@@ -1,0 +1,18 @@
+auth:
+    - 管理员
+    - 普通用户
+    - 游客
+data:
+    id: 5
+    title: 商品管理
+    type: 0
+    icon: layui-icon layui-icon-console
+    href: ''
+    children:
+      - title: 控制后台
+        icon: layui-icon layui-icon-console
+        type: 1
+        openType: _iframe
+        href: /admin/welcomes
+
+

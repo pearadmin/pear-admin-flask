@@ -1,0 +1,24 @@
+auth:
+    - 管理员
+    - 普通用户
+data:
+    id: 1
+    title: 系统管理
+    type: 0
+    icon: layui-icon layui-icon-console
+    href: ''
+    children:
+      - title: 控制后台
+        id: 10
+        icon: layui-icon layui-icon-console
+        type: 1
+        openType: _iframe
+        href: /admin/test
+      - title: 用户管理
+        id: 11
+        icon: layui-icon layui-icon-console
+        type: 1
+        openType: _iframe
+        href: /admin/user
+
+

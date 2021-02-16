@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/component/pear/css/pear.css') }}" />
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                 <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="username" required lay-verify="required" value="{{ user.username }}" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="password"  value="" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色</label>
+                        <div class="layui-input-block">
+                            <select name="role" lay-verify="required" value="{{ user.role }}" lay-search>
+        <option value=""></option>
+                                {% for r in role%}
+        <option value="{{ r }}"  {% if user.role == r %}
+        selected=""
+        {% endif %}>{{r}} </option>
+    {% endfor %}
+
+      </select>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="user-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+ <script src="{{ url_for('static', filename='admin/component/layui/layui.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/component/pear/pear.js') }}"></script>
+<script>
+layui.use(['form','jquery'],function(){
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    form.on('submit(user-save)', function(data){
+        let roleIds = "";
+        $('input[type=checkbox]:checked').each(function() {
+            roleIds += $(this).val()+",";
+        });
+        roleIds = roleIds.substr(0,roleIds.length-1);
+        data.field.roleIds = roleIds;
+
+        $.ajax({
+
+            data:data.field,
+            dataType:'json',
+
+            type:'post',
+            success:function(res){
+                if(res.code==200){
+                    layer.msg(res.msg,{icon:1,time:1000},function(){
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.table.reload("user-table");
+                    });
+                }else{
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+            }
+        })
+        return false;
+    });
+})
+</script>
+<script>
+</script>
+</body>
+</html>

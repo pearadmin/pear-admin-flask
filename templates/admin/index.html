@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title> Pear Admin Layui </title>
+		<!-- 依 赖 样 式 -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='admin/component/pear/css/pear.css') }}" />
+		<!-- 加 载 样 式-->
+		<link rel="stylesheet" href="{{ url_for('static', filename='admin/admin/css/load.css') }}" />
+		<!-- 布 局 样 式 -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='admin/admin/css/admin.css') }}" />
+	</head>
+	<!-- 结 构 代 码 -->
+	<body class="layui-layout-body pear-admin">
+		<!-- 布 局 框 架 -->
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<!-- 顶 部 左 侧 功 能 -->
+				<ul class="layui-nav layui-layout-left">
+					<li class="collaspe layui-nav-item"><a href="#" class="layui-icon layui-icon-shrink-right"></a></li>
+					<li class="refresh layui-nav-item"><a href="#" class="layui-icon layui-icon-refresh-1" loading=600></a></li>
+				</ul>
+				<!-- 顶 部 右 侧 菜 单 -->
+				<div id="control" class="layui-layout-control"></div>
+				<ul class="layui-nav layui-layout-right" lay-filter="layui_nav_right">
+					<li class="layui-nav-item layui-hide-xs"><a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a></li>
+					<li class="layui-nav-item layui-hide-xs"><a href="http://www.pearadmin.com" class="layui-icon layui-icon-website"></a></li>
+					<li class="layui-nav-item">
+						<!-- 头 像 -->
+						<a href="javascript:;">
+							<img src="admin/images/avatar.jpg" class="layui-nav-img">
+                            {{username}}
+						</a>
+						<!-- 功 能 菜 单 -->
+						<dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:void(0);" class="password">
+                                    修改密码
+                                </a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:void(0);" class="cache">
+                                    清理缓存
+                                </a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:void(0);" class="logout">
+                                    退出登录
+                                </a>
+                            </dd>
+                        </dl>
+					</li>
+					<!-- 主 题 配 置 -->
+					<li class="layui-nav-item setting"><a href="#" class="layui-icon layui-icon-more-vertical"></a></li>
+				</ul>
+			</div>
+			<!-- 侧 边 区 域 -->
+			<div class="layui-side layui-bg-black">
+				<!-- 顶 部 图 标 -->
+				<div class="layui-logo">
+					<!-- 图 表 -->
+					<img class="logo"></img>
+					<!-- 标 题 -->
+					<span class="title"></span>
+				</div>
+				<!-- 侧 边 菜 单 -->
+				<div class="layui-side-scroll">
+					<div id="sideMenu"></div>
+				</div>
+			</div>
+			<!-- 视 图 页 面 -->
+			<div class="layui-body">
+				<!-- 内 容 页 面 -->
+				<div id="content"></div>
+			</div>
+		</div>
+		<!-- 遮 盖 层 -->
+		<div class="pear-cover"></div>
+		<!-- 移 动 端 便 捷 操 作 -->
+		<div class="pear-collasped-pe collaspe"><a href="#" class="layui-icon layui-icon-shrink-right"></a></div>
+		<!-- 加 载 动 画-->
+		<div class="loader-main">
+			<div class="loader"></div>
+		</div>
+		<!-- 依 赖 脚 本 -->
+		<script src="{{ url_for('static', filename='admin/component/layui/layui.js') }}"></script>
+		<script src="{{ url_for('static', filename='admin/component/pear/pear.js') }}"></script>
+		<!-- 框 架 初 始 化 -->
+		<script>
+			layui.use(['admin','jquery','convert','layer','element'], function() {
+                var admin = layui.admin;
+                var $ = layui.jquery;
+                var convert = layui.convert;
+                var layelem = layui.element;
+                var layer = layui.layer;
+
+                var image = new Image();
+                image.src = "{{ url_for('static', filename='admin/admin/images/avatar.jpg') }}";
+                image.onload = function () {
+                    $(".layui-nav-img").attr("src", convert.imageToBase64(image));
+                }
+                // 框架初始化时会读取 根目录下 pear.config.yml 文件作为初始化配置
+                // 你可以通过 admin.setConfigPath 方法修改配置文件位置
+                // 你可以通过 admin.setConfigType 方法修改配置文件类型
+                admin.setConfigType("yml");
+                admin.setConfigPath("/static/admin/config/pear.config.yml");
+                admin.render();
+                console.log('444');
+                layelem.on('nav(layui_nav_right)', function(elem) {
+                             console.log('6');
+                    if ($(elem).hasClass('logout')) {
+                        layer.confirm('确定退出登录吗?', function(index) {
+                            layer.close(index);
+                            $.ajax({
+                                url: '/admin/logout',
+                                type:"POST",
+                                dataType:"json",
+                                success: function(res) {
+                                    if (res.code==200) {
+                                        layer.msg(res.msg, {
+                                            icon: 1
+                                        });
+                                        setTimeout(function() {
+                                            location.href = '/admin';
+                                        }, 333)
+                                    }
+                                }
+                            });
+                        });
+                    }else if ($(elem).hasClass('password')) {
+                        layer.open({
+                            type: 2,
+                            maxmin: true,
+                            title: '修改密码',
+                            shade: 0.1,
+                            area: ['300px', '300px'],
+                            content:MODULE_PATH+'/index/pass'
+                        });
+                    }else if ($(elem).hasClass('cache')) {
+                        $.post(MODULE_PATH+'/index/cache',
+                        function(data){
+                            layer.msg(data.msg, {time: 1500});
+                             location.reload()
+                        });
+
+                    }
+
+            });
+            })
+
+		</script>
+	</body>
+</html>
+/

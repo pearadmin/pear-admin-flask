@@ -1,6 +1,8 @@
 from flask import Flask
+from flask_uploads import configure_uploads, patch_request_class
 from applications.config import database, common
 from applications.service.deBug import OpenDug
+from applications.service.upload import photos
 from applications.views import init_view
 from applications.models import db
 from applications.service.login import init_flask_login
@@ -20,11 +22,13 @@ def create_app():
     db.init_app(app)
     # flask_login初始化
     init_flask_login(app)
-    # 开启调试栏(web)
+    # 文件上传
+    configure_uploads(app, photos)
+    patch_request_class(app)
+    # 调试工具栏
     OpenDug(app)
-    #logo
+    # logo
     logo()
-
 
     return app
 

@@ -3,16 +3,17 @@ auth:
     - 普通用户
     - 游客
 data:
-    id: 5
-    title: 商品管理
+    id: 6
+    title: 文件管理
     type: 0
     icon: layui-icon layui-icon-console
     href: ''
     children:
-      - title: 控制后台
+      - title: 图片管理
         icon: layui-icon layui-icon-console
+        id: 61
         type: 1
         openType: _iframe
-        href: /admin/welcomes
+        href: /admin/file
 
 

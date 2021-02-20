@@ -19,23 +19,23 @@ def read_all_yaml(menu_yaml_path):
         a = read_yaml(l)
         lista.append(a)
     return lista
+
+
 # zanshi_url = "D:\\it\\pear\\flask-admin-flask-simple\\applications\\views\\admin/../../config/menu\\*.yaml"
 # a = read_all_yaml(zanshi_url)
 # print(a)
-
-
-def make_tree(menu_yaml_path,auth):
+def make_tree(menu_yaml_path, auth):
     a = read_all_yaml(menu_yaml_path)
-    auth_tree= []
+    auth_tree = []
 
     for i in a:
         if auth in i.get('auth'):
             i_date = i.get('data')
             auth_tree.append(i_date)
     print(auth_tree)
-    return auth_tree
 
+    auth_tree.sort(key=lambda y:y['id'])
+    return auth_tree
 
 # zanshi_url = "D:\\it\\pear\\flask-admin-flask-simple\\applications\\views\\admin/../../config/menu\\*.yaml"
 # make_tree(zanshi_url,'管理员')
-

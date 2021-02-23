@@ -50,13 +50,16 @@
                 unresize: true,
                 align: 'center'
             },{
-                field: 'href',
+                 field: 'href',
                 title: '图片',
                 unresize: true,
                 align: 'center',
                 templet:function (d) {
-                    return '<img src=" '+d.href+'"></i>';
+                    return '<img class="photo" style="max-width: 100%;\n' +
+                        '  height: 100%;\n' +
+                        '  cursor: pointer;" lay-event="photo" src=" '+d.href+'"></i>';
                 }
+
             },{
                 field: 'mime',
                 title: 'mime类型',
@@ -96,8 +99,10 @@
     });
 
     table.on('tool(dataTable)', function(obj) {
-        if (obj.event === 'remove') {
+         if (obj.event === 'remove') {
             window.remove(obj);
+        } else if (obj.event === 'photo') {
+            window.photo(obj);
         }
     });
 
@@ -210,5 +215,16 @@
     window.refresh = function() {
         table.reload('dataTable');
     }
+     // 查看大图
+    window.photo = function(obj){
+        layer.open({
+            type: 1,
+            title: false,
+            area: ['auto'],
+            skin: 'layui-layer-nobg', //没有背景色
+            shadeClose: true,
+            content: "<img src='" + obj.data['href'] + "'>"
+        })
+    };
 })
     </script>

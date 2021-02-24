@@ -217,14 +217,32 @@
     }
      // 查看大图
     window.photo = function(obj){
-        layer.open({
-            type: 1,
-            title: false,
-            area: ['auto'],
-            skin: 'layui-layer-nobg', //没有背景色
-            shadeClose: true,
-            content: "<img src='" + obj.data['href'] + "'>"
-        })
+       if(!obj.data.href || obj.data.href ==""){
+		layer.msg("图片地址错误！");
+		return ;
+	}
+	var auto_img = {};
+	var img = new Image();
+	img.src = obj.data.href;
+    img.onload = function() {
+        var max_height = $(window).height() - 100;
+        var max_width = $(window).width();
+        var rate1 = max_height / img.height;
+        var rate2 = max_width / img.width;
+        var rate3 = 1;
+        var rate = Math.min(rate1, rate2, rate3);
+        auto_img.height = img.height * rate;
+        auto_img.width = img.width * rate;
+            layer.open({
+                type: 1,
+                title: false,
+                 area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: "<img src='" + obj.data['href'] + "' width='"+auto_img.width+"px' height='"+auto_img.height+"px'>"
+            });
+    }
     };
+
 })
     </script>

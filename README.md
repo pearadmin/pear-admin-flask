@@ -39,6 +39,7 @@
 #### 安装配置
 * git clone https://gitee.com/pear-admin/pear-admin-flask
 * pip install -r requirement.txt
+* 新建一个数据库
 * 数据库导入 pear.sql
 * 修改数据库连接配置文件
 * flask run

@@ -38,7 +38,7 @@
 
 #### 安装配置
 * git clone https://gitee.com/pear-admin/pear-admin-flask
-* pip install requirement.txt
+* pip install -r requirement.txt
 * 修改数据库连接配置文件applications\config\database.py
 * cd dev 
 * 运行 initDb.py

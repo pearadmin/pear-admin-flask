@@ -1,8 +1,7 @@
 # 数据库连接
 HOST = '127.0.0.1'
 PORT = '3306'
-# DATABASE = 'pear-admin-flask-simple'
-DATABASE = 'mkgtest'
+DATABASE = 'pear-admin-flask-simple'
 USERNAME = 'root'
 PASSWORD = 'root'
 

@@ -1,12 +1,14 @@
 import os
 
 from flask import Blueprint, request, render_template, jsonify, current_app
+from flask_login import login_required
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import desc
 
 from applications.models import db
 from applications.models.admin import Photo
+from applications.service.route_auth import check_auth
 from applications.service.upload import photos
 
 ma = Marshmallow()
@@ -14,7 +16,9 @@ admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
 
 @admin_file.route('/')
-def test():
+@login_required
+@check_auth(['管理员','普通用户','游客'])
+def index():
     return render_template('admin/photo.html')
 
 
@@ -29,6 +33,8 @@ class PhotoSchema(ma.Schema):  # 序列化类
 
 
 @admin_file.route('/table')
+@login_required
+@check_auth(['管理员','普通用户','游客'])
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -48,6 +54,8 @@ def table():
 
 
 @admin_file.route('/upload', methods=['GET', 'POST'])
+@login_required
+@check_auth(['管理员'])
 def upload():
     if request.method == 'POST' and 'file' in request.files:
         filename = photos.save(request.files['file'])
@@ -70,6 +78,8 @@ def upload():
 
 
 @admin_file.route('/delete', methods=['GET', 'POST'])
+@login_required
+@check_auth(['管理员'])
 def delete():
     id = request.form.get('id')
     photo_name = Photo.query.filter_by(id=id).first().name
@@ -86,6 +96,8 @@ def delete():
 
 
 @admin_file.route('/batchRemove', methods=['GET', 'POST'])
+@login_required
+@check_auth(['管理员'])
 def batchRemove():
     ids = request.form.getlist('ids[]')
     photo_name = Photo.query.filter(Photo.id.in_(ids)).all()

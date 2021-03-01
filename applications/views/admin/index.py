@@ -1,5 +1,5 @@
 from io import BytesIO
-from flask import Blueprint, render_template, jsonify, request, session, make_response, Response, send_file
+from flask import Blueprint, render_template, jsonify, request, session, make_response
 from flask_login import login_user, login_required, logout_user, current_user
 from applications.models.admin import User
 from applications.service.CaptchaTool import gen_captcha
@@ -18,7 +18,7 @@ ma = Marshmallow()
 
 @admin_index.route('/')
 @login_required
-@check_auth(['管理员'])
+@check_auth(['管理员','普通用户','游客'])
 def index():
     username = current_user.username
     return render_template('admin/index.html', username=username)
@@ -115,5 +115,6 @@ def menu():
 
 
 @admin_index.route('/welcome')
+@login_required
 def welcome():
     return render_template('admin/console/console.html')

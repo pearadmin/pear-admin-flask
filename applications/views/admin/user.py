@@ -5,6 +5,7 @@ from marshmallow import fields
 
 from applications.models import db
 from applications.models.admin import User
+from applications.service.route_auth import check_auth
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 ma = Marshmallow()
@@ -16,6 +17,8 @@ ma = Marshmallow()
 
 
 @admin_user.route('/')
+@login_required
+@check_auth(['管理员','普通用户','游客'])
 def index():
     return render_template('admin/user.html')
 
@@ -35,6 +38,8 @@ class UserSchema(ma.Schema):  # 序列化类
 
 
 @admin_user.route('/table')
+@login_required
+@check_auth(['管理员','普通用户','游客'])
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -59,6 +64,7 @@ def table():
 
 @admin_user.route('/insert', methods=['GET', 'POST'])
 @login_required
+@check_auth(['管理员'])
 def insert():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -94,6 +100,7 @@ def insert():
 
 @admin_user.route('/delete', methods=['POST'])
 @login_required
+@check_auth(['管理员'])
 def delete():
     id = request.form.get('id')
     user = User.query.filter_by(id=id).delete()
@@ -113,6 +120,7 @@ def delete():
 
 @admin_user.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
+@check_auth(['管理员'])
 def update(id):
     if request.method == 'POST':
         username = request.form.get('username')
@@ -121,7 +129,7 @@ def update(id):
         if username and role:
             if password is None:
                 if User.query.filter_by(id=id).first() is not None:
-                    user = User.query.filter_by(id=id).update({'username': username, 'roleid': role})
+                    user = User.query.filter_by(id=id).update({'username': username, 'role': role})
                     db.session.commit()
 
                     res = {"msg": "修改成功", "code": 200}
@@ -133,7 +141,7 @@ def update(id):
             else:
                 user = User.query.filter_by(id=id).first()
                 if user is not None:
-                    User.query.filter_by(id=id).update({'username': username, 'roleid': role})
+                    User.query.filter_by(id=id).update({'username': username, 'role': role})
                     user.set_password(password)
                     db.session.commit()
 
@@ -158,6 +166,8 @@ def update(id):
 #                               ==========================================================
 
 @admin_user.route('/update/status', methods=['POST'])
+@login_required
+@check_auth(['管理员'])
 def ustatus():
     id = request.form.get('id')
     status = request.form.get('status')
@@ -171,6 +181,8 @@ def ustatus():
 
 
 @admin_user.route('/batchRemove',methods=['GET','POST'])
+@login_required
+@check_auth(['管理员'])
 def batchRemove():
     ids = request.form.getlist('ids[]')
     user = User.query.filter(User.id.in_(ids)).delete(synchronize_session=False)

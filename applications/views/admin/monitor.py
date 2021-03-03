@@ -1,3 +1,8 @@
+import re
+import socket
+from datetime import datetime
+import platform
+import psutil
 from flask import Blueprint, request, render_template, jsonify, current_app
 from flask_marshmallow import Marshmallow
 
@@ -7,6 +12,58 @@ admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 @admin_Monitor.route('/')
 def index():
-    return render_template('admin/monitor.html')
+    # 主机名称
+    hostname = platform.node()
+    # 系统版本
+    system_version = platform.platform()
+    # python版本
+    python_version = platform.python_version()
+    # 逻辑cpu数量
+    cpu_count = psutil.cpu_count()
+    # cup使用率
+    cpus_percent = psutil.cpu_percent(interval=0.1)
+    # 内存
+    memory_information = psutil.virtual_memory()
+    # 内存使用率
+    memory_usage = memory_information.percent
+    memory_used = str(round(memory_information.used / 1024 / 1024))
+    memory_total = str(round(memory_information.total / 1024 / 1024))
+    memory_free = str(round(memory_information.free / 1024 / 1024))
+    # 磁盘信息
+    disk_partitions = psutil.disk_partitions()
+    disk_partitions_list = []
 
+    for i in disk_partitions:
+        a = psutil.disk_usage(i.device)
+        disk_partitions_dict = {
+            'device': i.device,
+            'fstype': i.fstype,
+            'total': str(round(a.total/ 1024 / 1024)),
+            'used': str(round(a.used/ 1024 / 1024)),
+            'free': str(round(a.free/ 1024 / 1024)),
+            'percent': a.percent
+        }
+        disk_partitions_list.append(disk_partitions_dict)
 
+    # 开机时间
+    boot_time = datetime.fromtimestamp(psutil.boot_time())
+    up_time = datetime.now() - boot_time
+    up_time_list = re.split(r':|\,', str(up_time))
+    # up_time_format=str(up_time)
+    up_time_format = "{} 天 {} 小时{} 分钟{} 秒".format(up_time.days, up_time_list[1], up_time_list[2], up_time_list[3])
+
+    return render_template('admin/monitor.html',
+                           hostname=hostname,
+                           system_version=system_version,
+                           python_version=python_version,
+                           cpus_percent=cpus_percent,
+                           memory_usage=memory_usage,
+                           cpu_count=cpu_count,
+                           memory_used=memory_used,
+                           memory_total=memory_total,
+                           memory_free=memory_free,
+                           boot_time=boot_time,
+                           up_time_format=up_time_format,
+                           disk_partitions_list=disk_partitions_list
+
+                           )

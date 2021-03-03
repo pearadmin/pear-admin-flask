@@ -23,13 +23,13 @@
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">核心数</div>
-                                    <div class="count pear-text" >21</div>
+                                    <div class="count pear-text" >{{ cpu_count }}</div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">空闲率</div>
-                                    <div class="count pear-text"  >32</div>
+                                    <div class="count pear-text"  ></div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
@@ -41,7 +41,7 @@
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">使用率</div>
-                                    <div class="count pear-text"></div>
+                                    <div class="count pear-text">{{ cpus_percent }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -58,25 +58,25 @@
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">空闲内存</div>
-                                    <div class="count pear-text"></div>
+                                    <div class="count pear-text">{{ memory_free }}M</div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">最大内存</div>
-                                    <div class="count pear-text"></div>
+                                    <div class="count pear-text">{{ memory_total }}M</div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">已用内存</div>
-                                    <div class="count pear-text"></div>
+                                    <div class="count pear-text">{{ memory_used }}M</div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">内存使用</div>
-                                    <div class="count pear-text"></div>
+                                    <div class="count pear-text">{{ memory_usage }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-header">访客流量</div>
+                    <div class="layui-card-header">主机监控</div>
                     <div class="layui-card-body">
                         <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                             <div id="echarts-records" style="background-color:#ffffff;min-height:400px;"></div>
@@ -100,17 +100,20 @@
             <div class="layui-card-header">磁盘信息</div>
             <div class="layui-card-body">
                 <ul class="pear-card-status">
-                    <li th:each="sysFile:${cpu.sysFiles}">
-                        <p th:text="${sysFile.typeName}"></p>
-                        磁盘大小&nbsp;<span >    6</span>&nbsp;&nbsp;
-                        空闲大小&nbsp;<span>6</span>&nbsp;&nbsp;
+                         {% for i in disk_partitions_list %}
+                    <li >
+                        <p >{{ i.device }}</p>
+                        <p >{{ i.fstype }}</p>
+                        磁盘大小&nbsp;<span >{{ i.total }}M</span>&nbsp;&nbsp;
+                        空闲大小&nbsp;<span>{{ i.free }}M</span>&nbsp;&nbsp;
                         <br/>
                         <br/>
-                        已经使用&nbsp;<span>6</span>&nbsp;&nbsp;
-                        使用概率&nbsp;<span>6</span>
+                        已经使用&nbsp;<span>{{ i.used }}M</span>&nbsp;&nbsp;
+                        使用概率&nbsp;<span>{{ i.percent }}%</span>
                         <br/>
                         <a href="javascript:;" data-id="1" class="pear-btn pear-btn-xs pear-btn-primary pear-reply">详情</a>
                     </li>
+                         {% endfor %}
                 </ul>
             </div>
         </div>
@@ -127,23 +130,24 @@
                     <tbody>
                     <tr>
                         <td>名称</td>
-                        <td>6</td>
+                        <td>{{ hostname }}</td>
                     </tr>
-                    <tr>
-                        <td>地址</td>
-                        <td>6</td>
-                    </tr>
+
                     <tr>
                         <td>系统</td>
-                        <td>6</td>
+                        <td>{{ system_version }}</td>
                     </tr>
                     <tr>
-                        <td>模型</td>
-                        <td>6</td>
+                        <td>开机时间</td>
+                        <td>{{ boot_time }}</td>
                     </tr>
                     <tr>
-                        <td>JDK</td>
-                        <td>6</td>
+                        <td>运行时长</td>
+                        <td>{{ up_time_format }}</td>
+                    </tr>
+                    <tr>
+                        <td>python版本</td>
+                        <td>{{ python_version }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -321,7 +325,7 @@
                 }
             }],
             series: [{
-                name: "2018",
+                name: "CPU",
                 type: "line",
                 smooth: true,
                 symbolSize: 8,
@@ -358,7 +362,7 @@
                 },
                 data: yAxisData1
             }, {
-                name: "2019",
+                name: '内存',
                 type: "line",
                 smooth: true,
                 symbolSize: 8,

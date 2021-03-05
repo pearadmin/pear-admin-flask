@@ -23,7 +23,7 @@
             <input placeholder="账 户 : admin " hover name="username" class="layui-input" />
         </div>
         <div class="layui-form-item">
-            <input placeholder="密 码 : admin " hover name="password" class="layui-input" />
+            <input placeholder="密 码 : 123456 " hover name="password" class="layui-input" />
         </div>
         <div class="layui-form-item">
             <input placeholder="验证码 : " hover name="code" class="code layui-input layui-input-inline" />
@@ -88,6 +88,7 @@
                 })
                 return false;
             });
+            initCode();
              function initCode() {
                   $('#codeimg').attr("src","{{ url_for('adminIndex.get_captcha') }}?data=" + new Date().getTime());
                    }

@@ -5,6 +5,7 @@ from applications.models import db
 
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'admin_user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20))
     # 哈希密码
@@ -33,7 +34,20 @@ class User(db.Model, UserMixin):
         return False
 
 
+class AdminLog(db.Model):
+    __tablename__ = 'admin_admin_log'
+    id = db.Column(db.Integer, primary_key=True)
+    method = db.Column(db.String(10))
+    uid = db.Column(db.Integer)
+    url = db.Column(db.String(255))
+    desc = db.Column(db.Text)
+    ip = db.Column(db.String(255))
+    user_agent = db.Column(db.Text)
+    create_time = db.Column(db.DateTime, default=datetime.datetime.now)
+
+
 class Photo(db.Model):
+    __tablename__ = 'admin_photo'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     href = db.Column(db.String(255))
@@ -41,3 +55,14 @@ class Photo(db.Model):
     size = db.Column(db.CHAR(30), nullable=False)
     # ext = db.Column(db.CHAR(10), nullable=False)
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
+
+
+class News(db.Model):
+    __tablename__ = 'admin_news'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    img = db.Column(db.String(255))
+    desc = db.Column(db.Text)
+    create_time = db.Column(db.DateTime, default=datetime.datetime.now)
+    update_time = db.Column(db.DateTime)
+    delete_time = db.Column(db.DateTime)

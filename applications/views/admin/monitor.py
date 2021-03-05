@@ -1,16 +1,29 @@
-import re
-import socket
-from datetime import datetime
 import platform
+import re
+from datetime import datetime
 import psutil
-from flask import Blueprint, request, render_template, jsonify, current_app
+from flask import Blueprint, request, render_template
+from flask_login import login_required
 from flask_marshmallow import Marshmallow
+from applications.service.admin_log import admin_log
 
 ma = Marshmallow()
 admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 
+@admin_Monitor.before_request
+@login_required
+def Monitor_log():
+    admin_log(request)
+
+
+#                               ----------------------------------------------------------
+#                               -------------------------  系统监控 --------------------------
+#                               ----------------------------------------------------------
+
+
 @admin_Monitor.route('/')
+@login_required
 def index():
     # 主机名称
     hostname = platform.node()
@@ -38,19 +51,18 @@ def index():
         disk_partitions_dict = {
             'device': i.device,
             'fstype': i.fstype,
-            'total': str(round(a.total/ 1024 / 1024)),
-            'used': str(round(a.used/ 1024 / 1024)),
-            'free': str(round(a.free/ 1024 / 1024)),
+            'total': str(round(a.total / 1024 / 1024)),
+            'used': str(round(a.used / 1024 / 1024)),
+            'free': str(round(a.free / 1024 / 1024)),
             'percent': a.percent
         }
         disk_partitions_list.append(disk_partitions_dict)
 
     # 开机时间
-    boot_time = datetime.fromtimestamp(psutil.boot_time())
-    up_time = datetime.now() - boot_time
-    up_time_list = re.split(r':|\,', str(up_time))
-    # up_time_format=str(up_time)
-    up_time_format = "{} 天 {} 小时{} 分钟{} 秒".format(up_time.days, up_time_list[1], up_time_list[2], up_time_list[3])
+    boot_time = datetime.fromtimestamp(psutil.boot_time()).replace(microsecond=0)
+    up_time = datetime.now().replace(microsecond=0) - boot_time
+    up_time_list = re.split(r':', str(up_time))
+    up_time_format = " {} 小时{} 分钟{} 秒".format(up_time_list[0], up_time_list[1], up_time_list[2])
 
     return render_template('admin/monitor.html',
                            hostname=hostname,

@@ -2,13 +2,19 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
-
 from applications.models import db
 from applications.models.admin import User
 from applications.service.route_auth import check_auth
+from applications.service.admin_log import  admin_log
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 ma = Marshmallow()
+
+
+@admin_user.before_request
+@login_required
+def Monitor_log():
+    admin_log(request)
 
 
 #                               ----------------------------------------------------------

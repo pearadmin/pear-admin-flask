@@ -26,5 +26,11 @@ data:
         type: 1
         openType: _iframe
         href: /admin/monitor
+      - title: 日志管理
+        id: 14
+        icon: layui-icon layui-icon-console
+        type: 1
+        openType: _iframe
+        href: /admin/log
 
 

@@ -6,6 +6,7 @@ from applications.service.CaptchaTool import gen_captcha
 from applications.service.menuTreeYaml import make_tree
 from flask_marshmallow import Marshmallow
 from applications.service.route_auth import check_auth
+from applications.service.admin_log import login_log
 
 admin_index = Blueprint('adminIndex', __name__, url_prefix='/admin')
 
@@ -24,9 +25,10 @@ def index():
     return render_template('admin/index.html', username=username)
 
 
-#                               ----------------------------------------------------------
-#                               -------------------------  获取验证码 ----------------------
-#                               ----------------------------------------------------------
+#                               ==========================================================
+#                                                             获取验证码
+#                               ==========================================================
+
 
 
 @admin_index.route('/getCaptcha', methods=["GET"])
@@ -74,6 +76,8 @@ def login():
         if username == user.username and user.validate_password(password):
             login_user(user)
             res = {"msg": "登录成功", "code": 1}
+            login_log(request)
+
             return jsonify(res)
 
         res = {"msg": "用户名或密码错误", "code": 0}

@@ -1,18 +1,27 @@
 import os
-
 from flask import Blueprint, request, render_template, jsonify, current_app
 from flask_login import login_required
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import desc
-
 from applications.models import db
 from applications.models.admin import Photo
+from applications.service.admin_log import admin_log
 from applications.service.route_auth import check_auth
 from applications.service.upload import photos
-
 ma = Marshmallow()
 admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
+
+
+@admin_file.before_request
+@login_required
+def Monitor_log():
+    admin_log(request)
+
+
+#                               ----------------------------------------------------------
+#                               -------------------------  图片管理 --------------------------
+#                               ----------------------------------------------------------
 
 
 @admin_file.route('/')
@@ -30,6 +39,10 @@ class PhotoSchema(ma.Schema):  # 序列化类
     size = fields.Str()
     ext = fields.Str()
     create_time = fields.DateTime()
+
+#                               ==========================================================
+#                                                            图片列表
+#                               ==========================================================
 
 
 @admin_file.route('/table')
@@ -51,6 +64,10 @@ def table():
 
     }
     return jsonify(res)
+
+#                               ==========================================================
+#                                                            上传接口
+#                               ==========================================================
 
 
 @admin_file.route('/upload', methods=['GET', 'POST'])
@@ -76,6 +93,10 @@ def upload():
 
     return render_template('admin/photo_add.html')
 
+#                               ==========================================================
+#                                                            图片删除
+#                               ==========================================================
+
 
 @admin_file.route('/delete', methods=['GET', 'POST'])
 @login_required
@@ -93,6 +114,10 @@ def delete():
     else:
         res = {"msg": "删除失败", "code": 999}
         return res
+
+#                               ==========================================================
+#                                                            图片批量删除
+#                               ==========================================================
 
 
 @admin_file.route('/batchRemove', methods=['GET', 'POST'])

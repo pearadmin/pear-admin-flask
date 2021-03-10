@@ -2,10 +2,12 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
+
+from applications.common.admin.api import jsonApi
 from applications.models import db
 from applications.models.admin import User
 from applications.service.route_auth import check_auth
-from applications.service.admin_log import  admin_log
+from applications.service.admin_log import admin_log
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 ma = Marshmallow()
@@ -24,7 +26,7 @@ def Monitor_log():
 
 @admin_user.route('/')
 @login_required
-@check_auth(['管理员','普通用户','游客'])
+@check_auth(['管理员', '普通用户', '游客'])
 def index():
     return render_template('admin/user.html')
 
@@ -45,7 +47,7 @@ class UserSchema(ma.Schema):  # 序列化类
 
 @admin_user.route('/table')
 @login_required
-@check_auth(['管理员','普通用户','游客'])
+@check_auth(['管理员', '普通用户', '游客'])
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -82,17 +84,11 @@ def insert():
                 user.set_password(password)
                 db.session.add(user)
                 db.session.commit()
-
-                res = {"msg": "添加成功", "code": 200}
-                return jsonify(res)
-
+                return jsonApi(msg="添加成功", code=200)
             else:
-                res = {"msg": "用户已经存在", "code": 999}
-                return jsonify(res)
+                return jsonApi(msg="用户已经存在", code=999)
         else:
-            res = {"msg": "用户名密码角色不能为空", "code": 999}
-            return jsonify(res)
-
+            return jsonApi(msg="用户名密码角色不能为空", code=999)
 
     else:
         role = ['管理员', '普通用户']
@@ -112,11 +108,9 @@ def delete():
     user = User.query.filter_by(id=id).delete()
     db.session.commit()
     if user:
-        res = {"msg": "删除成功", "code": 200}
-        return jsonify(res)
+        return jsonApi(msg="删除成功", code= 200)
     else:
-        res = {"msg": "删除失败", "code": 999}
-        return res
+        return jsonApi(msg="删除失败", code= 999)
 
 
 #                               ==========================================================
@@ -137,9 +131,7 @@ def update(id):
                 if User.query.filter_by(id=id).first() is not None:
                     user = User.query.filter_by(id=id).update({'username': username, 'role': role})
                     db.session.commit()
-
-                    res = {"msg": "修改成功", "code": 200}
-                    return jsonify(res)
+                    return jsonApi(msg="修改成功", code= 200)
 
                 else:
                     res = {"msg": "用户已经存在", "code": 200}
@@ -150,17 +142,13 @@ def update(id):
                     User.query.filter_by(id=id).update({'username': username, 'role': role})
                     user.set_password(password)
                     db.session.commit()
-
-                    res = {"msg": "修改成功", "code": 200}
-                    return jsonify(res)
-
+                    return jsonApi(msg="修改成功", code=200)
                 else:
-                    res = {"msg": "用户不存在", "code": 200}
-                    return jsonify(res)
+                    return jsonApi(msg="用户不存在", code= 200)
 
         else:
-            res = {"msg": "用户名密码角色不能为空", "code": 999, "test": str(username)}
-            return jsonify(res)
+
+            return jsonApi(msg="用户名密码角色不能为空", code=999)
     else:
         role = ['管理员', '普通用户']
         user = User.query.filter_by(id=id).first()
@@ -181,12 +169,11 @@ def ustatus():
         user = User.query.filter_by(id=id).update({'status': status})
         if user:
             db.session.commit()
-        res = {"msg": "更新成功", "code": 200}
-        return jsonify(res)
-    return {"msg": "出错啦", "code": 999}
+        return jsonApi(msg="更新成功",code= 200)
+    return jsonApi(msg= "出错啦", code=999)
 
 
-@admin_user.route('/batchRemove',methods=['GET','POST'])
+@admin_user.route('/batchRemove', methods=['GET', 'POST'])
 @login_required
 @check_auth(['管理员'])
 def batchRemove():
@@ -194,10 +181,8 @@ def batchRemove():
     user = User.query.filter(User.id.in_(ids)).delete(synchronize_session=False)
     db.session.commit()
     if user:
-        res = {"msg": "删除成功", "code": 200}
+        res = jsonApi(msg="批量删除成功",code= 200)
         return jsonify(res)
     else:
-        res = {"msg": "删除失败", "code": 999}
+        res = jsonApi(msg= "批量删除失败", code=999)
         return res
-
-

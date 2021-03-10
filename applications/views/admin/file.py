@@ -9,6 +9,7 @@ from applications.models.admin import Photo
 from applications.service.admin_log import admin_log
 from applications.service.route_auth import check_auth
 from applications.service.upload import photos
+from applications.common.admin.api import jsonApi
 ma = Marshmallow()
 admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
@@ -109,11 +110,9 @@ def delete():
     upload_url = current_app.config.get("UPLOADED_PHOTOS_DEST")
     os.remove(upload_url + '/' + photo_name)
     if photo:
-        res = {"msg": "删除成功", "code": 200}
-        return jsonify(res)
+        return jsonApi(msg="删除成功", code=200)
     else:
-        res = {"msg": "删除失败", "code": 999}
-        return res
+        return jsonApi(msg="删除失败", code= 999)
 
 #                               ==========================================================
 #                                                            图片批量删除
@@ -127,14 +126,12 @@ def batchRemove():
     ids = request.form.getlist('ids[]')
     photo_name = Photo.query.filter(Photo.id.in_(ids)).all()
     upload_url = current_app.config.get("UPLOADED_PHOTOS_DEST")
-    photo_list = []
     for p in photo_name:
         os.remove(upload_url + '/' + p.name)
     photo = Photo.query.filter(Photo.id.in_(ids)).delete(synchronize_session=False)
     db.session.commit()
     if photo:
-        res = {"msg": "删除成功", "code": 200}
-        return jsonify(res)
+        return jsonApi(msg="删除成功", code=200)
     else:
         res = {"msg": "删除失败", "code": 999}
         return res

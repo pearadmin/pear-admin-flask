@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>pear-admin-flask</title>
+		<meta name="description" content="pear-admin-flask">
+		<meta name="keyword" content="pear-admin-flask">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='/index/layui/css/layui.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='/index/css/main.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='/index/css/load.css') }}" />
+		<style>
+			.layui-nav .layui-this:after{
+				display: none;
+			}
+			.layui-nav .layui-nav-bar{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- header -->
+		<div class="ew-header">
+			<img class="layui-logo" src="{{ url_for('static', filename='/index/images/un28.svg') }}" style="height:50px;padding: 10px;" />
+			<div class="ew-nav-group">
+				<div class="nav-toggle"><i class="layui-icon layui-icon-more-vertical"></i></div>
+				<ul class="layui-nav" lay-filter="ew-header-nav">
+					<li class="layui-nav-item">
+						<a lay-href="/">首页</a>
+                    </li>
+                    <li class="layui-nav-item">
+						<a href="/admin" target="_blank">后台</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- banner -->
+		<div class="ew-banner" style="box-shadow: 0 0 8px rgba(0,0,0,.101562);">
+			<div class="layui-container">
+				<div class="layui-row layui-col-space25" style="margin-top: 10px;">
+					<div class="layui-col-md6  layui-col-xs12">
+						<img style="margin-top: 0px;margin-bottom: 40px;width: 80%;" src="{{ url_for('static', filename='/index/images/pear.png') }}"></h1>
+						<img style="width: 25%;position: absolute;left: 38%;margin-top: 5px;" src="{{ url_for('static', filename='/index/images/admin.png') }}"></h1>
+						<p style="font-size: 13.8px;font-weight: 500;margin-top: 10px;">💐 致 力 于 让 " Web " 开 发 变 得 简 单 优 雅 </p>
+						<div class="ew-banner-btngroup" style="margin-top: 50px;margin-bottom: 50px;">
+							<ul class="layui-nav" style="background-color: white;" lay-filter="ew-header-nav">
+								<li class="layui-nav-item">
+									<a target="_blank" href="http://pearadmin.com/" class="layui-btn layui-btn-primary" nav-scroll="pricing">
+										<svg data-v-796d512c="" style="width:20px;position: relative;top: 5px;margin-right: 5px;" aria-hidden="true"
+										 focusable="false" data-prefix="fad" data-icon="meteor" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+										 class="svg-inline--fa fa-meteor fa-w-16 h-5 -mb-1 mr-1">
+											<g data-v-796d512c="" class="fa-group">
+												<path data-v-796d512c="" fill="currentColor" d="M491.14.7C452.44 12.3 379.34 35 303.44 62c-2.1-7-4-13.5-5.6-18.6a16.06 16.06 0 0 0-20-10.69 16.6 16.6 0 0 0-2.86 1.19C232.54 56 122.14 116.5 60.54 176.4c-1.1 1-2.5 2-3.5 3C-19 255.5-19 378.87 57.09 455s199.48 76 275.55-.1c1-1 2-2.4 3-3.5C395.44 389.8 456 279.3 478.14 237a16.05 16.05 0 0 0-6.64-21.72 15.52 15.52 0 0 0-2.86-1.18c-5.2-1.6-11.6-3.5-18.6-5.6 27-76 49.7-149 61.3-187.7A16.17 16.17 0 0 0 491.14.7zM191.94 448a128 128 0 1 1 128-128 128 128 0 0 1-128 128z"
+												 opacity="0.4" class="fa-secondary"></path>
+												<path data-v-796d512c="" fill="currentColor" d="M191.94 192a128 128 0 1 0 128 128 128 128 0 0 0-128-128zm-32 128a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm48 64a16 16 0 1 1 16-16 16 16 0 0 1-16 16z"
+												 class="fa-primary"></path>
+											</g>
+										</svg>
+										官方网站</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="layui-col-md6 layui-col-xs12">
+						<div class="ew-banner-right">
+							<img class="show" style="width: 92%;" style="margin-top: 0px!important;" src="{{ url_for('static', filename='/index/images/un26.svg') }}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<br />
+		</div>
+		<div class="section">
+		</div>
+
+
+		<div class="section" nav-id="product">
+			<div class="section-title" style="font-size: 20px;font-weight:500;">
+				用法演示
+			</div>
+			<div class="layui-container" style="padding-bottom: 60px;">
+				<div class="layui-row layui-col-space30">
+
+
+				</div>
+			</div>
+		</div>
+		<!-- contact -->
+		<div class="section">
+			<div class="section-title">
+				<h2 style="font-size: 20px;font-weight:500;">合作伙伴</h2>
+				<p>Sponsorship and cooperation</p>
+			</div>
+			<div class="layui-container">
+				<div class="layui-row layui-col-space30" style="margin-top: 10px;">
+
+				</div>
+				<br>
+				<br>
+			</div>
+		</div>
+		<div class="ew-footer">
+		    <div class="layui-container">
+		        <div class="layui-row layui-col-space30">
+		            <div class="layui-col-md6">
+		                <h2 style="font-size: 17px;" class="footer-item-title">技术交流</h2>
+		                <p class="img-group" style="height: 105px;font-size: 15.5px;">
+		                    <img src="{{ url_for('static', filename='/index/images/code2.png') }}" style="border-radius: 2px;height: 100px;width: 100px;">
+		                    扫码免费加入前后端分离技术交流QQ群，与各位大佬一起交流技术、讨论问题。
+		                </p>
+		            </div>
+		            <div class="layui-col-md4">
+		                <h2 style="font-size: 17px;" class="footer-item-title">联系我们</h2>
+		                <p>
+		                    <i class="layui-icon layui-icon-dialogue"></i>
+		                     <a href="http://www.pearadmin.com">官网 : www.pearadmin.com</a>
+		                </p>
+		                <p style="margin-top: 2px;">
+		                    <i class="layui-icon layui-icon-website"></i>
+		                    <a href="http://forum.pearadmin.com">社区 : forum.pearadmin.com</a>
+		                </p>
+		            </div>
+		            <div class="layui-col-md2">
+		                <h2 style="font-size: 17px;" class="footer-item-title">友情链接</h2>
+		                <p><i class="layui-icon layui-icon-website"></i><a href="https://monksoul.gitee.io/furion/" target="_blank">Furion</a></p>
+						<p style="margin-top: 10px;"><i class="layui-icon layui-icon-website"></i><a href="http://mrdoc.zmister.com/" target="_blank">MrDoc</a></p>
+					</div>
+		        </div>
+		    </div>
+		</div>
+
+		<!-- js部分 -->
+        <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
+        <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
+
+		<script>
+			layui.use(['layer', 'form', 'jquery'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var form = layui.form;
+				var jquery = layui.jquery;
+			});
+		</script>
+	</body>
+</html>

@@ -4,7 +4,7 @@ logo:
   ## 网站名称
   title: "Pear Admin"
   ## 网站图标
-  image: "admin/admin/images/logo.png"
+  image: "/static/admin/admin/images/logo.png"
 ## 菜单配置
 menu: 
   ## 菜单数据来源

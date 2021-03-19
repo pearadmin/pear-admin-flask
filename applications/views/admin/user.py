@@ -21,7 +21,14 @@ def index():
 def data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    data, count = get_user_data_dict(page=page, limit=limit)
+    realName = request.args.get('realName', type=str)
+    username = request.args.get('username',type=str)
+    filters = {}
+    if realName:
+        filters["realname"]=('%'+realName+'%')
+    if username:
+        filters["username"]=('%'+username+'%')
+    data, count = get_user_data_dict(page=page, limit=limit, filters=filters)
     res = {
         'msg': "",
         'code': 0,

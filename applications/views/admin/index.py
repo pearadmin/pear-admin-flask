@@ -14,7 +14,7 @@ ma = Marshmallow()
 
 # 首页
 @admin_index.route('/')
-@PreAuthorize('index:index')
+@login_required
 def index():
     username = current_user.username
     return render_template('admin/index.html', username=username)

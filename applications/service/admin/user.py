@@ -2,6 +2,7 @@ from flask import jsonify
 from flask_login import current_user
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
+from sqlalchemy import and_
 from sqlalchemy.sql import exists
 
 from applications.models import db
@@ -27,8 +28,8 @@ class UserSchema(ma.Schema):
 '''
 
 
-def get_user_data(page, limit):
-    user = User.query.paginate(page=page, per_page=limit, error_out=False)
+def get_user_data(page, limit,filters):
+    user = User.query.filter(and_(*[getattr(User, k).like(v) for k,v in filters.items()])).paginate(page=page, per_page=limit, error_out=False)
     count = User.query.count()
     return user, count
 
@@ -39,8 +40,8 @@ def get_user_data(page, limit):
 '''
 
 
-def get_user_data_dict(page, limit):
-    user, count = get_user_data(page, limit)
+def get_user_data_dict(page, limit, filters):
+    user, count = get_user_data(page, limit,filters)
     user_schema = UserSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = user_schema.dump(user.items)  # 生成可序列化对象
     return output, count
@@ -104,10 +105,7 @@ def update_user_role(id, roles_list):
     user = User.query.filter_by(id=id).first()
     roles_id = []
     for role in user.role:
-        print(role)
         roles_id.append(role.id)
-    print('---------------------')
-    print(roles_id)
     roles = Role.query.filter(Role.id.in_(roles_id)).all()
     for r in roles:
         user.role.remove(r)

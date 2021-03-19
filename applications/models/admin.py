@@ -37,7 +37,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True, comment='角色ID')
     name = db.Column(db.String(255), comment='角色名称')
     code = db.Column(db.String(255), comment='角色标识')
-    enable = db.Column(db.CHAR(1), comment='是否启用')
+    enable = db.Column(db.Integer, comment='是否启用')
     remark = db.Column(db.String(255), comment='备注')
     details = db.Column(db.String(255), comment='详情')
     sort = db.Column(db.Integer, comment='排序')

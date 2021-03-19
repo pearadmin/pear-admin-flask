@@ -28,6 +28,7 @@ def get_power_dict():
     return power_dict
 
 
+# 选择父节点
 def select_parent():
     power = Power.query.all()
     power_schema = PowerSchema(many=True)
@@ -36,6 +37,7 @@ def select_parent():
     return power_dict
 
 
+# 增加权限
 def save_power(req):
     icon = req.get("icon")
     openType = req.get("openType")
@@ -44,6 +46,7 @@ def save_power(req):
     powerName = req.get("powerName")
     powerType = req.get("powerType")
     powerUrl = req.get("powerUrl")
+    sort = req.get("sort")
     power = Power(
         icon=icon,
         open_type=openType,
@@ -51,11 +54,34 @@ def save_power(req):
         code=powerCode,
         name=powerName,
         type=powerType,
-        url=powerUrl
+        url=powerUrl,
+        sort=sort
     )
     r = db.session.add(power)
     db.session.commit()
     return r
+
+
+# 根据id查询权限
+def get_power_by_id(id):
+    p = Power.query.filter_by(id=id).first()
+    return p
+
+
+# 更新角色
+def update_power(req_json):
+    id = req_json.get("roleId")
+    data = {
+        "code": req_json.get("roleCode"),
+        "name": req_json.get("roleName"),
+        "sort": req_json.get("sort"),
+        "enable": req_json.get("enable"),
+        "details": req_json.get("details")
+    }
+    print(data)
+    role = Role.query.filter_by(id=id).update(data)
+    db.session.commit()
+    return role
 
 
 # 删除权限（目前没有判断父节点自动删除子节点）

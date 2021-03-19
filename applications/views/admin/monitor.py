@@ -1,3 +1,4 @@
+import os
 import platform
 import re
 from datetime import datetime
@@ -43,20 +44,22 @@ def index():
     memory_total = str(round(memory_information.total / 1024 / 1024))
     memory_free = str(round(memory_information.free / 1024 / 1024))
     # 磁盘信息
-    disk_partitions = psutil.disk_partitions()
-    disk_partitions_list = []
 
-    for i in disk_partitions:
-        a = psutil.disk_usage(i.device)
-        disk_partitions_dict = {
-            'device': i.device,
-            'fstype': i.fstype,
-            'total': str(round(a.total / 1024 / 1024)),
-            'used': str(round(a.used / 1024 / 1024)),
-            'free': str(round(a.free / 1024 / 1024)),
-            'percent': a.percent
-        }
-        disk_partitions_list.append(disk_partitions_dict)
+    disk_partitions_list = []
+    # 判断是否在容器中
+    if not os.path.exists('/.dockerenv'):
+        disk_partitions = psutil.disk_partitions()
+        for i in disk_partitions:
+            a = psutil.disk_usage(i.device)
+            disk_partitions_dict = {
+                'device': i.device,
+                'fstype': i.fstype,
+                'total': str(round(a.total / 1024 / 1024)),
+                'used': str(round(a.used / 1024 / 1024)),
+                'free': str(round(a.free / 1024 / 1024)),
+                'percent': a.percent
+            }
+            disk_partitions_list.append(disk_partitions_dict)
 
     # 开机时间
     boot_time = datetime.fromtimestamp(psutil.boot_time()).replace(microsecond=0)

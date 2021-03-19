@@ -1,5 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
+from sqlalchemy import and_
 
 from applications.models import db
 from applications.models.admin import Role, Power
@@ -33,25 +34,24 @@ class PowerSchema(ma.Schema):  # 序列化类
     enable = fields.Integer()
 
 
-'''
-获取用户的sqlalchemy对象
-分页器
-'''
-
-
-def get_role_data(page, limit):
-    role = Role.query.paginate(page=page, per_page=limit, error_out=False)
+# 获取角色对象
+def get_role_data(page, limit, filters):
+    role = Role.query.filter(and_(*[getattr(Role, k).like(v) for k, v in filters.items()])).paginate(page=page,
+                                                                                                     per_page=limit,
+                                                                                                     error_out=False)
     count = Role.query.count()
     return role, count
 
 
-def get_role_data_dict(page, limit):
-    role, count = get_role_data(page, limit)
+# 获取角色dict
+def get_role_data_dict(page, limit, filters):
+    role, count = get_role_data(page, limit, filters)
     role_schema = RoleSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = role_schema.dump(role.items)  # 生成可序列化对象
     return output, count
 
 
+# 增加角色
 def add_role(req):
     details = req.get("details")
     enable = req.get("enable")
@@ -69,6 +69,29 @@ def add_role(req):
     db.session.commit()
 
 
+# 通过id获取角色
+def get_role_by_id(id):
+    r = Role.query.filter_by(id=id).first()
+    return r
+
+
+# 更新角色
+def update_role(req_json):
+    id =req_json.get("roleId")
+    data ={
+        "code":req_json.get("roleCode"),
+        "name":req_json.get("roleName"),
+        "sort":req_json.get("sort"),
+        "enable":req_json.get("enable"),
+        "details":req_json.get("details")
+    }
+    print(data)
+    role = Role.query.filter_by(id=id).update(data)
+    db.session.commit()
+    return role
+
+
+# 获取角色的权限
 def get_role_power(id):
     role = Role.query.filter_by(id=id).first()
     check_powers = role.power
@@ -86,6 +109,7 @@ def get_role_power(id):
     return output
 
 
+# 更新角色权限
 def update_role_power(id, power_list):
     role = Role.query.filter_by(id=id).first()
     power_id_list = []

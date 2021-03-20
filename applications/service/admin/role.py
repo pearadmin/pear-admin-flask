@@ -3,7 +3,7 @@ from marshmallow import fields
 from sqlalchemy import and_
 
 from applications.models import db
-from applications.models.admin import Role, Power
+from applications.models.admin import Role, Power, User
 
 ma = Marshmallow()
 
@@ -77,13 +77,13 @@ def get_role_by_id(id):
 
 # 更新角色
 def update_role(req_json):
-    id =req_json.get("roleId")
-    data ={
-        "code":req_json.get("roleCode"),
-        "name":req_json.get("roleName"),
-        "sort":req_json.get("sort"),
-        "enable":req_json.get("enable"),
-        "details":req_json.get("details")
+    id = req_json.get("roleId")
+    data = {
+        "code": req_json.get("roleCode"),
+        "name": req_json.get("roleName"),
+        "sort": req_json.get("sort"),
+        "enable": req_json.get("enable"),
+        "details": req_json.get("details")
     }
     print(data)
     role = Role.query.filter_by(id=id).update(data)
@@ -124,3 +124,25 @@ def update_role_power(id, power_list):
     for p in powers:
         role.power.append(p)
     db.session.commit()
+
+
+# 删除角色
+def remove_role(id):
+    role = Role.query.filter_by(id=id).first()
+    # 删除该角色的权限
+    power_id_list = []
+    for p in role.power:
+        power_id_list.append(p.id)
+
+    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    for p in powers:
+        role.power.remove(p)
+    user_id_list = []
+    for u in role.user:
+        user_id_list.append(u.id)
+    users = User.query.filter(User.id.in_(user_id_list)).all()
+    for u in users:
+        role.user.remove(u)
+    r = Role.query.filter_by(id=id).delete()
+    db.session.commit()
+    return r

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <title>权限编辑</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}"
@@ -39,11 +39,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" lay-filter="powerType" {% if power.type == '0' %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType" {% if power.type == "0" %} checked{% endif %}
                                name="powerType" value="0" title="目录">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == '1' %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType"  {% if power.type == "1" %} checked{% endif %}
                                name="powerType" value="1" title="菜单">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == '2' %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType"  {% if power.type == "2" %} checked{% endif %}
                                name="powerType" value="2" title="按钮">
                     </div>
                 </div>
@@ -59,8 +59,8 @@
                     <div class="layui-input-block">
                         <select name="openType" id="openType">
                             <option value=""></option>
-                            <option value="_iframe" {% if power.type == '_iframe' %} checked{% endif %}>框架</option>
-                            <option value="_blank" {% if power.type == '_blank' %} checked{% endif %}>签页</option>
+                            <option value="_iframe" {% if power.open_type == "_iframe" %} selected{% endif %}>框架</option>
+                            <option value="_blank" {% if power.open_type == "_blank" %} selected{% endif %}>签页</option>
                         </select>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
             skin: "layui",
             dataFormat: "list",
             response: {treeId: "powerId", parentId: "parentId", title: "powerName"},
-            selectInitVal: {{ power.parent_id }}
+            selectInitVal: "{{ power.parent_id }}"
         });
 
         form.on("radio(powerType)", function (data) {
@@ -140,7 +140,7 @@
         form.on('submit(power-save)', function (data) {
             data.field.icon = "layui-icon " + data.field.icon;
             $.ajax({
-                url: '/system/power/update',
+                url: '/admin/power/update',
                 data: JSON.stringify(data.field),
                 dataType: 'json',
                 contentType: 'application/json',
@@ -170,7 +170,7 @@
             }
         });
 
-        iconPicker.checkIcon("icon", [[${sysPower.icon}]]);
+        iconPicker.checkIcon("icon", "{{ icon }}");
 
         window.init = function (type) {
             if (type == '0') {
@@ -193,7 +193,7 @@
             }
         }
 
-        window.init([[${sysPower.powerType}]]);
+        window.init("{{ power.type}}");
     })
 </script>
 <script>

@@ -184,7 +184,7 @@
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "remove/" + obj.data['roleId'],
+                    url: MODULE_PATH + "remove/" + obj.data['id'],
                     dataType: 'json',
                     type: 'delete',
                     success: function (result) {
@@ -202,7 +202,7 @@
         }
 
         window.batchRemove = function (obj) {
-            let ids = common.checkField(obj,'roleId');
+            let ids = common.checkField(obj,'id');
             if (common.isEmpty(ids)) {
                 popup.warning("未选中数据");
                 return false;

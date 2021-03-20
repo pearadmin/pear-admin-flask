@@ -70,18 +70,22 @@ def get_power_by_id(id):
 
 # 更新角色
 def update_power(req_json):
-    id = req_json.get("roleId")
+    id = req_json.get("powerId")
     data = {
-        "code": req_json.get("roleCode"),
-        "name": req_json.get("roleName"),
-        "sort": req_json.get("sort"),
-        "enable": req_json.get("enable"),
-        "details": req_json.get("details")
+        "icon": req_json.get("icon"),
+        "open_type": req_json.get("openType"),
+        "parent_id": req_json.get("parentId"),
+        "code": req_json.get("powerCode"),
+        "name": req_json.get("powerName"),
+        "type": req_json.get("powerType"),
+        "url": req_json.get("powerUrl"),
+        "sort": req_json.get("sort")
     }
     print(data)
-    role = Role.query.filter_by(id=id).update(data)
+    power = Power.query.filter_by(id=id).update(data)
     db.session.commit()
-    return role
+    print(power)
+    return power
 
 
 # 删除权限（目前没有判断父节点自动删除子节点）

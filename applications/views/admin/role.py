@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 
 from applications.service.admin.role import get_role_data_dict, add_role, get_role_power, update_role_power, \
-    get_role_by_id, update_role
+    get_role_by_id, update_role, remove_role
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
@@ -97,6 +97,14 @@ def update():
     if not res:
         return jsonify(success=False, msg="更新角色失败")
     return jsonify(success=True, msg="更新角色成功")
+
+
+@admin_role.route('/remove/<int:id>', methods=['DELETE'])
+def remove(id):
+    res = remove_role(id)
+    if not res:
+        return jsonify(success=False, msg="角色删除失败")
+    return jsonify(success=True, msg="角色删除成功")
 
 # 批量删除
 # @admin_user.route('/batchRemove', methods=['GET', 'POST'])

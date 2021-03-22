@@ -39,12 +39,11 @@ Pear Admin Flask 分为 Common / Simple 两个版本：
 
 [** Common 通用版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
-[** Simple 简单版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+[** Simple 简洁版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
 
 #### 项目安装
 
 ```bash
-
 # 下 载
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
@@ -59,7 +58,6 @@ applications\config\database.py
 #### 修改配置
 
 ```python
-
 # 主 机
 HOST = '127.0.0.1'
 
@@ -80,17 +78,17 @@ PASSWORD = 'root'
 #### Venv 安装
 
 ```bash
-
 python -m venv venv
 
 ```
 
-```bash
+#### 运行项目
 
+```bash
 # 进 入 目 录
 cd dev
 
-# 初 始 化 数 据 库 脚 本
+# 初 始 化 数 据 库
 python initDb.py
 
 # 如 果 报 模 块 路 径 错 误
@@ -105,5 +103,6 @@ python dev/initDb.py
 
 |  |  |
 |---------------------|---------------------|
-| ![](readme/1.jpg)  | ![](readme/2.jpg)  |
-| ![](readme/3.jpg)|  ![](readme/4.jpg)   |
+| ![](readmes/1.jpg)  | ![](readmes/2.jpg)  |
+| ![](readmes/3.jpg)|  ![](readmes/4.jpg)   |
+| ![](readmes/5.jpg) |  ![](readmes/6.jpg)   |

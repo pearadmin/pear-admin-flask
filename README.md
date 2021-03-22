@@ -88,4 +88,9 @@ python dev/initDb.py
 然后，你可以使用 flask run 命令启动项目了
 
 
+#### 预览项目
 
+|  |  |
+|---------------------|---------------------|
+| ![](readme/1.jpg)  | ![](readme/2.jpg)  |
+| ![](readme/3.jpg)|  ![](readme/4.jpg)   |

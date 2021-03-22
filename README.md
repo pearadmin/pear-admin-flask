@@ -38,7 +38,7 @@
 
 ​		Pear Admin Flask 分为俩个版本：					
 
-​					**[数据库权限管理版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)    开发中**
+​					**[数据库权限管理版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
 ​					[**yaml权限管理版本（简洁版）**](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
 

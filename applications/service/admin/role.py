@@ -1,3 +1,4 @@
+from flask import jsonify
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import and_
@@ -146,3 +147,12 @@ def remove_role(id):
     r = Role.query.filter_by(id=id).delete()
     db.session.commit()
     return r
+
+
+# 批量删除
+def batch_remove(ids):
+    # role = Role.query.filter(Role.id.in_(ids)).delete(synchronize_session=False)
+    # db.session.commit()
+    for id in ids:
+        remove_role(id)
+

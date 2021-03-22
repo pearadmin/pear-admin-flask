@@ -2,30 +2,21 @@ import os
 import platform
 import re
 from datetime import datetime
+
 import psutil
-from flask import Blueprint, request, render_template
-from flask_login import login_required
+from flask import Blueprint, render_template
 from flask_marshmallow import Marshmallow
-from applications.service.admin_log import admin_log
+
+from applications.service.route_auth import authorize_and_log
 
 ma = Marshmallow()
 admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 
-# @admin_Monitor.before_request
-# @login_required
-# def Monitor_log():
-#     admin_log(request)
-
-
-#                               ----------------------------------------------------------
-#                               -------------------------  系统监控 --------------------------
-#                               ----------------------------------------------------------
-
-
+# 系统监控
 @admin_Monitor.route('/')
-@login_required
-def index():
+@authorize_and_log("admin:monitor:main")
+def main():
     # 主机名称
     hostname = platform.node()
     # 系统版本
@@ -80,5 +71,4 @@ def index():
                            boot_time=boot_time,
                            up_time_format=up_time_format,
                            disk_partitions_list=disk_partitions_list
-
                            )

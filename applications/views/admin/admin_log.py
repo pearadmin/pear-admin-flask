@@ -72,7 +72,7 @@ def operateLog():
     log = AdminLog.query.filter(AdminLog.url != '/admin/login').order_by(desc(AdminLog.create_time)).paginate(page=page,
                                                                                                               per_page=limit,
                                                                                                               error_out=False)
-    count = AdminLog.query.count()
+    count = AdminLog.query.filter(AdminLog.url != '/admin/login').count()
     role_schema = LogSchema(many=True)
     output = role_schema.dump(log.items)
     res = {

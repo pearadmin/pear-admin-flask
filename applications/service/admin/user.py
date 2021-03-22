@@ -28,8 +28,10 @@ class UserSchema(ma.Schema):
 '''
 
 
-def get_user_data(page, limit,filters):
-    user = User.query.filter(and_(*[getattr(User, k).like(v) for k,v in filters.items()])).paginate(page=page, per_page=limit, error_out=False)
+def get_user_data(page, limit, filters):
+    user = User.query.filter(and_(*[getattr(User, k).like(v) for k, v in filters.items()])).paginate(page=page,
+                                                                                                     per_page=limit,
+                                                                                                     error_out=False)
     count = User.query.count()
     return user, count
 
@@ -41,7 +43,7 @@ def get_user_data(page, limit,filters):
 
 
 def get_user_data_dict(page, limit, filters):
-    user, count = get_user_data(page, limit,filters)
+    user, count = get_user_data(page, limit, filters)
     user_schema = UserSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = user_schema.dump(user.items)  # 生成可序列化对象
     return output, count
@@ -68,6 +70,16 @@ def add_user(username, realName, password):
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
+    return user.id
+
+
+# 增加用户角色
+def add_user_role(id, roles_list):
+    user = User.query.filter_by(id=id).first()
+    roles = Role.query.filter(Role.id.in_(roles_list)).all()
+    for r in roles:
+        user.role.append(r)
+    db.session.commit()
 
 
 # 更新用户信息
@@ -78,8 +90,16 @@ def update_user(id, username, realname):
 
 
 def delete_by_id(id):
-    user = User.query.filter_by(id=id).delete()
-    return user
+    user = User.query.filter_by(id=id).first()
+    roles_id = []
+    for role in user.role:
+        roles_id.append(role.id)
+    roles = Role.query.filter(Role.id.in_(roles_id)).all()
+    for r in roles:
+        user.role.remove(r)
+    res = User.query.filter_by(id=id).delete()
+    db.session.commit()
+    return res
 
 
 def update_status(status):
@@ -90,15 +110,10 @@ def update_status(status):
     return jsonify(msg="出错啦", code=999)
 
 
+# 批量删除
 def batch_remove(ids):
-    user = User.query.filter(User.id.in_(ids)).delete(synchronize_session=False)
-    db.session.commit()
-    if user:
-        res = jsonify(msg="批量删除成功", code=200)
-        return jsonify(res)
-    else:
-        res = jsonify(msg="批量删除失败", code=999)
-        return jsonify(res)
+    for id in ids:
+        delete_by_id(id)
 
 
 def update_user_role(id, roles_list):

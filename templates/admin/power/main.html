@@ -37,21 +37,29 @@
 </div>
 
 <script type="text/html" id="power-toolbar">
+    {% if authorize("admin:power:add") %}
     <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
         <i class="layui-icon layui-icon-add-1"></i>
         新增
     </button>
+    {% endif %}
+    {% if authorize("admin:role:remove") %}
     <button  class="pear-btn pear-btn-md" lay-event="batchRemove">
         <i class="layui-icon layui-icon-delete"></i>
         删除
     </button>
+    {% endif %}
 </script>
 
 <script type="text/html" id="power-bar">
+    {% if authorize("admin:role:edit") %}
     <button  class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
     </button>
+    {% endif %}
+    {% if authorize("admin:role:remove") %}
     <button  class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
     </button>
+    {% endif %}
 </script>
 
 <script type="text/html" id="power-type">
@@ -104,7 +112,9 @@
                 page: false,
                 cols: [
                     [
+                        {% if authorize("admin:role:remove") %}
                         {type: 'checkbox'},
+                        {% endif %}
                         {field: 'powerName', minWidth: 200, title: '权限名称'},
                         {field: 'icon', title: '图标', templet: '#icon'},
                         {field: 'powerType', title: '权限类型', templet: '#power-type'},

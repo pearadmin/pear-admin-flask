@@ -49,21 +49,29 @@
 </body>
 
 <script type="text/html" id="user-toolbar">
+    {% if authorize("admin:user:add") %}
     <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
         <i class="pear-icon pear-icon-add"></i>
         新增
     </button>
+    {% endif %}
+      {% if authorize("admin:user:remove") %}
     <button class="pear-btn pear-btn-md" lay-event="batchRemove">
         <i class="pear-icon pear-icon-ashbin"></i>
         删除
     </button>
+{% endif %}
 </script>
 
 <script type="text/html" id="user-bar">
+     {% if authorize("admin:user:edit") %}
     <button  class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i>
     </button>
+     {% endif %}
+      {% if authorize("admin:user:remove") %}
     <button  class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="pear-icon pear-icon-ashbin"></i>
     </button>
+{% endif %}
 </script>
 
 <script type="text/html" id="user-enable">
@@ -94,13 +102,14 @@
         let form = layui.form;
         let $ = layui.jquery;
         let popup = layui.popup;
-        let common = layui.common;
 
         let MODULE_PATH = "/admin/user/";
 
         let cols = [
             [
+                 {% if authorize("admin:user:remove") %}
                 {type: 'checkbox'},
+                {% endif %}
                 {title: '姓名', field: 'realname', align: 'center', width: 110},
                 {title: '账号', field: 'username', align: 'center'},
                 {title: '启用', field: 'enable', align: 'center', templet: '#user-enable',width: 120},
@@ -239,32 +248,49 @@
             });
         }
 
-        window.batchRemove = function (obj) {
-            let ids = common.checkField(obj,'userId');
-            if (common.isEmpty(ids)) {
-                popup.warning("未选中数据");
-                return false;
-            }
-            layer.confirm('确定要删除选中用户', {icon: 3, title: '提示'}, function (index) {
-                layer.close(index);
-                let loading = layer.load();
-                $.ajax({
-                    url: MODULE_PATH + "batchRemove/" + ids,
-                    dataType: 'json',
-                    type: 'delete',
-                    success: function (result) {
-                        layer.close(loading);
-                        if (result.success) {
-                            popup.success(result.msg,function(){
-                                table.reload('user-table');
-                            })
-                        } else {
-                            popup.failure(result.msg);
-                        }
+          window.batchRemove = function(obj) {
+                    let data = table.checkStatus(obj.config.id).data;
+                    if (data.length === 0) {
+                        layer.msg("未选中数据", {
+                            icon: 3,
+                            time: 1000
+                        });
+                        return false;
                     }
-                })
-            });
-        }
+                    var ids = []
+                    var hasCheck = table.checkStatus('user-table')
+                    var hasCheckData = hasCheck.data
+                    if (hasCheckData.length > 0) {
+                        $.each(hasCheckData, function (index, element) {
+                            ids.push(element.id)
+                        })
+                    }
+                    console.log(ids)
+                    layer.confirm('确定要删除选中角色', {
+                        icon: 3,
+                        title: '提示'
+                    }, function(index) {
+                        layer.close(index);
+                        let loading = layer.load();
+                       $.ajax({
+
+                           url: MODULE_PATH + "batchRemove",
+                           data: {ids:ids},
+                           dataType: 'json',
+                            type: 'delete',
+                            success: function (result) {
+                                layer.close(loading);
+                                if (result.success) {
+                                    popup.success(result.msg, function () {
+                                        table.reload('role-table');
+                                    });
+                                } else {
+                                    popup.failure(result.msg);
+                                }
+                            }
+                        })
+                    });
+                }
 
         window.refresh = function (param) {
             table.reload('user-table', {where: param});

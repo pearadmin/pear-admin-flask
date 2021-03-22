@@ -46,6 +46,7 @@ def make_menu_tree():
     role = current_user.role
     power0 = []
     power1 = []
+    print(role)
     for i in role:
         for y in i.power:
             if int(y.type) == 0:
@@ -56,8 +57,8 @@ def make_menu_tree():
     power_schema = PowerSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     power0_dict = power_schema.dump(power0)  # 生成可序列化对象
     power1_dict = power_schema.dump(power1)  # 生成可序列化对象
-    # print(power0)
-    # print(power1)
+    print(power0)
+    print(power1)
 
     menu = []
 

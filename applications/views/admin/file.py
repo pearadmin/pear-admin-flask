@@ -4,20 +4,21 @@ from flask_login import login_required
 from applications.models import db
 from applications.models.admin import Photo
 from applications.service.admin.file import get_photo, upload_one, delete_photo_by_id
+from applications.service.route_auth import authorize_and_log
 
 admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
 
 #  图片管理
 @admin_file.route('/')
-@login_required
+@authorize_and_log("admin:file:main")
 def index():
     return render_template('admin/photo/photo.html')
 
 
 #  图片数据
 @admin_file.route('/table')
-@login_required
+@authorize_and_log("admin:file:main")
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -35,7 +36,7 @@ def table():
 
 #   上传接口
 @admin_file.route('/upload', methods=['GET', 'POST'])
-@login_required
+@authorize_and_log("admin:file:add")
 def upload():
     if request.method == 'POST' and 'file' in request.files:
         photo = request.files['file']
@@ -54,7 +55,7 @@ def upload():
 
 #    图片删除
 @admin_file.route('/delete', methods=['GET', 'POST'])
-@login_required
+@authorize_and_log("admin:file:delete")
 def delete():
     id = request.form.get('id')
     res = delete_photo_by_id(id)
@@ -66,7 +67,7 @@ def delete():
 
 # 图片批量删除
 @admin_file.route('/batchRemove', methods=['GET', 'POST'])
-@login_required
+@authorize_and_log("admin:file:delete")
 def batchRemove():
     ids = request.form.getlist('ids[]')
     photo_name = Photo.query.filter(Photo.id.in_(ids)).all()

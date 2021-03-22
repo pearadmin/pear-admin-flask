@@ -4,7 +4,7 @@ from flask_login import login_required
 from applications.service.admin_log import admin_log
 
 
-def PreAuthorize(power: str):
+def authorize(power: str):
     def decorator(func):
         @login_required
         @wraps(func)
@@ -13,7 +13,7 @@ def PreAuthorize(power: str):
                 if request.method == 'GET':
                     abort(403)
                 else:
-                    return jsonify(code=403, msg="权限不足!")
+                    return jsonify(success=False, msg="权限不足!")
             return func(*args, **kwargs)
 
         return wrapper
@@ -21,7 +21,7 @@ def PreAuthorize(power: str):
     return decorator
 
 
-def PreAuthorizeAndLog(power: str):
+def authorize_and_log(power: str):
     def decorator(func):
         @login_required
         @wraps(func)
@@ -31,7 +31,7 @@ def PreAuthorizeAndLog(power: str):
                 if request.method == 'GET':
                     abort(403)
                 else:
-                    return jsonify(code=403, msg="权限不足!")
+                    return jsonify(success=False, msg="权限不足!")
             admin_log(request=request, is_access=True)
             return func(*args, **kwargs)
 

@@ -53,11 +53,11 @@ def login():
             # 登录
             login_user(user)
             # 记录登录日志
-            login_log(request)
+            login_log(request, uid=user.id, is_access=True)
             # 存入权限
             add_auth_session()
             return jsonify(msg="登录成功", code=1,success=True)
-
+        login_log(request,uid=user.id, is_access=False)
         return jsonify(msg="用户名或密码错误", code=0,success=False)
     print(current_user.is_authenticated)
     if current_user.is_authenticated:

@@ -36,7 +36,14 @@
 
 
 <script type="text/html" id="log-createTime">
-    {{'  {{layui.util.toDateString(d.createTime,  "yyyy-MM-dd HH:mm:ss")}' |safe}}}
+    {{'  {{layui.util.toDateString(d.create_time,  "yyyy-MM-dd HH:mm:ss")}' |safe}}}
+</script>
+<script type="text/html" id="log-status">
+    {{'{{#if (d.success == true) { }}
+    <span style="color: green">成功</span>
+    {{# }else if(d.success == false){ }}
+    <span style="color: red">失败</span>
+    {{# } }}'|safe}}
 </script>
         <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
         <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
@@ -54,9 +61,10 @@
                 {title: '接口', field: 'url', align: 'center'},
                 {title: '浏览器', field: 'user_agent', align: 'center'},
                 {title: '操作地址', field: 'ip', align: 'center'},
-                {title: '访问时间', field: 'createTime', templet: '#log-createTime', align: 'center'},
+                {title: '访问时间', field: 'create_time', templet: '#log-createTime', align: 'center'},
                 {title: '操作人ID', field: 'uid', align: 'center'},
-                {title: '描述', field: 'desc', align: 'center'}
+                {title: '描述', field: 'desc', align: 'center'},
+                {title: '访问状态', templet: '#log-status', align: 'center'}
             ]
         ]
 

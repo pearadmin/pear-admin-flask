@@ -4,18 +4,26 @@ from applications.models import db
 from applications.models.admin import AdminLog
 
 
-def login_log(request):
+def login_log(request,uid, is_access):
     info = {
         'method': request.method,
         'url': request.path,
         'ip': request.remote_addr,
         'user_agent': request.headers.get('User-Agent'),
         'desc': request.form.get('username'),
-        'uid': current_user.id
+        'uid': uid,
+        'success': int(is_access)
 
     }
-    log = AdminLog(url=info.get('url'), ip=info.get('ip'), user_agent=info.get('user_agent'), desc=info.get('desc'),
-                   uid=info.get('uid'), method=info.get('method'))
+    log = AdminLog(
+        url=info.get('url'),
+        ip=info.get('ip'),
+        user_agent=info.get('user_agent'),
+        desc=info.get('desc'),
+        uid=info.get('uid'),
+        method=info.get('method'),
+        success = info.get('success')
+    )
     db.session.add(log)
     db.session.flush()
     db.session.commit()

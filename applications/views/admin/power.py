@@ -80,5 +80,5 @@ def edit(id):
 def update():
     res = update_power(request.json)
     if not res:
-        return jsonify(success=False, msg="更新角色失败")
-    return jsonify(success=True, msg="更新角色成功")
+        return jsonify(success=False, msg="更新权限失败")
+    return jsonify(success=True, msg="更新权限成功")

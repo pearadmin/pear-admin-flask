@@ -28,6 +28,7 @@ class LogSchema(ma.Schema):  # 序列化类
     desc = fields.Str()
     ip = fields.Str()
     user_agent = fields.Str()
+    success = fields.Bool()
     create_time = fields.DateTime()
 
 

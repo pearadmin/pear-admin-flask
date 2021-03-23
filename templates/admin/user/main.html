@@ -79,20 +79,11 @@
            {{"{ { d.enable== true ? 'checked' : '' }}"|safe}} />
 </script>
 
-<script type="text/html" id="user-sex">
-    {{" {{#if (d.sex == 0) { }}
-    <span>男</span>
-    {{# }else if(d.sex == 1){ }}
-    <span>女</span>
-    {{# } }}"|safe}}
+<script type="text/html" id="user-createTime">
+    {{'  {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}' |safe}}}
 </script>
-
-<script type="text/html" id="user-login">
-    {{"{{#if (d.login == 0) { }}
-    <span>在线</span>
-    {{# }else if(d.sex == 1){ }}
-    <span>离线</span>
-    {{# } }}"|safe}}
+<script type="text/html" id="user-updateTime">
+    {{'  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe}}}
 </script>
 <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
 <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
@@ -113,8 +104,8 @@
                 {title: '姓名', field: 'realname', align: 'center', width: 110},
                 {title: '账号', field: 'username', align: 'center'},
                 {title: '启用', field: 'enable', align: 'center', templet: '#user-enable',width: 120},
-                {title: '注册时间', field: 'create_at', align: 'center'},
-                {title: '更新时间', field: 'update_at', align: 'center'},
+                {title: '注册时间', field: 'create_at', templet: '#user-createTime', align: 'center'},
+                {title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center'},
                 {title: '操作', toolbar: '#user-bar', align: 'center', width: 130}
             ]
         ]

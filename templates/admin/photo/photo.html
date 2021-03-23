@@ -32,7 +32,10 @@
 		<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
 	    {% endif %}
     </script>
-<script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
+    <script type="text/html" id="file-uploadTime">
+    {{'  {{layui.util.toDateString(d.create_time,  "yyyy-MM-dd HH:mm:ss")}' |safe}}}
+    </script>
+    <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
         <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
     <script>
         layui.use(['table', 'form', 'jquery'], function() {
@@ -79,6 +82,7 @@
             },{
                 field: 'create_time',
                 title: '创建时间',
+                templet: '#file-uploadTime',
                 unresize: true,
                 align: 'center'
             },{

@@ -12,16 +12,15 @@
   [预 览](http://flask.pearadmin.com)   |   [官 网](http://www.pearadmin.com/)   |   [群聊](https://jq.qq.com/?_wv=1027&k=5OdSmve)   |   [社区](http://forum.pearadmin.com/)
 
 
-
 <p align="center">
     <a href="#">
-        <img src="https://img.shields.io/badge/pear%20admin%20flask-0.1-green" alt="Pear Admin Layui Version">
+        <img src="https://img.shields.io/badge/pear%20admin%20flask-1.0.0-green" alt="Pear Admin Layui Version">
     </a>
     <a href="#">
-        <img src="https://img.shields.io/badge/JQuery-2.0+-green.svg" alt="Jquery Version">
+        <img src="https://img.shields.io/badge/Python-3.6+-green.svg" alt="Python Version">
     </a>
       <a href="#">
-        <img src="https://img.shields.io/badge/Layui-2.5.6+-green.svg" alt="Layui Version">
+        <img src="https://img.shields.io/badge/Mysql-5.3.2+-green.svg" alt="Mysql Version">
     </a>
 </p>
 </div>
@@ -36,56 +35,74 @@
 
 #### 版本说明
 
-​		Pear Admin Flask 分为俩个版本：					
+Pear Admin Flask 分为 Common / Simple 两个版本：					
 
-​					**[数据库权限管理版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)    开发中**
+[** Common 通用版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
-​					[**yaml权限管理版本（简洁版）**](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+[** Simple 简洁版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
 
-#### 环境要求
-
-* python >= 3.6
-* mysql>=5.7
-
-#### 安装配置
+#### 项目安装
 
 ```bash
-#下载项目
+# 下 载
 git clone https://gitee.com/pear-admin/pear-admin-flask
-#安装依赖
+
+# 安 装
 pip install -r requirement.txt
-#修改数据库连接配置文件
+
+# 配 置
 applications\config\database.py
+
 ```
+
+#### 修改配置
 
 ```python
-#修改数据库连接配置文件applications\config\database.py
-#修改成你自己的
+# 主 机
 HOST = '127.0.0.1'
+
+# 端 口
 PORT = '3306'
+
+# 数 据 库
 DATABASE = 'PearAdminFlask'
+
+# 账 户
 USERNAME = 'root'
+
+# 密 码
 PASSWORD = 'root'
+
 ```
 
->推荐使用虚拟环境 venv
->
->```bash
->python -m venv venv
->```
->
+#### Venv 安装
 
 ```bash
-#进入开发目录
-cd dev
-#执行初始化数据库脚本
-python initDb.py
+python -m venv venv
 
-#如果报模块路径错误
-python dev/initDb.py
 ```
 
-然后，你可以使用 flask run 命令启动项目了
+#### 运行项目
+
+```bash
+# 进 入 目 录
+cd dev
+
+# 初 始 化 数 据 库
+python initDb.py
+
+# 如 果 报 模 块 路 径 错 误
+python dev/initDb.py
+
+```
+
+执行 flask run 命令启动项目
 
 
+#### 预览项目
 
+|  |  |
+|---------------------|---------------------|
+| ![](readmes/1.jpg)  | ![](readmes/2.jpg)  |
+| ![](readmes/3.jpg)|  ![](readmes/4.jpg)   |
+| ![](readmes/5.jpg) |  ![](readmes/6.jpg)   |

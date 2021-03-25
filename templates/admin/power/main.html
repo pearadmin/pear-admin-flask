@@ -77,7 +77,7 @@
 </script>
 
 <script type="text/html" id="power-enable">
-    <input type="checkbox" name="enable" value="{{ "{{d.powerId}}" }}" lay-skin="switch" lay-text="启用|禁用" lay-filter="power-enable" {{ "{{ d.enable== true ? 'checked' : '' }}" }}>
+    <input type="checkbox" name="enable" value="{{ "{{d.powerId}}" }}" lay-skin="switch" lay-text="启用|禁用" lay-filter="power-enable"  {{"{{# if(d.enable==1){ }} checked {{# } }}"}}>
 </script>
 
 <script type="text/html" id="icon">
@@ -183,7 +183,7 @@
             }
             let loading = layer.load();
             $.ajax({
-                url: '/system/power/' + operate,
+                url: '/admin/power/' + operate,
                 data: JSON.stringify({powerId: this.value}),
                 dataType: 'json',
                 contentType: 'application/json',
@@ -219,7 +219,6 @@
                 content: MODULE_PATH + 'edit/' + obj.data['powerId']
             });
         }
-
         window.remove = function (obj) {
             layer.confirm('确定要删除该权限', {icon: 3, title: '提示'}, function (index) {
                 layer.close(index);
@@ -232,6 +231,7 @@
                         layer.close(loading);
                         if (result.success) {
                             popup.success(result.msg,function(){
+                                console.log(obj);
                                 obj.del();
                             })
                         } else {
@@ -241,6 +241,49 @@
                 })
             });
         }
+
+         window.batchRemove = function(obj) {
+                    let data = table.checkStatus(obj.config.id).data;
+                    if (data.length === 0) {
+                        layer.msg("未选中数据", {
+                            icon: 3,
+                            time: 1000
+                        });
+                        return false;
+                    }
+                    var ids = []
+                    var hasCheck = table.checkStatus('power-table')
+                    var hasCheckData = hasCheck.data
+                    if (hasCheckData.length > 0) {
+                        $.each(hasCheckData, function (index, element) {
+                            ids.push(element.id)
+                        })
+                    }
+                    layer.confirm('确定要删除选中权限', {
+                        icon: 3,
+                        title: '提示'
+                    }, function(index) {
+                        layer.close(index);
+                        let loading = layer.load();
+                       $.ajax({
+                           url: MODULE_PATH + "batchRemove",
+                           data: {ids:ids},
+                           dataType: 'json',
+                            type: 'delete',
+                            success: function (result) {
+                                layer.close(loading);
+                                if (result.success) {
+                                    popup.success(result.msg, function () {
+                                        console.log(obj);
+                                        obj.del();
+                                    });
+                                } else {
+                                    popup.failure(result.msg);
+                                }
+                            }
+                        })
+                    });
+                }
     })
 </script>
 </html>

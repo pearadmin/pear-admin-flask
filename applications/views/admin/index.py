@@ -46,7 +46,7 @@ def login():
         if user is None:
             return jsonify(msg="不存在的用户", code=0,success=False)
 
-        if user.enable is 1:
+        if user.enable is 0:
             return jsonify(msg="用户被暂停使用", code=0,success=False)
 
         if username == user.username and user.validate_password(password):

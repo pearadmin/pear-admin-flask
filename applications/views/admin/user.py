@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from applications.models.admin import User, Role
-from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, update_status, \
-    batch_remove, update_user, update_user_role, is_user_exists, add_user_role
+from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, \
+    batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status
 from applications.service.route_auth import authorize_and_log
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
@@ -91,7 +91,7 @@ def edit(id):
         checked_roles.append(r.id)
     return render_template('admin/user/edit.html', user=user, roles=roles, checked_roles=checked_roles)
 
-
+#  编辑用户
 @admin_user.route('/update', methods=['PUT'])
 @authorize_and_log("admin:user:edit")
 def update():
@@ -106,16 +106,32 @@ def update():
     return jsonify(success=True, msg="更新成功")
 
 
-# 更新用户状态
-# @admin_user.route('/update/status', methods=['POST'])
-# @login_required
-# def ustatus():
-#     id = request.form.get('id')
-#     status = request.form.get('status')
-#     if id and status:
-#         res = update_status(status=status)
-#         return res
-#     return jsonify(msg="出错啦", code=999)
+# 启用用户
+@admin_user.route('/enable', methods=['PUT'])
+@authorize_and_log("admin:user:edit")
+def enable():
+    id = request.json.get('userId')
+    print(id)
+    if id:
+        res = enable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="启动成功", success=True)
+    return jsonify(msg="数据错误", success=False)
+
+
+# 禁用用户
+@admin_user.route('/disable', methods=['PUT'])
+@authorize_and_log("admin:user:edit")
+def disenable():
+    id = request.json.get('userId')
+    print(id)
+    if id:
+        res = disable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="禁用成功", success=True)
+    return jsonify(msg="数据错误", success=False)
 
 
 # 批量删除
@@ -125,3 +141,4 @@ def batchRemove():
     ids = request.form.getlist('ids[]')
     batch_remove(ids)
     return jsonify(success=True, msg="批量删除成功")
+

@@ -55,7 +55,8 @@ def save_power(req):
         name=powerName,
         type=powerType,
         url=powerUrl,
-        sort=sort
+        sort=sort,
+        enable=1
     )
     r = db.session.add(power)
     db.session.commit()
@@ -68,7 +69,7 @@ def get_power_by_id(id):
     return p
 
 
-# 更新角色
+# 更新权限
 def update_power(req_json):
     id = req_json.get("powerId")
     data = {
@@ -88,6 +89,26 @@ def update_power(req_json):
     return power
 
 
+# 启动权限
+def enable_status(id):
+    enable = 1
+    user = Power.query.filter_by(id=id).update({"enable": enable})
+    if user:
+        db.session.commit()
+        return True
+    return False
+
+
+# 停用权限
+def disable_status(id):
+    enable = 0
+    user = Power.query.filter_by(id=id).update({"enable": enable})
+    if user:
+        db.session.commit()
+        return True
+    return False
+
+
 # 删除权限（目前没有判断父节点自动删除子节点）
 def remove_power(id):
     power = Power.query.filter_by(id=id).first()
@@ -101,3 +122,9 @@ def remove_power(id):
     r = Power.query.filter_by(id=id).delete()
     db.session.commit()
     return r
+
+
+# 批量删除权限
+def batch_remove(ids):
+    for id in ids:
+        remove_power(id)

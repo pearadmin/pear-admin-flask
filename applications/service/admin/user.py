@@ -17,7 +17,7 @@ class UserSchema(ma.Schema):
     id = fields.Integer()
     username = fields.Str()
     realname = fields.Str()
-    enable = fields.Bool()
+    enable = fields.Integer()
     create_at = fields.DateTime()
     update_at = fields.DateTime()
 
@@ -102,12 +102,24 @@ def delete_by_id(id):
     return res
 
 
-def update_status(status):
-    user = User.query.filter_by(id=id).update({'status': status})
+# 启动用户
+def enable_status(id):
+    enable = 1
+    user = User.query.filter_by(id=id).update({"enable": enable})
     if user:
         db.session.commit()
-        return jsonify(msg="更新成功", code=200)
-    return jsonify(msg="出错啦", code=999)
+        return True
+    return False
+
+
+# 停用用户
+def disable_status(id):
+    enable = 0
+    user = User.query.filter_by(id=id).update({"enable": enable})
+    if user:
+        db.session.commit()
+        return True
+    return False
 
 
 # 批量删除

@@ -127,6 +127,28 @@ def update_role_power(id, power_list):
     db.session.commit()
 
 
+# 启动角色
+def enable_status(id):
+    enable = 1
+    role = Role.query.filter_by(id=id).update({"enable": enable})
+    if role:
+        db.session.commit()
+        return True
+    return False
+
+
+# 停用角色
+def disable_status(id):
+    enable = 0
+    role = Role.query.filter_by(id=id).update({"enable": enable})
+    if role:
+        db.session.commit()
+        return True
+    return False
+
+
+
+
 # 删除角色
 def remove_role(id):
     role = Role.query.filter_by(id=id).first()

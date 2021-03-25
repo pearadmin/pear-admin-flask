@@ -76,7 +76,7 @@
 
 <script type="text/html" id="user-enable">
     <input type="checkbox" name="enable" value="{{"{{ d.id }}"}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="user-enable"
-           {{"{ { d.enable== true ? 'checked' : '' }}"|safe}} />
+           {{"{{# if(d.enable==1){ }} checked {{# } }}"}} />
 </script>
 
 <script type="text/html" id="user-createTime">
@@ -181,7 +181,7 @@
             }
             let loading = layer.load();
             $.ajax({
-                url: '/system/user/' + operate,
+                url: '/admin/user/' + operate,
                 data: JSON.stringify({userId: this.value}),
                 dataType: 'json',
                 contentType: 'application/json',

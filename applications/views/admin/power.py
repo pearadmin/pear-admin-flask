@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from applications.service.admin.power import get_power_dict, select_parent, save_power, remove_power, get_power_by_id, \
-    update_power
+    update_power, enable_status, disable_status, batch_remove
 from applications.service.route_auth import authorize_and_log
 
 admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
@@ -50,17 +50,6 @@ def save():
     return jsonify(msg="成功", success=True)
 
 
-# 权限删除
-@admin_power.route('/remove/<int:id>', methods=['DELETE'])
-@authorize_and_log("admin:power:remove")
-def remove(id):
-    r = remove_power(id)
-    if r:
-        return jsonify(success=True, msg="删除成功")
-    else:
-        return jsonify(success=False, msg="删除失败")
-
-
 # 权限编辑
 @admin_power.route('/edit/<int:id>', methods=['GET', 'POST'])
 @authorize_and_log("admin:power:edit")
@@ -82,3 +71,51 @@ def update():
     if not res:
         return jsonify(success=False, msg="更新权限失败")
     return jsonify(success=True, msg="更新权限成功")
+
+
+# 启用用户
+@admin_power.route('/enable', methods=['PUT'])
+@authorize_and_log("admin:power:edit")
+def enable():
+    id = request.json.get('powerId')
+    print(id)
+    if id:
+        res = enable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="启动成功", success=True)
+    return jsonify(msg="数据错误", success=False)
+
+
+# 禁用用户
+@admin_power.route('/disable', methods=['PUT'])
+@authorize_and_log("admin:power:edit")
+def disenable():
+    id = request.json.get('powerId')
+    print(id)
+    if id:
+        res = disable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="禁用成功", success=True)
+    return jsonify(msg="数据错误", success=False)
+
+
+# 权限删除
+@admin_power.route('/remove/<int:id>', methods=['DELETE'])
+@authorize_and_log("admin:power:remove")
+def remove(id):
+    r = remove_power(id)
+    if r:
+        return jsonify(success=True, msg="删除成功")
+    else:
+        return jsonify(success=False, msg="删除失败")
+
+
+# 批量删除
+@admin_power.route('/batchRemove', methods=['DELETE'])
+@authorize_and_log("admin:power:remove")
+def batchRemove():
+    ids = request.form.getlist('ids[]')
+    batch_remove(ids)
+    return jsonify(success=True, msg="批量删除成功")

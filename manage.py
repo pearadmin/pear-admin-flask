@@ -9,7 +9,7 @@ Migrate(app=app, db=db)
 manager.add_command('db', MigrateCommand)  # 创建数据库映射命令
 
 # import models不能省
-from applications.models import admin
+from applications.models import *
 
 manager.add_command('start', Server(port=8080, use_debugger=True))  # 创建启动命令
 

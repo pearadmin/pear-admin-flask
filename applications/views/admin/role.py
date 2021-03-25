@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 
 from applications.service.admin.role import get_role_data_dict, add_role, get_role_power, update_role_power, \
-    get_role_by_id, update_role, remove_role, batch_remove
+    get_role_by_id, update_role, remove_role, batch_remove, enable_status, disable_status
 from applications.service.route_auth import authorize_and_log
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
@@ -105,7 +105,35 @@ def update():
         return jsonify(success=False, msg="更新角色失败")
     return jsonify(success=True, msg="更新角色成功")
 
+# 启用用户
+@admin_role.route('/enable', methods=['PUT'])
+@authorize_and_log("admin:role:edit")
+def enable():
+    id = request.json.get('roleId')
+    print(id)
+    if id:
+        res = enable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="启动成功", success=True)
+    return jsonify(msg="数据错误", success=False)
 
+
+# 禁用用户
+@admin_role.route('/disable', methods=['PUT'])
+@authorize_and_log("admin:role:edit")
+def disenable():
+    id = request.json.get('roleId')
+    print(id)
+    if id:
+        res = disable_status(id)
+        if not res:
+            return jsonify(msg="出错啦", success=False)
+        return jsonify(msg="禁用成功", success=True)
+    return jsonify(msg="数据错误", success=False)
+
+
+# 角色删除
 @admin_role.route('/remove/<int:id>', methods=['DELETE'])
 @authorize_and_log("admin:role:remove")
 def remove(id):

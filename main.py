@@ -32,11 +32,6 @@ def create_app():
     OpenDug(app)
     # logo
     logo()
-
-    @app.template_global
-    def authorize(power):
-        return bool(power in session.get('permissions'))
-
     return app
 
 

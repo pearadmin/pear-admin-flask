@@ -56,49 +56,91 @@ Pear Admin Flask 分为 Common / Simple 两个版本：
 ####  项目结构
 
 ```
-Pear Admin Flask:Common版本
+Pear Admin Flask
+│
 ├─applications
+│  │
 │  ├─config
-│  │  └─ common.py #普通配置
+│  │  │  
+│  │  ├─ common.py #普通配置
+│  │  │  
 │  │  └─ database.py #数据库配置
+│  │
 │  ├─models
+│  │  │  
 │  │  └─admin.py #基本模型
+│  │
 │  ├─service
+│  │  │  
 │  │  ├─admin
-│  │  │  └─ file.py		 		   	#file视图的数据操作
-│  │  │  └─ index.py				#index视图的数据操作
-│  │  │  └─ power.py				#power视图的数据操作
-│  │  │  └─ role.py					#role视图的数据操作
-│  │  │  └─ user.py					#user视图的数据操作
-│  │  └─ admin_log.py				#存储日志
-│  │  └─ deBug.py					#deBug工具栏初始化
-│  │  └─ login.py					#flask_login初始化
-│  │  └─ CaptchaTool.py				 #验证码
-│  │  └─ OriginalDb.py				 #原生sql查询封装
-│  │  └─ route_auth.py				 #权限
-│  │  └─ upload.py					 #上传
-│  ├─views
-│  │  ├─admin						#前台视图
-│  │  │  └─index.py					#主视图
-│  │  │  └─user.py					用户视图
-│  │  │  └─role.py					#角色视图
-│  │  │  └─power.py					#权限视图
-│  │  │  └─monitor.py				#系统监控
-│  │  │  └─file.py					#文件上传
-│  │  │  └─admin_log.py				#系统日志
-│  │  │  └─context_processor.py		 #全局模板函数注册
-│  │  │  └─error.py					#错误处理
-│  │  │  └─__init__.py			   	 #蓝图注册
-│  │  ├─index 					 	#前台视图
-├─dev							   #数据库初始化
-├─migrations						
+│  │  │  │
+│  │  │  ├─ file.py #file视图的数据操作
+│  │  │  │		 		   	
+│  │  │  ├─ index.py #index视图的数据操作
+│  │  │  │				
+│  │  │  ├─ power.py #power视图的数据操作
+│  │  │  │				
+│  │  │  ├─ role.py #role视图的数据操作
+│  │  │  │					
+│  │  │  └─ user.py #user视图的数据操作
+│  │  │  					
+│  │  ├─ admin_log.py #存储日志
+│  │  │  
+│  │  ├─ deBug.py #deBug工具栏初始化
+│  │  │  
+│  │  ├─ login.py #flask_login初始化					
+│  │  │  
+│  │  ├─ CaptchaTool.py	#验证码
+│  │  │  
+│  │  ├─ OriginalDb.py #原生sql查询封装
+│  │  │  
+│  │  ├─ route_auth.py #权限
+│  │  │  
+│  │  └─ upload.py #上传
+│  │
+│  └─views
+│     │
+│     ├─admin #前台视图
+│     │	 │     					
+│     │  ├─index.py #主视图
+│     │  │     
+│     │  ├─user.py #用户视图
+│     │  │     
+│     │  ├─role.py #角色视图
+│     │  │     
+│     │  ├─power.py #权限视图
+│     │  │     
+│     │  ├─monitor.py #系统监控
+│     │  │     
+│     │  ├─file.py #文件上传
+│     │  │     
+│     │  ├─admin_log.py #系统日志
+│     │  │     
+│     │  ├─context_processor.py	#全局模板函数注册
+│     │  │     
+│     │  ├─error.py #错误处理
+│     │  │     
+│     │  └─init.py #蓝图注册
+│     │
+│     └─index #前台视图
+│ 
+├─dev #数据库初始化
+│
+├─migrations	
+│					
 ├─readmes
-├─static							#静态资源
-│  └─upload	 					   	 #文件上传地址
-├─templates
-│  ├─admin							#前台模板
-│  ├─errors							#错误模板
-│  └─index							#前台模板
+│
+├─static #静态资源
+│  │
+│  └─upload #文件上传地址
+│
+└─templates
+    │
+    ├─admin #前台模板
+    │
+    ├─errors #错误模板
+    │ 
+    └─index #前台模板
 ```
 
 

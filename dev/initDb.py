@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import sqlparse
 import pymysql
 from applications.config.database import HOST, USERNAME, PASSWORD, DATABASE,PORT
@@ -51,5 +53,5 @@ def init_db():
     print('表创建成功')
     print('欢迎使用pear-admin-flask,请使用 flask run 命令启动程序')
 
-
-init_db()
+if __name__ == '__main__':
+    init_db()

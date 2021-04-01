@@ -75,4 +75,4 @@ other:
 
 header:
   ## 站内消息，数据来源，通过 false 设置关闭
-  message: flase
+  false

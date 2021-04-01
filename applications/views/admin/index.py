@@ -11,8 +11,8 @@ admin_index = Blueprint('adminIndex', __name__, url_prefix='/admin')
 @admin_index.route('/')
 @login_required
 def index():
-    realname = current_user.realname
-    return render_template('admin/index.html', realname=realname)
+    user = current_user
+    return render_template('admin/index.html', user=user)
 
 
 # 获取验证码

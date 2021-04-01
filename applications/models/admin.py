@@ -8,13 +8,14 @@ class User(db.Model, UserMixin):
     __tablename__ = 'admin_user'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
     username = db.Column(db.String(20), comment='用户名')
-    realname =db.Column(db.String(20), comment='真实名字')
+    realname = db.Column(db.String(20), comment='真实名字')
+    avatar = db.Column(db.String(255), comment='头像', default="/static/admin/admin/images/avatar.jpg")
+    remark = db.Column(db.String(255), comment='备注')
     password_hash = db.Column(db.String(128), comment='哈希密码')
     enable = db.Column(db.Integer, default=0, comment='启用')
     create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
-    role = db.relationship('Role',secondary="admin_user_role", backref=db.backref('user'),lazy = 'dynamic')
-    # power = db.relationship('Power',secondary="admin_user_role", backref=db.backref('user'))
+    role = db.relationship('Role', secondary="admin_user_role", backref=db.backref('user'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -43,7 +44,8 @@ class Role(db.Model):
     sort = db.Column(db.Integer, comment='排序')
     create_time = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_time = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='更新时间')
-    power = db.relationship('Power',secondary="admin_role_power", backref=db.backref('role'))
+    power = db.relationship('Power', secondary="admin_role_power", backref=db.backref('role'))
+
 
 # 创建中间表
 role_power = db.Table(

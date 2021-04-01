@@ -45,6 +45,7 @@ def upload():
         res = {
             "msg": "上传成功",
             "code": 0,
+            "success":True,
             "data":
                 {"src": file_url}
         }

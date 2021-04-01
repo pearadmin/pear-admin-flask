@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from applications.models.admin import User, Role
 from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, \
-    batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status
+    batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status, \
+    edit_password, get_current_user_logs, update_current_user_info, update_avatar
 from applications.service.route_auth import authorize_and_log
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
@@ -91,6 +92,7 @@ def edit(id):
         checked_roles.append(r.id)
     return render_template('admin/user/edit.html', user=user, roles=roles, checked_roles=checked_roles)
 
+
 #  编辑用户
 @admin_user.route('/update', methods=['PUT'])
 @authorize_and_log("admin:user:edit")
@@ -104,6 +106,57 @@ def update():
     update_user(id, username, realName)
     update_user_role(id, role_ids)
     return jsonify(success=True, msg="更新成功")
+
+
+# 个人中心
+@admin_user.route('/center')
+@login_required
+def center():
+    user_info = current_user
+    user_logs = get_current_user_logs()
+    return render_template('admin/user/center.html', user_info=user_info, user_logs=user_logs)
+
+
+# 修改头像
+@admin_user.route('/profile')
+@login_required
+def profile():
+    return render_template('admin/user/profile.html')
+
+
+# 修改头像
+@admin_user.route('/updateAvatar', methods=['PUT'])
+@login_required
+def updateAvatar():
+    url = request.json.get("avatar").get("src")
+    if not update_avatar(url):
+        return jsonify(msg="出错啦", success=False)
+    return jsonify(msg="修改成功", success=True)
+
+
+# 修改当前用户信息
+@admin_user.route('/updateInfo', methods=['PUT'])
+@login_required
+def updateInfo():
+    res_json = request.json
+    if not update_current_user_info(req_json=res_json):
+        return jsonify(msg="出错啦", success=False)
+    return jsonify(msg="更新成功", success=True)
+
+
+# 修改当前用户密码
+@admin_user.route('/editPassword', methods=['GET'])
+@login_required
+def editPassword():
+    return render_template('admin/user/edit_password.html')
+
+
+# 修改当前用户密码
+@admin_user.route('/editPassword', methods=['PUT'])
+@login_required
+def edit_password_put():
+    res_json = request.json
+    return edit_password(res_json=res_json)
 
 
 # 启用用户
@@ -141,4 +194,3 @@ def batchRemove():
     ids = request.form.getlist('ids[]')
     batch_remove(ids)
     return jsonify(success=True, msg="批量删除成功")
-

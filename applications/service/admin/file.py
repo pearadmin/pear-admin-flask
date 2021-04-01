@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from applications.models import db
 from applications.models.admin import Photo
 from applications.service.upload import photos
+
 ma = Marshmallow()
 
 
@@ -27,7 +28,7 @@ def get_photo(page, limit):
     return output, count
 
 
-def upload_one(photo,mime):
+def upload_one(photo, mime):
     filename = photos.save(photo)
     file_url = photos.url(filename)
 
@@ -36,7 +37,8 @@ def upload_one(photo,mime):
     photo = Photo(name=filename, href=file_url, mime=mime, size=size)
     db.session.add(photo)
     db.session.commit()
-    return upload_url
+    return file_url
+
 
 def delete_photo_by_id(id):
     photo_name = Photo.query.filter_by(id=id).first().name

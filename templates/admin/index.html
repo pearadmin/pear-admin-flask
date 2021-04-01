@@ -26,15 +26,15 @@
             <li class="layui-nav-item layui-hide-xs"><a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a></li>
             <li class="layui-nav-item layui-hide-xs"><a href="http://www.pearadmin.com" class="layui-icon layui-icon-website"></a></li>
             <li class="layui-nav-item layui-hide-xs message"></li>
-            <li class="layui-nav-item">
+            <li class="layui-nav-item user">
                 <!-- 头 像 -->
                 <a href="javascript:;">
-                    <img src="" id="avatar" class="avatar">
-                    <span>{{ realname }}</span>
+                    <img src="{{ user.avatar }}" id="avatar" class="layui-nav-img">
+                    <span>{{ user.realname }}</span>
                 </a>
                 <!-- 功 能 菜 单 -->
                 <dl class="layui-nav-child">
-                    <dd><a user-menu-url="/system/user/center" user-menu-id="5555" user-menu-title="基本资料">基本资料</a></dd>
+                    <dd><a user-menu-url="/admin/user/center" user-menu-id="5555" user-menu-title="基本资料">基本资料</a></dd>
                     <dd><a href="javascript:void(0);" class="logout">注销登录</a></dd>
                 </dl>
             </li>

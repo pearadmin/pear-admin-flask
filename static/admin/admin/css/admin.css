@@ -93,11 +93,12 @@ body,
 .pear-admin .layui-body {
 	left: 230px;
 	bottom: 0px;
+	margin-top: 60px;
+	padding-bottom: 0px;
 }
 
 .pear-admin .layui-layout-left {
 	left: 0px;
-
 }
 
 /** 隐 藏 布 局 样 式 */

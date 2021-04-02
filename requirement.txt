@@ -9,7 +9,7 @@ flask-marshmallow==0.14.0
 Flask-Migrate==2.6.0
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.4
--e git+https://github.com/maxcountryman/flask-uploads.git@f66d7dc93e684fa0a3a4350a38e41ae00483a796#egg=Flask_Uploads
+Flask_Reuploaded==0.5.0
 itsdangerous==1.1.0
 Jinja2==2.11.3
 Mako==1.1.4

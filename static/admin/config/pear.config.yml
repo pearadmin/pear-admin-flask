@@ -4,7 +4,7 @@ logo:
   ## 网站名称
   title: "Pear Admin"
   ## 网站图标
-  image: "admin/admin/images/logo.png"
+  image: "/static/admin/admin/images/logo.png"
 ## 菜单配置
 menu: 
   ## 菜单数据来源
@@ -72,3 +72,7 @@ other:
   keepLoad: "1200"
   ## 布局顶部主题
   autoHead: false
+## 头部配置
+header:
+  ## 站内消息，数据来源，通过 false 设置关闭
+  false

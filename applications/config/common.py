@@ -5,4 +5,4 @@ SECRET_KEY = 'pear-admin-flask'
 
 UPLOADED_PHOTOS_DEST = 'static/upload'
 UPLOADED_FILES_ALLOW = ['gif','jpg']
-
+JSON_AS_ASCII = False

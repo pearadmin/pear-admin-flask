@@ -16,7 +16,7 @@ class PowerSchema(ma.Schema):
     type = fields.Str()
     code = fields.Str()
     href = fields.Str(attribute="url")
-    open_type = fields.Str()
+    openType = fields.Str(attribute="open_type")
     parent_id = fields.Integer()
     icon = fields.Str()
     sort = fields.Integer()

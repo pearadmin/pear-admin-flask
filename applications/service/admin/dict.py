@@ -5,7 +5,7 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields
 
 from applications.models import db
-from applications.models.admin import DictType, DictData
+from applications.models.admin_dict import DictType, DictData
 
 ma = Marshmallow()
 

@@ -6,7 +6,9 @@ from sqlalchemy import and_, desc
 from sqlalchemy.sql import exists
 
 from applications.models import db
-from applications.models.admin import User, Role, AdminLog
+from applications.models.admin_user import User
+from applications.models.admin_role import  Role
+from applications.models.admin_log import  AdminLog
 from sqlalchemy.orm.dynamic import AppenderQuery
 
 ma = Marshmallow()

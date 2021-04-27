@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, render_template, jsonify, current_app
 from flask_login import login_required
 from applications.models import db
-from applications.models.admin import Photo
+from applications.models.admin_photo import Photo
 from applications.service.admin.file import get_photo, upload_one, delete_photo_by_id
 from applications.service.route_auth import authorize_and_log
 

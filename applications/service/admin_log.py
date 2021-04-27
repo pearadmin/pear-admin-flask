@@ -1,7 +1,7 @@
 from flask_login import current_user
 
 from applications.models import db
-from applications.models.admin import AdminLog
+from applications.models.admin_log import AdminLog
 
 
 def login_log(request,uid, is_access):

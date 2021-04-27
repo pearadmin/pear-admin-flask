@@ -1,10 +1,10 @@
-from flask import jsonify
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import and_
-
 from applications.models import db
-from applications.models.admin import Role, Power, User
+from applications.models.admin_role import Role
+from applications.models.admin_power import Power
+from applications.models.admin_user import User
 
 ma = Marshmallow()
 
@@ -147,8 +147,6 @@ def disable_status(id):
     return False
 
 
-
-
 # 删除角色
 def remove_role(id):
     role = Role.query.filter_by(id=id).first()
@@ -177,4 +175,3 @@ def batch_remove(ids):
     # db.session.commit()
     for id in ids:
         remove_role(id)
-

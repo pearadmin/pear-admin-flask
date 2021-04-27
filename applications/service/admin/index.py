@@ -3,7 +3,6 @@ from flask import session, make_response
 from flask_login import current_user
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
-from applications.models.admin import Power
 from applications.service.CaptchaTool import gen_captcha
 
 ma = Marshmallow()

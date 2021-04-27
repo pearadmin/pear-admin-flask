@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, session, redirec
 from flask_login import login_user, login_required, logout_user, current_user
 from applications.service.admin.index import add_auth_session, make_menu_tree, get_captcha
 from applications.service.admin_log import login_log
-from applications.models.admin import User
+from applications.models.admin_user import User
 
 admin_index = Blueprint('adminIndex', __name__, url_prefix='/admin')
 

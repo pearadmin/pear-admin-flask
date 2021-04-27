@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 
-from applications.models.admin import DictType, DictData
+from applications.models.admin_dict import DictType, DictData
 from applications.service.admin.dict import get_dict_type, get_dict_data, save_dict_type, save_dict_data, \
     delete_type_by_id, delete_data_by_id, update_dict_type, enable_dict_type_status, disable_dict_type_status, \
     enable_dict_data_status, disable_dict_data_status, update_dict_data

@@ -10,6 +10,6 @@ def init_flask_login(app):
 
     @login_manager.user_loader
     def load_user(user_id):
-        from applications.models.admin import User
+        from applications.models.admin_user import User
         user = User.query.get(int(user_id))
         return user

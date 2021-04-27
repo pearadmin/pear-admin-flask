@@ -3,7 +3,7 @@ from flask_login import login_required
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import desc
-from applications.models.admin import AdminLog
+from applications.models.admin_log import AdminLog
 
 ma = Marshmallow()
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')

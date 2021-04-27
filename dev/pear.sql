@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 16/04/2021 14:06:40
+ Date: 27/04/2021 11:57:13
 */
 
 SET NAMES utf8mb4;
@@ -37,15 +37,6 @@ CREATE TABLE `admin_admin_log`  (
 -- ----------------------------
 -- Records of admin_admin_log
 -- ----------------------------
-INSERT INTO `admin_admin_log` VALUES (1258, 'GET', 1, '/admin/user/', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:11', 1);
-INSERT INTO `admin_admin_log` VALUES (1259, 'GET', 1, '/admin/power/', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:11', 1);
-INSERT INTO `admin_admin_log` VALUES (1260, 'GET', 1, '/admin/role/', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:11', 1);
-INSERT INTO `admin_admin_log` VALUES (1261, 'GET', 1, '/admin/dict/', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:11', 1);
-INSERT INTO `admin_admin_log` VALUES (1262, 'GET', 1, '/admin/dict/dictType/data', '{\'page\': \'1\', \'limit\': \'10\'}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:12', 1);
-INSERT INTO `admin_admin_log` VALUES (1263, 'GET', 1, '/admin/user/data', '{\'page\': \'1\', \'limit\': \'10\'}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:12', 1);
-INSERT INTO `admin_admin_log` VALUES (1264, 'GET', 1, '/admin/role/data', '{\'page\': \'1\', \'limit\': \'10\'}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:12', 1);
-INSERT INTO `admin_admin_log` VALUES (1265, 'GET', 1, '/admin/power/data', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:12', 1);
-INSERT INTO `admin_admin_log` VALUES (1266, 'GET', 1, '/admin/dict/dictType/add', '{}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36', '2021-04-16 14:06:14', 1);
 
 -- ----------------------------
 -- Table structure for admin_dict_data
@@ -62,7 +53,7 @@ CREATE TABLE `admin_dict_data`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_dict_data
@@ -83,7 +74,7 @@ CREATE TABLE `admin_dict_type`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_dict_type
@@ -288,6 +279,6 @@ CREATE TABLE `alembic_version`  (
 -- ----------------------------
 -- Records of alembic_version
 -- ----------------------------
-INSERT INTO `alembic_version` VALUES ('85fcf9a09800');
+INSERT INTO `alembic_version` VALUES ('ec21e19825ff');
 
 SET FOREIGN_KEY_CHECKS = 1;

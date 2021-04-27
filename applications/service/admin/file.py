@@ -4,7 +4,7 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from sqlalchemy import desc
 from applications.models import db
-from applications.models.admin import Photo
+from applications.models.admin_photo import Photo
 from applications.service.upload import photos
 
 ma = Marshmallow()

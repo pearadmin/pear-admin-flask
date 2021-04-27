@@ -2,7 +2,8 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields
 
 from applications.models import db
-from applications.models.admin import Power, Role
+from applications.models.admin_power import Power
+from applications.models.admin_role import  Role
 
 ma = Marshmallow()
 

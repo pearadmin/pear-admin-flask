@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
-from applications.models.admin import User, Role
+from applications.models.admin_user import User
+from applications.models.admin_role import Role
 from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, \
     batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status, \
     edit_password, get_current_user_logs, update_current_user_info, update_avatar

@@ -8,6 +8,9 @@ from applications.models.admin_log import AdminLog
 
 
 # 获取用户的sqlalchemy对象分页器
+from applications.service.common.curd import model_to_dicts
+
+
 def get_user_data(page, limit, filters):
     user = User.query.filter(and_(*[getattr(User, k).like(v) for k, v in filters.items()])).paginate(page=page,
                                                                                                      per_page=limit,
@@ -19,9 +22,8 @@ def get_user_data(page, limit, filters):
 # 获取用户的dict数据分页器
 def get_user_data_dict(page, limit, filters):
     user, count = get_user_data(page, limit, filters)
-    user_schema = UserSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
-    output = user_schema.dump(user.items)  # 生成可序列化对象
-    return output, count
+    data = model_to_dicts(Schema=UserSchema,model=user.items)
+    return data, count
 
 
 # 通过名称获取用户

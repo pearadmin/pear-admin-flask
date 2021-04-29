@@ -9,6 +9,9 @@ from applications.models.admin_dict import DictType, DictData, DictTypeSchema, D
 # 通过type_code获取字典dict
 # 例：get_dict('user_sex')
 # [{'key': '男', 'value': 'boy'}, {'key': '女', 'value': 'girl'}]
+from applications.service.common.curd import model_to_dicts
+
+
 def get_dict(typecode: str):
     Dict_list = []
     if DictType.query.filter_by(type_code=typecode, enable=1).first():
@@ -24,15 +27,13 @@ def get_dict(typecode: str):
 def get_dict_type(page, limit, type_name):
     dict_all = DictType.query
     if type_name:
-        print('收到了')
         dict_all = dict_all.filter(DictType.type_name.like('%' + type_name + '%'))
     dict_all = dict_all.paginate(page=page,
                                  per_page=limit,
                                  error_out=False)
     count = DictType.query.count()
-    dict_schema = DictTypeSchema(many=True)
-    dict_dict = dict_schema.dump(dict_all.items)
-    return dict_dict, count
+    data = model_to_dicts(Schema=DictTypeSchema,model=dict_all.items)
+    return data, count
 
 
 def get_dict_data(page, limit, type_code):
@@ -40,8 +41,7 @@ def get_dict_data(page, limit, type_code):
                                                                       per_page=limit,
                                                                       error_out=False)
     count = DictType.query.count()
-    dict_schema = DictDataSchema(many=True)
-    dict_dict = dict_schema.dump(dict_all.items)
+    dict_dict = model_to_dicts(Schema=DictDataSchema,model=dict_all.items)
     return dict_dict, count
 
 

@@ -3,6 +3,7 @@ from flask_login import login_required
 
 from applications.service.admin.role import get_role_data_dict, add_role, get_role_power, update_role_power, \
     get_role_by_id, update_role, remove_role, batch_remove, enable_status, disable_status
+from applications.service.common.response import table_api, success_api, fail_api
 from applications.service.route_auth import authorize_and_log
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
@@ -29,15 +30,7 @@ def table():
     if roleCode:
         filters["code"] = ('%' + roleCode + '%')
     data, count = get_role_data_dict(page=page, limit=limit, filters=filters)
-    res = {
-        'msg': "",
-        'code': 0,
-        'data': data,
-        'count': count,
-        'limit': "10"
-
-    }
-    return jsonify(res)
+    return table_api(data=data, count=count)
 
 
 # 角色增加
@@ -54,7 +47,7 @@ def add():
 def save():
     req = request.json
     add_role(req=req)
-    return jsonify(msg="成功", success=True)
+    return success_api(msg="成功")
 
 
 # 角色授权
@@ -85,7 +78,7 @@ def saveRolePower():
     power_list = powerIds.split(',')
     roleId = req_form.get("roleId")
     update_role_power(id=roleId, power_list=power_list)
-    return jsonify(success=True, msg="授权成功")
+    return success_api(msg="授权成功")
 
 
 # 角色编辑
@@ -102,8 +95,9 @@ def edit(id):
 def update():
     res = update_role(request.json)
     if not res:
-        return jsonify(success=False, msg="更新角色失败")
-    return jsonify(success=True, msg="更新角色成功")
+        return fail_api(msg="更新角色失败")
+    return success_api(msg="更新角色成功")
+
 
 # 启用用户
 @admin_role.route('/enable', methods=['PUT'])
@@ -114,9 +108,9 @@ def enable():
     if id:
         res = enable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="启动成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="启动成功")
+    return fail_api(msg="数据错误")
 
 
 # 禁用用户
@@ -124,13 +118,12 @@ def enable():
 @authorize_and_log("admin:role:edit")
 def disenable():
     id = request.json.get('roleId')
-    print(id)
     if id:
         res = disable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="禁用成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="禁用成功")
+    return fail_api(msg="数据错误")
 
 
 # 角色删除
@@ -139,8 +132,8 @@ def disenable():
 def remove(id):
     res = remove_role(id)
     if not res:
-        return jsonify(success=False, msg="角色删除失败")
-    return jsonify(success=True, msg="角色删除成功")
+        return fail_api(msg="角色删除失败")
+    return success_api(msg="角色删除成功")
 
 
 # 批量删除
@@ -150,4 +143,4 @@ def remove(id):
 def batchRemove():
     ids = request.form.getlist('ids[]')
     batch_remove(ids)
-    return jsonify(success=True,msg="批量删除成功")
+    return success_api(msg="批量删除成功")

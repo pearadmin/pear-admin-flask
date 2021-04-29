@@ -46,7 +46,7 @@ layui.use(['jquery','element','form','upload'], function() {
 		,size: 1000
 		,bindAction: '#logo-upload-button'
 		,done: function(res){
-		  if(res.code == 0){
+		  if(res.success){
                 layer.msg(res.msg,{icon:1,time:500},function(){
                     parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
                     window.parent.location.reload();

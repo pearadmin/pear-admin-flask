@@ -3,15 +3,15 @@ from flask import current_app
 from sqlalchemy import desc
 from applications.models import db
 from applications.models.admin_photo import Photo, PhotoSchema
+from applications.service.common.curd import model_to_dicts
 from applications.service.upload import photos
 
 
 def get_photo(page, limit):
     photo = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit, error_out=False)
     count = Photo.query.count()
-    role_schema = PhotoSchema(many=True)
-    output = role_schema.dump(photo.items)
-    return output, count
+    data = model_to_dicts(Schema=PhotoSchema,model=photo.items)
+    return data, count
 
 
 def upload_one(photo, mime):

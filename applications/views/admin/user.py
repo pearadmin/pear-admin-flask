@@ -5,6 +5,7 @@ from applications.models.admin_role import Role
 from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, \
     batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status, \
     edit_password, get_current_user_logs, update_current_user_info, update_avatar
+from applications.service.common.response import table_api, fail_api, success_api
 from applications.service.route_auth import authorize_and_log
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
@@ -30,16 +31,8 @@ def data():
         filters["realname"] = ('%' + realName + '%')
     if username:
         filters["username"] = ('%' + username + '%')
-    data, count = get_user_data_dict(page=page, limit=limit, filters=filters)
-    res = {
-        'msg': "",
-        'code': 0,
-        'data': data,
-        'count': count,
-        'limit': "10"
-
-    }
-    return jsonify(res)
+    user_data, count = get_user_data_dict(page=page, limit=limit, filters=filters)
+    return table_api(data=user_data, count=count)
 
 
 # 用户增加
@@ -61,15 +54,15 @@ def save():
     role_ids = a.split(',')
 
     if not username or not realName or not password:
-        return jsonify(success=False, msg="账号姓名密码不得为空")
+        return fail_api(msg="账号姓名密码不得为空")
 
     if is_user_exists(username):
-        return jsonify(success=False, msg="用户已经存在")
+        return fail_api(msg="用户已经存在")
 
     id = add_user(username, realName, password)
     add_user_role(id, role_ids)
 
-    return jsonify(success=True, msg="增加成功")
+    return success_api(msg="增加成功")
 
 
 # 删除用户
@@ -78,8 +71,8 @@ def save():
 def delete(id):
     res = delete_by_id(id)
     if not res:
-        return jsonify(msg="删除失败", success=False)
-    return jsonify(msg="删除成功", success=True)
+        return fail_api(msg="删除失败")
+    return success_api(msg="删除成功")
 
 
 #  编辑用户
@@ -106,7 +99,7 @@ def update():
     role_ids = a.split(',')
     update_user(id, username, realName)
     update_user_role(id, role_ids)
-    return jsonify(success=True, msg="更新成功")
+    return success_api(msg="更新成功")
 
 
 # 个人中心
@@ -131,8 +124,8 @@ def profile():
 def updateAvatar():
     url = request.json.get("avatar").get("src")
     if not update_avatar(url):
-        return jsonify(msg="出错啦", success=False)
-    return jsonify(msg="修改成功", success=True)
+        return fail_api(msg="出错啦")
+    return success_api(msg="修改成功")
 
 
 # 修改当前用户信息
@@ -141,8 +134,8 @@ def updateAvatar():
 def updateInfo():
     res_json = request.json
     if not update_current_user_info(req_json=res_json):
-        return jsonify(msg="出错啦", success=False)
-    return jsonify(msg="更新成功", success=True)
+        return fail_api(msg="出错啦")
+    return success_api(msg="更新成功")
 
 
 # 修改当前用户密码
@@ -169,9 +162,9 @@ def enable():
     if id:
         res = enable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="启动成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="启动成功")
+    return fail_api(msg="数据错误")
 
 
 # 禁用用户
@@ -179,13 +172,12 @@ def enable():
 @authorize_and_log("admin:user:edit")
 def disenable():
     id = request.json.get('userId')
-    print(id)
     if id:
         res = disable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="禁用成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="禁用成功")
+    return fail_api(msg="数据错误")
 
 
 # 批量删除
@@ -194,4 +186,4 @@ def disenable():
 def batchRemove():
     ids = request.form.getlist('ids[]')
     batch_remove(ids)
-    return jsonify(success=True, msg="批量删除成功")
+    return success_api(msg="批量删除成功")

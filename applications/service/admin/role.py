@@ -4,8 +4,10 @@ from applications.models.admin_role import Role, RoleSchema
 from applications.models.admin_power import Power, PowerSchema2
 from applications.models.admin_user import User
 
-
 # 获取角色对象
+from applications.service.common.curd import model_to_dicts
+
+
 def get_role_data(page, limit, filters):
     role = Role.query.filter(and_(*[getattr(Role, k).like(v) for k, v in filters.items()])).paginate(page=page,
                                                                                                      per_page=limit,
@@ -17,9 +19,8 @@ def get_role_data(page, limit, filters):
 # 获取角色dict
 def get_role_data_dict(page, limit, filters):
     role, count = get_role_data(page, limit, filters)
-    role_schema = RoleSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
-    output = role_schema.dump(role.items)  # 生成可序列化对象
-    return output, count
+    data = model_to_dicts(Schema=RoleSchema, model=role.items)
+    return data, count
 
 
 # 增加角色

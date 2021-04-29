@@ -160,7 +160,7 @@
                 type: 'POST',
                 success: function(res) {
                     layer.close(loading);
-                    if (res.code==200) {
+                    if (res.success) {
                         layer.msg(res.msg, {
                             icon: 1,
                             time: 1000
@@ -208,7 +208,7 @@
                 type: 'POST',
                 success: function(res) {
                     layer.close(loading);
-                    if (res.code==200) {
+                    if (res.success) {
                         layer.msg(res.msg, {
                             icon: 1,
                             time: 1000

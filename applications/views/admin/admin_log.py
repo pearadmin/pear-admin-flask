@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, jsonify
 from flask_login import login_required
 from sqlalchemy import desc
 from applications.models.admin_log import AdminLog, LogSchema
+from applications.service.common.curd import model_to_dicts
+from applications.service.common.response import table_api
 
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 
@@ -31,18 +33,9 @@ def loginLog():
                                                                                                      per_page=limit,
                                                                                                      error_out=False)
     count = AdminLog.query.filter_by(url='/admin/login').count()
-    role_schema = LogSchema(many=True)
-    output = role_schema.dump(log.items)
-    res = {
-        'msg': "",
-        'code': 0,
-        'data': output,
-        'count': count,
-        'limit': "10"
+    data = model_to_dicts(Schema=LogSchema, model=log.items)
 
-    }
-
-    return jsonify(res)
+    return table_api(data=data, count=count)
 
 
 #                               ==========================================================
@@ -59,15 +52,5 @@ def operateLog():
                                                                                                               per_page=limit,
                                                                                                               error_out=False)
     count = AdminLog.query.filter(AdminLog.url != '/admin/login').count()
-    role_schema = LogSchema(many=True)
-    output = role_schema.dump(log.items)
-    res = {
-        'msg': "",
-        'code': 0,
-        'data': output,
-        'count': count,
-        'limit': "10"
-
-    }
-
-    return jsonify(res)
+    data = model_to_dicts(Schema=LogSchema,model=log.items)
+    return table_api(data=data,count=count)

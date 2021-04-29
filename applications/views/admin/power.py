@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify
-from flask_login import login_required
 from applications.service.admin.power import get_power_dict, select_parent, save_power, remove_power, get_power_by_id, \
     update_power, enable_status, disable_status, batch_remove
+from applications.service.common.response import success_api, fail_api
 from applications.service.route_auth import authorize_and_log
 
 admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
@@ -47,7 +47,7 @@ def selectParent():
 def save():
     req = request.json
     save_power(req)
-    return jsonify(msg="成功", success=True)
+    return success_api(msg="成功")
 
 
 # 权限编辑
@@ -69,8 +69,8 @@ def edit(id):
 def update():
     res = update_power(request.json)
     if not res:
-        return jsonify(success=False, msg="更新权限失败")
-    return jsonify(success=True, msg="更新权限成功")
+        return fail_api(msg="更新权限失败")
+    return success_api(msg="更新权限成功")
 
 
 # 启用用户
@@ -82,9 +82,9 @@ def enable():
     if id:
         res = enable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="启动成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="启动成功")
+    return fail_api(msg="数据错误")
 
 
 # 禁用用户
@@ -96,9 +96,9 @@ def disenable():
     if id:
         res = disable_status(id)
         if not res:
-            return jsonify(msg="出错啦", success=False)
-        return jsonify(msg="禁用成功", success=True)
-    return jsonify(msg="数据错误", success=False)
+            return fail_api(msg="出错啦")
+        return success_api(msg="禁用成功")
+    return fail_api(msg="数据错误")
 
 
 # 权限删除
@@ -107,9 +107,9 @@ def disenable():
 def remove(id):
     r = remove_power(id)
     if r:
-        return jsonify(success=True, msg="删除成功")
+        return success_api(msg="删除成功")
     else:
-        return jsonify(success=False, msg="删除失败")
+        return fail_api(msg="删除失败")
 
 
 # 批量删除
@@ -118,4 +118,4 @@ def remove(id):
 def batchRemove():
     ids = request.form.getlist('ids[]')
     batch_remove(ids)
-    return jsonify(success=True, msg="批量删除成功")
+    return success_api(msg="批量删除成功")

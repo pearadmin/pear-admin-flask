@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from applications.service.admin.index import add_auth_session, make_menu_tree, get_captcha
 from applications.service.admin_log import login_log
 from applications.models.admin_user import User
+from applications.service.common.response import fail_api, success_api
 
 admin_index = Blueprint('adminIndex', __name__, url_prefix='/admin')
 
@@ -33,21 +34,21 @@ def login():
         code = req.get('captcha')
 
         if not username or not password or not code:
-            return jsonify(msg="用户名或密码没有输入", code=0,success=False)
+            return fail_api(msg="用户名或密码没有输入")
         s_code = session.get("code", None)
 
         if not all([code, s_code]):
-            return jsonify(msg="参数错误", code=0,success=False)
+            return fail_api(msg="参数错误")
 
         if code != s_code:
-            return jsonify(msg="验证码错误", code=0,success=False)
+            return fail_api(msg="验证码错误")
         user = User.query.filter_by(username=username).first()
 
         if user is None:
-            return jsonify(msg="不存在的用户", code=0,success=False)
+            return fail_api(msg="不存在的用户")
 
         if user.enable is 0:
-            return jsonify(msg="用户被暂停使用", code=0,success=False)
+            return  fail_api(msg="用户被暂停使用")
 
         if username == user.username and user.validate_password(password):
             # 登录
@@ -56,10 +57,9 @@ def login():
             login_log(request, uid=user.id, is_access=True)
             # 存入权限
             add_auth_session()
-            return jsonify(msg="登录成功", code=1,success=True)
+            return success_api(msg="登录成功")
         login_log(request,uid=user.id, is_access=False)
-        return jsonify(msg="用户名或密码错误", code=0,success=False)
-    print(current_user.is_authenticated)
+        return fail_api(msg="用户名或密码错误")
     if current_user.is_authenticated:
         return redirect(url_for('adminIndex.index'))
     return render_template('admin/login.html')
@@ -71,7 +71,7 @@ def login():
 def logout():
     logout_user()
     session.pop('permissions')
-    return jsonify(msg="注销成功", success=True)
+    return success_api(msg="注销成功")
 
 
 # 菜单

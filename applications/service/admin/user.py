@@ -1,27 +1,10 @@
 from flask import jsonify
 from flask_login import current_user
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
 from sqlalchemy import and_, desc
-from sqlalchemy.sql import exists
-
 from applications.models import db
-from applications.models.admin_user import User
-from applications.models.admin_role import  Role
-from applications.models.admin_log import  AdminLog
-from sqlalchemy.orm.dynamic import AppenderQuery
-
-ma = Marshmallow()
-
-
-# 用户models的序列化类
-class UserSchema(ma.Schema):
-    id = fields.Integer()
-    username = fields.Str()
-    realname = fields.Str()
-    enable = fields.Integer()
-    create_at = fields.DateTime()
-    update_at = fields.DateTime()
+from applications.models.admin_user import User, UserSchema
+from applications.models.admin_role import Role
+from applications.models.admin_log import AdminLog
 
 
 # 获取用户的sqlalchemy对象分页器

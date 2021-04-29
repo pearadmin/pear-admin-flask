@@ -1,27 +1,8 @@
 from io import BytesIO
 from flask import session, make_response
 from flask_login import current_user
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
+from applications.models.admin_power import PowerSchema
 from applications.service.CaptchaTool import gen_captcha
-
-ma = Marshmallow()
-
-
-# 权限models序列化类
-class PowerSchema(ma.Schema):
-    id = fields.Integer()
-    title = fields.Str(attribute="name")
-    type = fields.Str()
-    code = fields.Str()
-    href = fields.Str(attribute="url")
-    openType = fields.Str(attribute="open_type")
-    parent_id = fields.Integer()
-    icon = fields.Str()
-    sort = fields.Integer()
-    create_time = fields.DateTime()
-    update_time = fields.DateTime()
-    enable = fields.Integer()
 
 
 # 授权路由存入session

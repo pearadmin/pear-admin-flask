@@ -1,30 +1,11 @@
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
-
 from applications.models import db
-from applications.models.admin_power import Power
-from applications.models.admin_role import  Role
-
-ma = Marshmallow()
-
-
-class PowerSchema(ma.Schema):  # 序列化类
-    powerId = fields.Str(attribute="id")
-    powerName = fields.Str(attribute="name")
-    powerType = fields.Str(attribute="type")
-    powerUrl = fields.Str(attribute="url")
-    openType = fields.Str(attribute="pen_type")
-    parentId = fields.Str(attribute="parent_id")
-    icon = fields.Str()
-    sort = fields.Integer()
-    create_time = fields.DateTime()
-    update_time = fields.DateTime()
-    enable = fields.Integer()
+from applications.models.admin_power import Power, PowerSchema2
+from applications.models.admin_role import Role
 
 
 def get_power_dict():
     power = Power.query.all()
-    power_schema = PowerSchema(many=True)
+    power_schema = PowerSchema2(many=True)
     power_dict = power_schema.dump(power)
     return power_dict
 
@@ -32,7 +13,7 @@ def get_power_dict():
 # 选择父节点
 def select_parent():
     power = Power.query.all()
-    power_schema = PowerSchema(many=True)
+    power_schema = PowerSchema2(many=True)
     power_dict = power_schema.dump(power)
     power_dict.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
     return power_dict

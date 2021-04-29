@@ -1,7 +1,9 @@
 import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from applications.models import db
+from applications.models import db, ma
+from marshmallow import fields
+from applications.models import admin_user_role
 
 
 class User(db.Model, UserMixin):
@@ -22,3 +24,13 @@ class User(db.Model, UserMixin):
 
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+# 用户models的序列化类
+class UserSchema(ma.Schema):
+    id = fields.Integer()
+    username = fields.Str()
+    realname = fields.Str()
+    enable = fields.Integer()
+    create_at = fields.DateTime()
+    update_at = fields.DateTime()

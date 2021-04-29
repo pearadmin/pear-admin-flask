@@ -1,38 +1,8 @@
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
 from sqlalchemy import and_
 from applications.models import db
-from applications.models.admin_role import Role
-from applications.models.admin_power import Power
+from applications.models.admin_role import Role, RoleSchema
+from applications.models.admin_power import Power, PowerSchema2
 from applications.models.admin_user import User
-
-ma = Marshmallow()
-
-
-class RoleSchema(ma.Schema):
-    id = fields.Integer()
-    roleName = fields.Str(attribute="name")
-    roleCode = fields.Str(attribute="code")
-    enable = fields.Str()
-    remark = fields.Str()
-    details = fields.Str()
-    sort = fields.Integer()
-    create_at = fields.DateTime()
-    update_at = fields.DateTime()
-
-
-class PowerSchema(ma.Schema):  # 序列化类
-    powerId = fields.Str(attribute="id")
-    powerName = fields.Str(attribute="name")
-    powerType = fields.Str(attribute="type")
-    powerUrl = fields.Str(attribute="url")
-    openType = fields.Str(attribute="pen_type")
-    parentId = fields.Str(attribute="parent_id")
-    icon = fields.Str()
-    sort = fields.Integer()
-    create_time = fields.DateTime()
-    update_time = fields.DateTime()
-    enable = fields.Integer()
 
 
 # 获取角色对象
@@ -100,7 +70,7 @@ def get_role_power(id):
     for cp in check_powers:
         check_powers_list.append(cp.id)
     powers = Power.query.all()
-    power_schema = PowerSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
+    power_schema = PowerSchema2(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = power_schema.dump(powers)  # 生成可序列化对象
     for i in output:
         if int(i.get("powerId")) in check_powers_list:

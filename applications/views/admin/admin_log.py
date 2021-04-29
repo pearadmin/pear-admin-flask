@@ -1,11 +1,8 @@
 from flask import Blueprint, request, render_template, jsonify
 from flask_login import login_required
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
 from sqlalchemy import desc
-from applications.models.admin_log import AdminLog
+from applications.models.admin_log import AdminLog, LogSchema
 
-ma = Marshmallow()
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 
 
@@ -18,18 +15,6 @@ admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 @login_required
 def index():
     return render_template('admin/admin_log/main.html')
-
-
-class LogSchema(ma.Schema):  # 序列化类
-    id = fields.Integer()
-    method = fields.Str()
-    uid = fields.Str()
-    url = fields.Str()
-    desc = fields.Str()
-    ip = fields.Str()
-    user_agent = fields.Str()
-    success = fields.Bool()
-    create_time = fields.DateTime()
 
 
 #                               ==========================================================

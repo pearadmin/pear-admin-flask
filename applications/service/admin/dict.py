@@ -1,13 +1,9 @@
 # 字典管理
 # 查询字典类型
 
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
 
 from applications.models import db
-from applications.models.admin_dict import DictType, DictData
-
-ma = Marshmallow()
+from applications.models.admin_dict import DictType, DictData, DictTypeSchema, DictDataSchema
 
 
 # 通过type_code获取字典dict
@@ -23,25 +19,6 @@ def get_dict(typecode: str):
     else:
         return None
     return Dict_list
-
-
-class DictTypeSchema(ma.Schema):  # 序列化类
-    id = fields.Str(attribute="id")
-    typeName = fields.Str(attribute="type_name")
-    typeCode = fields.Str(attribute="type_code")
-    description = fields.Str(attribute="description")
-    createTime = fields.Str(attribute="create_time")
-    updateName = fields.Str(attribute="update_time")
-    remark = fields.Str()
-    enable = fields.Str()
-
-
-class DictDataSchema(ma.Schema):  # 序列化类
-    dataId = fields.Str(attribute="id")
-    dataLabel = fields.Str(attribute="data_label")
-    dataValue = fields.Str(attribute="data_value")
-    remark = fields.Str()
-    enable = fields.Str()
 
 
 def get_dict_type(page, limit, type_name):

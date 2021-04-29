@@ -1,23 +1,9 @@
 import os
 from flask import current_app
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
 from sqlalchemy import desc
 from applications.models import db
-from applications.models.admin_photo import Photo
+from applications.models.admin_photo import Photo, PhotoSchema
 from applications.service.upload import photos
-
-ma = Marshmallow()
-
-
-class PhotoSchema(ma.Schema):
-    id = fields.Integer()
-    name = fields.Str()
-    href = fields.Str()
-    mime = fields.Str()
-    size = fields.Str()
-    ext = fields.Str()
-    create_time = fields.DateTime()
 
 
 def get_photo(page, limit):

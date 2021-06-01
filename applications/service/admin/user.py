@@ -11,8 +11,13 @@ from applications.models.admin_log import AdminLog
 from applications.service.common.curd import model_to_dicts
 
 
-def get_user_data(page, limit, filters):
-    user = User.query.filter(and_(*[getattr(User, k).like(v) for k, v in filters.items()])).paginate(page=page,
+def get_user_data(page, limit, filters,deptId):
+    if deptId:
+        user = User.query.filter_by(dept_id=deptId).filter(and_(*[getattr(User, k).like(v) for k, v in filters.items()])).paginate(page=page,
+                                                                                                     per_page=limit,
+                                                                                                     error_out=False)
+    else:
+        user = User.query.filter(and_(*[getattr(User, k).like(v) for k, v in filters.items()])).paginate(page=page,
                                                                                                      per_page=limit,
                                                                                                      error_out=False)
     count = User.query.count()
@@ -20,8 +25,8 @@ def get_user_data(page, limit, filters):
 
 
 # 获取用户的dict数据分页器
-def get_user_data_dict(page, limit, filters):
-    user, count = get_user_data(page, limit, filters)
+def get_user_data_dict(page, limit, filters,deptId):
+    user, count = get_user_data(page, limit, filters,deptId)
     data = model_to_dicts(Schema=UserSchema,model=user.items)
     return data, count
 
@@ -70,8 +75,8 @@ def update_avatar(url):
 
 
 # 更新用户信息
-def update_user(id, username, realname):
-    user = User.query.filter_by(id=id).update({'username': username, 'realname': realname})
+def update_user(id, username, realname, deptId):
+    user = User.query.filter_by(id=id).update({'username': username, 'realname': realname,'dept_id':deptId})
     db.session.commit()
     return user
 

@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from applications.models import db, ma
 from marshmallow import fields
 from applications.models import admin_user_role
+from applications.models.admin_dept import Dept
 
 
 class User(db.Model, UserMixin):
@@ -15,6 +16,7 @@ class User(db.Model, UserMixin):
     remark = db.Column(db.String(255), comment='备注')
     password_hash = db.Column(db.String(128), comment='哈希密码')
     enable = db.Column(db.Integer, default=0, comment='启用')
+    dept_id = db.Column(db.Integer, comment='部门id')
     create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
     role = db.relationship('Role', secondary="admin_user_role", backref=db.backref('user'), lazy='dynamic')
@@ -34,3 +36,11 @@ class UserSchema(ma.Schema):
     enable = fields.Integer()
     create_at = fields.DateTime()
     update_at = fields.DateTime()
+    dept = fields.Method("get_dept")
+
+    def get_dept(self, obj):
+        if obj.dept_id != None:
+            return Dept.query.filter_by(id=obj.dept_id).first().dept_name
+        else:
+            return None
+

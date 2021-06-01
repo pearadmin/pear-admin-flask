@@ -73,7 +73,7 @@ def update():
     return success_api(msg="更新权限成功")
 
 
-# 启用用户
+# 启用权限
 @admin_power.route('/enable', methods=['PUT'])
 @authorize_and_log("admin:power:edit")
 def enable():
@@ -83,11 +83,11 @@ def enable():
         res = enable_status(id)
         if not res:
             return fail_api(msg="出错啦")
-        return success_api(msg="启动成功")
+        return success_api(msg="启用成功")
     return fail_api(msg="数据错误")
 
 
-# 禁用用户
+# 禁用权限
 @admin_power.route('/disable', methods=['PUT'])
 @authorize_and_log("admin:power:edit")
 def disenable():

@@ -26,12 +26,13 @@ def data():
     limit = request.args.get('limit', type=int)
     realName = request.args.get('realName', type=str)
     username = request.args.get('username', type=str)
+    deptId = request.args.get('deptId', type=int)
     filters = {}
     if realName:
         filters["realname"] = ('%' + realName + '%')
     if username:
         filters["username"] = ('%' + username + '%')
-    user_data, count = get_user_data_dict(page=page, limit=limit, filters=filters)
+    user_data, count = get_user_data_dict(page=page, limit=limit, filters=filters,deptId=deptId)
     return table_api(data=user_data, count=count)
 
 
@@ -96,8 +97,9 @@ def update():
     id = req_json.get("userId")
     username = req_json.get('username')
     realName = req_json.get('realName')
+    deptId = req_json.get('deptId')
     role_ids = a.split(',')
-    update_user(id, username, realName)
+    update_user(id, username, realName,deptId)
     update_user_role(id, role_ids)
     return success_api(msg="更新成功")
 
@@ -158,7 +160,6 @@ def edit_password_put():
 @authorize_and_log("admin:user:edit")
 def enable():
     id = request.json.get('userId')
-    print(id)
     if id:
         res = enable_status(id)
         if not res:

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 27/04/2021 11:57:13
+ Date: 01/06/2021 17:50:18
 */
 
 SET NAMES utf8mb4;
@@ -32,11 +32,40 @@ CREATE TABLE `admin_admin_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `success` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1267 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 546 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_admin_log
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for admin_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_dept`;
+CREATE TABLE `admin_dept`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '部门ID',
+  `parent_id` int(11) NULL DEFAULT NULL COMMENT '父级编号',
+  `dept_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '部门名称',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `leader` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '联系方式',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态(1开启,0关闭)',
+  `remark` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL COMMENT '备注',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '详细地址',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of admin_dept
+-- ----------------------------
+INSERT INTO `admin_dept` VALUES (1, 0, '总公司', 1, '就眠仪式', '12312345679', '123qq.com', 1, NULL, '这是总公司', NULL, '2021-06-01 17:23:20');
+INSERT INTO `admin_dept` VALUES (4, 1, '济南分公司', 2, '就眠仪式', '12312345678', '1234qq.com', 1, NULL, '这是济南', '2021-06-01 17:24:33', '2021-06-01 17:25:19');
+INSERT INTO `admin_dept` VALUES (5, 1, '唐山分公司', 4, 'mkg', '12312345678', '123@qq.com', 1, NULL, '这是唐山', '2021-06-01 17:25:15', '2021-06-01 17:25:20');
+INSERT INTO `admin_dept` VALUES (7, 4, '济南分公司开发部', 5, '就眠仪式', '12312345678', '123@qq.com', 1, NULL, '测试', '2021-06-01 17:27:39', '2021-06-01 17:27:39');
+INSERT INTO `admin_dept` VALUES (8, 5, '唐山测试部', 6, 'mkg', '12312345678', '123@qq.com', 1, NULL, '测试部', '2021-06-01 17:28:27', '2021-06-01 17:28:27');
 
 -- ----------------------------
 -- Table structure for admin_dict_data
@@ -74,7 +103,7 @@ CREATE TABLE `admin_dict_type`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_dict_type
@@ -119,7 +148,7 @@ CREATE TABLE `admin_power`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `enable` int(11) NULL DEFAULT NULL COMMENT '是否开启',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_power
@@ -148,6 +177,10 @@ INSERT INTO `admin_power` VALUES (44, '数据字典', '1', 'admin:dict:main', '/
 INSERT INTO `admin_power` VALUES (45, '字典增加', '2', 'admin:dict:add', '', '', '44', 'layui-icon ', 1, '2021-04-16 14:00:59', '2021-04-16 14:00:59', 1);
 INSERT INTO `admin_power` VALUES (46, '字典修改', '2', 'admin:dict:edit', '', '', '44', 'layui-icon ', 2, '2021-04-16 14:01:33', '2021-04-16 14:01:33', 1);
 INSERT INTO `admin_power` VALUES (47, '字典删除', '2', 'admin:dict:remove', '', '', '44', 'layui-icon ', 3, '2021-04-16 14:02:06', '2021-04-16 14:02:06', 1);
+INSERT INTO `admin_power` VALUES (48, '部门管理', '1', 'admin:dept:main', '/admin/dept', '_iframe', '1', 'layui-icon layui-icon-group', 3, '2021-06-01 16:22:11', '2021-06-01 16:22:11', 1);
+INSERT INTO `admin_power` VALUES (49, '部门增加', '2', 'admin:dept:add', '', '', '48', 'layui-icon None', 1, '2021-06-01 17:35:52', '2021-06-01 17:36:15', 1);
+INSERT INTO `admin_power` VALUES (50, '部门编辑', '2', 'admin:dept:edit', '', '', '48', 'layui-icon ', 2, '2021-06-01 17:36:41', '2021-06-01 17:36:41', 1);
+INSERT INTO `admin_power` VALUES (51, '部门删除', '2', 'admin:dept:remove', '', '', '48', 'layui-icon None', 3, '2021-06-01 17:37:15', '2021-06-01 17:37:26', 1);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -185,43 +218,49 @@ CREATE TABLE `admin_role_power`  (
   INDEX `role_id`(`role_id`) USING BTREE,
   CONSTRAINT `admin_role_power_ibfk_1` FOREIGN KEY (`power_id`) REFERENCES `admin_power` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `admin_role_power_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `admin_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 212 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_role_power
 -- ----------------------------
-INSERT INTO `admin_role_power` VALUES (159, 1, 2);
-INSERT INTO `admin_role_power` VALUES (160, 3, 2);
-INSERT INTO `admin_role_power` VALUES (161, 4, 2);
-INSERT INTO `admin_role_power` VALUES (162, 9, 2);
-INSERT INTO `admin_role_power` VALUES (163, 12, 2);
-INSERT INTO `admin_role_power` VALUES (164, 13, 2);
-INSERT INTO `admin_role_power` VALUES (165, 17, 2);
-INSERT INTO `admin_role_power` VALUES (166, 18, 2);
-INSERT INTO `admin_role_power` VALUES (188, 1, 1);
-INSERT INTO `admin_role_power` VALUES (189, 3, 1);
-INSERT INTO `admin_role_power` VALUES (190, 4, 1);
-INSERT INTO `admin_role_power` VALUES (191, 9, 1);
-INSERT INTO `admin_role_power` VALUES (192, 12, 1);
-INSERT INTO `admin_role_power` VALUES (193, 13, 1);
-INSERT INTO `admin_role_power` VALUES (194, 17, 1);
-INSERT INTO `admin_role_power` VALUES (195, 18, 1);
-INSERT INTO `admin_role_power` VALUES (196, 21, 1);
-INSERT INTO `admin_role_power` VALUES (197, 22, 1);
-INSERT INTO `admin_role_power` VALUES (198, 23, 1);
-INSERT INTO `admin_role_power` VALUES (199, 24, 1);
-INSERT INTO `admin_role_power` VALUES (200, 25, 1);
-INSERT INTO `admin_role_power` VALUES (201, 26, 1);
-INSERT INTO `admin_role_power` VALUES (202, 27, 1);
-INSERT INTO `admin_role_power` VALUES (203, 28, 1);
-INSERT INTO `admin_role_power` VALUES (204, 29, 1);
-INSERT INTO `admin_role_power` VALUES (205, 30, 1);
-INSERT INTO `admin_role_power` VALUES (206, 31, 1);
-INSERT INTO `admin_role_power` VALUES (207, 32, 1);
-INSERT INTO `admin_role_power` VALUES (208, 44, 1);
-INSERT INTO `admin_role_power` VALUES (209, 45, 1);
-INSERT INTO `admin_role_power` VALUES (210, 46, 1);
-INSERT INTO `admin_role_power` VALUES (211, 47, 1);
+INSERT INTO `admin_role_power` VALUES (237, 1, 1);
+INSERT INTO `admin_role_power` VALUES (238, 3, 1);
+INSERT INTO `admin_role_power` VALUES (239, 4, 1);
+INSERT INTO `admin_role_power` VALUES (240, 9, 1);
+INSERT INTO `admin_role_power` VALUES (241, 12, 1);
+INSERT INTO `admin_role_power` VALUES (242, 13, 1);
+INSERT INTO `admin_role_power` VALUES (243, 17, 1);
+INSERT INTO `admin_role_power` VALUES (244, 18, 1);
+INSERT INTO `admin_role_power` VALUES (245, 21, 1);
+INSERT INTO `admin_role_power` VALUES (246, 22, 1);
+INSERT INTO `admin_role_power` VALUES (247, 23, 1);
+INSERT INTO `admin_role_power` VALUES (248, 24, 1);
+INSERT INTO `admin_role_power` VALUES (249, 25, 1);
+INSERT INTO `admin_role_power` VALUES (250, 26, 1);
+INSERT INTO `admin_role_power` VALUES (251, 27, 1);
+INSERT INTO `admin_role_power` VALUES (252, 28, 1);
+INSERT INTO `admin_role_power` VALUES (253, 29, 1);
+INSERT INTO `admin_role_power` VALUES (254, 30, 1);
+INSERT INTO `admin_role_power` VALUES (255, 31, 1);
+INSERT INTO `admin_role_power` VALUES (256, 32, 1);
+INSERT INTO `admin_role_power` VALUES (257, 44, 1);
+INSERT INTO `admin_role_power` VALUES (258, 45, 1);
+INSERT INTO `admin_role_power` VALUES (259, 46, 1);
+INSERT INTO `admin_role_power` VALUES (260, 47, 1);
+INSERT INTO `admin_role_power` VALUES (261, 48, 1);
+INSERT INTO `admin_role_power` VALUES (262, 49, 1);
+INSERT INTO `admin_role_power` VALUES (263, 50, 1);
+INSERT INTO `admin_role_power` VALUES (264, 51, 1);
+INSERT INTO `admin_role_power` VALUES (265, 1, 2);
+INSERT INTO `admin_role_power` VALUES (266, 3, 2);
+INSERT INTO `admin_role_power` VALUES (267, 4, 2);
+INSERT INTO `admin_role_power` VALUES (268, 9, 2);
+INSERT INTO `admin_role_power` VALUES (269, 12, 2);
+INSERT INTO `admin_role_power` VALUES (270, 13, 2);
+INSERT INTO `admin_role_power` VALUES (271, 17, 2);
+INSERT INTO `admin_role_power` VALUES (272, 18, 2);
+INSERT INTO `admin_role_power` VALUES (273, 44, 2);
+INSERT INTO `admin_role_power` VALUES (274, 48, 2);
 
 -- ----------------------------
 -- Table structure for admin_user
@@ -237,14 +276,16 @@ CREATE TABLE `admin_user`  (
   `realname` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '真实名字',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '头像',
+  `dept_id` int(11) NULL DEFAULT NULL COMMENT '部门id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_user
 -- ----------------------------
-INSERT INTO `admin_user` VALUES (1, 'admin', 'pbkdf2:sha256:150000$raM7mDSr$58fe069c3eac01531fc8af85e6fc200655dd2588090530084d182e6ec9d52c85', NULL, '2021-04-01 23:39:41', 1, '超级管理', '要是不能把握时机，就要终身蹭蹬，一事无成！', 'http://127.0.0.1:5000/_uploads/photos/1617291580000.jpg');
-INSERT INTO `admin_user` VALUES (7, 'test', 'pbkdf2:sha256:150000$cRS8bYNh$adb57e64d929863cf159f924f74d0634f1fecc46dba749f1bfaca03da6d2e3ac', '2021-03-22 20:03:42', '2021-04-01 23:37:39', 1, '超级管理', '要是不能把握时机，就要终身蹭蹬，一事无成', '/static/admin/admin/images/avatar.jpg');
+INSERT INTO `admin_user` VALUES (1, 'admin', 'pbkdf2:sha256:150000$raM7mDSr$58fe069c3eac01531fc8af85e6fc200655dd2588090530084d182e6ec9d52c85', NULL, '2021-06-01 17:28:55', 1, '超级管理', '要是不能把握时机，就要终身蹭蹬，一事无成！', 'http://127.0.0.1:5000/_uploads/photos/1617291580000.jpg', 1);
+INSERT INTO `admin_user` VALUES (7, 'test', 'pbkdf2:sha256:150000$cRS8bYNh$adb57e64d929863cf159f924f74d0634f1fecc46dba749f1bfaca03da6d2e3ac', '2021-03-22 20:03:42', '2021-06-01 17:29:47', 1, '超级管理', '要是不能把握时机，就要终身蹭蹬，一事无成', '/static/admin/admin/images/avatar.jpg', 1);
+INSERT INTO `admin_user` VALUES (8, 'wind', 'pbkdf2:sha256:150000$skME1obT$6a2c20cd29f89d7d2f21d9e373a7e3445f70ebce3ef1c3a555e42a7d17170b37', '2021-06-01 17:30:39', '2021-06-01 17:30:52', 1, '风', NULL, '/static/admin/admin/images/avatar.jpg', 7);
 
 -- ----------------------------
 -- Table structure for admin_user_role
@@ -259,13 +300,14 @@ CREATE TABLE `admin_user_role`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `admin_user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `admin_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `admin_user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `admin_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_user_role
 -- ----------------------------
-INSERT INTO `admin_user_role` VALUES (14, 1, 1);
-INSERT INTO `admin_user_role` VALUES (17, 7, 2);
+INSERT INTO `admin_user_role` VALUES (21, 1, 1);
+INSERT INTO `admin_user_role` VALUES (22, 7, 2);
+INSERT INTO `admin_user_role` VALUES (24, 8, 2);
 
 -- ----------------------------
 -- Table structure for alembic_version
@@ -279,6 +321,6 @@ CREATE TABLE `alembic_version`  (
 -- ----------------------------
 -- Records of alembic_version
 -- ----------------------------
-INSERT INTO `alembic_version` VALUES ('ec21e19825ff');
+INSERT INTO `alembic_version` VALUES ('7634e028e338');
 
 SET FOREIGN_KEY_CHECKS = 1;

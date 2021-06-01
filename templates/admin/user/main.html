@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
 		<title>用户管理</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}" />
+        {% include 'admin/common/header.html' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/user.css') }}" />
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -33,6 +34,8 @@
     <div class="user-left user-collasped">
         <div class="layui-card">
             <div class="layui-card-body">
+                <div class="button button-primary user-group" user-group=""> 全 部 用 户 </div>
+                <div class="button button-default user-group" user-group="-1"> 默 认 分 组 </div>
                 <div style="overflow: auto">
                     <ul id="dept-tree" class="dept-tree" data-id="0"></ul>
                 </div>
@@ -60,7 +63,11 @@
         <i class="pear-icon pear-icon-ashbin"></i>
         删除
     </button>
-{% endif %}
+    {% endif %}
+    <button class="pear-btn pear-btn-md" lay-event="collasped">
+        <i class="pear-icon pear-icon-modular"></i>
+        高级
+    </button>
 </script>
 
 <script type="text/html" id="user-bar">
@@ -88,12 +95,13 @@
 <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
 <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
 <script>
-    layui.use(['table','form', 'jquery','popup','common'], function () {
+    layui.use(['table', 'dtree','form', 'jquery','popup','common'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
+        let dtree = layui.dtree;
         let popup = layui.popup;
-
+        let common = layui.common;
         let MODULE_PATH = "/admin/user/";
 
         let cols = [
@@ -103,6 +111,7 @@
                 {% endif %}
                 {title: '姓名', field: 'realname', align: 'center', width: 110},
                 {title: '账号', field: 'username', align: 'center'},
+                {title: '部门', field: 'dept', align: 'center'},
                 {title: '启用', field: 'enable', align: 'center', templet: '#user-enable',width: 120},
                 {title: '注册时间', field: 'create_at', templet: '#user-createTime', align: 'center'},
                 {title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center'},
@@ -123,6 +132,23 @@
         });
 
 
+         dtree.render({
+            elem: "#dept-tree",
+            method: "get",
+            url: "/admin/dept/tree",
+            dataFormat: "list",
+            line: true,
+            skin: "laySimple",
+            icon: "-1",
+            response: {treeId: "deptId", parentId: "parentId", title: "deptName"},
+        });
+
+
+         dtree.on("node('dept-tree')" ,function(obj){
+            let field = form.val("user-query-form");
+            field.deptId =  obj.param.nodeId;
+            window.refresh(field);
+        });
 
 
 

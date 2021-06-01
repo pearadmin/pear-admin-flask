@@ -1,22 +1,20 @@
 from applications.models import db
 from applications.models.admin_power import Power, PowerSchema2
 from applications.models.admin_role import Role
+from applications.service.common.curd import model_to_dicts
 
 
 def get_power_dict():
     power = Power.query.all()
-    power_schema = PowerSchema2(many=True)
-    power_dict = power_schema.dump(power)
-    return power_dict
-
+    res = model_to_dicts(Schema=PowerSchema2, model=power)
+    return res
 
 # 选择父节点
 def select_parent():
     power = Power.query.all()
-    power_schema = PowerSchema2(many=True)
-    power_dict = power_schema.dump(power)
-    power_dict.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
-    return power_dict
+    res = model_to_dicts(Schema=PowerSchema2, model=power)
+    res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
+    return res
 
 
 # 增加权限

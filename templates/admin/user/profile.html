@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/console1.css') }}" />
+    <title>头像上传</title>
+    {% include 'admin/common/header.html' %}
 </head>
 <body class="pear-container">
 <div class="layui-row layui-col-space15">
@@ -29,8 +29,7 @@
     </div>
 </div>
 </body>
-<script src="{{ url_for('static', filename='admin/component/layui/layui.js') }}"></script>
-<script src="{{ url_for('static', filename='admin/component/pear/pear.js') }}"></script>
+{% include 'admin/common/footer.html' %}
 <script>
     layui.use(['jquery','layer','cropper','popup'], function () {
         let $ = layui.jquery;

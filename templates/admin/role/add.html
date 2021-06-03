@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>角色新增</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}"
-</head>
+    {% include 'admin/common/header.html' %}</head>
 <body>
 <form class="layui-form" action="">
     <div class="mainBox">
@@ -59,8 +58,7 @@
         </div>
     </div>
 </form>
-        <script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
-        <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
+{% include 'admin/common/footer.html' %}
 <script>
     layui.use(['form', 'jquery'], function () {
         let form = layui.form;

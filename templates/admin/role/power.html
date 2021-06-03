@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-		<title>角色授权</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}" />
-</head>
+    <title>角色授权</title>
+    {% include 'admin/common/header.html' %}</head>
 <body>
 <form class="layui-form" action="">
     <div class="mainBox">
@@ -27,8 +25,7 @@
         </div>
     </div>
 </form>
-<script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
-<script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
+{% include 'admin/common/footer.html' %}
 <script>
     layui.use(['dtree', 'form', 'jquery'], function () {
         let dtree = layui.dtree;

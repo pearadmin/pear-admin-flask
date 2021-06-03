@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-      <link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}" />
+      {% include 'admin/common/header.html' %}
     <style>
         .pear-container{background-color:white;}
         body{margin: 10px;}
-       </style>
+    </style>
 </head>
 <body>
 <div class="layui-row layui-col-space15">
@@ -29,8 +28,7 @@
         </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
-        <script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
+{% include 'admin/common/footer.html' %}
 <script>
 layui.use(['jquery','element','form','upload'], function() {
     var $ = layui.jquery;

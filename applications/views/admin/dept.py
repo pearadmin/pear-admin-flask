@@ -1,19 +1,19 @@
 from flask import Blueprint, render_template, request, jsonify
-from applications.service.admin import dept as dept_curd
-from applications.service.common.response import table_api, success_api, fail_api
-from applications.service.route_auth import authorize_and_log, authorize
+from applications.service.admin import dept_curd as dept_curd
+from applications.service.common.response import success_api, fail_api
+from applications.service.route_auth import authorize
 
 admin_dept = Blueprint('adminDept', __name__, url_prefix='/admin/dept')
 
 
 @admin_dept.route('/')
-@authorize_and_log("admin:dept:main")
+@authorize("admin:dept:main", log=True)
 def main():
     return render_template('admin/dept/main.html')
 
 
 @admin_dept.route('/data')
-@authorize_and_log("admin:dept:main")
+@authorize("admin:dept:main", log=True)
 def data():
     power_data = dept_curd.get_dept_dict()
     res = {
@@ -23,13 +23,13 @@ def data():
 
 
 @admin_dept.route('/add')
-@authorize_and_log("admin:dept:add")
+@authorize("admin:dept:add", log=True)
 def add():
     return render_template('admin/dept/add.html')
 
 
 @admin_dept.route('/tree')
-@authorize_and_log("admin:dept:main")
+@authorize("admin:dept:main", log=True)
 def tree():
     power_data = dept_curd.get_dept_dict()
     res = {
@@ -41,7 +41,7 @@ def tree():
 
 
 @admin_dept.route('/save', methods=['POST'])
-@authorize_and_log("admin:dept:edit")
+@authorize("admin:dept:edit", log=True)
 def save():
     req = request.json
     dept_curd.save_dept(req)
@@ -49,7 +49,7 @@ def save():
 
 
 @admin_dept.route('/edit', methods=['GET', 'POST'])
-@authorize_and_log("admin:dept:edit")
+@authorize("admin:dept:edit", log=True)
 def edit():
     id = request.args.get("deptId")
     dept = dept_curd.get_dept_by_id(id)
@@ -58,7 +58,7 @@ def edit():
 
 # 启用
 @admin_dept.route('/enable', methods=['PUT'])
-@authorize_and_log("admin:dept:edit")
+@authorize("admin:dept:edit", log=True)
 def enable():
     id = request.json.get('deptId')
     if id:
@@ -71,7 +71,7 @@ def enable():
 
 # 禁用
 @admin_dept.route('/disable', methods=['PUT'])
-@authorize_and_log("admin:dept:edit")
+@authorize("admin:dept:edit", log=True)
 def disenable():
     id = request.json.get('deptId')
     if id:
@@ -83,7 +83,7 @@ def disenable():
 
 
 @admin_dept.route('/update', methods=['PUT'])
-@authorize_and_log("admin:dept:edit")
+@authorize("admin:dept:edit", log=True)
 def update():
     res = dept_curd.update_dept(request.json)
     if not res:
@@ -92,7 +92,7 @@ def update():
 
 
 @admin_dept.route('/remove/<int:id>', methods=['DELETE'])
-@authorize_and_log("admin:dept:remove")
+@authorize("admin:dept:remove", log=True)
 def remove(id):
     res = dept_curd.remove_dept(id)
     if res:

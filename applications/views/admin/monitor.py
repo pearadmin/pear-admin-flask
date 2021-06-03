@@ -7,7 +7,7 @@ import psutil
 from flask import Blueprint, render_template, jsonify
 from flask_marshmallow import Marshmallow
 
-from applications.service.route_auth import authorize_and_log, authorize
+from applications.service.route_auth import  authorize
 
 ma = Marshmallow()
 admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
@@ -15,7 +15,7 @@ admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 # 系统监控
 @admin_Monitor.route('/')
-@authorize_and_log("admin:monitor:main")
+@authorize("admin:monitor:main", log=True)
 def main():
     # 主机名称
     hostname = platform.node()

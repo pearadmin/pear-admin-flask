@@ -1,5 +1,3 @@
-from markupsafe import escape, Markup
-
 from applications.models import db
 from applications.models.admin_dept import Dept, DeptSchema
 from applications.models.admin_user import User
@@ -18,9 +16,7 @@ def save_dept(req):
     email = req.get("email")
     leader = req.get("leader")
     parentId = req.get("parentId")
-    parentName = req.get("parentName")
     phone = req.get("phone")
-    selectParent_select_input = req.get("selectParent_select_input")
     sort = req.get("sort")
     status = req.get("status")
     dept = Dept(
@@ -50,7 +46,6 @@ def enable_status(id):
     if d:
         db.session.commit()
         return True
-    print('0')
     return False
 
 
@@ -66,7 +61,7 @@ def disable_status(id):
 
 def update_dept(json):
     id = json.get("deptId"),
-    print(str(Markup(json.get("leader"))))
+    print(json.get("leader"))
     data = {
         "dept_name": json.get("deptName"),
         "sort": json.get("sort"),

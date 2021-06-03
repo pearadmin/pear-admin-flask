@@ -4,12 +4,12 @@
 
 from applications.models import db
 from applications.models.admin_dict import DictType, DictData, DictTypeSchema, DictDataSchema
+from applications.service.common.curd import model_to_dicts
 
 
 # 通过type_code获取字典dict
 # 例：get_dict('user_sex')
 # [{'key': '男', 'value': 'boy'}, {'key': '女', 'value': 'girl'}]
-from applications.service.common.curd import model_to_dicts
 
 
 def get_dict(typecode: str):
@@ -32,7 +32,7 @@ def get_dict_type(page, limit, type_name):
                                  per_page=limit,
                                  error_out=False)
     count = DictType.query.count()
-    data = model_to_dicts(Schema=DictTypeSchema,model=dict_all.items)
+    data = model_to_dicts(Schema=DictTypeSchema, model=dict_all.items)
     return data, count
 
 
@@ -41,7 +41,7 @@ def get_dict_data(page, limit, type_code):
                                                                       per_page=limit,
                                                                       error_out=False)
     count = DictType.query.count()
-    dict_dict = model_to_dicts(Schema=DictDataSchema,model=dict_all.items)
+    dict_dict = model_to_dicts(Schema=DictDataSchema, model=dict_all.items)
     return dict_dict, count
 
 

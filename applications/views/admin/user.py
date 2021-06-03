@@ -1,26 +1,24 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from applications.models.admin_user import User
 from applications.models.admin_role import Role
-from applications.service.admin.user import get_user_data_dict, add_user, delete_by_id, \
-    batch_remove, update_user, update_user_role, is_user_exists, add_user_role, enable_status, disable_status, \
-    edit_password, get_current_user_logs, update_current_user_info, update_avatar
+from applications.service.admin import user_curd
 from applications.service.common.response import table_api, fail_api, success_api
-from applications.service.route_auth import authorize_and_log
+from applications.service.route_auth import authorize
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 
 
 # 用户管理
 @admin_user.route('/')
-@authorize_and_log("admin:user:main")
+@authorize("admin:user:main", log=True)
 def main():
     return render_template('admin/user/main.html')
 
 
 #   用户分页查询
 @admin_user.route('/data')
-@authorize_and_log("admin:user:main")
+@authorize("admin:user:main", log=True)
 def data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -32,20 +30,20 @@ def data():
         filters["realname"] = ('%' + realName + '%')
     if username:
         filters["username"] = ('%' + username + '%')
-    user_data, count = get_user_data_dict(page=page, limit=limit, filters=filters,deptId=deptId)
+    user_data, count = user_curd.get_user_data_dict(page=page, limit=limit, filters=filters,deptId=deptId)
     return table_api(data=user_data, count=count)
 
 
 # 用户增加
 @admin_user.route('/add')
-@authorize_and_log("admin:user:add")
+@authorize("admin:user:add",log=True)
 def add():
     roles = Role.query.all()
     return render_template('admin/user/add.html', roles=roles)
 
 
 @admin_user.route('/save', methods=['POST'])
-@authorize_and_log("admin:user:add")
+@authorize("admin:user:add", log=True)
 def save():
     req_json = request.json
     a = req_json.get("roleIds")
@@ -57,20 +55,20 @@ def save():
     if not username or not realName or not password:
         return fail_api(msg="账号姓名密码不得为空")
 
-    if is_user_exists(username):
+    if user_curd.is_user_exists(username):
         return fail_api(msg="用户已经存在")
 
-    id = add_user(username, realName, password)
-    add_user_role(id, role_ids)
+    id = user_curd.add_user(username, realName, password)
+    user_curd.add_user_role(id, role_ids)
 
     return success_api(msg="增加成功")
 
 
 # 删除用户
 @admin_user.route('/remove/<int:id>', methods=['DELETE'])
-@authorize_and_log("admin:user:remove")
+@authorize("admin:user:remove", log=True)
 def delete(id):
-    res = delete_by_id(id)
+    res = user_curd.delete_by_id(id)
     if not res:
         return fail_api(msg="删除失败")
     return success_api(msg="删除成功")
@@ -78,7 +76,7 @@ def delete(id):
 
 #  编辑用户
 @admin_user.route('/edit/<int:id>', methods=['GET', 'POST'])
-@authorize_and_log("admin:user:edit")
+@authorize("admin:user:edit", log=True)
 def edit(id):
     user = User.query.filter_by(id=id).first()
     roles = Role.query.all()
@@ -90,7 +88,7 @@ def edit(id):
 
 #  编辑用户
 @admin_user.route('/update', methods=['PUT'])
-@authorize_and_log("admin:user:edit")
+@authorize("admin:user:edit", log=True)
 def update():
     req_json = request.json
     a = req_json.get("roleIds")
@@ -99,8 +97,8 @@ def update():
     realName = req_json.get('realName')
     deptId = req_json.get('deptId')
     role_ids = a.split(',')
-    update_user(id, username, realName,deptId)
-    update_user_role(id, role_ids)
+    user_curd.update_user(id, username, realName,deptId)
+    user_curd.update_user_role(id, role_ids)
     return success_api(msg="更新成功")
 
 
@@ -109,7 +107,7 @@ def update():
 @login_required
 def center():
     user_info = current_user
-    user_logs = get_current_user_logs()
+    user_logs = user_curd.get_current_user_logs()
     return render_template('admin/user/center.html', user_info=user_info, user_logs=user_logs)
 
 
@@ -125,7 +123,7 @@ def profile():
 @login_required
 def updateAvatar():
     url = request.json.get("avatar").get("src")
-    if not update_avatar(url):
+    if not user_curd.update_avatar(url):
         return fail_api(msg="出错啦")
     return success_api(msg="修改成功")
 
@@ -135,7 +133,7 @@ def updateAvatar():
 @login_required
 def updateInfo():
     res_json = request.json
-    if not update_current_user_info(req_json=res_json):
+    if not user_curd.update_current_user_info(req_json=res_json):
         return fail_api(msg="出错啦")
     return success_api(msg="更新成功")
 
@@ -152,16 +150,16 @@ def editPassword():
 @login_required
 def edit_password_put():
     res_json = request.json
-    return edit_password(res_json=res_json)
+    return user_curd.edit_password(res_json=res_json)
 
 
 # 启用用户
 @admin_user.route('/enable', methods=['PUT'])
-@authorize_and_log("admin:user:edit")
+@authorize("admin:user:edit",log=True)
 def enable():
     id = request.json.get('userId')
     if id:
-        res = enable_status(id)
+        res = user_curd.enable_status(id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启动成功")
@@ -170,11 +168,11 @@ def enable():
 
 # 禁用用户
 @admin_user.route('/disable', methods=['PUT'])
-@authorize_and_log("admin:user:edit")
+@authorize("admin:user:edit",log=True)
 def disenable():
     id = request.json.get('userId')
     if id:
-        res = disable_status(id)
+        res = user_curd.disable_status(id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -183,8 +181,8 @@ def disenable():
 
 # 批量删除
 @admin_user.route('/batchRemove', methods=['DELETE'])
-@authorize_and_log("admin:user:remove")
+@authorize("admin:user:remove", log=True)
 def batchRemove():
     ids = request.form.getlist('ids[]')
-    batch_remove(ids)
+    user_curd.batch_remove(ids)
     return success_api(msg="批量删除成功")

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, session, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
-from applications.service.admin.index import add_auth_session, make_menu_tree, get_captcha
+from applications.service.admin import index_curd
 from applications.service.admin_log import login_log
 from applications.models.admin_user import User
 from applications.service.common.response import fail_api, success_api
@@ -19,7 +19,7 @@ def index():
 # 获取验证码
 @admin_index.route('/getCaptcha', methods=["GET"])
 def getCaptcha():
-    resp,code=get_captcha()
+    resp, code = index_curd.get_captcha()
     session["code"] = code
     return resp
 
@@ -48,7 +48,7 @@ def login():
             return fail_api(msg="不存在的用户")
 
         if user.enable is 0:
-            return  fail_api(msg="用户被暂停使用")
+            return fail_api(msg="用户被暂停使用")
 
         if username == user.username and user.validate_password(password):
             # 登录
@@ -56,9 +56,9 @@ def login():
             # 记录登录日志
             login_log(request, uid=user.id, is_access=True)
             # 存入权限
-            add_auth_session()
+            index_curd.add_auth_session()
             return success_api(msg="登录成功")
-        login_log(request,uid=user.id, is_access=False)
+        login_log(request, uid=user.id, is_access=False)
         return fail_api(msg="用户名或密码错误")
     if current_user.is_authenticated:
         return redirect(url_for('adminIndex.index'))
@@ -78,7 +78,7 @@ def logout():
 @admin_index.route('/menu')
 @login_required
 def menu():
-    menu_tree = make_menu_tree()
+    menu_tree = index_curd.make_menu_tree()
     return jsonify(menu_tree)
 
 

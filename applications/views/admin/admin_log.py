@@ -1,9 +1,9 @@
-from flask import Blueprint, request, render_template, jsonify
-from flask_login import login_required
+from flask import Blueprint, request, render_template
 from sqlalchemy import desc
 from applications.models.admin_log import AdminLog, LogSchema
 from applications.service.common.curd import model_to_dicts
 from applications.service.common.response import table_api
+from applications.service.route_auth import authorize
 
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 
@@ -14,7 +14,7 @@ admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 
 
 @admin_log.route('/')
-@login_required
+@authorize("admin:log:main")
 def index():
     return render_template('admin/admin_log/main.html')
 
@@ -25,7 +25,7 @@ def index():
 
 
 @admin_log.route('/loginLog')
-@login_required
+@authorize("admin:log:main")
 def loginLog():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
@@ -44,7 +44,7 @@ def loginLog():
 
 
 @admin_log.route('/operateLog')
-@login_required
+@authorize("admin:log:main")
 def operateLog():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)

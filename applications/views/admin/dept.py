@@ -41,7 +41,7 @@ def tree():
 
 
 @admin_dept.route('/save', methods=['POST'])
-@authorize("admin:dept:edit", log=True)
+@authorize("admin:dept:add", log=True)
 def save():
     req = request.json
     dept_curd.save_dept(req)

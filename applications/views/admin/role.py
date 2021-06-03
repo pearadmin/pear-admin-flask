@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from applications.service.admin import role_curd
 from applications.service.common.response import table_api, success_api, fail_api
+from applications.service.common.validate import xss_escape
 from applications.service.route_auth import authorize
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
@@ -20,8 +21,8 @@ def main():
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    roleName = request.args.get('roleName', type=str)
-    roleCode = request.args.get('roleCode', type=str)
+    roleName = xss_escape(request.args.get('roleName', type=str))
+    roleCode = xss_escape(request.args.get('roleCode', type=str))
     filters = {}
     if roleName:
         filters["name"] = ('%' + roleName + '%')
@@ -102,7 +103,7 @@ def update():
 @authorize("admin:role:edit", log=True)
 def enable():
     id = request.json.get('roleId')
-    print(id)
+    # print(id)
     if id:
         res = role_curd.enable_status(id)
         if not res:

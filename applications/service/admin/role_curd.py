@@ -6,6 +6,7 @@ from applications.models.admin_user import User
 
 # 获取角色对象
 from applications.service.common.curd import model_to_dicts
+from applications.service.common.validate import xss_escape
 
 
 def get_role_data(page, limit, filters):
@@ -25,11 +26,11 @@ def get_role_data_dict(page, limit, filters):
 
 # 增加角色
 def add_role(req):
-    details = req.get("details")
-    enable = req.get("enable")
-    roleCode = req.get("roleCode")
-    roleName = req.get("roleName")
-    sort = req.get("sort")
+    details = xss_escape(req.get("details"))
+    enable = xss_escape(req.get("enable"))
+    roleCode = xss_escape(req.get("roleCode"))
+    roleName = xss_escape(req.get("roleName"))
+    sort = xss_escape(req.get("sort"))
     role = Role(
         details=details,
         enable=enable,
@@ -51,13 +52,12 @@ def get_role_by_id(id):
 def update_role(req_json):
     id = req_json.get("roleId")
     data = {
-        "code": req_json.get("roleCode"),
-        "name": req_json.get("roleName"),
-        "sort": req_json.get("sort"),
-        "enable": req_json.get("enable"),
-        "details": req_json.get("details")
+        "code": xss_escape(req_json.get("roleCode")),
+        "name": xss_escape(req_json.get("roleName")),
+        "sort": xss_escape(req_json.get("sort")),
+        "enable": xss_escape(req_json.get("enable")),
+        "details": xss_escape(req_json.get("details"))
     }
-    print(data)
     role = Role.query.filter_by(id=id).update(data)
     db.session.commit()
     return role
@@ -87,8 +87,8 @@ def update_role_power(id, power_list):
     power_id_list = []
     for p in role.power:
         power_id_list.append(p.id)
-        print(p.id)
-    print(power_id_list)
+        # print(p.id)
+    # print(power_id_list)
     powers = Power.query.filter(Power.id.in_(power_id_list)).all()
     for p in powers:
         role.power.remove(p)

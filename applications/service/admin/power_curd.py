@@ -2,6 +2,7 @@ from applications.models import db
 from applications.models.admin_power import Power, PowerSchema2
 from applications.models.admin_role import Role
 from applications.service.common.curd import model_to_dicts
+from applications.service.common.validate import xss_escape
 
 
 def get_power_dict():
@@ -19,14 +20,14 @@ def select_parent():
 
 # 增加权限
 def save_power(req):
-    icon = req.get("icon")
-    openType = req.get("openType")
-    parentId = req.get("parentId")
-    powerCode = req.get("powerCode")
-    powerName = req.get("powerName")
-    powerType = req.get("powerType")
-    powerUrl = req.get("powerUrl")
-    sort = req.get("sort")
+    icon = xss_escape(req.get("icon"))
+    openType = xss_escape(req.get("openType"))
+    parentId = xss_escape(req.get("parentId"))
+    powerCode = xss_escape(req.get("powerCode"))
+    powerName = xss_escape(req.get("powerName"))
+    powerType = xss_escape(req.get("powerType"))
+    powerUrl = xss_escape(req.get("powerUrl"))
+    sort = xss_escape(req.get("sort"))
     power = Power(
         icon=icon,
         open_type=openType,
@@ -53,19 +54,19 @@ def get_power_by_id(id):
 def update_power(req_json):
     id = req_json.get("powerId")
     data = {
-        "icon": req_json.get("icon"),
-        "open_type": req_json.get("openType"),
-        "parent_id": req_json.get("parentId"),
-        "code": req_json.get("powerCode"),
-        "name": req_json.get("powerName"),
-        "type": req_json.get("powerType"),
-        "url": req_json.get("powerUrl"),
-        "sort": req_json.get("sort")
+        "icon": xss_escape(req_json.get("icon")),
+        "open_type": xss_escape(req_json.get("openType")),
+        "parent_id": xss_escape(req_json.get("parentId")),
+        "code": xss_escape(req_json.get("powerCode")),
+        "name": xss_escape(req_json.get("powerName")),
+        "type": xss_escape(req_json.get("powerType")),
+        "url": xss_escape(req_json.get("powerUrl")),
+        "sort": xss_escape(req_json.get("sort"))
     }
-    print(data)
+    # print(data)
     power = Power.query.filter_by(id=id).update(data)
     db.session.commit()
-    print(power)
+    # print(power)
     return power
 
 

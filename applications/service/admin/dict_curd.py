@@ -5,7 +5,7 @@
 from applications.models import db
 from applications.models.admin_dict import DictType, DictData, DictTypeSchema, DictDataSchema
 from applications.service.common.curd import model_to_dicts
-
+from applications.service.common.validate import xss_escape
 
 # 通过type_code获取字典dict
 # 例：get_dict('user_sex')
@@ -47,10 +47,10 @@ def get_dict_data(page, limit, type_code):
 
 # 增加dicttype
 def save_dict_type(req_json):
-    description = req_json.get("description")
-    enable = req_json.get("enable")
-    type_code = req_json.get("typeCode")
-    type_name = req_json.get("typeName")
+    description = xss_escape(req_json.get("description"))
+    enable = xss_escape(req_json.get("enable"))
+    type_code = xss_escape(req_json.get("typeCode"))
+    type_name = xss_escape(req_json.get("typeName"))
     d = DictType(type_name=type_name, type_code=type_code, enable=enable, description=description)
     db.session.add(d)
     db.session.commit()
@@ -59,11 +59,11 @@ def save_dict_type(req_json):
 
 # 编辑字典类型
 def update_dict_type(req_json):
-    id = req_json.get("id")
-    description = req_json.get("description")
-    enable = req_json.get("enable")
-    type_code = req_json.get("typeCode")
-    type_name = req_json.get("typeName")
+    id = xss_escape(req_json.get("id"))
+    description = xss_escape(req_json.get("description"))
+    enable = xss_escape(req_json.get("enable"))
+    type_code = xss_escape(req_json.get("typeCode"))
+    type_name = xss_escape(req_json.get("typeName"))
     DictType.query.filter_by(id=id).update({
         "description": description,
         "enable": enable,
@@ -103,11 +103,11 @@ def delete_type_by_id(id):
 
 # 增加dictdata
 def save_dict_data(req_json):
-    data_label = req_json.get("dataLabel")
-    data_value = req_json.get("dataValue")
-    enable = req_json.get("enable")
-    remark = req_json.get("remark")
-    type_code = req_json.get("typeCode")
+    data_label = xss_escape(req_json.get("dataLabel"))
+    data_value = xss_escape(req_json.get("dataValue"))
+    enable = xss_escape(req_json.get("enable"))
+    remark = xss_escape(req_json.get("remark"))
+    type_code = xss_escape(req_json.get("typeCode"))
     d = DictData(data_label=data_label, data_value=data_value, enable=enable, remark=remark, type_code=type_code)
     db.session.add(d)
     db.session.commit()
@@ -118,11 +118,11 @@ def save_dict_data(req_json):
 def update_dict_data(req_json):
     id = req_json.get("dataId")
     DictData.query.filter_by(id=id).update({
-        "data_label": req_json.get("dataLabel"),
-        "data_value": req_json.get("dataValue"),
-        "enable": req_json.get("enable"),
-        "remark": req_json.get("remark"),
-        "type_code": req_json.get("typeCode")
+        "data_label": xss_escape(req_json.get("dataLabel")),
+        "data_value": xss_escape(req_json.get("dataValue")),
+        "enable": xss_escape(req_json.get("enable")),
+        "remark": xss_escape(req_json.get("remark")),
+        "type_code": xss_escape(req_json.get("typeCode"))
     })
     db.session.commit()
     return

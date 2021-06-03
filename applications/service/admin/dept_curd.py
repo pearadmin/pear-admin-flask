@@ -2,6 +2,7 @@ from applications.models import db
 from applications.models.admin_dept import Dept, DeptSchema
 from applications.models.admin_user import User
 from applications.service.common.curd import model_to_dicts
+from applications.service.common.validate import xss_escape
 
 
 def get_dept_dict():
@@ -11,14 +12,15 @@ def get_dept_dict():
 
 
 def save_dept(req):
-    address = req.get("address")
-    deptName = req.get("deptName")
-    email = req.get("email")
-    leader = req.get("leader")
-    parentId = req.get("parentId")
-    phone = req.get("phone")
-    sort = req.get("sort")
-    status = req.get("status")
+
+    address = xss_escape(req.get("address"))
+    deptName = xss_escape(req.get("deptName"))
+    email = xss_escape(req.get("email"))
+    leader = xss_escape(req.get("leader"))
+    parentId = xss_escape(req.get("parentId"))
+    phone = xss_escape(req.get("phone"))
+    sort = xss_escape(req.get("sort"))
+    status = xss_escape(req.get("status"))
     dept = Dept(
         parent_id=parentId,
         dept_name=deptName,
@@ -61,15 +63,14 @@ def disable_status(id):
 
 def update_dept(json):
     id = json.get("deptId"),
-    print(json.get("leader"))
     data = {
-        "dept_name": json.get("deptName"),
-        "sort": json.get("sort"),
-        "leader": json.get("leader"),
-        "phone": json.get("phone"),
-        "email": json.get("email"),
-        "status": json.get("status"),
-        "address": json.get("address")
+        "dept_name": xss_escape(json.get("deptName")),
+        "sort": xss_escape(json.get("sort")),
+        "leader": xss_escape(json.get("leader")),
+        "phone": xss_escape(json.get("phone")),
+        "email": xss_escape(json.get("email")),
+        "status": xss_escape(json.get("status")),
+        "address": xss_escape(json.get("address"))
     }
     d = Dept.query.filter_by(id=id).update(data)
     if not d:

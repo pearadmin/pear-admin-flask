@@ -4,6 +4,7 @@ from applications.models.admin_user import User
 from applications.models.admin_role import Role
 from applications.service.admin import user_curd
 from applications.service.common.response import table_api, fail_api, success_api
+from applications.service.common.validate import xss_escape
 from applications.service.route_auth import authorize
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
@@ -22,8 +23,8 @@ def main():
 def data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    realName = request.args.get('realName', type=str)
-    username = request.args.get('username', type=str)
+    realName = xss_escape(request.args.get('realName', type=str))
+    username = xss_escape(request.args.get('username', type=str))
     deptId = request.args.get('deptId', type=int)
     filters = {}
     if realName:
@@ -47,9 +48,9 @@ def add():
 def save():
     req_json = request.json
     a = req_json.get("roleIds")
-    username = req_json.get('username')
-    realName = req_json.get('realName')
-    password = req_json.get('password')
+    username = xss_escape(req_json.get('username'))
+    realName = xss_escape(req_json.get('realName'))
+    password = xss_escape(req_json.get('password'))
     role_ids = a.split(',')
 
     if not username or not realName or not password:
@@ -91,11 +92,11 @@ def edit(id):
 @authorize("admin:user:edit", log=True)
 def update():
     req_json = request.json
-    a = req_json.get("roleIds")
-    id = req_json.get("userId")
-    username = req_json.get('username')
-    realName = req_json.get('realName')
-    deptId = req_json.get('deptId')
+    a = xss_escape(req_json.get("roleIds"))
+    id = xss_escape(req_json.get("userId"))
+    username = xss_escape(req_json.get('username'))
+    realName = xss_escape(req_json.get('realName'))
+    deptId = xss_escape(req_json.get('deptId'))
     role_ids = a.split(',')
     user_curd.update_user(id, username, realName,deptId)
     user_curd.update_user_role(id, role_ids)

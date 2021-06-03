@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from applications.models.admin_dict import DictType, DictData
 from applications.service.admin import dict_curd
 from applications.service.common.response import table_api, success_api, fail_api
+from applications.service.common.validate import xss_escape
 from applications.service.route_auth import authorize
 
 admin_dict = Blueprint('adminDict', __name__, url_prefix='/admin/dict')
@@ -19,7 +20,7 @@ def main():
 def dictType_data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    type_name = request.args.get('typeName', type=str)
+    type_name = xss_escape(request.args.get('typeName', type=str))
     data, count = dict_curd.get_dict_type(page=page, limit=limit, type_name=type_name)
     return table_api(data=data,count=count)
 
@@ -44,7 +45,7 @@ def dictType_save():
 @admin_dict.route('/dictType/edit', methods=['GET', 'POST'])
 @authorize("admin:dict:edit", log=True)
 def dictType_edit():
-    id = request.args.get('dictTypeId', type=str)
+    id = request.args.get('dictTypeId', type=int)
     dict_type = DictType.query.filter_by(id=id).first()
     return render_template('admin/dict/edit.html', dict_type=dict_type)
 
@@ -99,7 +100,7 @@ def dictType_delete(id):
 def dictCode_data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    type_code = request.args.get('typeCode', type=str)
+    type_code = xss_escape(request.args.get('typeCode', type=str))
     data, count = dict_curd.get_dict_data(page=page, limit=limit, type_code=type_code)
     return table_api(data=data,count=count)
 
@@ -117,7 +118,7 @@ def dictData_add():
 @authorize("admin:dict:add", log=True)
 def dictData_save():
     req_json = request.json
-    res = save_dict_data(req_json=req_json)
+    res = dict_curd.save_dict_data(req_json=req_json)
     if res == None:
         return jsonify(success=False, msg="增加失败")
     return jsonify(success=True, msg="增加成功")
@@ -137,7 +138,7 @@ def dictData_edit():
 @authorize("admin:dict:edit", log=True)
 def dictData_update():
     req_json = request.json
-    update_dict_data(req_json)
+    dict_curd.update_dict_data(req_json)
     return success_api(msg="更新成功")
 
 
@@ -147,7 +148,7 @@ def dictData_update():
 def dictData_enable():
     id = request.json.get('dataId')
     if id:
-        res = enable_dict_data_status(id)
+        res = dict_curd.enable_dict_data_status(id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启动成功")
@@ -160,7 +161,7 @@ def dictData_enable():
 def dictData_disenable():
     id = request.json.get('dataId')
     if id:
-        res = disable_dict_data_status(id)
+        res = dict_curd.isable_dict_data_status(id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -171,7 +172,7 @@ def dictData_disenable():
 @admin_dict.route('dictData/remove/<int:id>', methods=['DELETE'])
 @authorize("admin:dict:remove", log=True)
 def dictData_delete(id):
-    res = delete_data_by_id(id)
+    res = dict_curd.delete_data_by_id(id)
     if not res:
         return fail_api(msg="删除失败")
     return success_api(msg="删除成功")

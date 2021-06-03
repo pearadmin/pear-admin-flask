@@ -2,7 +2,7 @@ from io import BytesIO
 from flask import session, make_response
 from flask_login import current_user
 from applications.models.admin_power import PowerSchema
-from applications.service.CaptchaTool import gen_captcha
+from applications.service.captcha import gen_captcha
 
 
 # 授权路由存入session

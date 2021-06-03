@@ -1,6 +1,6 @@
 from flask_debugtoolbar import DebugToolbarExtension
 
 
-def OpenDug(app):
+def open_debug_tool(app):
     toolbar = DebugToolbarExtension()
     toolbar.init_app(app)

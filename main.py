@@ -1,13 +1,13 @@
-from flask import Flask, session
+from flask import Flask
 from flask_uploads import configure_uploads, patch_request_class
 from applications.config import database, common
-from applications.service.deBug import OpenDug
+from applications.models import db
+from applications.service.debug_tool import open_debug_tool
+from applications.service.login import init_flask_login
 from applications.service.upload import photos
 from applications.views import init_view
-from applications.models import db
-from applications.service.login import init_flask_login
-from applications.views.admin.error import init_error
 from applications.views.admin.context_processor import init_template_global
+from applications.views.admin.error import init_error
 
 
 def create_app():
@@ -29,7 +29,7 @@ def create_app():
     configure_uploads(app, photos)
     patch_request_class(app)
     # 调试工具栏
-    OpenDug(app)
+    open_debug_tool(app)
     # logo
     logo()
     return app

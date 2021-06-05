@@ -5,7 +5,7 @@ window.rootPath = (function(src) {
 
 layui.config({
 	base: rootPath + "module/",
-	version: "3.7.6.Release"
+	version: "3.8.0.Release"
 }).extend({
 	admin: "admin", 	// 框架布局组件
 	menu: "menu",		// 数据菜单组件
@@ -37,7 +37,7 @@ layui.config({
 	context: "context",		// 上下文组件
 	http: "http",			// ajax请求组件
 	theme: "theme",			// 主题转换
-	message: "message"		// 通知组件
+	message: "message",     // 通知组件
 }).use(['layer', 'theme'], function () {
 	layui.theme.changeTheme(window, false);
 });

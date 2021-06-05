@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, session, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, session, redirect, url_for, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from applications.service.admin import index_curd
 from applications.service.admin_log import login_log
@@ -14,6 +14,13 @@ admin_index = Blueprint('adminIndex', __name__, url_prefix='/admin')
 def index():
     user = current_user
     return render_template('admin/index.html', user=user)
+
+
+# 渲染配置
+@admin_index.route('/config')
+@login_required
+def config():
+    return index_curd.get_render_config()
 
 
 # 获取验证码

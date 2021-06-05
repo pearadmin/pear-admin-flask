@@ -26,6 +26,7 @@
 	color: #333;
 	font-size: 13.5px;
 	line-height: 20px;
+    cursor:pointer;
 }
 .pear-tab-menu .item:hover{
 	background: #36b368;

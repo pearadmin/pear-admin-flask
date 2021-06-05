@@ -1,1 +1,5538 @@
-layui.define(["jquery","layer","form"],function(e){var y=layui.$,f=layui.layer,r=layui.form,m="dtree-nav-ul-sid",k="dtree-nav-item",S="dtree-nav-div",v="dtreefont-special",o="dtree-none-text",t="dtree-toolbar",g="dtree-toolbar-tool",l="dtree-toolbar-fixed",D="dtree-nav-checkbox-div",N="d-click-checkbar",n="t-click",c="dtree",s="dtree-nav-first-line",d="dtree-nav-line",h="dtree-nav-last-line",i="dtree-nav-this",C="dtree-nav-show",T="dtree-nav-hide",x="dtree-disabled",j="dtree-icon-hide",a=y("body"),u=y(window),p=(y(document),"dtree"),b={},I={},P="dtree-icon-fuxuankuangxuanzhong",w="dtree-icon-fuxuankuang",A="dtree-icon-fuxuankuang-banxuan",q="dtree-icon-move-down",L="dtree-icon-move-up",R="dtree-icon-refresh",O="dtree-icon-roundcheckfill",_="dtree-icon-roundclosefill",E="dtree-icon-roundcheck",F="dtree-icon-delete1",M="dtree-icon-search_list_light",B="dtree-icon-pulldown",U="dtree-icon-pullup",H="dtree-icon-roundadd",W="dtree-icon-bianji",$="dtree-icon-roundclose",V={"-1":{open:"dtree-icon-null-open",close:"dtree-icon-null-close"},0:{open:"dtree-icon-wenjianjiazhankai",close:"dtree-icon-weibiaoti5"},1:{open:"dtree-icon-jian",close:"dtree-icon-jia"},2:{open:"dtree-icon-xiangxia1",close:"dtree-icon-xiangyou"}},J={"-1":"dtree-icon-null",0:"dtree-icon-weibiaoti5",1:"dtree-icon-yonghu",2:"dtree-icon-fenzhijigou",3:"dtree-icon-fenguangbaobiao",4:"dtree-icon-xinxipilu",5:"dtree-icon-shuye1",6:"dtree-icon-caidan_xunzhang",7:"dtree-icon-normal-file",8:"dtree-icon-dian",9:"dtree-icon-set-sm",10:"dtree-icon-rate"},G="dtree-",z="checkNodeClick",X="itemNodeClick",K="pulldown",Q="pullup",Y="addToolbar",Z="editToolbar",ee="delToolbar",te="moveDown",oe="moveUp",ae="refresh",ie="checkAll",ne="unCheckAll",se="invertAll",re="remove",le="searchNode",de={getElemId:function(e){var t=e.elem||"",o=e.obj||y(t);return 0==o.length?"":y(o)[0].id},escape:function(e){return"string"!=typeof e?"":e.replace(ue.escape,function(e){return he.escape[e]})},unescape:function(e){return"string"!=typeof e?"":e.replace(ue.unescape,function(e){return he.unescape[e]})},cloneObj:function(e,t){var o={};e instanceof Array&&(o=[]);var a="";for(var i in void 0!==t&&(a=t.join(",")),e)if(-1==a.indexOf(i)){var n=e[i];o[i]="object"==typeof n?de.cloneObj(n,void 0!==typeof t?t:[]):n}return o},trimToDot:function(e){return e.replace(/ /g,".")}},ce=Object.keys||function(e){e=Object(e);var t=[];for(var o in e)t.push(o);return t},he={escape:{"&":"&amp;","<":"&lt;",">":"&gt;","'":"&quo;"}};he.unescape=function(e){e=Object(e);var t={};for(var o in e)t[e[o]]=o;return t}(he.escape);var ue={escape:RegExp("["+ce(he.escape).join("")+"]","g"),unescape:RegExp("("+ce(he.unescape).join("|")+")","g")},fe=function(a){var e=a.data?a.data:{},t="boolean"!=typeof a.async||a.async;y.ajax({type:a.type?a.type:"POST",headers:a.headers,url:a.url,dataType:a.dataType?a.dataType:"json",data:e,async:t,contentType:a.contentType,xhrFields:{withCredentials:a.withCredentials},success:a.success,error:function(e,t,o){"function"==typeof a.error?a.error(e,t,o):f.msg("异步加载失败： "+t,{icon:5,shift:6})},statusCode:{404:function(){f.msg("未找到指定请求，请检查访问路径！",{icon:5,shift:6})},500:function(){f.msg("系统错误！",{icon:5,shift:6})}},complete:function(e,t){"function"==typeof a.complete&&a.complete(e,t)}})},pe=function(e){var t="?";for(var o in e)t+=o+"="+e[o]+"&";return t=t.substring(0,t.length-1)},be=function(e){this.formatter={title:!1},this.response={statusName:"code",statusCode:200,message:"message",rootName:"data",treeId:"id",parentId:"parentId",title:"title",ficonClass:"ficonClass",iconClass:"iconClass",childName:"children",last:"last",spread:"spread",disabled:"disabled",hide:"hide",checkArr:"checkArr",checked:"checked",type:"type",basicData:"basicData"},this.defaultRequest={nodeId:"nodeId",parentId:"parentId",context:"context",leaf:"leaf",level:"level",spread:"spread",dataType:"dataType",checked:"checked",initchecked:"initchecked",basicData:"basicData",recordData:"recordData"},this.toolbarFun={addTreeNode:function(e,t){},editTreeNode:function(e,t){},editTreeLoad:function(e){},delTreeNode:function(e,t){},loadToolbarBefore:function(e,t,o){return e}},this.toolbarStyle={title:"节点",area:["60%","80%"]},this.menubarFun={remove:function(e){return!0}},this.menubarTips={toolbar:[],group:[te,oe,ae,ie,ne,se,re,le],freedom:[]},this.checkbarFun={chooseBefore:function(e,t){return!0},chooseDone:function(e){}},this.iframeDefaultRequest={nodeId:"nodeId",parentId:"parentId",context:"context",leaf:"leaf",level:"level",spread:"spread",dataType:"dataType",checked:"checked",initchecked:"initchecked",basicData:"basicData",recordData:"recordData"},this.iframeFun={iframeDone:function(e){}},this.style={item:"",itemThis:"",dfont:"",icon:"",cbox:"",chs:""},this.usefontStyle={fnode:{node:{open:"",close:""},leaf:""},snode:{node:{open:"",close:""},leaf:""},checkbox:{on:"",out:"",noall:""},menubar:{movedown:"",moveup:"",refresh:"",checkAll:"",unCheckAll:"",invertAll:"",remove:"",search:""},menubarExt:"",toolbar:{menubar:{movedown:"",moveup:"",refresh:"",checkAll:"",unCheckAll:"",invertAll:"",remove:"",search:""},menubarExt:"",pulldown:"",pullup:"",add:"",edit:"",del:""},toolbarExt:""},this.node={nodeId:"",parentId:"",context:"",leaf:"",level:"",spread:"",dataType:"",checked:"",initchecked:"",basicData:"",recordData:""},this.toolbarMenu={},this.checkbarNode=[],this.errData=[],this.checkArrLen=0,this.temp=[],this.bak="",this.setting(e)};be.prototype.setting=function(e){this.options=e||{},this.elem=this.options.elem||b.elem||"",void 0===this.options.obj?this.elem&&0<y(this.elem).length&&(this.obj=y(this.elem)):(this.obj=this.options.obj||b.obj||this.obj,this.elem="#"+this.obj[0].id),this.scroll=this.options.scroll||b.scroll||this.elem,this.accordion="boolean"==typeof this.options.accordion?this.options.accordion:"boolean"==typeof b.accordion&&b.accordion,this.accordion?this.initLevel=1:this.initLevel=this.options.initLevel||b.initLevel||2,this.type=this.options.type||b.type||"load",this.cache="boolean"==typeof this.options.cache?this.options.cache:"boolean"!=typeof b.cache||b.cache,this.record=this.options.record||b.record||!1,this.load="boolean"==typeof this.options.load?this.options.load:"boolean"!=typeof b.load||b.load,this.none=this.options.none||b.nont||"无数据",this.tempHeight=this.options.height||b.height,this.tempHeight?/^full-\d+$/.test(this.tempHeight)?(this.fullHeightGap=this.tempHeight.split("-")[1],this.height=u.height()-this.fullHeightGap):(this.fullHeightGap=this.tempHeight,this.height=this.tempHeight):(this.fullHeightGap="",this.height=""),this.width=this.options.width||b.width||"260",this.obj.css("width",this.width),this.iconfont=this.options.iconfont||b.iconfont||"dtreefont",this.iconfontStyle=this.options.iconfontStyle||b.iconfontStyle||{},this.nodeIconArray=y.extend(V,this.options.nodeIconArray||b.nodeIconArray)||V,this.leafIconArray=y.extend(J,this.options.leafIconArray||b.leafIconArray)||J,this.skin=this.options.skin||b.skin||"theme","layui"==this.skin?(this.line="boolean"==typeof this.options.line?this.options.line:"boolean"!=typeof b.line||b.line,this.ficon=this.options.ficon||b.ficon||"7",this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"1":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||b.icon||"-1",this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?(this.icon,"-1"):this.icon[0]):"laySimple"==this.skin?(this.line=this.options.line||b.line||!1,this.ficon=this.options.ficon||b.ficon||["2","-1"],this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"2":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||b.icon||"-1",this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?(this.icon,"-1"):this.icon[0]):(this.line=this.options.line||b.line||!1,this.ficon=this.options.ficon||b.ficon||"8",this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"1":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||b.icon||"5",this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?"-1"==this.icon?"-1":"0":this.icon[0]),this.leafIcon="string"==typeof this.icon||"number"==typeof this.icon?this.icon:this.icon[1],this.url=this.options.url||b.url||"",this.async="boolean"==typeof this.options.async?this.options.async:"boolean"!=typeof b.async||b.async,this.headers=this.options.headers||b.headers||{},this.method=this.options.method||b.method||"post",this.dataType=this.options.dataType||b.dataType||"json",this.contentType=this.options.contentType||b.contentType||"application/x-www-form-urlencoded",this.defaultRequest=y.extend(this.defaultRequest,this.options.defaultRequest||b.defaultRequest)||this.defaultRequest,this.filterRequest=this.options.filterRequest||b.filterRequest||[],this.request=this.options.request||b.request||{},this.response=y.extend(this.response,this.options.response||b.response)||this.response,this.data=this.options.data||b.data||null,this.dataFormat=this.options.dataFormat||b.dataFormat||"levelRelationship",this.dataStyle=this.options.dataStyle||b.dataStyle||"defaultStyle",this.errDataShow=this.options.errDataShow||b.errDataShow||!1,this.withCredentials=this.options.withCredentials||b.withCredentials||!1,this.success=this.options.success||b.success||function(e,t){},this.done=this.options.done||b.done||function(e,t){},this.formatter=y.extend(this.formatter,this.options.formatter||b.formatter)||this.formatter,this.error=this.options.error||b.error||function(e,t,o){},this.complete=this.options.complete||b.complete||function(e,t){},this.checkbar=this.options.checkbar||b.checkbar||!1,this.checkbarLoad=this.options.checkbarLoad||b.checkbarLoad||"node",this.checkbarType=this.options.checkbarType||b.checkbarType||"all",this.checkbarData=this.options.checkbarData||b.checkbarData||"choose",this.checkbarFun=y.extend(this.checkbarFun,this.options.checkbarFun||b.checkbarFun)||this.checkbarFun,this.menubar=this.options.menubar||b.menubar||!1,this.menubarTips=y.extend(this.menubarTips,this.options.menubarTips||b.menubarTips)||this.menubarTips,this.menubarFun=y.extend(this.menubarFun,this.options.menubarFun||b.menubarFun)||this.menubarFun,this.toolbar=this.options.toolbar||b.toolbar||!1,this.toolbarWay=this.options.toolbarWay||b.toolbarWay||"contextmenu",this.toolbarStyle=y.extend(this.toolbarStyle,this.options.toolbarStyle||b.toolbarStyle)||this.toolbarStyle,this.toolbarLoad=this.options.toolbarLoad||b.toolbarLoad||"node",this.toolbarShow=this.options.toolbarShow||b.toolbarShow||["add","edit","delete"],this.toolbarBtn=this.options.toolbarBtn||b.toolbarBtn||null,this.toolbarExt=this.options.toolbarExt||b.toolbarExt||[],this.toolbarFun=y.extend(this.toolbarFun,this.options.toolbarFun||b.toolbarFun)||this.toolbarFun,this.useIframe=this.options.useIframe||b.useIframe||!1,this.iframeElem=this.options.iframeElem||b.iframeElem||"",this.iframeUrl=this.options.iframeUrl||b.iframeUrl||"",this.iframeLoad=this.options.iframeLoad||b.iframeLoad||"leaf",this.iframeDefaultRequest=y.extend(this.iframeDefaultRequest,this.options.iframeDefaultRequest||b.iframeDefaultRequest)||this.iframeDefaultRequest,this.iframeRequest=y.extend(this.iframeRequest,this.options.iframeRequest)||y.extend(this.iframeRequest,b.iframeRequest)||this.iframeRequest,this.iframeFun=y.extend(this.iframeFun,this.options.iframeFun)||y.extend(this.iframeFun,b.iframeFun)||this.iframeFun,this.select=this.options.select||!1,this.select&&this.selectSetting(),this.ensureTheme()},be.prototype.reloadSetting=function(e){this.options=y.extend(this.options,e)||this.options,this.elem=this.options.elem||this.elem,void 0===this.options.obj?this.elem&&0<y(this.elem).length&&(this.obj=y(this.elem)):(this.obj=this.options.obj||this.obj,this.elem="#"+this.obj[0].id),this.scroll=this.options.scroll||this.scroll,this.accordion="boolean"==typeof this.options.accordion?this.options.accordion:this.accordion,this.accordion?this.initLevel=1:this.initLevel=this.options.initLevel||this.initLevel,this.type=this.options.type||this.type,this.cache="boolean"==typeof this.options.cache?this.options.cache:this.cache,this.record="boolean"==typeof this.options.record?this.options.record:this.record,this.load="boolean"==typeof this.options.load?this.options.load:this.load,this.none=this.options.none||this.none,this.tempHeight=this.options.height||this.height,this.tempHeight&&(/^full-\d+$/.test(this.tempHeight)?(this.fullHeightGap=this.tempHeight.split("-")[1],this.height=u.height()-this.fullHeightGap):(this.fullHeightGap=this.tempHeight,this.height=this.tempHeight)),this.width=this.options.width||this.width,this.obj.css("width",this.width),this.line="boolean"==typeof this.options.line?this.options.line:this.line,this.iconfont=this.options.iconfont||this.iconfont,this.iconfontStyle=this.options.iconfontStyle||this.iconfontStyle,this.nodeIconArray=y.extend(V,this.options.nodeIconArray)||this.nodeIconArray,this.leafIconArray=y.extend(J,this.options.leafIconArray)||this.leafIconArray,this.skin=this.options.skin||this.skin,"layui"==this.skin?(this.line="boolean"!=typeof this.options.line||this.options.line,this.ficon=this.options.ficon||this.ficon,this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"1":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||this.icon,this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?(this.icon,"-1"):this.icon[0]):"laySimple"==this.skin?(this.line="boolean"==typeof this.options.line&&this.options.line,this.ficon=this.options.ficon||this.ficon,this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"2":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||this.icon,this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?(this.icon,"-1"):this.icon[0]):(this.line="boolean"==typeof this.options.line&&this.options.line,this.ficon=this.options.ficon||this.ficon,this.fnodeIcon="string"==typeof this.ficon||"number"==typeof this.ficon?"-1"==this.ficon?"-1":"1":this.ficon[0],this.fleafIcon="string"==typeof this.ficon||"number"==typeof this.ficon?this.ficon:this.ficon[1],this.icon=this.options.icon||this.icon,this.nodeIcon="string"==typeof this.icon||"number"==typeof this.icon?"-1"==this.icon?"-1":"0":this.icon[0]),this.leafIcon="string"==typeof this.icon||"number"==typeof this.icon?this.icon:this.icon[1],this.url=this.options.url||this.url,this.async="boolean"==typeof this.options.async?this.options.async:this.async,this.headers=this.options.headers||this.headers,this.method=this.options.method||this.method,this.dataType=this.options.dataType||this.dataType,this.contentType=this.options.contentType||this.contentType,this.defaultRequest=y.extend(this.defaultRequest,this.options.defaultRequest)||this.defaultRequest,this.filterRequest=this.options.filterRequest||this.filterRequest,this.request=this.options.request||this.request,this.response=y.extend(this.response,this.options.response)||this.response,this.data=this.options.data||this.data,this.dataFormat=this.options.dataFormat||this.dataFormat,this.dataStyle=this.options.dataStyle||this.dataStyle,this.errDataShow="boolean"==typeof this.options.errDataShow?this.options.errDataShow:this.errDataShow,this.withCredentials="boolean"==typeof this.options.withCredentials?this.options.withCredentials:this.withCredentials,this.success=this.options.success||this.success,this.done=this.options.done||this.done,this.formatter=y.extend(this.formatter,this.options.formatter)||this.formatter,this.error=this.options.error||this.error,this.complete=this.options.complete||this.complete,this.checkbar=this.options.checkbar||this.checkbar,this.checkbarLoad=this.options.checkbarLoad||this.checkbarLoad,this.checkbarType=this.options.checkbarType||this.checkbarType,this.checkbarData=this.options.checkbarData||this.checkbarData,this.checkbarFun=y.extend(this.checkbarFun,this.options.checkbarFun)||this.checkbarFun,this.menubar=this.options.menubar||this.menubar,this.menubarTips=y.extend(this.menubarTips,this.options.menubarTips)||this.menubarTips,this.menubarFun=y.extend(this.menubarFun,this.options.menubarFun)||this.menubarFun,this.toolbar=this.options.toolbar||this.toolbar,this.toolbarWay=this.options.toolbarWay||this.toolbarWay,this.toolbarStyle=y.extend(this.toolbarStyle,this.options.toolbarStyle)||this.toolbarStyle,this.toolbarLoad=this.options.toolbarLoad||this.toolbarLoad,this.toolbarShow=this.options.toolbarShow||this.toolbarShow,this.toolbarBtn=this.options.toolbarBtn||this.toolbarBtn,this.toolbarExt=this.options.toolbarExt||this.toolbarExt,this.toolbarFun=y.extend(this.toolbarFun,this.options.toolbarFun)||this.toolbarFun,this.useIframe=this.options.useIframe||this.useIframe,this.iframeElem=this.options.iframeElem||this.iframeElem,this.iframeUrl=this.options.iframeUrl||this.iframeUrl,this.iframeLoad=this.options.iframeLoad||this.iframeLoad,this.iframeDefaultRequest=y.extend(this.iframeDefaultRequest,this.options.iframeDefaultRequest)||this.iframeDefaultRequest,this.iframeRequest=y.extend(this.iframeRequest,this.options.iframeRequest)||this.iframeRequest,this.iframeFun=y.extend(this.iframeFun,this.options.iframeFun)||this.iframeFun,this.select&&this.reloadSelectSetting(),this.ensureTheme()},be.prototype.selectSetting=function(){this.select=!0,this.selectInitVal=this.obj.attr("data-value")||this.options.selectInitVal||"",this.selectTreeDiv=this.obj[0].id+"_tree_div",this.selectCardDiv=this.obj[0].id+"_select_card_div",this.selectDiv=this.obj[0].id+"_select_div",this.selectTipsName=this.obj[0].id+"_select_input",this.selectTips=this.options.selectTips||"请选择",this.selectInputName=this.options.selectInputName||{nodeId:this.obj[0].id+"_select_nodeId"},this.renderSelectDom()},be.prototype.reloadSelectSetting=function(){this.selectInitVal=this.obj.attr("data-value")||this.options.selectInitVal||this.selectInitVal,this.selectTips=this.options.selectTips||this.selectTips,this.selectInputName=y.extend(this.selectInputName,this.options.selectInputName)||this.selectInputName,this.reloadSelectDom()},be.prototype.renderSelectDom=function(){var e=this,t=e.obj[0].id,o=e.selectInputName,a=[];for(var i in o)a.push('<input type="hidden" dtree-id="'+t+'" dtree-node="'+i+'" name="'+o[i]+'" value="" readonly>');var n=['<div class="layui-unselect layui-form-select" dtree-id="'+t+'" dtree-select="'+e.selectDiv+'">','<div class="layui-select-title">',a.join(""),'<input type="text" dtree-id="'+t+'" id="'+e.selectTipsName+'_id" name="'+e.selectTipsName+'" placeholder="'+e.selectTips+'" value="" readonly class="layui-input layui-unselect">','<i class="layui-edge"></i>',"</div></div>"].join("");e.obj.before(n),e.obj.wrap('<div class="layui-card dtree-select" dtree-id="'+t+'" dtree-card="'+e.selectCardDiv+'"></div>').wrap('<div class="layui-card-body"></div>').wrap('<div id="'+e.selectTreeDiv+'"></div>')},be.prototype.reloadSelectDom=function(){var e=this,t=e.obj[0].id,o=e.selectInputName,a=[];for(var i in o)a.push('<input type="hidden" dtree-id="'+t+'" dtree-node="'+i+'" name="'+o[i]+'" value="" readonly>');y("div[dtree-id='"+t+"'][dtree-select='"+e.selectDiv+"']").find("div.layui-select-title").html("");var n=[a.join(""),'<input type="text" dtree-id="'+t+'" id="'+e.selectTipsName+'_id" name="'+e.selectTipsName+'" placeholder="'+e.selectTips+'" value="" readonly class="layui-input layui-unselect">','<i class="layui-edge"></i>'].join("");y("div[dtree-id='"+t+"'][dtree-select='"+e.selectDiv+"']").find("div.layui-select-title").html(n)},be.prototype.selectVal=function(e){var t=this,o=t.obj[0].id,a=t.selectInputName,i="",n={};if(t.checkbar)y("div[dtree-select='"+t.selectDiv+"']").find("input[dtree-id='"+o+"']").each(function(){var e=y(this).attr("name"),t=y(this).val();n[e]=t});else{for(var s in void 0===e&&(e=t.getNowParam()),"string"==typeof e&&(e=t.getParam(e)),i=e.context,a)n[a[s]]=e[s],y("div[dtree-select='"+t.selectDiv+"']").find("input[dtree-id='"+o+"'][name='"+a[s]+"']").val(e[s]||"");e.nodeId&&!e.context&&(i=t.getParam(e.nodeId)),y("div[dtree-select='"+t.selectDiv+"']").find("input[dtree-id='"+o+"'][name='"+t.selectTipsName+"']").val(i||"")}return n},be.prototype.selectCheckboxVal=function(){var e=this,t=e.obj[0].id,o=e.selectInputName,a=e.getCheckbarJsonArrParam();selectTipsNameValue=a.context;var i={};for(var n in o){var s=a[n].join(",");i[o[n]]=s,y("div[dtree-select='"+e.selectDiv+"']").find("input[dtree-id='"+t+"'][name='"+o[n]+"']").val(s)}return y("div[dtree-select='"+e.selectDiv+"']").find("input[dtree-id='"+t+"'][name='"+e.selectTipsName+"']").val(selectTipsNameValue),i},be.prototype.selectResetVal=function(){var e=this.obj[0].id;y("input[dtree-id='"+e+"']").val(""),this.cancelNavThis(),this.checkbar&&this.cancelCheckedNode()},be.prototype.ensureTheme=function(){this.style.item=G+this.skin+"-item",this.style.itemThis=G+this.skin+"-item-this",this.style.dfont=G+this.skin+"-dtreefont",this.style.ficon=G+this.skin+"-ficon",this.style.icon=G+this.skin+"-icon",this.style.cbox=G+this.skin+"-checkbox",this.style.chs=G+this.skin+"-choose";var e=this.iconfont,t=[];"string"==typeof e?t.push(e):t=e;var o=this.iconfontStyle,a=[];null==o.length?a.push(o):a=o;for(var i=0;i<t.length;i++){var n=t[i],s=a[i];void 0!==s&&(this.useDefaultOrUserDefineFnodeStyle(n,s.fnode),this.useDefaultOrUserDefineSnodeStyle(n,s.snode),this.useDefaultOrUserDefineCheckboxStyle(n,s.checkbox),this.useDefaultOrUserDefineMenubarStyle(n,s.menubar),this.useDefaultOrUserDefineMenubarExtStyle(n,s.menubarExt),this.useDefaultOrUserDefineToolbarStyle(n,s.toolbar),this.useDefaultOrUserDefineToolbarExtStyle(n,s.toolbarExt))}},be.prototype.useDefaultOrUserDefineFnodeStyle=function(e,t){var o=this.usefontStyle.fnode.node.open,a=this.usefontStyle.fnode.node.close,i=this.usefontStyle.fnode.leaf;if(void 0===t)this.usefontStyle.fnode.node.open=""==o?e+" "+this.nodeIconArray[this.fnodeIcon].open:o,this.usefontStyle.fnode.node.close=""==a?e+" "+this.nodeIconArray[this.fnodeIcon].close:a,this.usefontStyle.fnode.leaf=""==i?e+" "+this.leafIconArray[this.fleafIcon]:i;else{var n=t.node,s=t.leaf;if(void 0===n)this.usefontStyle.fnode.node.open=""==o?e+" "+this.nodeIconArray[this.fnodeIcon].open:o,this.usefontStyle.fnode.node.close=""==a?e+" "+this.nodeIconArray[this.fnodeIcon].close:a;else{var r=n.open,l=n.close;this.usefontStyle.fnode.node.open=void 0===r?""==o?e+" "+this.nodeIconArray[this.fnodeIcon].open:o:e+" "+r,this.usefontStyle.fnode.node.close=void 0===l?""==a?e+" "+this.nodeIconArray[this.fnodeIcon].close:a:e+" "+l}this.usefontStyle.fnode.leaf=void 0===s?""==i?e+" "+this.leafIconArray[this.fleafIcon]:i:e+" "+s}},be.prototype.useDefaultOrUserDefineSnodeStyle=function(e,t){var o=this.usefontStyle.snode.node.open,a=this.usefontStyle.snode.node.close,i=this.usefontStyle.snode.leaf;if(void 0===t)this.usefontStyle.snode.node.open=""==o?e+" "+this.nodeIconArray[this.nodeIcon].open:o,this.usefontStyle.snode.node.close=""==a?e+" "+this.nodeIconArray[this.nodeIcon].close:a,this.usefontStyle.snode.leaf=""==i?e+" "+this.leafIconArray[this.leafIcon]:i;else{var n=t.node,s=t.leaf;if(void 0===n)this.usefontStyle.snode.node.open=""==o?e+" "+this.nodeIconArray[this.nodeIcon].open:o,this.usefontStyle.snode.node.close=""==a?e+" "+this.nodeIconArray[this.nodeIcon].close:a;else{var r=n.open,l=n.close;this.usefontStyle.snode.node.open=void 0===r?""==o?e+" "+this.nodeIconArray[this.nodeIcon].open:o:e+" "+r,this.usefontStyle.snode.node.close=void 0===l?""==a?e+" "+this.nodeIconArray[this.nodeIcon].close:a:e+" "+l}this.usefontStyle.snode.leaf=void 0===s?""==i?e+" "+this.leafIconArray[this.leafIcon]:i:e+" "+s}},be.prototype.useDefaultOrUserDefineCheckboxStyle=function(e,t){var o=this.usefontStyle.checkbox.on,a=this.usefontStyle.checkbox.out,i=this.usefontStyle.checkbox.noall;if(void 0===t)this.usefontStyle.checkbox.on=""==o?e+" "+P:o,this.usefontStyle.checkbox.out=""==a?e+" "+w:a,this.usefontStyle.checkbox.noall=""==i?e+" "+A:i;else{var n=t.on,s=t.out,r=t.noall;this.usefontStyle.checkbox.on=void 0===n?""==o?e+" "+P:o:e+" "+n,this.usefontStyle.checkbox.out=void 0===s?""==a?e+" "+w:a:e+" "+s,this.usefontStyle.checkbox.noall=void 0===r?""==i?e+" "+A:i:e+" "+r}},be.prototype.useDefaultOrUserDefineMenubarStyle=function(e,t){var o=this.usefontStyle.menubar.movedown,a=this.usefontStyle.menubar.moveup,i=this.usefontStyle.menubar.refresh,n=this.usefontStyle.menubar.checkAll,s=this.usefontStyle.menubar.unCheckAll,r=this.usefontStyle.menubar.invertAll,l=this.usefontStyle.menubar.remove,d=this.usefontStyle.menubar.search;if(void 0===t)this.usefontStyle.menubar.movedown=""==o?e+" "+q:o,this.usefontStyle.menubar.moveup=""==a?e+" "+L:a,this.usefontStyle.menubar.refresh=""==i?e+" "+R:i,this.usefontStyle.menubar.checkAll=""==n?e+" "+O:n,this.usefontStyle.menubar.unCheckAll=""==s?e+" "+_:s,this.usefontStyle.menubar.invertAll=""==r?e+" "+E:r,this.usefontStyle.menubar.remove=""==l?e+" "+F:l,this.usefontStyle.menubar.search=""==d?e+" "+M:d;else{var c=t.movedown,h=t.moveup,u=t.refresh,f=t.checkAll,p=t.unCheckAll,b=t.invertAll,m=t.remove,y=t.search;this.usefontStyle.menubar.movedown=void 0===c?""==o?e+" "+q:o:e+" "+c,this.usefontStyle.menubar.moveup=void 0===h?""==a?e+" "+L:a:e+" "+h,this.usefontStyle.menubar.refresh=void 0===u?""==i?e+" "+R:i:e+" "+u,this.usefontStyle.menubar.checkAll=void 0===f?""==n?e+" "+O:n:e+" "+f,this.usefontStyle.menubar.unCheckAll=void 0===p?""==s?e+" "+_:s:e+" "+p,this.usefontStyle.menubar.invertAll=void 0===b?""==r?e+" "+E:r:e+" "+b,this.usefontStyle.menubar.remove=void 0===m?""==l?e+" "+F:l:e+" "+m,this.usefontStyle.menubar.search=void 0===y?""==d?e+" "+M:d:e+" "+y}},be.prototype.useDefaultOrUserDefineMenubarExtStyle=function(e,t){var o=this.usefontStyle.menubarExt;this.usefontStyle.menubarExt=void 0===t?""==o?e:o:t},be.prototype.useDefaultOrUserDefineToolbarStyle=function(e,t){var o=this.usefontStyle.toolbar.menubar.movedown,a=this.usefontStyle.toolbar.menubar.moveup,i=this.usefontStyle.toolbar.menubar.refresh,n=this.usefontStyle.toolbar.menubar.checkAll,s=this.usefontStyle.toolbar.menubar.unCheckAll,r=this.usefontStyle.toolbar.menubar.invertAll,l=this.usefontStyle.toolbar.menubar.remove,d=this.usefontStyle.toolbar.menubar.search,c=this.usefontStyle.toolbar.menubarExt,h=this.usefontStyle.toolbar.pulldown,u=this.usefontStyle.toolbar.pullup,f=this.usefontStyle.toolbar.add,p=this.usefontStyle.toolbar.edit,b=this.usefontStyle.toolbar.del;if(void 0===t)this.usefontStyle.toolbar.menubar.movedown=""==o?e+" "+this.usefontStyle.menubar.movedown:o,this.usefontStyle.toolbar.menubar.moveup=""==a?e+" "+this.usefontStyle.menubar.moveup:a,this.usefontStyle.toolbar.menubar.refresh=""==i?e+" "+this.usefontStyle.menubar.refresh:i,this.usefontStyle.toolbar.menubar.checkAll=""==n?e+" "+this.usefontStyle.menubar.checkAll:n,this.usefontStyle.toolbar.menubar.unCheckAll=""==s?e+" "+this.usefontStyle.menubar.unCheckAll:s,this.usefontStyle.toolbar.menubar.invertAll=""==r?e+" "+this.usefontStyle.menubar.invertAll:r,this.usefontStyle.toolbar.menubar.remove=""==l?e+" "+this.usefontStyle.menubar.remove:l,this.usefontStyle.toolbar.menubar.search=""==d?e+" "+this.usefontStyle.menubar.search:d,this.usefontStyle.toolbar.menubarExt=""==c?this.usefontStyle.menubarExt:c,this.usefontStyle.toolbar.pulldown=""==h?e+" "+B:h,this.usefontStyle.toolbar.pullup=""==u?e+" "+U:u,this.usefontStyle.toolbar.add=""==f?e+" "+H:f,this.usefontStyle.toolbar.edit=""==p?e+" "+W:p,this.usefontStyle.toolbar.del=""==b?e+" "+$:b;else{var m=t.menubar,y=t.menubarExt,v=t.pulldown,g=t.pullup,k=t.add,S=t.edit,D=t.del;if(void 0===m)this.usefontStyle.toolbar.menubar.movedown=""==o?e+" "+this.usefontStyle.menubar.movedown:o,this.usefontStyle.toolbar.menubar.moveup=""==a?e+" "+this.usefontStyle.menubar.moveup:a,this.usefontStyle.toolbar.menubar.refresh=""==i?e+" "+this.usefontStyle.menubar.refresh:i,this.usefontStyle.toolbar.menubar.checkAll=""==n?e+" "+this.usefontStyle.menubar.checkAll:n,this.usefontStyle.toolbar.menubar.unCheckAll=""==tempUncheckAll?e+" "+this.usefontStyle.menubar.unCheckAll:tempUncheckAll,this.usefontStyle.toolbar.menubar.invertAll=""==r?e+" "+this.usefontStyle.menubar.invertAll:r,this.usefontStyle.toolbar.menubar.remove=""==l?e+" "+this.usefontStyle.menubar.remove:l,this.usefontStyle.toolbar.menubar.search=""==d?e+" "+this.usefontStyle.menubar.search:d;else{var N=m.movedown,C=m.moveup,T=m.refresh,x=m.checkAll,j=m.unCheckAll,I=m.invertAll,P=m.remove,w=m.search;this.usefontStyle.toolbar.menubar.movedown=void 0===N?""==o?e+" "+this.usefontStyle.menubar.movedown:o:e+" "+N,this.usefontStyle.toolbar.menubar.moveup=void 0===C?""==a?e+" "+this.usefontStyle.menubar.moveup:a:e+" "+C,this.usefontStyle.toolbar.menubar.refresh=void 0===T?""==i?e+" "+this.usefontStyle.menubar.refresh:i:e+" "+T,this.usefontStyle.toolbar.menubar.checkAll=void 0===x?""==n?e+" "+this.usefontStyle.menubar.checkAll:n:e+" "+x,this.usefontStyle.toolbar.menubar.unCheckAll=void 0===j?""==tempUncheckAll?e+" "+this.usefontStyle.menubar.unCheckAll:tempUncheckAll:e+" "+j,this.usefontStyle.toolbar.menubar.invertAll=void 0===I?""==r?e+" "+this.usefontStyle.menubar.invertAll:r:e+" "+I,this.usefontStyle.toolbar.menubar.remove=void 0===P?""==l?e+" "+this.usefontStyle.menubar.remove:l:e+" "+P,this.usefontStyle.toolbar.menubar.search=void 0===w?""==d?e+" "+this.usefontStyle.menubar.search:d:e+" "+w}this.usefontStyle.toolbar.menubarExt=void 0===y?""==c?this.usefontStyle.menubarExt:c:y,this.usefontStyle.toolbar.pulldown=void 0===v?""==h?e+" "+B:h:e+" "+v,this.usefontStyle.toolbar.pullup=void 0===g?""==u?e+" "+U:u:e+" "+g,this.usefontStyle.toolbar.add=void 0===k?""==f?e+" "+H:f:e+" "+k,this.usefontStyle.toolbar.edit=void 0===S?""==p?e+" "+W:p:e+" "+S,this.usefontStyle.toolbar.del=void 0===D?""==b?e+" "+$:b:e+" "+D}},be.prototype.useDefaultOrUserDefineToolbarExtStyle=function(e,t){var o=this.usefontStyle.toolbarExt;this.usefontStyle.toolbarExt=void 0===t?""==o?e:o:t},be.prototype.operateIcon=function(e,t){var o=this,a=e.attr("data-iconClass"),i=t.attr("data-iconClass");return{open:function(){e.attr("data-spread","open"),t.attr("data-spread","open"),a||(e.removeClass(o.usefontStyle.fnode.node.close),e.addClass(o.usefontStyle.fnode.node.open)),i||(t.removeClass(o.usefontStyle.snode.node.close),t.addClass(o.usefontStyle.snode.node.open))},close:function(){e.attr("data-spread","close"),t.attr("data-spread","close"),a||(e.removeClass(o.usefontStyle.fnode.node.open),e.addClass(o.usefontStyle.fnode.node.close)),i||(t.removeClass(o.usefontStyle.snode.node.open),t.addClass(o.usefontStyle.snode.node.close))},openWithLeaf:function(){e.attr("data-spread","open"),t.attr("data-spread","open"),a||(e.removeClass(o.usefontStyle.fnode.leaf),e.addClass(o.usefontStyle.fnode.node.open)),i||(t.removeClass(o.usefontStyle.snode.leaf),t.addClass(o.usefontStyle.snode.node.open))},closeWithLeaf:function(){e.attr("data-spread","last"),t.attr("data-spread","last"),a||(e.removeClass(o.usefontStyle.fnode.node.open),e.removeClass(o.usefontStyle.fnode.node.close),e.addClass(o.usefontStyle.fnode.leaf)),i||(t.removeClass(o.usefontStyle.snode.node.open),t.removeClass(o.usefontStyle.snode.node.close),t.addClass(o.usefontStyle.snode.leaf))}}},be.prototype.showLine=function(e){var t=this;t.line&&(e&&0<e.length?e.each(function(){t.showLineLi(y(this))}):t.obj.find("li[data-id]").each(function(){t.showLineLi(y(this))}))},be.prototype.showLineLi=function(e){var t=e.children("div"),o=e.next("li"),a=e.parent("ul");if(a[0].id==this.obj[0].id)e.removeClass(d),e.removeClass(h),e.addClass(s);else{var i=a.parent("li").next("li");if(0==i.length)0==o.length?(e.removeClass(d),e.removeClass(s),e.addClass(h)):(e.removeClass(s),e.removeClass(h),e.addClass(d));else{var n=i.children("div");0==o.length&&"leaf"==t.children("cite").attr("data-leaf")&&"leaf"==n.children("cite").attr("data-leaf")?(e.removeClass(s),e.removeClass(d),e.addClass(h)):(e.removeClass(s),e.removeClass(h),e.addClass(d))}}},be.prototype.autoHeight=function(){var e=this,t=e.height;""!=t&&(e.elem==e.scroll?e.obj.parent().css("height",t+"px"):e.obj.closest(e.scroll).css("height",t+"px"))},be.prototype.reload=function(e){this.reloadSetting(e),this.init()},be.prototype.init=function(){var n=this;if("object"==typeof n)if(n.autoHeight(),n.data){if(void 0===n.data.length)return void f.msg("数据解析异常，data数据格式不正确",{icon:5});if(0==n.data.length)return void n.obj.html(n.getNoneDom().text());n.obj.html(""),setTimeout(function(){if(n.success(n.data,n.obj),"list"==n.dataFormat){var e=n.obj.attr("data-id"),t=n.queryListTreeByPid(e,n.data);n.loadListTree(t,n.data,1)}else n.loadTree(n.data,1);n.showLine(),n.toolbar&&"contextmenu"!=n.toolbarWay&&n.setToolbarDom().setToolbarPlace(n.toolbarMenu),n.msgErrData(),n.select&&n.selectVal(n.selectInitVal),n.bak=n.obj.html(),n.done(n.data,n.obj)},100)}else{if(!n.url)return void f.msg("数据请求异常，url参数未指定",{icon:5});n.obj.html("");var o=n.load?f.load(1):"";fe({async:n.async,headers:n.headers,type:n.method,url:n.url,dataType:n.dataType,contentType:n.contentType,withCredentials:n.withCredentials,data:n.getFilterRequestParam(n.getRequestParam()),success:function(e){"string"==typeof e&&(e=y.parseJSON(e)),n.success(e,n.obj);var t="";if((t="layuiStyle"==n.dataStyle?e[n.response.statusName]:e.status[n.response.statusName])==n.response.statusCode){var o=e[n.response.rootName];if(void 0===o.length)return void n.obj.html(n.getNoneDom().errText("数据解析异常，url回调后的数据格式不正确"));if(0==o.length)return void n.obj.html(n.getNoneDom().text());if("list"==n.dataFormat){var a=n.obj.attr("data-id"),i=n.queryListTreeByPid(a,o);n.loadListTree(i,o,1)}else n.loadTree(o,1);n.showLine(),n.toolbar&&"contextmenu"!=n.toolbarWay&&n.setToolbarDom().setToolbarPlace(n.toolbarMenu),n.msgErrData(),n.select&&n.selectVal(n.selectInitVal),n.bak=n.obj.html(),n.done(e,n.obj)}else"layuiStyle"==n.dataStyle?(n.obj.html(n.getNoneDom().errText(e[n.response.message])),n.error(null,t,e[n.response.message])):(n.obj.html(n.getNoneDom().errText(e.status[n.response.message])),n.error(null,t,e.status[n.response.message]))},error:function(e,t,o){n.obj.html(n.getNoneDom().errText(t+": "+o)),n.error(e,t,o)},complete:function(e,t){n.load&&f.close(o),n.complete(e,t)}})}else f.msg("树组件未成功加载，请检查配置",{icon:5})},be.prototype.getChild=function(e,t){var n=this,s=e.next("ul");if(n.setNodeParam(e),void 0!==t){if(void 0===t.length)return void f.msg("数据解析异常，data数据格式不正确",{icon:5});if(s.html(""),"list"==n.dataFormat){var o=n.node.nodeId,a=parseInt(n.node.level)+1,i=n.queryListTreeByPid(o,t);n.loadListTree(i,n.data,a)}else n.loadTree(t,a);n.showLine(),n.toolbar&&"contextmenu"!=n.toolbarWay&&n.setToolbarDom().setToolbarPlace(n.toolbarMenu),n.msgErrData(),n.bak=n.obj.html()}else{if(!n.url)return void f.msg("数据请求异常，url参数未指定",{icon:5});s.html("");var r=n.load?f.load(1):"";fe({async:n.async,headers:n.headers,type:n.method,url:n.url,dataType:n.dataType,withCredentials:n.withCredentials,data:n.getFilterRequestParam(n.getRequestParam()),success:function(e){"string"==typeof e&&(e=y.parseJSON(e));var t="";if((t="layuiStyle"==n.dataStyle?e[n.response.statusName]:e.status[n.response.statusName])==n.response.statusCode){var o=n.node.nodeId,a=parseInt(n.node.level)+1;if("list"==n.dataFormat){var i=n.queryListTreeByPid(o,e[n.response.rootName]);n.loadListTree(i,e[n.response.rootName],a,s)}else n.loadTree(e[n.response.rootName],a,s);n.showLine(),n.toolbar&&"contextmenu"!=n.toolbarWay&&n.setToolbarDom().setToolbarPlace(n.toolbarMenu),n.msgErrData(),s.addClass(C),n.bak=n.obj.html()}else"layuiStyle"==n.dataStyle?(n.obj.html(n.getNoneDom().errText(e[n.response.message])),n.error(null,t,e[n.response.message])):(n.obj.html(n.getNoneDom().errText(e.status[n.response.message])),n.error(null,t,e.status[n.response.message]))},error:function(e,t,o){n.obj.html(n.getNoneDom().errText(t+": "+o)),n.error(e,t,o)},complete:function(e,t){n.load&&f.close(r),n.complete(e,t)}})}},be.prototype.loadListTree=function(e,t,o,a){var i=this;if(a=a||i.getNodeDom().nowOrRootUl(),0<e.length)for(var n=0;n<e.length;n++){var s=e[n];if("object"==typeof s){var r=i.parseData(s),l=i.queryListTreeByPid(r.treeId(),t);if(a.append(i.getLiItemDom(r.treeId(),r.parentId(),r.title(),r.fmtTitle(),r.last(l.length),r.ficonClass(),r.iconClass(),r.checkArr(),o,r.spread(o),r.disabled(),r.hide(),r.basicData(),r.recordData(),a.hasClass(c)?"root":"item")),0<l.length){var d=parseInt(o)+1;i.loadListTree(l,t,d,i.obj.find("ul[data-id='"+r.treeId()+"']"))}}}},be.prototype.queryListTreeByPid=function(e,t){var o=[];if(t)for(var a=0;a<t.length;a++){var i=t[a];"object"==typeof i&&("null"==e||null==e?null==i[this.response.parentId]&&o.push(i):i[this.response.parentId]==e&&(i[this.response.treeId]==e?this.errData.push(i):o.push(i)))}return o},be.prototype.loadTree=function(e,t,o){var a=this;if(e){o=o||a.getNodeDom().nowOrRootUl();for(var i=0;i<e.length;i++){var n=e[i];if("object"==typeof n){n[a.response.treeId]==n[a.response.parentId]&&a.errData.push(n);var s=a.parseData(n),r=s.children();if(o.append(a.getLiItemDom(s.treeId(),s.parentId(),s.title(),s.fmtTitle(),s.last(r.length),s.ficonClass(),s.iconClass(),s.checkArr(),t,s.spread(t),s.disabled(),s.hide(),s.basicData(),s.recordData(),o.hasClass(c)?"root":"item")),0!=r.length){var l=parseInt(t)+1;a.loadTree(r,l,a.obj.find("ul[data-id='"+s.treeId()+"']"))}}}}},be.prototype.msgErrData=function(){var e=this;if(0<e.errData.length&&e.errDataShow){for(var t="",o=0;o<e.errData.length;o++){t+="数据：【"+e.errData[o][e.response.title]+"】中节点id和上级id值一致！ \n"}f.msg(t,{icon:2,time:5e3})}e.errData=[]},be.prototype.parseData=function(o){var a=this;return{treeId:function(){return o[a.response.treeId]},parentId:function(){return o[a.response.parentId]},fmtTitle:function(){if("function"!=typeof a.formatter.title)return o[a.response.title];var e=a.formatter.title(o),t=o[a.response.title];return(t=""==e||null==e||null==e?t:e)||""},title:function(){return o[a.response.title]},level:function(){return o[a.response.level]||""},ficonClass:function(){return o[a.response.ficonClass]||""},iconClass:function(){return o[a.response.iconClass]||""},last:function(e){return 0==e?"boolean"!=typeof o[a.response.last]||o[a.response.last]:"boolean"==typeof o[a.response.last]&&o[a.response.last]},spread:function(e){return e<a.initLevel?"boolean"!=typeof o[a.response.spread]||o[a.response.spread]:"boolean"==typeof o[a.response.spread]&&o[a.response.spread]},disabled:function(){return"boolean"==typeof o[a.response.disabled]&&o[a.response.disabled]},hide:function(){return"boolean"==typeof o[a.response.hide]&&o[a.response.hide]},checkArr:function(){var e=[],t=o[a.response.checkArr];return"string"==typeof t&&(t=-1<t.indexOf("{")&&-1<t.indexOf("}")?JSON.parse(t):{type:"0",checked:t}),"object"==typeof t&&(void 0===t.length?e.push(t):e=t),0<e.length&&e.length>a.checkArrLen&&(a.checkArrLen=e.length),e},children:function(){return o[a.response.childName]||[]},basicData:function(){return de.escape(JSON.stringify(o[a.response.basicData]))||JSON.stringify({})},recordData:function(){var e=a.record?de.cloneObj(o,[a.response.treeId,a.response.parentId,a.response.title,a.response.iconClass,a.response.childName,a.response.last,a.response.spread,a.response.disabled,a.response.hide,a.response.checkArr,a.response.checked,a.response.type,a.response.basicData]):{};return de.escape(JSON.stringify(e))},data:function(){return o}}},be.prototype.getNoneDom=function(){var t=this.obj[0].id,e=this.none;return{text:function(){return"<div class='"+o+"' dtree-id='"+t+"'>"+e+"</div>"},errText:function(e){return"<div class='"+o+"' dtree-id='"+t+"'>"+e+"</div>"}}},be.prototype.getDom=function(r,e,t,o,l,s,d,c,a,h,u,i){var f=this,p=f.obj[0].id,b=(f.toolbar,f.checkbar);return{fnode:function(){var e=f.fnodeIcon,t=f.fleafIcon,o=f.usefontStyle.fnode.leaf,a=f.usefontStyle.fnode.node.open,i=f.usefontStyle.fnode.node.close;if(s){var n=f.iconfont;i="string"==typeof n?a=o=n+" "+s:(o=n[0]+" "+s,a=n[0]+" "+s,n[0]+" "+s)}return"-1"!=e&&"-1"!=t?l?"<i class='"+o+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"'></i>":h?"<i class='"+a+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"'></i>":"<i class='"+i+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+s+"'></i>":"-1"!=e&&"-1"==t?l?"<i class='"+o+" "+j+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"'></i>":h?"<i class='"+a+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"'></i>":"<i class='"+i+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+s+"'></i>":"-1"==e&&"-1"!=t?l?"<i class='"+o+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"'></i>":h?"<i class='"+a+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"'></i>":"<i class='"+i+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+s+"'></i>":"-1"==e&&"-1"==t?l?"<i class='"+o+" "+j+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"' style='display:none;'></i>":h?"<i class='"+a+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"'></i>":"<i class='"+i+" "+f.style.dfont+" "+f.style.ficon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+s+"'></i>":void 0},node:function(){var e=f.nodeIcon,t=f.leafIcon,o=f.usefontStyle.snode.leaf,a=f.usefontStyle.snode.node.open,i=f.usefontStyle.snode.node.close;if(d){var n=f.iconfont;i="string"==typeof n?a=o=n+" "+d:(o=n[0]+" "+d,a=n[0]+" "+d,n[0]+" "+d)}return"-1"!=e&&"-1"!=t?l?"<i class='"+o+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":h?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"-1"!=e&&"-1"==t?l?"<i class='"+o+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":h?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"-1"==e&&"-1"!=t?l?"<i class='"+o+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":h?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"-1"==e&&"-1"==t?l?"<i class='"+o+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":h?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+r+"' dtree-id='"+p+"' data-iconClass='"+d+"'></i>":void 0},checkbox:function(){var e=!1;if("node"==f.checkbarLoad?b&&(e=!0):l&&b&&(e=!0),e){var t="<div class='"+D+"' data-id='"+r+"' dtree-id='"+p+"'>";if(c&&0<c.length)for(var o=0;o<c.length;o++){var a=c[o],i=a.checked,n=f.usefontStyle.checkbox.out;n="2"==i?f.usefontStyle.checkbox.noall+" "+f.style.chs:"1"==i?f.usefontStyle.checkbox.on+" "+f.style.chs:f.usefontStyle.checkbox.out;var s="";u&&(s=x),t+="<i class='"+n+" "+f.style.dfont+" "+f.style.cbox+" "+s+"' data-id='"+r+"' dtree-id='"+p+"' data-checked='"+a.checked+"' data-initchecked='"+a.checked+"' data-type='"+a.type+"' dtree-click='"+z+"' data-par='."+N+"' dtree-disabled='"+u+"'></i>"}return t+="</div>"}return""},text:function(){var e="";return u&&(e=x),"<cite class='"+n+" "+e+"' data-id='"+r+"' data-leaf='"+(l?"leaf":"node")+"' dtree-disabled='"+u+"' data-title='"+t+"' >"+o+"</cite>"},ul:function(){return l?"<ul class='"+m+"' data-id='"+r+"' dtree-id='"+p+"'></ul>":h?"<ul class='"+m+" "+C+"' data-id='"+r+"' dtree-id='"+p+"'></ul>":"<ul class='"+m+"' data-id='"+r+"' dtree-id='"+p+"'></ul>"}}},be.prototype.replaceDom=function(l,d,c,h,u,e){var f=this,p=f.obj[0].id,b=(f.toolbar,f.checkbar);return{fnode:function(e){var t="",o=f.fnodeIcon,a=(f.fleafIcon,f.usefontStyle.fnode.leaf),i=f.usefontStyle.fnode.node.open,n=f.usefontStyle.fnode.node.close;if(e){var s=f.iconfont;n="string"==typeof s?i=a=s+" "+e:(a=s[0]+" "+e,i=s[0]+" "+e,s[0]+" "+e)}"-1"!=o&&"-1"!=leafIcon?t=c?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":h?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"!=nodeIcon&&"-1"==leafIcon?t=c?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":h?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"==nodeIcon&&"-1"!=leafIcon?t=c?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":h?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"==nodeIcon&&"-1"==leafIcon&&(t=c?"<i class='"+a+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":h?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+iconClass+"'></i>":"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>"),""!=t&&f.getNodeDom(l).fnode().replaceWith(y(t))},node:function(e){var t="",o=f.nodeIcon,a=f.leafIcon,i=f.usefontStyle.snode.leaf,n=f.usefontStyle.snode.node.open,s=f.usefontStyle.snode.node.close;if(e){var r=f.iconfont;s="string"==typeof r?n=i=r+" "+e:(i=r[0]+" "+e,n=r[0]+" "+e,r[0]+" "+e)}"-1"!=o&&"-1"!=a?t=c?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":h?"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"<i class='"+s+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"!=o&&"-1"==a?t=c?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":h?"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"<i class='"+s+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"==o&&"-1"!=a?t=c?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":h?"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"<i class='"+s+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"-1"==o&&"-1"==a&&(t=c?"<i class='"+i+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='last' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":h?"<i class='"+n+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='open' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>":"<i class='"+s+" "+v+" "+f.style.dfont+" "+f.style.icon+"' data-spread='close' data-id='"+d+"' dtree-id='"+p+"' data-iconClass='"+e+"'></i>"),""!=t&&f.getNodeDom(l).snode().replaceWith(y(t))},checkbox:function(e){var t=!1;if("node"==f.checkbarLoad?b&&(t=!0):c&&b&&(t=!0),t){var o="<div class='"+D+"' data-id='"+d+"' dtree-id='"+p+"'>";if(e&&0<e.length)for(var a=0;a<e.length;a++){var i=e[a],n=i.checked,s=f.usefontStyle.checkbox.out;s="2"==n?f.usefontStyle.checkbox.noall+" "+f.style.chs:"1"==n?f.usefontStyle.checkbox.on+" "+f.style.chs:f.usefontStyle.checkbox.out;var r="";u&&(r=x),o+="<i class='"+s+" "+f.style.dfont+" "+f.style.cbox+" "+r+"' data-id='"+d+"' dtree-id='"+p+"' data-checked='"+i.checked+"' data-initchecked='"+i.checked+"' data-type='"+i.type+"' dtree-click='"+z+"' data-par='."+N+"' dtree-disabled='"+u+"'></i>"}o+="</div>",f.getNodeDom(l).snode().next("div").replaceWith(y(o))}},text:function(e){var t="";u&&(t=x);var o="<cite class='"+n+" "+t+"' data-id='"+d+"' data-leaf='"+(c?"leaf":"node")+"' dtree-disabled='"+u+"' >"+e+"</cite>";f.getNodeDom(l).cite().replaceWith(y(o))},ul:function(){var e=c?"<ul class='"+m+"' data-id='"+d+"' dtree-id='"+p+"'></ul>":h?"<ul class='"+m+" "+C+"' data-id='"+d+"' dtree-id='"+p+"'></ul>":"<ul class='"+m+"' data-id='"+d+"' dtree-id='"+p+"'></ul>";f.getNodeDom(l).nextUl().replaceWith(y(e))},div:function(){l.attr("data-id",d)},basicData:function(e){e="{}"==e?"":e,l.attr("data-basic",e)},recordData:function(e){e="{}"==e?"":e,l.attr("data-record",e)},p_li:function(e){var t=l.parent("li");return t.attr("data-id",d),e&&t.attr("data-pid",e),t}}},be.prototype.getLiItemDom=function(e,t,o,a,i,n,s,r,l,d,c,h,u,f,p){var b=this,m=b.obj[0].id,y=b.getDom(e,t,o,a,i,n,s,r,l,d,c,h);u="{}"==u?"":u,f="{}"==f?"":f;var v="<div class='"+S+" "+b.style.item+"' data-id='"+e+"' dtree-id='"+m+"' dtree-click='"+X+"' data-basic='"+u+"' data-record='"+f+"' dtree-disabled='"+c+"' dtree-hide='"+h+"' ";b.toolbar&&"contextmenu"==b.toolbarWay?("node"==b.toolbarLoad&&(v+=" d-contextmenu='true'>"),"noleaf"==b.toolbarLoad&&(v+=i?" d-contextmenu='false'>":" d-contextmenu='true'>"),"leaf"==b.toolbarLoad&&(v+=i?" d-contextmenu='true'>":" d-contextmenu='false'>")):v+=" d-contextmenu='false'>";var g="";return h&&(g=T),["<li class='"+N+" "+k+" "+g+" 'data-id='"+e+"'data-pid='"+("root"==p?void 0!==typeof t&&""!=t?t:"-1":t)+"'dtree-id='"+m+"'data-index='"+l+"'dtree-hide='"+h+"'>"+v,y.fnode(),y.node(),y.checkbox(),y.text(),"</div>",y.ul(),"</li>"].join("")},be.prototype.dataInit=function(e){var t=this,o=t.obj.find("div[data-id='"+e+"']");t.getNodeDom(o).parentLi().find("."+i).removeClass(i),t.getNodeDom(o).parentLi().find("."+t.style.itemThis).removeClass(t.style.itemThis),o.addClass(i),o.addClass(t.style.itemThis),t.setNodeParam(o);var a=o.parents("."+k);return a.children("ul").addClass(C),a.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.fnode.node.close)).addClass(t.usefontStyle.fnode.node.open),a.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.fnode.node.close)).removeClass(t.usefontStyle.fnode.node.close),a.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.snode.node.close)).addClass(t.usefontStyle.snode.node.open),a.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.snode.node.close)).removeClass(t.usefontStyle.snode.node.close),t.getNowParam()},be.prototype.rollbackHtml=function(e){var t=this;t.bak&&(t.obj.html(t.bak),t.cancelNavThis(),t.checkbar?(t.cancelCheckedNode(),t.chooseDataInit(e)):t.dataInit(e),t.bak=t.obj.html())},be.prototype.escape=function(e){return de.escape(e)},be.prototype.unescape=function(e){return de.unescape(e)},be.prototype.cancelNavThis=function(){this.obj.find("div[data-id]").parent().find("."+i).removeClass(i),this.obj.find("div[data-id]").parent().find("."+this.style.itemThis).removeClass(this.style.itemThis)},be.prototype.navThis=function(e){var t="object"==typeof e?e:0==this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']");null!=t&&(this.cancelNavThis(),t.addClass(i),t.addClass(this.style.itemThis))},be.prototype.accordionUL=function(e){if(this.accordion){e.closest("li[data-index]").siblings("li[data-index]").children("ul[data-id]").removeClass(C);var t=e.closest("li[data-index]").siblings("li[data-index]").children("ul[data-id]").prev("div");if(t.length&&0<t.length)for(var o=0;o<t.length;o++){var a=y(t[o]),i=this.getNodeDom(a).fnode(),n=this.getNodeDom(a).snode();"last"!=i.attr("data-spread")&&this.operateIcon(i,n).close()}}},be.prototype.clickSpread=function(e){var t=this,o=t.getNodeDom(e).fnode(),a=t.getNodeDom(e).snode(),i=(t.getNodeDom(e).cite(),o.attr("data-spread")),n=e.next("ul");0<n.length&&("close"==i?("load"==t.type?t.cache?n.html()?n.addClass(C):t.getChild(e):(n.html(""),t.getChild(e)):n.addClass(C),t.accordionUL(n),t.operateIcon(o,a).open()):"open"==i&&(n.removeClass(C),t.operateIcon(o,a).close()))},be.prototype.setDisabledNodes=function(e){for(var t=e.split(","),o=0;o<t.length;o++){var a=this.getNodeDom(t[o]).div(),i=a.children("div."+D).children("i[data-par]"),n=a.children("cite[data-leaf]");null!=a&&"true"!=a.attr("dtree-disabled")&&(a.attr("dtree-disabled","true"),i.attr("dtree-disabled","true"),i.addClass(x),n.attr("dtree-disabled","true"),n.addClass(x))}},be.prototype.setDisabledAllNodes=function(){this.obj.find("div[dtree-click='"+X+"']").each(function(){var e=y(this),t=e.children("div."+D).children("i[data-par]"),o=e.children("cite[data-leaf]");null!=e&&"true"!=e.attr("dtree-disabled")&&(e.attr("dtree-disabled","true"),t.attr("dtree-disabled","true"),t.addClass(x),o.attr("dtree-disabled","true"),o.addClass(x))})},be.prototype.cancelDisabledNodes=function(e){for(var t=e.split(","),o=0;o<t.length;o++){var a=this.getNodeDom(t[o]).div(),i=a.children("div."+D).children("i[data-par]"),n=a.children("cite[data-leaf]");null!=a&&"true"==a.attr("dtree-disabled")&&(a.attr("dtree-disabled","false"),i.attr("dtree-disabled","false"),i.removeClass(x),n.attr("dtree-disabled","false"),n.removeClass(x))}},be.prototype.getDisabledNodesParam=function(e){for(var t=e.split(","),o=[],a=0;a<t.length;a++){var i=this.getNodeDom(t[a]).div();null!=i&&"true"==i.attr("dtree-disabled")&&o.push(this.getRequestParam(this.getTempNodeParam(i)))}return o},be.prototype.getAllDisabledNodesParam=function(){var t=this,o=[];return t.obj.find("div[dtree-click='"+X+"'][dtree-disabled='true']").each(function(){var e=y(this);o.push(t.getRequestParam(t.getTempNodeParam(e)))}),o},be.prototype.setHideNodes=function(e){for(var t=e.split(","),o=0;o<t.length;o++){var a=this.getNodeDom(t[o]).div(),i=a.parent("li[dtree-hide]");null!=a&&"true"!=a.attr("dtree-hide")&&(a.attr("dtree-hide","true"),i.attr("dtree-hide","true"),i.addClass(T))}},be.prototype.cancelHideNodes=function(e){for(var t=e.split(","),o=0;o<t.length;o++){var a=this.getNodeDom(t[o]).div(),i=a.parent("li[dtree-hide]");null!=a&&"true"==a.attr("dtree-hide")&&(a.attr("dtree-hide","false"),i.attr("dtree-hide","false"),i.removeClass(T))}},be.prototype.getHideNodesParam=function(e){for(var t=e.split(","),o=[],a=0;a<t.length;a++){var i=this.getNodeDom(t[a]).div();null!=i&&"true"==i.attr("dtree-hide")&&o.push(this.getRequestParam(this.getTempNodeParam(i)))}return o},be.prototype.getAllHideNodesParam=function(){var t=this,o=[];return t.obj.find("div[dtree-click='"+X+"'][dtree-hide='true']").each(function(){var e=y(this);o.push(t.getRequestParam(t.getTempNodeParam(e)))}),o},be.prototype.refreshTree=function(){this.obj.html(""),this.initNodeParam(),this.init()},be.prototype.partialRefreshAdd=function(e,t){var o=this;$ul=e.next("ul");var a=e.find("i[data-spread]");if("last"==a.eq(0).attr("data-spread")?o.operateIcon(a.eq(0),a.eq(1)).openWithLeaf():o.operateIcon(a.eq(0),a.eq(1)).open(),$ul.addClass(C),o.accordionUL($ul),t)if(t.length&&0<t.length)o.getChild(e,t);else{var i=o.parseData(t);if(i.treeId()){var n=parseInt(e.parent("li").attr("data-index"))+1;$ul.append(o.getLiItemDom(i.treeId(),i.parentId(),i.title(),i.fmtTitle(),i.last(0),i.ficonClass(),i.iconClass(),i.checkArr(),n,i.spread(),i.disabled(),i.hide(),i.basicData(),i.recordData(),"item")),$thisDiv=$ul.find("div[data-id='"+i.treeId()+"']"),o.setNodeParam($thisDiv),o.showLine($ul.find("li"))}else f.msg("添加失败,节点ID为undefined！",{icon:5}),o.setNodeParam(e)}else o.getChild(e)},be.prototype.partialRefreshEdit=function(e,t){var o=this;if($ul=e.next("ul"),$p_li=e.parent("li"),t)if("object"==typeof t){var a=o.parseData(t);if(a.treeId()){var i=o.replaceDom(e,a.treeId(),a.last(0),a.spread(),a.disabled(),a.hide());i.div(),i.node(a.iconClass()),i.checkbox(a.checkArr()),i.text(a.title()),i.ul(),i.basicData(a.basicData()),i.recordData(a.recordData());var n=a.parentId(),s=$p_li.attr("data-pid");if(n&&n!=s){$p_li=i.p_li(n);var r=o.getNodeDom(n).div(),l=o.getNodeDom(n).nextUl();if(0==l.children("li").length){var d=r.find("i[data-spread]");o.operateIcon(d.eq(0),d.eq(1)).openWithLeaf(),l.addClass(C)}l.append($p_li)}else i.p_li();o.setNodeParam(e)}else f.msg("编辑失败,节点ID为undefined！",{icon:5}),o.setNodeParam(e)}else o.getNodeDom(e).cite().html(t)},be.prototype.partialRefreshDel=function(e){var t=this;if($p_li=e.parent("li"),$p_ul=t.getNodeDom(e).parentUl(),$p_div=t.getNodeDom(e).parentDiv(),$p_li.remove(),t.showLine($p_ul.find("li")),0==$p_ul.children("li").length){var o=$p_div.find("i[data-spread]");t.operateIcon(o.eq(0),o.eq(1)).closeWithLeaf()}t.initNodeParam()},be.prototype.chooseDataInit=function(e){for(var t=this,o=e.split(","),a=0;a<o.length;a++)t.obj.find("i[dtree-click='"+z+"']").each(function(){y(this).attr("data-id")==o[a]&&t.checkStatus(y(this)).check()});var i=t.obj.find("i[dtree-click='"+z+"'][data-checked='1']").parents("."+k);return i.children("ul").addClass(C),i.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.fnode.node.close)).addClass(t.usefontStyle.fnode.node.open),i.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.fnode.node.close)).removeClass(t.usefontStyle.fnode.node.close),i.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.snode.node.close)).addClass(t.usefontStyle.snode.node.open),i.children("."+S).children("i[data-spread]."+de.trimToDot(t.usefontStyle.snode.node.close)).removeClass(t.usefontStyle.snode.node.close),t.getCheckbarNodesParam()},be.prototype.checkAllOrNot=function(e){var t=this,o=e.attr("data-par"),a=e.attr("data-type"),i=e.closest(o),n=e.parents(o),s=i.find(o);if("1"==e.attr("data-checked")){t.checkStatus(e).noCheck();var r=s.find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(r).noCheck();for(var l=1,d=n;l<d.length;l++){if(0==d.eq(l).find(">."+m+" ."+D+">i[data-type='"+a+"'][data-checked='1']").length){var c=d.eq(l).find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(c).noCheck()}}}else{t.checkStatus(e).check();r=s.find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(r).check();for(l=1,d=n;l<d.length;l++){c=d.eq(l).find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(c).check()}}},be.prototype.checkAllOrNoallOrNot=function(e){var t=this,o=(e.closest("."+S),e.attr("data-par")),a=e.attr("data-type"),i=e.closest(o),n=e.parents(o),s=i.find(o);if("1"==e.attr("data-checked")){t.checkStatus(e).noCheck();var r=s.find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(r).noCheck();for(var l=1,d=n;l<d.length;l++){var c=d.eq(l).find(">."+m+" ."+D+">i[data-type='"+a+"'][data-checked='1']").length,h=d.eq(l).find(">."+S+">."+D+">i[data-type='"+a+"']");0==c?t.checkStatus(h).noCheck():t.checkStatus(h).noallCheck()}}else{t.checkStatus(e).check();r=s.find(">."+S+">."+D+">i[data-type='"+a+"']");t.checkStatus(r).check();for(l=1,d=n;l<d.length;l++){var u=d.eq(l).find(">."+m+" ."+D+">i[data-type='"+a+"'][data-checked='1']").length,f=d.eq(l).find(">."+m+" ."+D+">i[data-type='"+a+"']").length;h=d.eq(l).find(">."+S+">."+D+">i[data-type='"+a+"']");u!=f?t.checkStatus(h).noallCheck():t.checkStatus(h).check()}}},be.prototype.checkAllOrPcascOrNot=function(e){e.closest("."+S);var t=e.attr("data-par"),o=e.attr("data-type"),a=e.closest(t),i=(e.parents(t),a.find(t));if("1"==e.attr("data-checked")){this.checkStatus(e).noCheck();var n=i.find(">."+S+">."+D+">i[data-type='"+o+"']");this.checkStatus(n).noCheck()}else{this.checkStatus(e).check();n=i.find(">."+S+">."+D+">i[data-type='"+o+"']");this.checkStatus(n).check()}},be.prototype.checkOrNot=function(e){e.closest("."+S);var t=e.attr("data-par"),o=(e.attr("data-type"),e.closest(t));e.parents(t),o.find(t);"1"==e.attr("data-checked")?this.checkStatus(e).noCheck():this.checkStatus(e).check()},be.prototype.checkOnly=function(e){e.closest("."+S);var t=e.attr("data-par"),o=(e.attr("data-type"),e.closest(t)),a=(e.parents(t),o.find(t),e.attr("data-checked")),i=this.obj.find("i[data-checked]");this.checkStatus(i).noCheck(),"1"!=a&&this.checkStatus(e).check()},be.prototype.changeCheck=function(e){var t=this,o=t.temp;void 0===e&&(e=o[0]),"all"==t.checkbarType?t.checkAllOrNot(e):"no-all"==t.checkbarType?t.checkAllOrNoallOrNot(e):"p-casc"==t.checkbarType?t.checkAllOrPcascOrNot(e):"self"==t.checkbarType?t.checkOrNot(e):"only"==t.checkbarType?t.checkOnly(e):t.checkAllOrNot(e),t.select&&t.selectCheckboxVal();var a=t.setAndGetCheckbarNodesParam(!0);t.checkbarFun.chooseDone(a),layui.event.call(this,p,"chooseDone("+y(t.obj)[0].id+")",{checkbarParams:a}),t.temp=[]},be.prototype.initNoAllCheck=function(){var e=this.obj.find("i[data-checked='1']");if(0<e.length)for(var t=0;t<e.length;t++)for(var o=y(e[t]),a=o.attr("data-par"),i=o.attr("data-type"),n=o.closest(a),s=o.parents(a),r=(n.find(a),1),l=s;r<l.length;r++){var d=l.eq(r).find(">."+m+" ."+D+">i[data-type='"+i+"'][data-checked='1']").length,c=l.eq(r).find(">."+m+" ."+D+">i[data-type='"+i+"']").length,h=l.eq(r).find(">."+S+">."+D+">i[data-type='"+i+"']");d!=c?this.checkStatus(h).noallCheck():this.checkStatus(h).check()}},be.prototype.initAllCheck=function(){var e=this.obj.find("i[data-checked='1']");if(0<e.length)for(var t=0;t<e.length;t++)for(var o=y(e[t]),a=o.attr("data-par"),i=o.attr("data-type"),n=o.closest(a),s=o.parents(a),r=(n.find(a),1),l=s;r<l.length;r++){var d=l.eq(r).find(">."+S+">."+D+">i[data-type='"+i+"']");this.checkStatus(d).check()}},be.prototype.checkStatus=function(e){var t=this;return{check:function(){e.removeClass(t.usefontStyle.checkbox.out),e.removeClass(t.usefontStyle.checkbox.noall),e.addClass(t.usefontStyle.checkbox.on),e.addClass(t.style.chs),e.attr("data-checked","1")},noCheck:function(){e.removeClass(t.usefontStyle.checkbox.noall),e.removeClass(t.usefontStyle.checkbox.on),e.removeClass(t.style.chs),e.addClass(t.usefontStyle.checkbox.out),e.attr("data-checked","0")},noallCheck:function(){e.removeClass(t.usefontStyle.checkbox.out),e.removeClass(t.usefontStyle.checkbox.on),e.addClass(t.usefontStyle.checkbox.noall),e.addClass(t.style.chs),e.attr("data-checked","2")}}},be.prototype.setAndGetCheckbarNodesParam=function(o){var a=this;return a.checkbarNode=[],"change"==a.checkbarData?a.obj.find("i[data-par][dtree-disabled='false']").each(function(){var e=y(this),t=e.closest("."+S);e.attr("data-checked")!=e.attr("data-initchecked")&&(o?a.checkbarNode.push(a.getRequestParam(a.getCheckbarNodeParam(t,e))):a.checkbarNode.push(a.getCheckbarNodeParam(t,e)))}):"all"==a.checkbarData?a.obj.find("i[data-par][data-checked][dtree-disabled='false']").each(function(){var e=y(this),t=e.closest("."+S);o?a.checkbarNode.push(a.getRequestParam(a.getCheckbarNodeParam(t,e))):a.checkbarNode.push(a.getCheckbarNodeParam(t,e))}):"choose"==a.checkbarData?a.obj.find("i[data-par][data-checked='1'][dtree-disabled='false']").each(function(){var e=y(this),t=e.closest("."+S);o?a.checkbarNode.push(a.getRequestParam(a.getCheckbarNodeParam(t,e))):a.checkbarNode.push(a.getCheckbarNodeParam(t,e))}):"halfChoose"==a.checkbarData&&(a.obj.find("i[data-par][data-checked='1'][dtree-disabled='false']").each(function(){var e=y(this),t=e.closest("."+S);o?a.checkbarNode.push(a.getRequestParam(a.getCheckbarNodeParam(t,e))):a.checkbarNode.push(a.getCheckbarNodeParam(t,e))}),a.obj.find("i[data-par][data-checked='2'][dtree-disabled='false']").each(function(){var e=y(this),t=e.closest("."+S);o?a.checkbarNode.push(a.getRequestParam(a.getCheckbarNodeParam(t,e))):a.checkbarNode.push(a.getCheckbarNodeParam(t,e))})),a.checkbarNode},be.prototype.getCheckbarNodesParam=function(){return this.setAndGetCheckbarNodesParam(!0)},be.prototype.getCheckbarNodeParam=function(e,t){var o=this,a={};a.nodeId=e.attr("data-id"),a.parentId=o.getNodeDom(e).parentLi().attr("data-pid"),a.context="function"==typeof o.formatter.title?o.getNodeDom(e).cite().attr("data-title"):o.getNodeDom(e).cite().text(),a.leaf="leaf"==o.getNodeDom(e).cite().attr("data-leaf"),a.level=o.getNodeDom(e).parentLi().attr("data-index"),a.spread="open"==o.getNodeDom(e).fnode().attr("data-spread");var i=e.attr("data-basic");i&&(i=JSON.parse(de.unescape(i))),a.basicData=i;var n=e.attr("data-record");return n&&(n=JSON.parse(de.unescape(n))),a.recordData=n,a.dataType=t.attr("data-type"),a.checked=t.attr("data-checked"),a.initchecked=t.attr("data-initchecked"),a},be.prototype.getCheckbarJsonArrParam=function(){var e={nodeId:[],parentId:[],context:[],leaf:[],level:[],spread:[],dataType:[],checked:[],initchecked:[],basicData:[],recordData:[]},t=this.setAndGetCheckbarNodesParam(!1);if(t&&0<t.length)for(var o=0;o<t.length;o++){var a=t[o];console.log(a),e.nodeId.push(a.nodeId),e.parentId.push(a.parentId),e.context.push(a.context),e.leaf.push(a.leaf),e.level.push(a.level),e.spread.push(a.spread),e.dataType.push(a.dataType),e.checked.push(a.checked),e.initchecked.push(a.initchecked),e.basicData.push(a.basicData),e.recordData.push(a.recordData)}return e=this.getRequestParam(e),console.log(e),e},be.prototype.changeCheckbarNodes=function(){var t=!1;return this.obj.find("i[data-par]").each(function(){var e=y(this);if($div=e.closest("."+S),e.attr("data-checked")!=e.attr("data-initchecked"))return t=!0}),t},be.prototype.clickNodeCheckbar=function(e){var t=this.getNodeDom(e).checkbox();this.temp=[t],this.changeCheck()},be.prototype.checkAllNode=function(e){var t=this.obj.find("i[data-par][data-checked!='1']");0<t.length&&this.checkStatus(t).check()},be.prototype.cancelCheckedNode=function(e){var t=this.obj.find("i[data-par][data-checked!='0']");0<t.length&&this.checkStatus(t).noCheck()},be.prototype.invertCheckedNode=function(e){var t=this;if(0<t.obj.find("i[data-par]").length){var o=!1;t.obj.find("i[data-par]").each(function(){var e=y(this);"2"==e.attr("data-checked")?o=!0:"0"==e.attr("data-checked")?t.checkStatus(e).check():"1"==e.attr("data-checked")&&t.checkStatus(e).noCheck()}),o?t.initNoAllCheck():t.initAllCheck()}},be.prototype.removeCheckedNode=function(e){var o=this;if(0==o.obj.find("i[data-par][data-checked='1']").length)f.msg("请至少选中一个节点",{icon:2});else{o.checkbarNode=[];o.obj.find("i[data-par][data-checked='1']").each(function(){var e=y(this),t=e.closest("."+S);o.checkbarNode.push(o.getRequestParam(o.getCheckbarNodeParam(t,e)))}),f.confirm("确定要删除选中节点？",{icon:3,title:"删除选中节点"},function(e){o.menubarFun.remove(o.checkbarNode)&&(o.obj.find("i[data-par][data-checked='1']").closest("."+S).next("ul").remove(),o.obj.find("i[data-par][data-checked='1']").closest("."+S).remove(),o.checkbarNode=[]),f.close(e)})}},be.prototype.initTreePlus=function(){var e=this;e.obj.prevAll("div#dtree_menubar_"+e.obj[0].id).remove(),e.toolbarMenu={},e.menubar&&e.menubarTips.group&&0<e.menubarTips.group.length&&e.obj.before("<div class='dtree-menubar' id='dtree_menubar_"+e.obj[0].id+"'><div class='layui-btn-group'></div></div>"),e.toolbar&&"contextmenu"==e.toolbarWay&&(e.obj.prevAll("div#dtree_toolbar_"+e.obj[0].id).remove(),e.obj.before("<div class='"+t+" layui-nav' id='dtree_toolbar_"+e.obj[0].id+"'><div class='layui-nav-item'><dl class='layui-nav-child layui-anim'></dl></div></div>"))},be.prototype.openTreePlus=function(){var e=this,t=[];if(e.toolbar&&e.getToolbarDom(),e.menubar){var o=e.menubarTips,a=o.toolbar,i=o.group;o.freedom;if(a&&0<a.length)for(var n=0;n<a.length;n++){var s=a[n];"string"==typeof s&&e.getMenubarToolDom(s),"object"==typeof s&&e.getExtMenubarToolDom(s)}if(i&&0<i.length){for(n=0;n<i.length;n++){var r=i[n];"string"==typeof r&&t.push(e.getMenubarDom(r)),"object"==typeof r&&t.push(e.getExtMenubarDom(r))}e.obj.prevAll("div#dtree_menubar_"+e.obj[0].id).children("div.layui-btn-group").append(t.join(""))}}},be.prototype.getMenubarDom=function(e){var t=this,o=t.obj[0].id,a="";switch(e){case te:a="<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+te+"' title='展开全部节点'><i class='"+t.usefontStyle.menubar.movedown+"'></i></button>";break;case oe:a="<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+oe+"' title='收缩全部节点'><i class='"+t.usefontStyle.menubar.moveup+"'></i></button>";break;case ae:a="<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+ae+"' title='刷新'><i class='"+t.usefontStyle.menubar.refresh+"'></i></button>";break;case ie:a=t.checkbar&&"only"!=t.checkbarType?"<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+ie+"' title='全选节点'><i class='"+t.usefontStyle.menubar.checkAll+"'></i></button>":"";break;case ne:a=t.checkbar&&"only"!=t.checkbarType?"<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+ne+"' title='全不选节点'><i class='"+t.usefontStyle.menubar.unCheckAll+"'></i></button>":"";break;case se:a=t.checkbar&&"only"!=t.checkbarType?"<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+se+"' title='反选节点'><i class='"+t.usefontStyle.menubar.invertAll+"'></i></button>":"";break;case re:a=t.checkbar?"<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+re+"' title='删除选中节点'><i class='"+t.usefontStyle.menubar.remove+"'></i></button>":"";break;case le:a="<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+o+"' d-menu='"+le+"' title='查询节点'><i class='"+t.usefontStyle.menubar.search+"'></i></button>"}return a},be.prototype.getExtMenubarDom=function(e){return"<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+this.obj[0].id+"' d-menu='"+e.menubarId+"' title='"+e.title+"'><i class='"+this.usefontStyle.menubarExt+" "+e.icon+"'></i></button>"},be.prototype.getMenubarToolDom=function(e){var t=this;t.obj[0].id;switch(e){case te:t.toolbarMenu[te]=t.setToolbarDom().setMenuToolbarOption(te,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.movedown,"展开全部");break;case oe:t.toolbarMenu[oe]=t.setToolbarDom().setMenuToolbarOption(oe,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.moveup,"收缩全部");break;case ae:t.toolbarMenu[ae]=t.setToolbarDom().setMenuToolbarOption(ae,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.refresh,"刷新");break;case ie:t.checkbar&&"only"!=t.checkbarType&&(t.toolbarMenu[ie]=t.setToolbarDom().setMenuToolbarOption(ie,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.checkAll,"全选节点"));break;case ne:t.checkbar&&"only"!=t.checkbarType&&(t.toolbarMenu[ne]=t.setToolbarDom().setMenuToolbarOption(ne,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.unCheckAll,"全不选节点"));break;case se:t.checkbar&&"only"!=t.checkbarType&&(t.toolbarMenu[se]=t.setToolbarDom().setMenuToolbarOption(se,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.invertAll,"反选节点"));break;case re:t.checkbar&&(t.toolbarMenu[re]=t.setToolbarDom().setMenuToolbarOption(re,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.remove,"删除选中"));break;case le:t.toolbarMenu[le]=t.setToolbarDom().setMenuToolbarOption(le,t.toolbarStyle.title,t.usefontStyle.toolbar.menubar.searchNode,"查询")}},be.prototype.getExtMenubarToolDom=function(e){this.toolbarMenu[e.menubarId]=this.setToolbarDom().setMenuToolbarOption(e.menubarId,e.title,this.usefontStyle.toolbar.menubarExt+" "+e.icon,"")},be.prototype.menubarMethod=function(){var c=this;return{openAllNode:function(e){for(var t=e||c.obj.children("li").children("ul"),o=0;o<t.length;o++){var a=y(t[o]),i=a.prev("div"),n=c.getNodeDom(i).fnode(),s=c.getNodeDom(i).snode(),r=c.getNodeDom(i).cite(),l=n.attr("data-spread");if("leaf"!=r.attr("data-leaf")){"open"==l||("load"==c.type?c.cache?a.html()?a.addClass(C):c.getChild(i):(a.html(""),c.getChild(i)):a.addClass(C),c.operateIcon(n,s).open());var d=a.children("li").children("ul");c.menubarMethod().openAllNode(d)}}},closeAllNode:function(){c.obj.find("."+m).each(function(){var e=y(this),t=e.prev("div"),o=c.getNodeDom(t).fnode(),a=c.getNodeDom(t).snode(),i=c.getNodeDom(t).cite();o.attr("data-spread"),i.attr("data-leaf");e.removeClass(C),c.operateIcon(o,a).close()})},refreshTree:function(){c.refreshTree()},checkAll:function(){c.checkAllNode()},unCheckAll:function(){c.cancelCheckedNode()},invertAll:function(){c.invertCheckedNode()},remove:function(){c.removeCheckedNode()},searchNode:function(){f.prompt({formType:0,value:"",title:"查询节点"},function(e,t,o){e?c.searchNode(e)||f.msg("该名称节点不存在！",{icon:5}):f.msg("未指定查询节点名称",{icon:5});f.close(t)})},extMethod:function(e,t,o){if(c.menubar&&c.menubarTips.group&&0<c.menubarTips.group.length&&"group"==o)for(var a=0;a<c.menubarTips.group.length;a++){if(e==(i=c.menubarTips.group[a]).menubarId){i.handler(c.getRequestParam(c.getNodeParam(t),t));break}}if(c.menubar&&c.menubarTips.toolbar&&0<c.menubarTips.toolbar.length&&"toolbar"==o)for(a=0;a<c.menubarTips.toolbar.length;a++){if(e==(i=c.menubarTips.toolbar[a]).menubarId){i.handler(c.getRequestParam(c.getNodeParam(t),t));break}}if(c.menubar&&c.menubarTips.freedom&&0<c.menubarTips.freedom.length&&"freedom"==o)for(a=0;a<c.menubarTips.freedom.length;a++){var i;if(e==(i=c.menubarTips.freedom[a]).menubarId){i.handler(c.getRequestParam(c.getNodeParam(t),t));break}}}}},be.prototype.menubarListener=function(e,t){var o=this,a=o.getNodeDom().nowDiv();switch(e){case te:o.menubarMethod().openAllNode();break;case oe:o.menubarMethod().closeAllNode();break;case ae:o.menubarMethod().refreshTree();break;case ie:o.menubarMethod().checkAll();break;case ne:o.menubarMethod().unCheckAll();break;case se:o.menubarMethod().invertAll();break;case re:o.menubarMethod().remove();break;case le:o.menubarMethod().searchNode();break;default:o.menubarMethod().extMethod(e,a,t)}},be.prototype.searchNode=function(a){var e=!1,i=[];if(this.obj.find("cite[data-leaf]").each(function(){var e=y(this);if(-1<e.html().indexOf(a)){if("leaf"==e.attr("data-leaf")){var t="";e.parents("li").each(function(){t="-"+y(this).find("cite[data-leaf]").html()+t}),t=t.substring(1,t.length),e.attr("title",t)}var o=0;e.parents("li").each(function(){if(-1<y(this).find("cite[data-leaf]").html().indexOf(a)&&o++,2<=o)return!0}),o<2&&i.push(e.closest("li").prop("outerHTML"))}}),0<i.length){e=!0,this.obj.html("");for(var t=0;t<i.length;t++)this.obj.append(i[t])}return e},be.prototype.getToolbarDom=function(){var e=this,t=e.toolbarShow,o=e.toolbarExt;e.toolbarWay;if(0<t.length)for(var a=0;a<t.length;a++){var i=t[a];"pulldown"==i&&(e.toolbarMenu[K]=e.setToolbarDom().setToolbarOption(K,e.toolbarStyle.title,e.usefontStyle.toolbar.pulldown,"展开")),"pullup"==i&&(e.toolbarMenu[Q]=e.setToolbarDom().setToolbarOption(Q,e.toolbarStyle.title,e.usefontStyle.toolbar.pullup,"收缩")),"add"==i&&(e.toolbarMenu[Y]=e.setToolbarDom().setToolbarOption(Y,e.toolbarStyle.title,e.usefontStyle.toolbar.add,"新增")),"edit"==i&&(e.toolbarMenu[Z]=e.setToolbarDom().setToolbarOption(Z,e.toolbarStyle.title,e.usefontStyle.toolbar.edit,"编辑")),"delete"==i&&(e.toolbarMenu[ee]=e.setToolbarDom().setToolbarOption(ee,e.toolbarStyle.title,e.usefontStyle.toolbar.del,"删除"))}if(0<o.length)for(a=0;a<o.length;a++){var n=o[a];e.toolbarMenu[n.toolbarId]=e.setToolbarDom().setToolbarOption(n.toolbarId,n.title,e.usefontStyle.toolbarExt+" "+n.icon,"")}},be.prototype.setToolbarDom=function(){var n=this,s=n.toolbarWay;return{setToolbarOption:function(e,t,o,a){return"contextmenu"==s?"<dd><a dtree-tool='"+e+"'><i class='"+o+"'></i>&nbsp;"+a+t+"</a></dd>":"fixed"==s||"follow"==s?"<a dtree-tool='"+e+"' title='"+a+t+"'><i class='"+o+"'></i></a>":void 0},setMenuToolbarOption:function(e,t,o,a){var i=n.obj[0].id;return"contextmenu"==s?"<dd><a dtree-id='"+i+"' d-menu='"+e+"'><i class='"+o+"'></i>&nbsp;"+a+t+"</a></dd>":"fixed"==s||"follow"==s?"<a dtree-id='"+i+"' d-menu='"+e+"' title='"+a+t+"'><i class='"+o+"'></i></a>":void 0},setToolbarPlace:function(e){if("contextmenu"==s){if(e)for(var t in n.obj.prevAll("div#dtree_toolbar_"+n.obj[0].id).find("div.layui-nav-item>dl.layui-nav-child").html(""),e)n.obj.prevAll("div#dtree_toolbar_"+n.obj[0].id).find("div.layui-nav-item>dl.layui-nav-child").append(e[t])}else"fixed"!=s&&"follow"!=s||n.obj.find("cite[data-leaf][dtree-disabled='false']").each(function(){var e=y(this);n.dynamicToolbarDom(e)})}}},be.prototype.dynamicToolbarDom=function(e){var t=this,o=t.toolbarWay;if(0==e.next("em."+l).length){var a=e.parent("div"),i=t.getRequestParam(t.getTempNodeParam(a)),n=t.toolbarFun.loadToolbarBefore(de.cloneObj(t.toolbarMenu),i,a),s=["<em class='"+l+" "+("follow"==o?T:"")+"'>"];if(n)for(var r in n)s.push(n[r]);s.push("</em>"),e.after(s.join(""))}},be.prototype.toolbarHide=function(){this.toolbar&&"contextmenu"==this.toolbarWay&&this.obj.prevAll("div#dtree_toolbar_"+this.obj[0].id).find(".layui-nav-child").removeClass("layui-anim-fadein layui-show")},be.prototype.toolbarMethod=function(){var c=this;return{pulldown:function(e){if(e)for(var t=e,o=0;o<t.length;o++){var a=y(t[o]),i=a.prev("div"),n=c.getNodeDom(i).fnode(),s=c.getNodeDom(i).snode(),r=c.getNodeDom(i).cite(),l=n.attr("data-spread");if("leaf"!=r.attr("data-leaf")){"open"==l||("load"==c.type?c.cache?a.html()?a.addClass(C):c.getChild(i):(a.html(""),c.getChild(i)):a.addClass(C),c.operateIcon(n,s).open());var d=a.children("li").children("ul");c.toolbarMethod().pulldown(d)}}},pullup:function(e){e.find("."+m).each(function(){var e=y(this),t=e.prev("div"),o=c.getNodeDom(t).fnode(),a=c.getNodeDom(t).snode(),i=c.getNodeDom(t).cite();o.attr("data-spread"),i.attr("data-leaf");e.removeClass(C),c.operateIcon(o,a).close()})}}},be.prototype.toolbarListener=function(e,d){var c=this,a=d.children("cite[data-leaf]"),h=d.next("ul"),u=d.parent("li[data-index]"),i=u.parent("ul").prev("div"),n=a.html();switch(e){case K:c.toolbarMethod().pulldown(h);break;case Q:c.toolbarMethod().pullup(u);break;case Y:var t=c.loadToolBar(n,Y);f.open({title:"新增"+c.toolbarStyle.title,type:1,area:c.toolbarStyle.area,content:t,success:function(e,l){r.render(),r.on("submit(dtree_addNode_form)",function(e){e=e.field;var t=d.attr("data-id"),o=d.attr("data-id")+"_node_"+h[0].childNodes.length,a=parseInt(u.attr("data-index"))+1,i=[];if(0<c.checkArrLen)for(var n=0;n<c.checkArrLen;n++)i.push({type:n,checked:"0"});h.append(c.getLiItemDom(o,t,e.addNodeName,e.addNodeName,!0,"","",i,a,!1,!1,!1,"","","item")),h.find("li[data-id='"+o+"']").hide();var s=h.find("div[data-id='"+o+"']");node=c.getNodeParam(s);var r=c.getRequestParam(node);return r=y.extend(r,e),c.temp=[o,h,d,a],c.toolbarFun.addTreeNode(r,d),f.close(l),!1})}});break;case Z:t=c.loadToolBar(n,Z);f.open({title:"编辑"+c.toolbarStyle.title,type:1,area:c.toolbarStyle.area,content:t,success:function(e,o){c.toolbarFun.editTreeLoad(c.getRequestParam(c.getNodeParam(d))),r.render(),r.on("submit(dtree_editNode_form)",function(e){e=e.field;a.html(e.editNodeName),node=c.getNodeParam(d);var t=c.getRequestParam(node);t=y.extend(t,e),c.temp=[a,d,n,i],c.toolbarFun.editTreeNode(t,d),f.close(o)})}});break;case ee:f.confirm("确定要删除该"+c.toolbarStyle.title+"？",{icon:3,title:"删除"+c.toolbarStyle.title},function(e){c.getNodeParam(d);c.temp=[u,i],c.toolbarFun.delTreeNode(c.getRequestParam(c.getNodeParam(d)),d),f.close(e)});break;default:if(0<c.toolbarExt.length)for(var o=0;o<c.toolbarExt.length;o++){var s=c.toolbarExt[o];if(e==s.toolbarId){s.handler(c.getRequestParam(c.getNodeParam(d)),d);break}}}},be.prototype.loadToolBar=function(e,t){var o=this,a=(o.toolbarShow,o.toolbarBtn),i="";switch(t){case Y:var n=[{label:"当前选中",name:"nodeTitle",type:"text",value:e,defElem:"nowChoose",readonly:!0},{label:"新增"+o.toolbarStyle.title,name:"addNodeName",type:"text",value:"",defElem:"nowChange",verify:"required"},{type:"submit",value:"确认添加",defElem:"btn",filter:"dtree_addNode_form"}],s=['<div class="'+g+'"><form class="layui-form layui-form-pane" lay-filter="dtree_addNode_form">'];if(null!=a&&0<a.length&&null!=a[0]&&null!=a[0]&&0<a[0].length)for(var r=a[0],l=0;l<r.length;l++){"nowChoose"==(p=r[l].defElem)?y.extend(n[0],r[l]):"nowChange"==p?y.extend(n[1],r[l]):"btn"==p?y.extend(n[2],r[l]):n.push(r[l])}for(var d=0;d<n.length;d++){switch((m=n[d].type)||(m="text"),m){case"text":s.push(o.loadToolBarDetail(n[d]).text());break;case"textarea":s.push(o.loadToolBarDetail(n[d]).textarea());break;case"select":s.push(o.loadToolBarDetail(n[d]).select());break;case"hidden":s.push(o.loadToolBarDetail(n[d]).hidden())}}var c=['<div class="layui-form-item">','<div class="layui-input-block" style="margin-left:0px;text-align:center;">'];for(d=0;d<n.length;d++){switch((m=n[d].type)||(m="text"),m){case"submit":c.push(o.loadToolBarDetail(n[d]).submit());break;case"button":c.push(o.loadToolBarDetail(n[d]).button());break;case"reset":c.push(o.loadToolBarDetail(n[d]).reset())}}c.push("</div></div>"),s.push(c.join("")),s.push("</form></div>"),i=s.join("");break;case Z:var h=[{label:"当前选中",name:"nodeTitle",type:"text",value:e,defElem:"nowChoose",readonly:!0},{label:"编辑"+o.toolbarStyle.title,name:"editNodeName",type:"text",value:"",defElem:"nowChange",verify:"required"},{type:"submit",value:"确认编辑",defElem:"btn",filter:"dtree_editNode_form"}],u=['<div class="'+g+'"><form class="layui-form layui-form-pane" lay-filter="dtree_editNode_form">'];if(null!=a&&0<a.length&&null!=a[1]&&null!=a[1]&&0<a[1].length){var f=a[1];for(l=0;l<f.length;l++){var p;"nowChoose"==(p=f[l].defElem)?y.extend(h[0],f[l]):"nowChange"==p?y.extend(h[1],f[l]):"btn"==p?y.extend(h[2],f[l]):h.push(f[l])}}for(d=0;d<h.length;d++){switch((m=h[d].type)||(m="text"),m){case"text":u.push(o.loadToolBarDetail(h[d]).text());break;case"textarea":u.push(o.loadToolBarDetail(h[d]).textarea());break;case"select":u.push(o.loadToolBarDetail(h[d]).select());break;case"hidden":u.push(o.loadToolBarDetail(h[d]).hidden())}}var b=['<div class="layui-form-item">','<div class="layui-input-block" style="margin-left:0px;text-align:center;">'];for(d=0;d<h.length;d++){var m;switch((m=h[d].type)||(m="text"),m){case"submit":b.push(o.loadToolBarDetail(h[d]).submit());break;case"button":b.push(o.loadToolBarDetail(h[d]).button());break;case"reset":b.push(o.loadToolBarDetail(h[d]).reset())}}b.push("</div></div>"),u.push(b.join("")),u.push("</form></div>"),i=u.join("")}return i},be.prototype.loadToolBarDetail=function(a){var i="boolean"==typeof a.readonly&&a.readonly,n="boolean"==typeof a.disabled&&a.disabled,s=a.id?a.id:"",r=a.name?a.name:"",l=a.value?a.value:"",d=a.verify?a.verify:"",e=a.placeholder?a.placeholder:l;return{text:function(){return['<div class="layui-form-item">','<label class="layui-form-label" title="'+a.label+'">'+a.label+"：</label>",'<div class="layui-input-block f-input-par">','<input type="text" class="layui-input f-input" value="'+l+'" placeholder="'+e+'" lay-verify="'+d+'" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",i?"readonly ":"",n?"disabled ":"","/>","</div>","</div>"].join("")},textarea:function(){return['<div class="layui-form-item layui-form-text">','<label class="layui-form-label" title="'+a.label+'">'+a.label+"：</label>",'<div class="layui-input-block f-input-par">','<textarea class="layui-textarea f-input" value="'+l+'" placeholder="'+e+'" lay-verify="'+d+'" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",i?"readonly ":"",n?"disabled ":"",">"+l+"</textarea>","</div>","</div>"].join("")},hidden:function(){return['<input type="hidden" class="layui-input f-input" value="'+l+'" lay-verify="'+d+'" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",i?"readonly ":"",n?"disabled ":"","/>"].join("")},select:function(){var e="object"==typeof a.optionsData?a.optionsData:a.optionsData(),t="";for(var o in e)l==e[o]?t+="<option value='"+o+"' selected>"+e[o]+"</option>":t+="<option value='"+o+"'>"+e[o]+"</option>";return['<div class="layui-form-item">','<label class="layui-form-label" title="'+a.label+'">'+a.label+"：</label>",'<div class="layui-input-block f-input-par">','<select lay-verify="'+d+'" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",i?"readonly ":"",n?"disabled ":"",">",t,"</select>","</div>","</div>"].join("")},submit:function(){return['<button type="button" class="layui-btn layui-btn-normal btn-w100" lay-submit lay-filter="'+a.filter+'" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",">"+l+"</button>"].join("")},button:function(){return['<button type="button" class="layui-btn layui-btn-normal btn-w100" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':""," >"+l+"</button>"].join("")},reset:function(){return['<button type="reset" class="layui-btn layui-btn-primary btn-w100" ',""!=s?'id="'+s+'" ':"",""!=r?'name="'+r+'" ':"",">"+l+"</button>"].join("")}}},be.prototype.changeTreeNodeAdd=function(e){var t=this,o=t.temp,a=o[0],i=o[1],n=o[2],s=o[3],r=!1;if(e){var l=t.obj.find("[data-id='"+a+"']");if("object"==typeof e){l.remove();var d=t.parseData(e);if(!d.treeId())return f.msg("添加失败,节点ID为undefined！",{icon:5}),i.find("li[data-id='"+a+"']").remove(),t.setNodeParam(n),void(t.temp=[]);i.append(t.getLiItemDom(d.treeId(),d.parentId(),d.title(),d.fmtTitle(),d.last(0),d.ficonClass(),d.iconClass(),d.checkArr(),s,d.spread(),d.disabled(),d.hide(),d.basicData(),d.recordData(),"item")),l=i.find("div[data-id='"+d.treeId()+"']"),t.setNodeParam(l)}else"refresh"==e?r=!0:"string"!=typeof e&&"number"!=typeof e&&1!=e||(l.attr("data-id",e),i.find("li[data-id='"+e+"']").show(),t.setNodeParam(l));var c=n.find("i[data-spread]");"last"==c.eq(0).attr("data-spread")?t.operateIcon(c.eq(0),c.eq(1)).openWithLeaf():t.operateIcon(c.eq(0),c.eq(1)).open(),i.addClass(C),t.accordionUL(i),r?t.getChild(n):(t.showLine(i.find("li")),t.toolbar&&"contextmenu"!=t.toolbarWay&&t.dynamicToolbarDom(l.find("cite[data-leaf]")))}else i.find("li[data-id='"+a+"']").remove(),t.setNodeParam(n);t.temp=[]},be.prototype.changeTreeNodeDone=function(e){r.val("dtree_editNode_form",e),r.render()},be.prototype.changeTreeNodeEdit=function(e){var t=this,o=t.temp,a=o[0],i=o[1],n=o[2];o[3];if(e){if("object"==typeof e){var s=t.parseData(data);if(s.treeId()){var r=t.replaceDom(i,s.treeId(),s.last(0),s.spread(),s.disabled(),s.hide());r.node(s.iconClass()),r.checkbox(s.checkArr()),r.text(s.title()),r.ul(),r.basicData(s.basicData()),r.recordData(s.recordData()),t.setNodeParam(i)}else f.msg("编辑失败,节点ID为undefined！",{icon:5}),t.setNodeParam(i)}}else a.html(n),t.getNodeParam(i);t.temp=[]},be.prototype.changeTreeNodeDel=function(e){var t=this,o=t.temp,a=o[0],i=a.parent("ul"),n=o[1];if(e){if(a.remove(),t.showLine(i.find("li")),0==i.children("li").length){var s=n.find("i[data-spread]");t.operateIcon(s.eq(0),s.eq(1)).closeWithLeaf()}t.initNodeParam()}t.temp=[]},be.prototype.loadIframe=function(e,t){var o=this,a=o.getNodeDom(e).cite();if(!o.useIframe)return!1;var i=o.iframeElem,n=o.iframeUrl,s="leaf"!=o.iframeLoad||"leaf"==a.attr("data-leaf");if(s){if(!(0<y(i).length))return f.msg("iframe绑定异常，请确认页面中是否有iframe页对应的容器",{icon:5}),!1;if(!n)return f.msg("数据请求异常，iframeUrl参数未指定",{icon:5}),!1;var r=pe(t);-1<n.indexOf("?")&&(r="&"+r.substring(1,r.length));var l=n+r;y(i).attr("src",l)}return s},be.prototype.getIframeRequestParam=function(e){var t=this.iframeRequest,o=this.iframeDefaultRequest,a=e||this.node,i={};for(var n in t)i[n]=t[n];for(var n in o){var s=o[n],r=a[n];"boolean"==typeof r?i[s]=r:r&&(i[s]=r)}var l=/[\u4E00-\u9FA5\uF900-\uFA2D]/;for(var n in i)if(l.test(i[n])){var d=i[n];i[n]=encodeURI(encodeURI(d))}return i},be.prototype.getNodeDom=function(e){var t=this,o="object"==typeof e?e:0==t.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:t.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']");return{div:function(){return o},fnode:function(){return null==o?null:o.find("i[data-spread]").eq(0)},snode:function(){return null==o?null:o.find("i[data-spread]").eq(1)},checkbox:function(){return null==o?null:o.find("i[data-par]")},cite:function(){return null==o?null:o.find("cite[data-leaf]")},nextUl:function(){return null==o?null:o.next("ul")},parentLi:function(){return null==o?null:o.parent("li")},parentUl:function(){return null==o?null:o.parent("li").parent("ul")},parentDiv:function(){return null==o?null:o.parent("li").parent("ul").prev("div")},nowDiv:function(){return 0==t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i).length?null:t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i)},nowOrRootDiv:function(){return 0==t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i).length?t.obj.children("li").eq(0).children("div").eq(0):t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i)},nowOrRootUl:function(){return 0==t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i).length?t.obj:t.obj.find("div[dtree-click='"+X+"'][data-id]").parent().find("."+i).next("ul")}}},be.prototype.getNowNodeUl=function(){return this.getNodeDom().nowOrRootUl()},be.prototype.getNowNode=function(){return this.getNodeDom().nowOrRootDiv()},be.prototype.getNowNodeOrNull=function(){return this.getNodeDom().nowDiv()},be.prototype.getNode=function(e){return this.getNodeDom(e).div()},be.prototype.setNodeParam=function(e){var t=this;t.node.nodeId=e.attr("data-id"),t.node.parentId=t.getNodeDom(e).parentLi().attr("data-pid"),t.node.context="function"==typeof t.formatter.title?t.getNodeDom(e).cite().attr("data-title"):t.getNodeDom(e).cite().text(),t.node.leaf="leaf"==t.getNodeDom(e).cite().attr("data-leaf"),t.node.level=t.getNodeDom(e).parentLi().attr("data-index"),t.node.spread="open"==t.getNodeDom(e).fnode().attr("data-spread");var o=e.attr("data-basic");o&&(o=JSON.parse(de.unescape(o))),t.node.basicData=o;var a=e.attr("data-record");if(a&&(a=JSON.parse(de.unescape(a))),t.node.recordData=a,t.getNodeDom(e).checkbox()){var i="",n="",s="";t.getNodeDom(e).checkbox().each(function(){i+=y(this).attr("data-type")+",",n+=y(this).attr("data-checked")+",",s+=y(this).attr("data-initchecked")+","}),i=i.substring(0,i.length-1),n=n.substring(0,n.length-1),s=s.substring(0,s.length-1),t.node.dataType=i,t.node.checked=n,t.node.initchecked=s}},be.prototype.getNodeParam=function(e){return e?this.setNodeParam(e):0==this.obj.find("div[data-id]").parent().find("."+i).length&&this.initNodeParam(),this.node},be.prototype.getTempNodeParam=function(e){var t=this,o={};o.nodeId=e.attr("data-id"),o.parentId=t.getNodeDom(e).parentLi().attr("data-pid"),o.context="function"==typeof t.formatter.title?t.getNodeDom(e).cite().attr("data-title"):t.getNodeDom(e).cite().text(),o.leaf="leaf"==t.getNodeDom(e).cite().attr("data-leaf"),o.level=t.getNodeDom(e).parentLi().attr("data-index"),o.spread="open"==t.getNodeDom(e).fnode().attr("data-spread");var a=e.attr("data-basic");a&&(a=JSON.parse(de.unescape(a))),o.basicData=a;var i=e.attr("data-record");if(i&&(i=JSON.parse(de.unescape(i))),o.recordData=i,t.getNodeDom(e).checkbox()){var n="",s="",r="";t.getNodeDom(e).checkbox().each(function(){n+=y(this).attr("data-type")+",",s+=y(this).attr("data-checked")+",",r+=y(this).attr("data-initchecked")+","}),n=n.substring(0,n.length-1),s=s.substring(0,s.length-1),r=r.substring(0,r.length-1),o.dataType=n,o.checked=s,o.initchecked=r}return o},be.prototype.initNodeParam=function(){var e=this;e.node.nodeId="",e.node.parentId="",e.node.context="",e.node.leaf="",e.node.level="",e.node.spread="",e.node.dataType="",e.node.checked="",e.node.initchecked="",e.node.basicData="",e.node.recordData="",e.select&&e.selectResetVal()},be.prototype.getRequestParam=function(e){var t=this.request,o=this.defaultRequest,a=e||this.node,i={};for(var n in t)i[n]=t[n];for(var n in o){var s=o[n],r=a[n];"boolean"==typeof r?i[s]=r:r&&(i[s]=r)}return i},be.prototype.getFilterRequestParam=function(e){var t=this.filterRequest;return de.cloneObj(e,t)},be.prototype.getNowParam=function(){return this.getRequestParam(this.getNodeParam())},be.prototype.getParam=function(e){var t="object"==typeof e?e:0==this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']");return null!=t?this.callbackData().node(this.getTempNodeParam(t)):{}},be.prototype.getParentParam=function(e){var t="object"==typeof e?e:0==this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']");return null!=t?this.callbackData().parentNode(t):{}},be.prototype.getAllParentParam=function(e){var t=this,o="object"==typeof e?e:0==t.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:t.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']"),a=[];if(null!=o)for(var i=t.getTempNodeParam(o).level,n=1;n<i;n++)a.unshift(t.callbackData().parentNode(o)),o=t.getNodeDom(o).parentDiv();return a},be.prototype.getChildParam=function(e){var t="object"==typeof e?e:0==this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']").length?null:this.obj.find("div[dtree-click='"+X+"'][data-id='"+e+"']");return null!=t?this.callbackData().childNode(t):[]},be.prototype.callbackData=function(){var a=this;return{dom:function(e){return e},node:function(e){return a.getRequestParam(e)},childNode:function(e){var t=e.next("ul").find("li."+k+" div."+S),o=[];return t&&0<t.length&&t.each(function(){var e=y(this);o.push(a.getRequestParam(a.getTempNodeParam(e)))}),o},parentNode:function(e){var t=a.getNodeDom(e).parentLi().attr("data-pid"),o=a.obj.find("div[data-id='"+t+"']");return 0<o.length?a.getRequestParam(a.getTempNodeParam(o)):{}}}},be.prototype.bindBrowserEvent=function(){var s=this,i=s.obj[0].id;s.obj.on("click","i[data-spread]",function(e){e.stopPropagation();var t=y(this),o=t.parent("div"),a=s.getNodeParam(o);s.toolbarHide(),s.navThis(o),s.clickSpread(o),layui.event.call(this,p,"changeTree("+y(s.obj)[0].id+")",{dom:s.callbackData().dom(t),param:s.callbackData().node(a),show:"open"==s.callbackData().dom(t).attr("data-spread")})}),s.obj.on("click","div[dtree-click='"+X+"'][dtree-disabled='false']",function(e){e.stopPropagation();var t=y(this),o=(t.find("cite"),s.getNodeParam(t));if(s.toolbarHide(),s.navThis(t),s.select&&(s.selectVal(o.nodeId),y("div[dtree-id='"+i+"'][dtree-select='"+s.selectDiv+"']").click()),s.useIframe){var a=s.getFilterRequestParam(s.getIframeRequestParam(o));s.loadIframe(t,a)&&(s.iframeFun.iframeDone(a),layui.event.call(this,p,"iframeDone("+y(s.obj)[0].id+")",{iframeParam:a,dom:s.callbackData().dom(t)}))}else layui.event.call(this,p,"node("+y(s.obj)[0].id+")",{param:s.callbackData().node(o),childParams:s.callbackData().childNode(t),parentParam:s.callbackData().parentNode(t),dom:s.callbackData().dom(t)})}),s.obj.on("dblclick","div[dtree-click='"+X+"'][dtree-disabled='false']",function(e){e.stopPropagation();var t=y(this),o=(t.find("cite"),s.getNodeParam(t));s.toolbarHide(),s.navThis(t),s.select&&(s.selectVal(o.nodeId),y("div[dtree-id='"+i+"'][dtree-select='"+s.selectDiv+"']").click()),layui.event.call(this,p,"nodedblclick("+y(s.obj)[0].id+")",{param:s.callbackData().node(o),childParams:s.callbackData().childNode(t),parentParam:s.callbackData().parentNode(t),dom:s.callbackData().dom(t)})}),s.checkbar&&s.obj.on("click","i[dtree-click='"+z+"'][dtree-disabled='false']",function(e){s.toolbarHide();var t=y(this),o=t.closest("div[dtree-click='"+X+"']"),a=s.getNodeParam(o),i=s.checkbarFun.chooseBefore(t,s.getRequestParam(a));s.temp=[t],i&&s.changeCheck(),e.stopPropagation()}),s.menubar&&(s.obj.prevAll("div#dtree_menubar_"+s.obj[0].id).on("click","button[d-menu]",function(e){e.stopPropagation(),s.toolbarHide(),s.menubarListener(y(this).attr("d-menu"),"group")}),s.obj.prevAll("div#dtree_toolbar_"+s.obj[0].id).on("click","a[d-menu]",function(e){e.stopPropagation(),s.toolbarHide(),s.menubarListener(y(this).attr("d-menu"),"toolbar")}),s.obj.closest("body").find("*[dtree-id='"+s.obj[0].id+"'][dtree-menu]").on("click",function(e){e.stopPropagation(),s.toolbarHide(),s.menubarListener(y(this).attr("dtree-menu"),"freedom")})),s.toolbar&&("contextmenu"==s.toolbarWay?(s.obj.on("contextmenu","div[dtree-click='"+X+"'][d-contextmenu='true'][dtree-disabled='false']",function(e){var t=y(this),o=s.getNodeParam(t);s.toolbarHide(),s.setToolbarDom().setToolbarPlace(s.toolbarFun.loadToolbarBefore(de.cloneObj(s.toolbarMenu),s.getRequestParam(o),t));var a=(e=e||window.event).pageX-t.offset().left+45,i=t.offset().top-s.obj.closest(s.scroll).offset().top+15;s.navThis(t);var n=s.obj.prevAll("div#dtree_toolbar_"+s.obj[0].id);return n.find(".layui-nav-child").addClass("layui-anim-fadein layui-show"),n.css({left:a+"px",top:i+"px"}),e.stopPropagation(),!1}),s.obj.closest(s.scroll).scroll(function(){s.toolbarHide()}),s.obj.prevAll("div#dtree_toolbar_"+s.obj[0].id).on("click","a[dtree-tool]",function(e){e.stopPropagation();var t=s.getNodeDom().nowOrRootDiv();s.getNodeParam(t);s.toolbarHide();var o=y(this).attr("dtree-tool");s.toolbarListener(o,t)})):"fixed"==s.toolbarWay?s.obj.on("click","a[dtree-tool]",function(e){e.stopPropagation();var t=y(this),o=t.parent("em."+l).prev("cite").parent("div"),a=(s.getNodeParam(o),t.attr("dtree-tool"));s.toolbarHide(),s.navThis(o),s.toolbarListener(a,o)}):"follow"==s.toolbarWay&&(s.obj.on("mouseover mouseout","div[dtree-click='"+X+"'][dtree-disabled='false']",function(e){var t=y(this).children("em."+l);"mouseover"==e.type?(t.removeClass(T),e.stopPropagation()):"mouseout"==e.type&&(t.addClass(T),e.stopPropagation())}),s.obj.on("click","a[dtree-tool]",function(e){e.stopPropagation();var t=y(this),o=t.parent("em."+l).prev("cite").parent("div"),a=(s.getNodeParam(o),t.attr("dtree-tool"));s.toolbarHide(),s.navThis(o),s.toolbarListener(a,o)}))),s.select&&y("div[dtree-id='"+i+"'][dtree-select='"+s.selectDiv+"']").on("click",function(e){e.stopPropagation(),y(this).toggleClass("layui-form-selected"),y("div[dtree-id='"+i+"'][dtree-card='"+s.selectCardDiv+"']").toggleClass("dtree-select-show layui-anim layui-anim-upbit"),layui.event.call(this,p,"changeSelect("+y(s.obj)[0].id+")",{show:y(this).hasClass("layui-form-selected"),param:s.selectVal()})})},a.on("click",function(e){y("div."+t).find(".layui-show").removeClass("layui-anim-fadein layui-show")}),be.prototype.unbindBrowserEvent=function(){var e=this;e.obj.unbind(),e.menubar&&(e.obj.prevAll("div#dtree_menubar_"+e.obj[0].id).unbind(),0<e.obj.closest("body").find("*[dtree-id='"+e.obj[0].id+"'][dtree-menu]").length&&e.obj.closest("body").find("*[dtree-id='"+e.obj[0].id+"'][dtree-menu]").unbind()),e.toolbar&&"contextmenu"==e.toolbarWay&&(e.obj.prevAll("div#dtree_toolbar_"+e.obj[0].id).unbind(),0<e.obj.closest(e.scroll).length&&e.obj.closest(e.scroll).unbind()),e.select&&(y("div[dtree-id='"+e.obj[0].id+"'][dtree-select='"+e.selectDiv+"']").removeClass("layui-form-selected"),y("div[dtree-id='"+e.obj[0].id+"'][dtree-card='"+e.selectCardDiv+"']").removeClass("dtree-select-show layui-anim layui-anim-upbit"),y("div[dtree-id='"+e.obj[0].id+"'][dtree-select='"+e.selectDiv+"']").unbind())},e("dtree",{set:function(e){void 0!==e&&y.extend(b,e)},render:function(e){var t=null,o=de.getElemId(e);return""==o?f.msg("页面中未找到绑定id",{icon:5}):("object"==typeof(t=I[o])&&t.unbindBrowserEvent(),t=new be(e),(I[o]=t).initTreePlus(),t.openTreePlus(),t.init(),t.bindBrowserEvent()),t},renderSelect:function(e){var t=null,o=de.getElemId(e);return""==o?f.msg("页面中未找到绑定id",{icon:5}):("object"==typeof(t=I[o])&&t.unbindBrowserEvent(),(t=new be(e)).selectSetting(),(I[o]=t).initTreePlus(),t.openTreePlus(),t.init(),t.bindBrowserEvent()),t},reload:function(e,t){"string"==typeof e&&(e=I[e]),void 0!==e?(e.reloadSetting(t),e.initTreePlus(),e.openTreePlus(),e.initNodeParam(),e.init(),e.unbindBrowserEvent(),e.bindBrowserEvent()):f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},on:function(e,t){return 0<e.indexOf("'")&&(e=e.replace(/'/g,"")),0<e.indexOf('"')&&(e=e.replace(/"/g,"")),layui.onevent.call(this,p,e,t)},click:function(e,t){"string"==typeof e&&(e=I[e]),void 0!==e?y("div[dtree-click='"+X+"'][dtree-id='"+e.obj[0].id+"'][data-id='"+t+"']").click():f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getNowParam:function(e){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.getNowParam();f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getParam:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.getParam(t);f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getParentParam:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.getParentParam(t);f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getAllParentParam:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.getAllParentParam(t);f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getChildParam:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.getChildParam(t);f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},getCheckbarNodesParam:function(e){return"string"==typeof e&&(e=I[e]),void 0===e?(f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2}),{}):e.getCheckbarNodesParam()},dataInit:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return t?e.dataInit(t):void 0;f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},chooseDataInit:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return t?e.chooseDataInit(t):void 0;f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},changeCheckbarNodes:function(e){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.changeCheckbarNodes();f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},initNoAllCheck:function(e){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.initNoAllCheck();f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},initAllCheck:function(e){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.initAllCheck();f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},selectVal:function(e,t){if("string"==typeof e&&(e=I[e]),void 0!==e)return e.selectVal(t);f.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2})},escape:function(e){return de.escape(e)},unescape:function(e){return de.unescape(e)},version:function(){return"v2.5.6"}})});
+/**
+ *@Name dtree 树形组件
+ *@Author 智慧的小西瓜
+ *@DOCS http://www.wisdomelon.com/DTreeHelper/
+ *@License https://www.layui.com/
+ *@LASTTIME 2020/03/31
+ *@VERSION v2.5.8
+ */
+layui.define(['jquery','layer','form'], function(exports) {
+    var $ = layui.$,
+        layer = layui.layer,
+        form = layui.form;
+
+    // 树的公共定义样式汇总
+    var LI_NAV_CHILD = "dtree-nav-ul-sid", LI_NAV_ITEM = "dtree-nav-item",
+        LI_DIV_ITEM = "dtree-nav-div",  DTREEFONTSPECIAL="dtreefont-special", NONETITLE="dtree-none-text",
+        LI_DIV_MENUBAR = "dtree-menubar",
+        LI_DIV_TOOLBAR = "dtree-toolbar", TOOLBAR_TOOL = "dtree-toolbar-tool",  TOOLBAR_TOOL_EM = "dtree-toolbar-fixed",
+        LI_DIV_CHECKBAR = "dtree-nav-checkbox-div",
+        LI_CLICK_CHECKBAR = "d-click-checkbar",		//绑定点击复选框时需要用到
+        LI_DIV_TEXT_CLASS = "t-click", UL_ROOT="dtree",
+        LI_NAV_FIRST_LINE = "dtree-nav-first-line", LI_NAV_LINE = "dtree-nav-line", LI_NAV_LAST_LINE = "dtree-nav-last-line";
+
+
+    // 树的公共指定
+    var NAV_THIS = "dtree-nav-this",	//当前节点
+        NAV_SHOW = "dtree-nav-show",	//显示子节点
+        NAV_HIDE = "dtree-nav-hide",	//隐藏节点
+        NAV_DIS = "dtree-disabled",		//禁用节点
+        ICON_HIDE = "dtree-icon-hide",  //隐藏图标
+        $BODY = $("body"),				//body选择器
+        $WIN = $(window),				//window窗口
+        $DOC = $(document),				//当前文档
+        MOD_NAME = "dtree",				//模块名称
+        VERSION = "v2.5.8",				//版本
+        OPTIONS = {},					//全局属性配置
+        DTrees = {};				    //当前被实例化的树的集合
+
+    // 树的自定义图标
+    var DTREEFONT = "dtreefont",									//默认使用图标字体
+        LI_DIV_CHECKBAR_ON = "dtree-icon-fuxuankuangxuanzhong", 	//复选框选中图标
+        LI_DIV_CHECKBAR_OUT = "dtree-icon-fuxuankuang", 			//复选框未选中图标
+        LI_DIV_CHECKBAR_NOALL = "dtree-icon-fuxuankuang-banxuan",	//复选框半选图标
+        LI_DIV_MENUBAR_DOWN = "dtree-icon-move-down", 				//menubar的展开全部的图标
+        LI_DIV_MENUBAR_UP = "dtree-icon-move-up", 					//menubar的收缩全部的图标
+        LI_DIV_MENUBAR_REFRESH = "dtree-icon-refresh",				//menubar的刷新图标
+        LI_DIV_MENUBAR_CHECKALL = "dtree-icon-roundcheckfill", 		//menubar的全选图标
+        LI_DIV_MENUBAR_UNCHECKALL = "dtree-icon-roundclosefill", 	//menubar的全不选图标
+        LI_DIV_MENUBAR_INVERTALL = "dtree-icon-roundcheck", 		//menubar的反选图标
+        LI_DIV_MENUBAR_DELETE = "dtree-icon-delete1", 				//menubar的删除图标
+        LI_DIV_MENUBAR_SEARCH = "dtree-icon-search_list_light",		//menubar的搜索图标
+        LI_DIV_TOOLBAR_PULLDOWN = "dtree-icon-pulldown", 			//toolbar的展开图标
+        LI_DIV_TOOLBAR_PULLUP = "dtree-icon-pullup", 				//toolbar的收缩图标
+        LI_DIV_TOOLBAR_ADD = "dtree-icon-roundadd", 				//toolbar的新增图标
+        LI_DIV_TOOLBAR_EDIT = "dtree-icon-bianji", 					//toolbar的编辑图标
+        LI_DIV_TOOLBAR_DEL = "dtree-icon-roundclose";				//toolbar的删除图标
+
+    // 树的非叶子节点图标集合
+    var nodeIconArray = {
+        "-1": {"open": "dtree-icon-null-open", "close": "dtree-icon-null-close"},			//未指定
+        "0" : {"open": "dtree-icon-wenjianjiazhankai", "close": "dtree-icon-weibiaoti5"},	//文件夹(二级图标默认样式)
+        "1" : {"open": "dtree-icon-jian", "close": "dtree-icon-jia"},						//+-图标(一级图标默认样式)
+        "2" : {"open": "dtree-icon-xiangxia1", "close": "dtree-icon-xiangyou"}				//箭头图标
+    };
+
+    // 树的叶子节点图标集合
+    var leafIconArray = {
+        "-1": "dtree-icon-null",				//未指定
+        "0" : "dtree-icon-weibiaoti5", 			//文件夹
+        "1" : "dtree-icon-yonghu",				//人员
+        "2" : "dtree-icon-fenzhijigou",			//机构
+        "3" : "dtree-icon-fenguangbaobiao",		//报表
+        "4" : "dtree-icon-xinxipilu",			//信息
+        "5" : "dtree-icon-shuye1",				//叶子(二级图标默认样式)
+        "6" : "dtree-icon-caidan_xunzhang",	    //勋章
+        "7" : "dtree-icon-normal-file",		    //文件
+        "8" : "dtree-icon-dian",				//小圆点（一级图标默认样式）
+        "9" : "dtree-icon-set-sm",				//齿轮
+        "10" : "dtree-icon-rate"				//星星
+    };
+
+    // 树的自定义样式
+    var DTREE = "dtree-",			//自定义样式前缀
+        ITEMTHIS = "-item-this",	//自定义样式当前行选中后缀
+        ITEM = "-item",				//自定义样式当前行后缀
+        DFONT = "-dtreefont",		//自定义样式图标样式后缀
+        FICON = "-ficon",			//自定义样式一级图标样式后缀
+        ICON = "-icon",				//自定义样式二级图标样式后缀
+        CBOX = "-checkbox",			//自定义样式复选框样式后缀
+        CHS = "-choose";			//自定义样式复选框选中样式后缀
+
+    // 树自定义操作事件名称集合	绑定dtree-click的事件
+    var eventName = {
+        checkNodeClick: "checkNodeClick",	//点击复选框
+        itemNodeClick: "itemNodeClick"		//点击子节点div
+    };
+
+    // 树默认toolbar提供的功能集合	绑定dtree-tool的事件
+    var defaultTool = {
+        pulldown: "pulldown",		//点击展开当前节点下的全部节点
+        pullup: "pullup",			//点击收缩当前节点下的全部节点
+        addTool: "addToolbar",		//点击toolbar新增
+        editTool: "editToolbar",	//点击toolbar编辑
+        delTool: "delToolbar"		//点击toolbar删除
+    };
+
+    // 树默认menubar提供的功能集合	绑定dtree-menu的事件
+    var defaultMenu = {
+        moveDown: "moveDown",		//menubar展开全部节点
+        moveUp: "moveUp",			//menubar收缩全部节点
+        refresh: "refresh",			//menubar刷新树
+        checkAll: "checkAll",		//menubar全选
+        unCheckAll: "unCheckAll",	//menubar全不选
+        invertAll: "invertAll",		//menubar反选
+        remove: "remove",			//menubar删除选中节点
+        searchNode: "searchNode"	//menubar查询节点
+    };
+
+    // 树的公共事件
+    var event = {
+        getElemId: function(options){	// 根据传入的参数获取ID
+            var elem = options.elem || "";
+            var obj = options.obj || $(elem);
+
+            if (obj.length == 0) {	//页面中未找到绑定id
+                return "";
+            } else {
+                return $(obj)[0].id;
+            }
+        },
+        escape: function(html){  // 编码
+            if(typeof html !== 'string') return '';
+            return html.replace(entityReg.escape, function(match){return entityMap.escape[match];});
+        },
+        unescape: function(str){  // 解码
+            if(typeof str !== 'string') return '';
+            return str.replace(entityReg.unescape, function(match){return entityMap.unescape[match];});
+        },
+        cloneObj: function (obj, filter) {  //深复制对象方法
+            var newObj = {};
+            if (obj instanceof Array) {
+                newObj = [];
+            }
+            var str = "";
+            if(typeof filter !== 'undefined') {str = filter.join(",");}
+            for (var key in obj) {
+                if(str.indexOf(key) == -1){
+                    var val = obj[key];
+                    newObj[key] = typeof val === 'object' ? event.cloneObj(val, typeof filter !== undefined ? filter : []): val;
+                }
+
+            }
+            return newObj;
+        },
+        trimToDot: function(str){
+            return str.replace(/ /g, ".");
+        }
+    };
+
+    // 特殊符号转义
+    var keys = Object.keys || function(obj) {
+        obj = Object(obj);
+        var arr = [];
+        for(var a in obj) arr.push(a);
+        return arr;
+    };
+    var invert = function(obj){
+        obj = Object(obj);
+        var result = {};
+        for(var a in obj) result[obj[a]] = a;
+        return result;
+    };
+    var entityMap = {
+        escape: {
+            "&" : "&amp;",
+            "<" : "&lt;",
+            ">" : "&gt;",
+            "'" : "&quo;"
+        }
+    };
+    entityMap.unescape = invert(entityMap.escape);
+    var entityReg = {
+        escape: RegExp('[' + keys(entityMap.escape).join('') + ']', 'g'),
+        unescape: RegExp('(' + keys(entityMap.unescape).join('|') + ')', 'g')
+    };
+
+    //异步加载接口
+    var AjaxHelper = {
+        request : function(config) {
+            var data = config.data ? config.data : {};
+            var async = (typeof (config.async) === "boolean") ? config.async : true;
+            $.ajax({
+                type : config.type ? config.type : "POST",
+                headers : config.headers,
+                url : config.url,
+                dataType : config.dataType ? config.dataType : "json",
+                data : data,
+                async : async,
+                contentType : config.contentType,
+                xhrFields: {withCredentials: config.withCredentials},
+                beforeSend: function (XMLHttpRequest, self) {
+                	if (typeof (config.beforeSend) === "function") {
+                        return config.beforeSend(XMLHttpRequest, self);
+                    }
+                	return true;
+                },
+                success : config.success,
+                error : function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (typeof (config.error) === "function") {
+                        config.error(XMLHttpRequest, textStatus, errorThrown);
+                    } else {
+                        layer.msg("异步加载失败： " + textStatus,{icon:5, shift:6});
+                    }
+                },
+                statusCode : {
+                    404 : function() {
+                        layer.msg('未找到指定请求，请检查访问路径！',{icon:5, shift:6});
+                    },
+                    500 : function() {
+                        layer.msg('系统错误！',{icon:5, shift:6});
+                    }
+                },
+                complete : function(XMLHttpRequest, textStatus) {
+                    if (typeof (config.complete) === "function") {
+                        config.complete(XMLHttpRequest, textStatus);
+                    }
+                }
+            });
+        },
+        serialize: function(first, param){	//json序列化   key=value&key1=value1
+            var p = first;
+            for (var key in param) {
+                p += key + "=" + param[key] + "&";
+            }
+            p = p.substring(0, p.length-1);
+            return p;
+        }
+    };
+
+    /** 树类 Class定义 */
+    var DTree = function(options){
+        var _this = this;
+        /** 默认赋值**/
+        this.formatter = {	// 数据过滤
+            title: false    // 文字，默认不开启
+        };
+        this.response = {           // 树返回的json格式
+            statusName: "code",		  //返回标识
+            statusCode: 200,		  //返回码
+            message: "message",		  //返回信息
+            rootName: "data",		  //根节点名称
+            treeId: "id",			  //节点ID
+            parentId: "parentId",	  //父节点ID
+            title: "title",			  //节点名称
+            ficonClass: "ficonClass", //自定义一级图标
+            iconClass: "iconClass",	  //自定义二级图标
+            childName: "children",	  //子节点名称
+            last: "last",		      //是否最后一级节点
+//			level: "level",			  //层级
+            spread: "spread",		  //展开
+            disabled: "disabled",	  //禁用
+            hide: "hide",		      //隐藏
+            checkArr: "checkArr",	  //复选框列表
+            checked: "checked",       //是否选中
+            type: "type",			  //复选框标记
+            basicData: "basicData"	  //表示用户自定义需要存储在树节点中的数据
+        };
+        this.defaultRequest = {         // 树的默认发起请求参数格式，最后会将value作为参数名称传递
+            nodeId: "nodeId",		    //节点ID
+            parentId: "parentId",	    //父节点ID
+            context: "context",	        //节点内容
+            leaf: "leaf",		        //是否叶子节点
+            level: "level",		        //层级
+            spread: "spread",		    //节点展开状态
+            dataType: "dataType",	    //节点标记
+            checked: "checked",  	    //节点复选框选中状态
+            initchecked: "initchecked",	//节点复选框初始状态
+            basicData: "basicData",		//用户自定义的记录节点数据
+            recordData: "recordData",	//当前data数据（排除basicData和children字段）
+        };
+        this.toolbarFun = {
+            addTreeNode: function(param, $div) {	//添加树节点后调用的函数，用于用户自定义，如未指定则树不会发生变化
+                return ;
+            },
+            editTreeNode: function(param, $div) {	//编辑树节点后调用的函数，用于用户自定义，如未指定则树不会发生变化
+                return ;
+            },
+            editTreeLoad: function(param){	        // 编辑树的数据回显，用于打开编辑时，回填数据
+                return ;
+            },
+            delTreeNode: function(param, $div){	    //删除树后调用的函数，用于用户自定义，如未指定则树不会发生变化
+                return ;
+            },
+            loadToolbarBefore: function(buttons, param, $div){  // 右键菜单加载前的函数
+                return buttons;
+            }
+        };
+        this.toolbarStyle = {  // 工具栏弹出层的自定义样式
+            title: "节点",
+            area: ["60%","80%"]
+        };
+        this.menubarFun = {
+            remove: function(checkbarNodes){  //删除复选框选中节点，需要用户自定义，如未指定则树只是页面上做了修改
+                return true;
+            }
+        };
+        this.menubarTips = {  // 菜单栏的默认显示
+            toolbar: [],
+            group: [defaultMenu.moveDown, defaultMenu.moveUp, defaultMenu.refresh, defaultMenu.checkAll, defaultMenu.unCheckAll, defaultMenu.invertAll, defaultMenu.remove, defaultMenu.searchNode],
+            freedom: []
+        };
+        this.checkbarFun = {
+            chooseBefore: function($i, node){	        // 复选框点击前回调
+                return true;
+            },
+            chooseDone: function(checkbarNodesParam) {	//复选框点击事件完毕后，返回该树关于复选框操作的全部信息，用于用户自定义，如未指定则树只是页面上做了修改
+                return ;
+            }
+        };
+        this.iframeDefaultRequest = {   //iframe的默认参数,目的是与加载树的参数不一样
+            nodeId: "nodeId",		    //节点ID
+            parentId: "parentId",	    //父节点ID
+            context: "context",	        //节点内容
+            leaf: "leaf",		        //是否叶子节点
+            level: "level",		        //层级
+            spread: "spread",		    //节点展开状态
+            dataType: "dataType",	    //节点标记
+            checked: "checked",	        //节点复选框选中状态
+            initchecked: "initchecked",	//节点复选框初始状态
+            basicData: "basicData",		//用户自定义的记录节点数据
+            recordData: "recordData",	//当前data数据（排除basicData和children字段）
+        };
+
+        this.iframeFun = {
+            iframeDone: function(iframeParam){	//iframe加载完毕后，用于用户自定义事件
+                return ;
+            }
+        };
+        this.style = {			//树最终使用的样式集合
+            item: "",			//每一项div的样式
+            itemThis: "",		//选中div的样式
+            dfont: "",			//一级图标的样式
+            icon: "",			//二级图标的样式
+            cbox: "",			//复选框的样式
+            chs: ""				//复选框选中的样式
+        };
+        this.usefontStyle = {		//树最终使用的图标集合
+            fnode:{					//一级节点
+                node:{				//非叶子节点
+                    open:"",		//节点展开
+                    close:""		//节点关闭
+                },
+                leaf:""				//叶子节点
+            },
+            snode:{					//二级节点
+                node:{				//非叶子节点
+                    open:"",		//节点展开
+                    close:""		//节点关闭
+                },
+                leaf:""				//叶子节点
+            },
+            checkbox:{				//复选框
+                on:"",				//复选框选中
+                out:"",				//未选中
+                noall:""			//半选
+            },
+            menubar:{				//菜单栏
+                movedown:"",		//全部展开
+                moveup:"",			//全部收缩
+                refresh:"",			//刷新
+                checkAll:"",		//全选
+                unCheckAll:"",		//全不选
+                invertAll:"",		//反选
+                remove:"",			//删除
+                search:""			//搜索
+            },
+            menubarExt:"",			//扩展菜单栏
+            toolbar:{				//工具栏
+                menubar:{			//依附在菜单栏的工具栏
+                    movedown:"",	//全部展开
+                    moveup:"",		//全部收缩
+                    refresh:"",		//刷新
+                    checkAll:"",	//全选
+                    unCheckAll:"",	//全不选
+                    invertAll:"",	//反选
+                    remove:"",		//删除
+                    search:""		//搜索
+                },
+                menubarExt:"",		//依附在菜单栏的扩展菜单栏
+                pulldown:"",		//展开
+                pullup:"",			//收缩
+                add:"",				//添加
+                edit:"",			//编辑
+                del:""				//删除
+            },
+            toolbarExt:""			//扩展工具栏
+        }
+
+        /** 数据绑定**/
+        this.node = {		// 树节点选中时，包含当前节点的全部信息
+            nodeId: "",		//节点ID
+            parentId: "",	//父节点ID
+            context: "",	//节点内容
+            leaf: "",		//是否叶子节点
+            level: "",		//层级
+            spread: "",		//节点展开状态
+            dataType: "",	//节点标记
+            checked: "",	//节点复选框选中状态
+            initchecked: "",	//节点复选框初始状态
+            basicData: "",		//用户自定义的记录节点数据
+            recordData: "",		//当前data数据（排除basicData和children字段）
+        };
+        
+        this.toolbarMenu = {};	// 工具栏右键菜单绑定的所有元素
+        this.checkbarNode = [];	// 复选框标记的全部节点数据
+        this.errData = [];		// 记录在渲染节点时有问题的数据
+        this.checkArrLen = 0;	// 添加节点的时判断复选框个数
+        this.temp = [];	        // 临时变量
+        this.bak = "";	        // 临时变量
+        this.setting(options);
+    };
+    
+    /******************** 初始参数加载 ********************/
+    /**
+     * @Desc: 设置基本属性值
+     * @Param: options：JSON对象，初始设置dtree所需的全部属性
+     */
+    DTree.prototype.setting = function(options) {
+        this.options = options || {};
+
+        /** 绑定元素参数（必填，2个参数项必填一个）**/
+        this.elem = this.options.elem || OPTIONS.elem ||  ""; //树绑定的元素ID：#elem
+        if(typeof this.options.obj === 'undefined'){
+            if(this.elem) {
+                if($(this.elem).length > 0) {
+                    this.obj = $(this.elem);
+                }
+            }
+        } else {
+            this.obj = this.options.obj || OPTIONS.obj || this.obj; //树绑定的jquery元素，用于当元素是延迟加载出来的话，可以用这个找到
+            this.elem = "#" + this.obj[0].id;
+        }
+
+        /** 基本参数**/
+        this.scroll = this.options.scroll || OPTIONS.scroll || this.elem; //树的上级div容器，让树可以显示滚动条的div容器的ID
+        this.accordion = (typeof (this.options.accordion) === "boolean") ? this.options.accordion : (typeof (OPTIONS.accordion) === "boolean") ? OPTIONS.accordion : false; //手风琴加载， 默认false
+        if(this.accordion) {
+            this.initLevel = 1; //默认展开节点  1节
+        } else {
+            this.initLevel = this.options.initLevel || OPTIONS.initLevel || 2; //默认展开节点  2节
+        }
+        this.type = this.options.type || OPTIONS.type || "load"; //树的加载方式  all，全量树，  load，增量树，默认load
+        this.cache = (typeof (this.options.cache) === "boolean") ? this.options.cache : (typeof (OPTIONS.cache) === "boolean") ? OPTIONS.cache : true; //数据缓存，默认true
+        this.record =  this.options.record || OPTIONS.record || false; //开启数据记录模式，默认false
+        this.load = (typeof (this.options.load) === "boolean") ? this.options.load : (typeof (OPTIONS.load) === "boolean") ? OPTIONS.load : true; //开启加载动画，默认true
+        this.none = this.options.none || OPTIONS.nont || "无数据";	 //初始加载无记录时显示文字
+        this.tempHeight = this.options.height || OPTIONS.height; //临时转换高度变量
+        if(this.tempHeight) { // 设置高度
+            if(/^full-\d+$/.test(this.tempHeight)) {
+                this.fullHeightGap = this.tempHeight.split('-')[1];
+                this.height = $WIN.height() - this.fullHeightGap; //设置高度
+            } else {
+                this.fullHeightGap = this.tempHeight;
+                this.height = this.tempHeight;
+            }
+        } else {
+            this.fullHeightGap = "";
+            this.height = "";
+        }
+        this.width = this.options.width || OPTIONS.width  || "260"; //宽度
+        this.obj.css("width", this.width);
+
+        /** 样式相关参数**/
+        this.iconfont = this.options.iconfont || OPTIONS.iconfont || DTREEFONT; //默认图标字体 dtreefont
+        this.iconfontStyle = this.options.iconfontStyle  || OPTIONS.iconfontStyle || {}; //用于自定义树的每个关键部位使用的图标
+        this.nodeIconArray = $.extend(nodeIconArray, this.options.nodeIconArray || OPTIONS.nodeIconArray) || nodeIconArray; //用户自定义非叶子节点图标集合，node
+        this.leafIconArray = $.extend(leafIconArray, this.options.leafIconArray || OPTIONS.leafIconArray) || leafIconArray; //用户自定义叶子节点图标集合，leaf
+        this.skin = this.options.skin || OPTIONS.skin || "theme"; // 自定义样式
+        if(this.skin == "layui"){ // layui主题
+            this.line = (typeof (this.options.line) === "boolean") ? this.options.line : (typeof (OPTIONS.line) === "boolean") ? OPTIONS.line : true; //开启树线，默认开启
+            this.ficon = this.options.ficon || OPTIONS.ficon || "7"; //一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'7'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "1") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示一级图标，默认'1'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1]; //一级图标中的leaf节点图标
+            this.icon = this.options.icon || OPTIONS.icon || "-1"; //二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'-1'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "-1") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'-1'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        } else if(this.skin == "laySimple"){ // laySimple主题
+            this.line = this.options.line || OPTIONS.line || false; //开启树线，默认不开启
+            this.ficon = this.options.ficon || OPTIONS.ficon || ["2","-1"];	//一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'-1'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "2") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示一级图标，默认'2'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1];	// 一级图标中的leaf节点图标
+            this.icon = this.options.icon || OPTIONS.icon || "-1"; //二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'-1'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "-1") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'-1'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        } else { // 默认主题  或者自定义主题
+            this.line = this.options.line || OPTIONS.line || false; //开启树线，默认不开启
+            this.ficon = this.options.ficon || OPTIONS.ficon || "8"; //一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'8'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "1") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示一级图标，默认'1'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1];	// 一级图标中的leaf节点图标
+            this.icon = this.options.icon || OPTIONS.icon || "5"; //二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'5'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "0") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'0'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        }
+
+        /** 数据加载参数**/
+        this.url = this.options.url || OPTIONS.url || ""; //请求地址
+        this.async = (typeof (this.options.async) === "boolean") ? this.options.async : (typeof (OPTIONS.async) === "boolean") ? OPTIONS.async : true; //异步同步加载,默认异步加载
+        this.asyncLoad = this.options.asyncLoad || OPTIONS.asyncLoad || []; //初始异步加载层级数据
+        this.headers = this.options.headers || OPTIONS.headers || {}; //ajax header属性
+        this.method = this.options.method || OPTIONS.method || "post"; //请求类型
+        this.dataType = this.options.dataType || OPTIONS.dataType || "json"; //参数类型
+        this.contentType = this.options.contentType || OPTIONS.contentType || "application/x-www-form-urlencoded"; //发送信息至服务器时内容编码类型
+        this.defaultRequest = $.extend(this.defaultRequest, this.options.defaultRequest || OPTIONS.defaultRequest) || this.defaultRequest; //默认请求参数
+        this.filterRequest = this.options.filterRequest || OPTIONS.filterRequest || [];	//过滤请求参数
+        this.request = this.options.request || OPTIONS.request || {}; //用户自定义请求参数
+        this.response = $.extend(this.response, this.options.response || OPTIONS.response) || this.response; //返回json格式
+        this.data = this.options.data || OPTIONS.data || null; //初始化指定该参数，则不会访问异步接口
+        this.dataFormat = this.options.dataFormat || OPTIONS.dataFormat || "levelRelationship"; //用于用户配置的data数据格式，list：列表，  levelRelationship：层级关系，默认
+        this.dataStyle = this.options.dataStyle || OPTIONS.dataStyle || "defaultStyle"; //用于用户配置layui通用的json数据风格,layuiStyle:layui风格，defaultStyle：默认风格
+        this.errDataShow = this.options.errDataShow || OPTIONS.errDataShow || false; //是否在递归数据出现错误后，显示错误信息，默认false
+        this.withCredentials = this.options.withCredentials || OPTIONS.withCredentials || false; //是否允许跨域请求，默认false
+        this.beforeSend = this.options.beforeSend || OPTIONS.beforeSend || function(ajax, XMLHttpRequest, self){return true}; //异步加载之前的回调
+        this.success = this.options.success || OPTIONS.success || function(data, obj, first){}; //树加载完毕后执行解析树之前的回调
+        this.done = this.options.done || OPTIONS.done || function(data, obj, first){};	 //树加载完毕后的回调
+        this.formatter = $.extend(this.formatter, this.options.formatter || OPTIONS.formatter) || this.formatter; //数据过滤
+        this.error = this.options.error || OPTIONS.error || function(XMLHttpRequest, textStatus, errorThrown){}; // 异步加载异常回调
+        this.complete = this.options.complete || OPTIONS.complete || function(XMLHttpRequest, textStatus){};	// 异步加载完成回调
+
+        /** 复选框参数**/
+        this.checkbar = this.options.checkbar || OPTIONS.checkbar || false; //是否开启复选框模式
+        this.checkbarLoad = this.options.checkbarLoad || OPTIONS.checkbarLoad || "node"; //复选框作用范围，node：所有节点， leaf：最后一级；默认所有节点
+        this.checkbarType = this.options.checkbarType || OPTIONS.checkbarType || "all";	//复选框选中形式	all：子集选中父级也选中，  no-all：子集选中父级半选中，子集全选父级选中，p-casc：父级选中子集全选，子集无法改变父级选中状态， self：没有任何级联关系，only：只能选中一个复选框。   默认all
+        this.checkbarData = this.options.checkbarData || OPTIONS.checkbarData || "choose"; //复选框记录数据类型形式，  change表示记录变更数据，choose表示记录选中数据，all记录全部数据，halfChoose记录选中和半选中的数据，默认choose
+        this.checkbarFun =  $.extend(this.checkbarFun, this.options.checkbarFun || OPTIONS.checkbarFun) || this.checkbarFun; //checkbar事件加载
+
+        /** 菜单栏参数**/
+        this.menubar = this.options.menubar || OPTIONS.menubar || false; //是否打开菜单栏
+        this.menubarTips = $.extend(this.menubarTips, this.options.menubarTips || OPTIONS.menubarTips) || this.menubarTips; //菜单栏吸附， toolbar：依附在工具栏，group：依附在按钮组，freedom，自由
+        this.menubarFun = $.extend(this.menubarFun, this.options.menubarFun || OPTIONS.menubarFun) || this.menubarFun; //menubar事件加载
+
+        /** 工具栏参数**/
+        this.toolbar = this.options.toolbar || OPTIONS.toolbar || false; //是否开启可编辑模式
+        this.toolbarWay = this.options.toolbarWay || OPTIONS.toolbarWay || "contextmenu"; //工具栏显示方式，contextmenu:右键，follow:跟随节点，fixed:固定在节点右侧
+        this.toolbarStyle = $.extend(this.toolbarStyle, this.options.toolbarStyle || OPTIONS.toolbarStyle) || this.toolbarStyle; //toolbar的自定义风格，标题，弹框大小
+        this.toolbarLoad = this.options.toolbarLoad || OPTIONS.toolbarLoad || "node"; //toolbar作用范围：node:所有节点，noleaf:非最后一级节点，leaf:最后一级
+        this.toolbarShow = this.options.toolbarShow || OPTIONS.toolbarShow || ["add","edit","delete"]; //toolbar三个按钮自定义加载
+        this.toolbarBtn = this.options.toolbarBtn || OPTIONS.toolbarBtn || null; //toolbar增删改中内容的自定义加载
+        this.toolbarExt = this.options.toolbarExt || OPTIONS.toolbarExt || []; //toolbar按钮扩展
+        this.toolbarFun = $.extend(this.toolbarFun, this.options.toolbarFun || OPTIONS.toolbarFun) || this.toolbarFun; //toolbar事件加载
+
+        /** iframe模式参数**/
+        this.useIframe = this.options.useIframe || OPTIONS.useIframe || false; //是否加载iframe 默认false，
+        this.iframeElem = this.options.iframeElem || OPTIONS.iframeElem || ""; //iframe的ID
+        this.iframeUrl = this.options.iframeUrl || OPTIONS.iframeUrl || ""; //树关联的iframe地址
+        this.iframeLoad = this.options.iframeLoad || OPTIONS.iframeLoad || "leaf"; //点击哪一层加载frame： node：所有节点， leaf：默认，最后一级
+        this.iframeDefaultRequest = $.extend(this.iframeDefaultRequest, this.options.iframeDefaultRequest || OPTIONS.iframeDefaultRequest) || this.iframeDefaultRequest; //iframe的默认传递参数
+        this.iframeRequest = $.extend(this.iframeRequest, this.options.iframeRequest) || $.extend(this.iframeRequest, OPTIONS.iframeRequest) || this.iframeRequest; //iframe的自定义参数
+        this.iframeFun = $.extend(this.iframeFun, this.options.iframeFun) || $.extend(this.iframeFun, OPTIONS.iframeFun) || this.iframeFun;	//iframe事件加载
+
+        /** 下拉树模式参数**/
+        this.select = this.options.select || false; 
+        if(this.select) {
+        	// 重置下拉树
+        	this.selectSetting();
+        }
+        
+        /** 调用确认最终主题方法*/
+        this.ensureTheme();
+    };
+
+    /**
+     * @Desc: 重置基本属性值
+     * @Param: options：JSON对象，重置dtree所需的全部属性
+     */
+    DTree.prototype.reloadSetting = function(options) {
+        this.options = $.extend(this.options, options) || this.options;
+
+        /** 绑定元素参数**/
+        this.elem = this.options.elem || this.elem;	  //树绑定的元素ID：#elem
+        if(typeof this.options.obj === 'undefined'){
+            if(this.elem) {
+                if($(this.elem).length > 0) {
+                    this.obj = $(this.elem);
+                }
+            }
+        } else {
+            this.obj = this.options.obj || this.obj; //树绑定的jquery元素，用于当元素是延迟加载出来的话，可以用这个找到
+            this.elem = "#" + this.obj[0].id;
+        }
+
+        /** 基本参数**/
+        this.scroll = this.options.scroll || this.scroll; //树的上级div容器，让树可以显示滚动条的div容器
+        this.accordion = (typeof (this.options.accordion) === "boolean") ? this.options.accordion : this.accordion; //开启手风琴加载
+        if(this.accordion) {
+            this.initLevel = 1; //默认展开节点  1节
+        } else {
+            this.initLevel = this.options.initLevel || this.initLevel; //默认展开节点  2节
+        }
+        this.type = this.options.type || this.type; //树的加载方式  all，全量树，  load，增量树，默认load
+        this.cache = (typeof (this.options.cache) === "boolean") ? this.options.cache : this.cache; //开启数据缓存
+        this.record = (typeof (this.options.record) === "boolean") ? this.options.record : this.record; //开启数据记录模式
+        this.load = (typeof (this.options.load) === "boolean") ? this.options.load : this.load; //开启加载动画
+        this.none = this.options.none || this.none;  //初始节点加载无数据时显示文字
+        this.tempHeight = this.options.height || this.height; //临时转换高度变量
+        if(this.tempHeight) {  //设置高度
+            if(/^full-\d+$/.test(this.tempHeight)) {
+                this.fullHeightGap = this.tempHeight.split('-')[1];
+                this.height = $WIN.height() - this.fullHeightGap;
+            } else {
+                this.fullHeightGap = this.tempHeight;
+                this.height = this.tempHeight;
+            }
+        }
+        this.width = this.options.width || this.width; //宽度
+        this.obj.css("width", this.width);
+
+        /** 样式相关参数**/
+        this.line = (typeof (this.options.line) === "boolean") ? this.options.line : this.line; //开启树线，默认不开启
+        this.iconfont = this.options.iconfont || this.iconfont; //默认图标字体 dtreefont
+        this.iconfontStyle = this.options.iconfontStyle || this.iconfontStyle; //用于自定义树的每个关键部位使用的图标
+        this.nodeIconArray = $.extend(nodeIconArray, this.options.nodeIconArray) || this.nodeIconArray;	//用户自定义非叶子节点图标集合，node
+        this.leafIconArray = $.extend(leafIconArray, this.options.leafIconArray) || this.leafIconArray;	//用户自定义叶子节点图标集合，leaf
+        this.skin = this.options.skin || this.skin;	//自定义样式
+        if(this.skin == "layui"){ //layui主题
+            this.line = (typeof (this.options.line) === "boolean") ? this.options.line : true; //开启树线，默认开启
+            this.ficon = this.options.ficon || this.ficon; //一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'7'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "1") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'1'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1]; //一级图标中的leaf节点图标
+            this.icon = this.options.icon || this.icon;	//二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'-1'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "-1") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'-1'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        } else if(this.skin == "laySimple"){ //laySimple主题
+            this.line = (typeof (this.options.line) === "boolean") ? this.options.line : false; //开启树线，默认不开启
+            this.ficon = this.options.ficon || this.ficon; //一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'-1'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "2") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'2'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1];//一级图标中的leaf节点图标
+            this.icon = this.options.icon || this.icon;	//二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'-1'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "-1") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'-1'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        } else { // 默认主题  或者自定义主题
+            this.line = (typeof (this.options.line) === "boolean") ? this.options.line : false; //开启树线，默认不开启
+            this.ficon = this.options.ficon || this.ficon; //一级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示一级图标。默认'8'
+            this.fnodeIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? (this.ficon == "-1" ? "-1" : "1") : this.ficon[0]; //一级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'1'
+            this.fleafIcon = (typeof this.ficon === 'string' || typeof this.ficon === 'number') ? this.ficon : this.ficon[1]; // 一级图标中的leaf节点图标
+            this.icon = this.options.icon || this.icon;	//二级图标样式，0：文件夹，1：人员，2：机构，3：报表，4：信息，5：叶子，6：勋章，7：文件，8：小圆点，9：齿轮，10：星星， -1：不显示二级图标。默认'5'
+            this.nodeIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? (this.icon == "-1" ? "-1" : "0") : this.icon[0]; //二级图标中的node节点图标。0：文件夹，1：+、-，2：三角形， -1：不显示二级图标，默认'0'
+            this.leafIcon = (typeof this.icon === 'string' || typeof this.icon === 'number') ? this.icon : this.icon[1]; //二级图标中的leaf节点图标
+        }
+
+        /** 数据加载参数**/
+        this.url = this.options.url || this.url; //请求地址
+        this.async = (typeof (this.options.async) === "boolean") ? this.options.async : this.async;	//异步同步加载,默认异步加载
+        this.asyncLoad = this.options.asyncLoad || this.asyncLoad; //初始异步加载层级数据
+        this.headers = this.options.headers || this.headers; //ajax header属性
+        this.method = this.options.method || this.method; //请求类型
+        this.dataType = this.options.dataType || this.dataType; //参数类型
+        this.contentType = this.options.contentType || this.contentType; //发送信息至服务器时内容编码类型
+        this.defaultRequest = $.extend(this.defaultRequest, this.options.defaultRequest) || this.defaultRequest; //默认请求参数
+        this.filterRequest = this.options.filterRequest || this.filterRequest; //过滤请求参数
+        this.request = this.options.request || this.request; //用户自定义请求参数
+        this.response = $.extend(this.response, this.options.response) || this.response; //返回json格式
+        this.data = this.options.data || this.data; //初始化指定该参数，则不会访问异步接口
+        this.dataFormat = this.options.dataFormat || this.dataFormat; //用于用户配置的data数据格式，list：列表，  levelRelationship：层级关系，默认
+        this.dataStyle = this.options.dataStyle || this.dataStyle; //用于用户配置layui通用的json数据风格,layuiStyle:layui风格，defaultStyle：默认风格
+        this.errDataShow = (typeof (this.options.errDataShow) === "boolean") ? this.options.errDataShow : this.errDataShow; //是否在使用list模式递归数据出现错误时，显示错误信息
+        this.withCredentials = (typeof (this.options.withCredentials) === "boolean") ? this.options.withCredentials : this.withCredentials; //是否允许跨域请求
+        this.beforeSend = this.options.beforeSend || this.beforeSend; //异步加载之前的回调
+        this.success = this.options.success || this.success; //树加载完毕后执行解析树之前的回调
+        this.done = this.options.done || this.done; //树加载完毕后的回调
+        this.formatter = $.extend(this.formatter, this.options.formatter)|| this.formatter; //数据过滤
+        this.error = this.options.error || this.error; //异步加载异常回调
+        this.complete = this.options.complete || this.complete; //异步加载完成回调
+
+        /** 复选框参数**/
+        this.checkbar = this.options.checkbar || this.checkbar; //是否开启复选框模式
+        this.checkbarLoad = this.options.checkbarLoad || this.checkbarLoad; //复选框作用范围，node：所有节点， leaf：最后一级；默认所有节点
+        this.checkbarType = this.options.checkbarType || this.checkbarType;	//复选框选中形式	all：子集选中父级也选中，  no-all：子集选中父级半选中，子集全选父级选中，p-casc：父级选中子集全选，子集无法改变父级选中状态， self：没有任何级联关系，only：只能选中一个复选框。   默认all
+        this.checkbarData = this.options.checkbarData || this.checkbarData; //复选框记录数据类型形式，  change表示记录变更数据，choose表示记录选中数据，all记录全部数据，halfChoose记录选中和半选中的数据，默认choose
+        this.checkbarFun =  $.extend(this.checkbarFun, this.options.checkbarFun)|| this.checkbarFun; //checkbar事件加载
+
+        /** 菜单栏参数**/
+        this.menubar = this.options.menubar || this.menubar; //是否打开菜单栏
+        this.menubarTips = $.extend(this.menubarTips, this.options.menubarTips) || this.menubarTips; //菜单栏吸附， toolbar：依附在工具栏，group：依附在按钮组，freedom，自由
+        this.menubarFun = $.extend(this.menubarFun, this.options.menubarFun) || this.menubarFun; //menubar事件加载
+
+        /** 工具栏参数**/
+        this.toolbar = this.options.toolbar || this.toolbar; //是否开启工具栏
+        this.toolbarWay = this.options.toolbarWay || this.toolbarWay; //工具栏显示方式，contextmenu:右键，follow:跟随节点，fixed:固定在节点右侧
+        this.toolbarStyle = $.extend(this.toolbarStyle, this.options.toolbarStyle) || this.toolbarStyle; //toolbar的自定义风格，标题，弹框大小
+        this.toolbarLoad = this.options.toolbarLoad || this.toolbarLoad; //toolbar作用范围：node:所有节点，noleaf:非最后一级节点，leaf:最后一级
+        this.toolbarShow = this.options.toolbarShow || this.toolbarShow; //toolbar三个按钮
+        this.toolbarBtn = this.options.toolbarBtn || this.toolbarBtn; //toolbar增删改中内容的自定义加载
+        this.toolbarExt = this.options.toolbarExt || this.toolbarExt; //toolbar按钮扩展
+        this.toolbarFun = $.extend(this.toolbarFun, this.options.toolbarFun) || this.toolbarFun; //toolbar事件加载
+
+        /** iframe模式参数**/
+        this.useIframe = this.options.useIframe || this.useIframe;//是否加载iframe 默认false
+        this.iframeElem = this.options.iframeElem || this.iframeElem; //iframe的ID
+        this.iframeUrl = this.options.iframeUrl || this.iframeUrl; //树关联的iframe地址
+        this.iframeLoad = this.options.iframeLoad || this.iframeLoad; //点击哪一层加载frame： node：所有节点， leaf：默认，最后一级
+        this.iframeDefaultRequest = $.extend(this.iframeDefaultRequest, this.options.iframeDefaultRequest) || this.iframeDefaultRequest; //iframe的默认传递参数
+        this.iframeRequest = $.extend(this.iframeRequest, this.options.iframeRequest) || this.iframeRequest; //iframe的自定义参数
+        this.iframeFun = $.extend(this.iframeFun, this.options.iframeFun) || this.iframeFun; //iframe事件加载
+
+        /** 下拉树模式参数**/
+        if(this.select) {
+        	// 重置下拉树
+        	this.reloadSelectSetting();
+        }
+        
+        /** 调用确认最终主题方法*/
+        this.ensureTheme();
+        
+    };
+    
+    /**
+     * @Desc: 设置下拉树的基本参数值
+     */ 
+    DTree.prototype.selectSetting = function() {
+    	/** select模式参数*/
+        this.select = true; //配置成select模式
+        
+        this.selectInitVal = this.obj.attr("data-value") || this.options.selectInitVal || "";	//输入框的值
+        this.selectTreeDiv = this.obj[0].id + "_tree_div";		// 上级DIV节点
+        this.selectCardDiv = this.obj[0].id + "_select_card_div";	// 上级layui卡片节点
+        this.selectDiv = this.obj[0].id + "_select_div";		// 模拟的select节点
+        this.selectTipsName = this.obj[0].id + "_select_input"; // select的提示输入框名称
+        this.selectTips = this.options.selectTips || "请选择";			// 输入框的提示语
+        this.selectCardHeight = this.options.selectCardHeight || "350";			// 下拉面板的高度
+        this.selectInputName = this.options.selectInputName || {nodeId: this.obj[0].id + "_select_nodeId"};  // select表单中的元素
+        
+        // 调取下拉树的特殊处理页面元素标识
+        this.renderSelectDom();
+    }
+    
+    /**
+     * @Desc: 重置下拉树的基本参数值
+     */
+    DTree.prototype.reloadSelectSetting = function() {
+        
+    	this.selectInitVal = this.obj.attr("data-value") || this.options.selectInitVal || this.selectInitVal;	//输入框的值
+        this.selectTips = this.options.selectTips || this.selectTips;			// 输入框的提示语
+        this.selectCardHeight = this.options.selectCardHeight || this.selectCardHeight;			// 下拉面板的高度
+        this.selectInputName = $.extend(this.selectInputName, this.options.selectInputName) || this.selectInputName;  // select表单中的元素
+        
+        // 调取下拉树的特殊处理页面元素标识
+        this.reloadSelectDom();
+    }
+
+    /******************** 下拉树设置区域 ********************/
+    /**
+     * @Desc: 渲染下拉树的Dom结构
+     */
+    DTree.prototype.renderSelectDom = function() {
+        var _this = this;
+        var rootId = _this.obj[0].id;
+        
+        // 设置自定义表单隐藏域
+        var selectInputName = _this.selectInputName;
+        var selectInput = [];
+        for(var key in selectInputName) {
+        	selectInput.push('<input type="hidden" dtree-id="' + rootId + '" dtree-node="' + key + '" name="' + selectInputName[key] + '" value="" readonly>');
+        }
+
+        // 设置html
+        var prevHtml = ['<div class="layui-unselect layui-form-select" dtree-id="' + rootId + '" dtree-select="' + _this.selectDiv + '">',
+			            '<div class="layui-select-title">', selectInput.join(""), 
+			            '<input type="text" dtree-id="' + rootId + '" id="' +  _this.selectTipsName +'_id" name="' + _this.selectTipsName + '" placeholder="' + _this.selectTips + '" value="" readonly class="layui-input layui-unselect">',
+			            '<i class="layui-edge"></i>',
+			            '</div></div>'].join('');
+
+        _this.obj.before(prevHtml);
+
+        var cardStyle = "style=";
+        if(this.selectCardHeight) {
+        	cardStyle += "'height:"+_this.selectCardHeight+"px'";
+        }
+        _this.obj.wrap('<div class="layui-card dtree-select" dtree-id="' + rootId + '" dtree-card="' + _this.selectCardDiv + '" ' + cardStyle + '></div>').wrap('<div class="layui-card-body"></div>').wrap('<div id="' + _this.selectTreeDiv + '"></div>');
+    
+    }
+    
+    /**
+     * @Desc: 重新渲染下拉树的Dom结构
+     */
+    DTree.prototype.reloadSelectDom = function() {
+        var _this = this;
+        var rootId = _this.obj[0].id;
+        
+        // 设置自定义表单隐藏域
+        var selectInputName = _this.selectInputName;
+        var selectInput = [];
+        for(var key in selectInputName) {
+        	selectInput.push('<input type="hidden" dtree-id="' + rootId + '" dtree-node="' + key + '" name="' + selectInputName[key] + '" value="" readonly>');
+        }
+        
+        $("div[dtree-id='"+rootId+"'][dtree-select='"+_this.selectDiv+"']").find("div.layui-select-title").html("");
+
+        // 设置html
+        var prevHtml = [selectInput.join(""), 
+			            '<input type="text" dtree-id="' + rootId + '" id="' +  _this.selectTipsName +'_id" name="' + _this.selectTipsName + '" placeholder="' + _this.selectTips + '" value="" readonly class="layui-input layui-unselect">',
+			            '<i class="layui-edge"></i>'].join('');
+
+        $("div[dtree-id='"+rootId+"'][dtree-select='"+_this.selectDiv+"']").find("div.layui-select-title").html(prevHtml);
+
+        var cardStyle = "style=";
+        if(this.selectCardHeight) {
+        	cardStyle += "'height:"+_this.selectCardHeight+"px'";
+        }
+        $("div[dtree-id='"+rootId+"'][dtree-card='"+_this.selectCardDiv+"']").attr("style", cardStyle);
+    }
+
+    /**
+     * @Desc: 设置下拉树模式中，input输入框的值
+     * @Param: param： input中的值对应树数据的ID值\当前树选中的数据JSON对象，可不传，不传的话则树内部读取
+     */
+    DTree.prototype.selectVal = function(param) {
+        var _this = this;
+        var rootId = _this.obj[0].id;
+        var selectInputName = _this.selectInputName;
+        var selectTipsNameValue = "";
+        var selectValues = {};
+        
+        // 如果开启了复选框，则此方法用来取值
+        if(_this.checkbar) {
+        	return _this.selectCheckboxVal();
+        }
+        
+        if(typeof param === 'undefined') { // 不传，则为当前树中记录的ID
+        	param = _this.getNowParam();
+        }
+        if(typeof param === 'string') {    // 传递ID，则查询树节点ID对应的值
+        	param = _this.getParam(param);
+        }
+        
+        selectTipsNameValue = param["context"];
+    	for(var key in selectInputName) {
+    		selectValues[selectInputName[key]] = param[key];
+    		$("div[dtree-select='" + _this.selectDiv + "']").find("input[dtree-id='" + rootId + "'][name='"+selectInputName[key]+"']").val(param[key] || "");
+    	}
+    	
+    	if(param["nodeId"] && !param["context"]) {
+    		selectTipsNameValue = _this.getParam(param["nodeId"]);
+    	}
+    	
+        // 返显提示输入框值
+        $("div[dtree-select='" + _this.selectDiv + "']").find("input[dtree-id='" + rootId + "'][name='"+_this.selectTipsName+"']").val(selectTipsNameValue || "");
+        
+        // 返回隐藏域中的值
+        return selectValues;
+    }
+    
+    /**
+     * @Desc: 设置复选框模式中的下拉树的选中值
+     */
+    DTree.prototype.selectCheckboxVal = function() {
+    	var _this = this;
+    	var rootId = _this.obj[0].id;
+    	var selectInputName = _this.selectInputName;
+    	
+    	// 获取全部复选框选中节点
+    	var param = _this.getCheckbarJsonArrParam();
+    	
+    	selectTipsNameValue = param["context"];
+    	var selectValues = {};
+    	for(var key in selectInputName) {
+    		var value = param[key].join(",");
+    		selectValues[selectInputName[key]] = value;
+    		$("div[dtree-select='" + _this.selectDiv + "']").find("input[dtree-id='" + rootId + "'][name='"+selectInputName[key]+"']").val(value);
+    	}
+    	
+    	$("div[dtree-select='" + _this.selectDiv + "']").find("input[dtree-id='" + rootId + "'][name='"+_this.selectTipsName+"']").val(selectTipsNameValue);
+    	
+    	// 返回隐藏域中的值
+        return selectValues;
+    }
+    
+    /**
+     * @Desc: 重置下拉树的值，1.表单清空；2.节点重置；3.复选框重置
+     */
+    DTree.prototype.selectResetVal = function() {
+    	var _this = this;
+    	var rootId = _this.obj[0].id;
+    	// 表单清空
+        $("input[dtree-id='"+rootId+"']").val("");
+        // 节点重置
+        _this.cancelNavThis();
+        if(_this.checkbar) {
+        	// 复选框重置
+        	_this.cancelCheckedNode();
+        }
+    }
+
+
+    /******************** 字体及图标区域 ********************/
+    /**
+     * @Desc: 树使用的最终主题方案
+     */
+    DTree.prototype.ensureTheme = function(){
+        var _this = this;
+
+        // 确认style
+        this.style.item = DTREE + this.skin + ITEM;
+        this.style.itemThis = DTREE + this.skin + ITEMTHIS;
+        this.style.dfont = DTREE + this.skin + DFONT;
+        this.style.ficon = DTREE + this.skin + FICON;
+        this.style.icon = DTREE + this.skin + ICON;
+        this.style.cbox = DTREE + this.skin + CBOX;
+        this.style.chs = DTREE + this.skin + CHS;
+
+        // 确认usefontStyle
+        var iconfont = this.iconfont;
+        var iconfonts = [];
+        if(typeof iconfont === 'string') {
+            iconfonts.push(iconfont);
+        } else {
+            iconfonts = iconfont;
+        }
+
+        var iconfontStyle = this.iconfontStyle;
+        var iconfontStyles = [];
+        if(iconfontStyle.length == undefined) {
+            iconfontStyles.push(iconfontStyle);
+        } else {
+            iconfontStyles = iconfontStyle;
+        }
+
+        for(var i=0; i<iconfonts.length; i++){
+            var ifont = iconfonts[i];
+            var ifontStyle = iconfontStyles[i];
+            if(typeof ifontStyle !== 'undefined') {
+                // 判断，赋值
+                this.useDefaultOrUserDefineFnodeStyle(ifont, ifontStyle.fnode);
+                this.useDefaultOrUserDefineSnodeStyle(ifont, ifontStyle.snode);
+                this.useDefaultOrUserDefineCheckboxStyle(ifont, ifontStyle.checkbox);
+                this.useDefaultOrUserDefineMenubarStyle(ifont, ifontStyle.menubar);
+                this.useDefaultOrUserDefineMenubarExtStyle(ifont, ifontStyle.menubarExt);
+                this.useDefaultOrUserDefineToolbarStyle(ifont, ifontStyle.toolbar);
+                this.useDefaultOrUserDefineToolbarExtStyle(ifont, ifontStyle.toolbarExt);
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值一级图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: fnode： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineFnodeStyle = function(ifont, fnode){
+        var _this = this;
+        var tempOpen = this.usefontStyle.fnode.node.open;
+        var tempClose = this.usefontStyle.fnode.node.close;
+        var tempLeaf = this.usefontStyle.fnode.leaf;
+
+        if(typeof fnode === 'undefined'){
+            this.usefontStyle.fnode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["open"]) : tempOpen; // 一级图标中的node节点open图标
+            this.usefontStyle.fnode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["close"]) : tempClose; // 一级图标中的node节点close图标
+            this.usefontStyle.fnode.leaf = (tempLeaf == "") ? (ifont + " " + this.leafIconArray[this.fleafIcon]) : tempLeaf; // 一级图标中的node节点的leaf图标
+        } else {
+            var node = fnode.node;
+            var leaf = fnode.leaf;
+            if(typeof node === 'undefined'){
+                this.usefontStyle.fnode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["open"]) : tempOpen; // 一级图标中的node节点open图标
+                this.usefontStyle.fnode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["close"]) : tempClose; // 一级图标中的node节点close图标
+            } else {
+                var open = node.open;
+                var close = node.close;
+                if(typeof open === 'undefined'){
+                    this.usefontStyle.fnode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["open"]) : tempOpen; // 一级图标中的node节点open图标
+                } else {
+                    this.usefontStyle.fnode.node.open = ifont + " " + open;
+                }
+                if(typeof close === 'undefined') {
+                    this.usefontStyle.fnode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.fnodeIcon]["close"]) : tempClose; // 一级图标中的node节点close图标
+                } else {
+                    this.usefontStyle.fnode.node.close = ifont + " " + close;
+                }
+            }
+            if(typeof leaf === 'undefined'){
+                this.usefontStyle.fnode.leaf = (tempLeaf == "") ? (ifont + " " + this.leafIconArray[this.fleafIcon]) : tempLeaf; // 一级图标中的node节点的leaf图标
+            } else {
+                this.usefontStyle.fnode.leaf = ifont + " " + leaf;
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值二级图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: snode： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineSnodeStyle = function(ifont, snode){
+        var _this = this;
+        var tempOpen = this.usefontStyle.snode.node.open;
+        var tempClose = this.usefontStyle.snode.node.close;
+        var tempLeaf = this.usefontStyle.snode.leaf;
+
+        if(typeof snode === 'undefined'){
+            this.usefontStyle.snode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["open"]) : tempOpen;  // 二级图标中的node节点open图标
+            this.usefontStyle.snode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["close"]) : tempClose; // 二级图标中的node节点close图标
+            this.usefontStyle.snode.leaf = (tempLeaf == "") ? (ifont + " " + this.leafIconArray[this.leafIcon]) : tempLeaf; // 二级图标中的leaf节点图标
+        } else {
+            var node = snode.node;
+            var leaf = snode.leaf;
+            if(typeof node === 'undefined') {
+                this.usefontStyle.snode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["open"]) : tempOpen;  // 二级图标中的node节点open图标
+                this.usefontStyle.snode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["close"]) : tempClose; // 二级图标中的node节点close图标
+            } else {
+                var open = node.open;
+                var close = node.close;
+                if(typeof open === 'undefined'){
+                    this.usefontStyle.snode.node.open = (tempOpen == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["open"]) : tempOpen;  // 二级图标中的node节点open图标
+                } else {
+                    this.usefontStyle.snode.node.open = ifont + " " + open;
+                }
+                if(typeof close === 'undefined') {
+                    this.usefontStyle.snode.node.close = (tempClose == "") ? (ifont + " " + this.nodeIconArray[this.nodeIcon]["close"]) : tempClose; // 二级图标中的node节点close图标
+                } else {
+                    this.usefontStyle.snode.node.close = ifont + " " + close;
+                }
+            }
+            if(typeof leaf === 'undefined') {
+                this.usefontStyle.snode.leaf = (tempLeaf == "") ? (ifont + " " + this.leafIconArray[this.leafIcon]) : tempLeaf; // 二级图标中的leaf节点图标
+            } else {
+                this.usefontStyle.snode.leaf = ifont + " " + leaf;
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值复选框图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: checkbox： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineCheckboxStyle = function(ifont, checkbox){
+        var _this = this;
+        var tempOn = this.usefontStyle.checkbox.on;
+        var tempOut = this.usefontStyle.checkbox.out;
+        var tempNoall = this.usefontStyle.checkbox.noall;
+
+        if(typeof checkbox === 'undefined'){
+            this.usefontStyle.checkbox.on = (tempOn == "") ? (ifont + " " + LI_DIV_CHECKBAR_ON) : tempOn;
+            this.usefontStyle.checkbox.out = (tempOut == "") ? (ifont + " " + LI_DIV_CHECKBAR_OUT) : tempOut;
+            this.usefontStyle.checkbox.noall = (tempNoall == "") ? (ifont + " " + LI_DIV_CHECKBAR_NOALL) : tempNoall;
+        } else {
+            var on = checkbox.on;
+            var out = checkbox.out;
+            var noall = checkbox.noall;
+            if(typeof on === 'undefined') {
+                this.usefontStyle.checkbox.on = (tempOn == "") ? (ifont + " " + LI_DIV_CHECKBAR_ON) : tempOn;
+            } else {
+                this.usefontStyle.checkbox.on = ifont + " " + on;
+            }
+            if(typeof out === 'undefined') {
+                this.usefontStyle.checkbox.out = (tempOut == "") ? (ifont + " " + LI_DIV_CHECKBAR_OUT) : tempOut;
+            } else {
+                this.usefontStyle.checkbox.out = ifont + " " + out;
+            }
+            if(typeof noall === 'undefined') {
+                this.usefontStyle.checkbox.noall = (tempNoall == "") ? (ifont + " " + LI_DIV_CHECKBAR_NOALL) : tempNoall;
+            } else {
+                this.usefontStyle.checkbox.noall = ifont + " " + noall;
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值菜单栏图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: menubar： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineMenubarStyle = function(ifont, menubar){
+        var _this = this;
+        var tempMovedown = this.usefontStyle.menubar.movedown;
+        var tempMoveup = this.usefontStyle.menubar.moveup;
+        var tempRefresh = this.usefontStyle.menubar.refresh;
+        var tempCheckAll = this.usefontStyle.menubar.checkAll;
+        var tempUncheckAll = this.usefontStyle.menubar.unCheckAll;
+        var tempInvertAll = this.usefontStyle.menubar.invertAll;
+        var tempRemove = this.usefontStyle.menubar.remove;
+        var tempSearch = this.usefontStyle.menubar.search;
+
+        if(typeof menubar === 'undefined'){
+            this.usefontStyle.menubar.movedown = (tempMovedown == "") ? (ifont + " " + LI_DIV_MENUBAR_DOWN) : tempMovedown;
+            this.usefontStyle.menubar.moveup = (tempMoveup == "") ? (ifont + " " + LI_DIV_MENUBAR_UP) : tempMoveup;
+            this.usefontStyle.menubar.refresh = (tempRefresh == "") ? (ifont + " " + LI_DIV_MENUBAR_REFRESH) : tempRefresh;
+            this.usefontStyle.menubar.checkAll = (tempCheckAll == "") ? (ifont + " " + LI_DIV_MENUBAR_CHECKALL) : tempCheckAll;
+            this.usefontStyle.menubar.unCheckAll = (tempUncheckAll == "") ? (ifont + " " + LI_DIV_MENUBAR_UNCHECKALL) : tempUncheckAll;
+            this.usefontStyle.menubar.invertAll = (tempInvertAll == "") ? (ifont + " " + LI_DIV_MENUBAR_INVERTALL) : tempInvertAll;
+            this.usefontStyle.menubar.remove = (tempRemove == "") ? (ifont + " " + LI_DIV_MENUBAR_DELETE) : tempRemove;
+            this.usefontStyle.menubar.search = (tempSearch == "") ? (ifont + " " + LI_DIV_MENUBAR_SEARCH) : tempSearch;
+        } else {
+            var movedown = menubar.movedown;
+            var moveup = menubar.moveup;
+            var refresh = menubar.refresh;
+            var checkAll = menubar.checkAll;
+            var unCheckAll = menubar.unCheckAll;
+            var invertAll = menubar.invertAll;
+            var remove = menubar.remove;
+            var search = menubar.search;
+            if(typeof movedown === 'undefined') {
+                this.usefontStyle.menubar.movedown = (tempMovedown == "") ? (ifont + " " + LI_DIV_MENUBAR_DOWN) : tempMovedown;
+            } else {
+                this.usefontStyle.menubar.movedown = ifont + " " + movedown;
+            }
+            if(typeof moveup === 'undefined') {
+                this.usefontStyle.menubar.moveup = (tempMoveup == "") ? (ifont + " " + LI_DIV_MENUBAR_UP) : tempMoveup;
+            } else {
+                this.usefontStyle.menubar.moveup = ifont + " " + moveup;
+            }
+            if(typeof refresh === 'undefined') {
+                this.usefontStyle.menubar.refresh = (tempRefresh == "") ? (ifont + " " + LI_DIV_MENUBAR_REFRESH) : tempRefresh;
+            } else {
+                this.usefontStyle.menubar.refresh = ifont + " " + refresh;
+            }
+            if(typeof checkAll === 'undefined') {
+                this.usefontStyle.menubar.checkAll = (tempCheckAll == "") ? (ifont + " " + LI_DIV_MENUBAR_CHECKALL) : tempCheckAll;
+            } else {
+                this.usefontStyle.menubar.checkAll = ifont + " " + checkAll;
+            }
+            if(typeof unCheckAll === 'undefined') {
+                this.usefontStyle.menubar.unCheckAll = (tempUncheckAll == "") ? (ifont + " " + LI_DIV_MENUBAR_UNCHECKALL) : tempUncheckAll;
+            } else {
+                this.usefontStyle.menubar.unCheckAll = ifont + " " + unCheckAll;
+            }
+            if(typeof invertAll === 'undefined') {
+                this.usefontStyle.menubar.invertAll = (tempInvertAll == "") ? (ifont + " " + LI_DIV_MENUBAR_INVERTALL) : tempInvertAll;
+            } else {
+                this.usefontStyle.menubar.invertAll = ifont + " " + invertAll;
+            }
+            if(typeof remove === 'undefined') {
+                this.usefontStyle.menubar.remove = (tempRemove == "") ? (ifont + " " + LI_DIV_MENUBAR_DELETE) : tempRemove;
+            } else {
+                this.usefontStyle.menubar.remove = ifont + " " + remove;
+            }
+            if(typeof search === 'undefined') {
+                this.usefontStyle.menubar.search = (tempSearch == "") ? (ifont + " " + LI_DIV_MENUBAR_SEARCH) : tempSearch;
+            } else {
+                this.usefontStyle.menubar.search = ifont + " " + search;
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值扩展菜单栏图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: menubarExt： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineMenubarExtStyle = function(ifont, menubarExt){
+        var _this = this;
+        var tempExt = this.usefontStyle.menubarExt;
+
+        if(typeof menubarExt === 'undefined'){
+            this.usefontStyle.menubarExt = (tempExt == "") ? ifont : tempExt;
+        } else {
+            this.usefontStyle.menubarExt = menubarExt;
+        }
+    };
+
+    /**
+     * @Desc: 赋值工具栏图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: toolbar： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineToolbarStyle = function(ifont, toolbar){
+        var _this = this;
+        var tempMovedown = this.usefontStyle.toolbar.menubar.movedown;
+        var tempMoveup = this.usefontStyle.toolbar.menubar.moveup;
+        var tempRefresh = this.usefontStyle.toolbar.menubar.refresh;
+        var tempCheckAll = this.usefontStyle.toolbar.menubar.checkAll;
+        var tempUnCheckAll = this.usefontStyle.toolbar.menubar.unCheckAll;
+        var tempInvertAll = this.usefontStyle.toolbar.menubar.invertAll;
+        var tempRemove = this.usefontStyle.toolbar.menubar.remove;
+        var tempSearch = this.usefontStyle.toolbar.menubar.search;
+        var tempExt = this.usefontStyle.toolbar.menubarExt;
+        var tempPulldown = this.usefontStyle.toolbar.pulldown;
+        var tempPullup = this.usefontStyle.toolbar.pullup;
+        var tempAdd = this.usefontStyle.toolbar.add;
+        var tempEdit = this.usefontStyle.toolbar.edit;
+        var tempDel = this.usefontStyle.toolbar.del;
+
+
+        if(typeof toolbar === 'undefined'){
+            this.usefontStyle.toolbar.menubar.movedown = (tempMovedown == "") ? (ifont + " " + this.usefontStyle.menubar.movedown) : tempMovedown;
+            this.usefontStyle.toolbar.menubar.moveup = (tempMoveup == "") ? (ifont + " " + this.usefontStyle.menubar.moveup) : tempMoveup;
+            this.usefontStyle.toolbar.menubar.refresh = (tempRefresh == "") ? (ifont + " " + this.usefontStyle.menubar.refresh) : tempRefresh;
+            this.usefontStyle.toolbar.menubar.checkAll = (tempCheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.checkAll) : tempCheckAll;
+            this.usefontStyle.toolbar.menubar.unCheckAll = (tempUnCheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.unCheckAll) : tempUnCheckAll;
+            this.usefontStyle.toolbar.menubar.invertAll = (tempInvertAll == "") ? (ifont + " " + this.usefontStyle.menubar.invertAll) : tempInvertAll;
+            this.usefontStyle.toolbar.menubar.remove = (tempRemove == "") ? (ifont + " " + this.usefontStyle.menubar.remove) : tempRemove;
+            this.usefontStyle.toolbar.menubar.search = (tempSearch == "") ? (ifont + " " + this.usefontStyle.menubar.search) : tempSearch;
+            this.usefontStyle.toolbar.menubarExt = (tempExt == "") ? this.usefontStyle.menubarExt : tempExt;
+            this.usefontStyle.toolbar.pulldown = (tempPulldown == "") ? (ifont + " " + LI_DIV_TOOLBAR_PULLDOWN) : tempPulldown;
+            this.usefontStyle.toolbar.pullup = (tempPullup == "") ? (ifont + " " + LI_DIV_TOOLBAR_PULLUP) : tempPullup;
+            this.usefontStyle.toolbar.add = (tempAdd == "") ? (ifont + " " + LI_DIV_TOOLBAR_ADD) : tempAdd;
+            this.usefontStyle.toolbar.edit = (tempEdit == "") ? (ifont + " " + LI_DIV_TOOLBAR_EDIT) : tempEdit;
+            this.usefontStyle.toolbar.del = (tempDel == "") ? (ifont + " " + LI_DIV_TOOLBAR_DEL) : tempDel;
+        } else {
+            var menubar = toolbar.menubar;
+            var menubarExt = toolbar.menubarExt;
+            var pulldown = toolbar.pulldown;
+            var pullup = toolbar.pullup;
+            var add = toolbar.add;
+            var edit = toolbar.edit;
+            var del = toolbar.del;
+
+            if(typeof menubar === 'undefined'){
+                this.usefontStyle.toolbar.menubar.movedown = (tempMovedown == "") ? (ifont + " " + this.usefontStyle.menubar.movedown) : tempMovedown;
+                this.usefontStyle.toolbar.menubar.moveup = (tempMoveup == "") ? (ifont + " " + this.usefontStyle.menubar.moveup) : tempMoveup;
+                this.usefontStyle.toolbar.menubar.refresh = (tempRefresh == "") ? (ifont + " " + this.usefontStyle.menubar.refresh) : tempRefresh;
+                this.usefontStyle.toolbar.menubar.checkAll = (tempCheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.checkAll) : tempCheckAll;
+                this.usefontStyle.toolbar.menubar.unCheckAll = (tempUncheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.unCheckAll) : tempUncheckAll;
+                this.usefontStyle.toolbar.menubar.invertAll = (tempInvertAll == "") ? (ifont + " " + this.usefontStyle.menubar.invertAll) : tempInvertAll;
+                this.usefontStyle.toolbar.menubar.remove = (tempRemove == "") ? (ifont + " " + this.usefontStyle.menubar.remove) : tempRemove;
+                this.usefontStyle.toolbar.menubar.search = (tempSearch == "") ? (ifont + " " + this.usefontStyle.menubar.search) : tempSearch;
+            } else {
+                var movedown = menubar.movedown;
+                var moveup = menubar.moveup;
+                var refresh = menubar.refresh;
+                var checkAll = menubar.checkAll;
+                var unCheckAll = menubar.unCheckAll;
+                var invertAll = menubar.invertAll;
+                var remove = menubar.remove;
+                var search = menubar.search;
+                if(typeof movedown === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.movedown = (tempMovedown == "") ? (ifont + " " + this.usefontStyle.menubar.movedown) : tempMovedown;
+                } else {
+                    this.usefontStyle.toolbar.menubar.movedown = ifont + " " + movedown;
+                }
+                if(typeof moveup === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.moveup = (tempMoveup == "") ? (ifont + " " + this.usefontStyle.menubar.moveup) : tempMoveup;
+                } else {
+                    this.usefontStyle.toolbar.menubar.moveup = ifont + " " + moveup;
+                }
+                if(typeof refresh === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.refresh = (tempRefresh == "") ? (ifont + " " + this.usefontStyle.menubar.refresh) : tempRefresh;
+                } else {
+                    this.usefontStyle.toolbar.menubar.refresh = ifont + " " + refresh;
+                }
+                if(typeof checkAll === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.checkAll = (tempCheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.checkAll) : tempCheckAll;
+                } else {
+                    this.usefontStyle.toolbar.menubar.checkAll = ifont + " " + checkAll;
+                }
+                if(typeof unCheckAll === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.unCheckAll = (tempUncheckAll == "") ? (ifont + " " + this.usefontStyle.menubar.unCheckAll) : tempUncheckAll;
+                } else {
+                    this.usefontStyle.toolbar.menubar.unCheckAll = ifont + " " + unCheckAll;
+                }
+                if(typeof invertAll === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.invertAll = (tempInvertAll == "") ? (ifont + " " + this.usefontStyle.menubar.invertAll) : tempInvertAll;
+                } else {
+                    this.usefontStyle.toolbar.menubar.invertAll = ifont + " " + invertAll;
+                }
+                if(typeof remove === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.remove = (tempRemove == "") ? (ifont + " " + this.usefontStyle.menubar.remove) : tempRemove;
+                } else {
+                    this.usefontStyle.toolbar.menubar.remove = ifont + " " + remove;
+                }
+                if(typeof search === 'undefined') {
+                    this.usefontStyle.toolbar.menubar.search = (tempSearch == "") ? (ifont + " " + this.usefontStyle.menubar.search) : tempSearch;
+                } else {
+                    this.usefontStyle.toolbar.menubar.search = ifont + " " + search;
+                }
+            }
+
+            if(typeof menubarExt === 'undefined'){
+                this.usefontStyle.toolbar.menubarExt = (tempExt == "") ? this.usefontStyle.menubarExt : tempExt;
+            } else {
+                this.usefontStyle.toolbar.menubarExt = menubarExt;
+            }
+
+            if(typeof pulldown === 'undefined'){
+                this.usefontStyle.toolbar.pulldown = (tempPulldown == "") ? (ifont + " " + LI_DIV_TOOLBAR_PULLDOWN) : tempPulldown;
+            } else {
+                this.usefontStyle.toolbar.pulldown = ifont + " " + pulldown;
+            }
+            if(typeof pullup === 'undefined'){
+                this.usefontStyle.toolbar.pullup = (tempPullup == "") ? (ifont + " " + LI_DIV_TOOLBAR_PULLUP) : tempPullup;
+            } else {
+                this.usefontStyle.toolbar.pullup = ifont + " " + pullup;
+            }
+            if(typeof add === 'undefined'){
+                this.usefontStyle.toolbar.add = (tempAdd == "") ? (ifont + " " + LI_DIV_TOOLBAR_ADD) : tempAdd;
+            } else {
+                this.usefontStyle.toolbar.add = ifont + " " + add;
+            }
+            if(typeof edit === 'undefined'){
+                this.usefontStyle.toolbar.edit = (tempEdit == "") ? (ifont + " " + LI_DIV_TOOLBAR_EDIT) : tempEdit;
+            } else {
+                this.usefontStyle.toolbar.edit = ifont + " " + edit;
+            }
+            if(typeof del === 'undefined'){
+                this.usefontStyle.toolbar.del = (tempDel == "") ? (ifont + " " + LI_DIV_TOOLBAR_DEL) : tempDel;
+            } else {
+                this.usefontStyle.toolbar.del = ifont + " " + del;
+            }
+        }
+    };
+
+    /**
+     * @Desc: 赋值扩展工具栏图标的class属性变量
+     * @Param: ifont： 当前的图标class前缀，如 dtreefont
+     * @Param: toolbarExt： 当前的图标class实际图标，如 dtree-icon-jia1
+     */
+    DTree.prototype.useDefaultOrUserDefineToolbarExtStyle = function(ifont, toolbarExt){
+        var _this = this;
+        var tempExt = this.usefontStyle.toolbarExt;
+
+        if(typeof toolbarExt === 'undefined'){
+            this.usefontStyle.toolbarExt = (tempExt == "") ? ifont : tempExt;
+        } else {
+            this.usefontStyle.toolbarExt = toolbarExt;
+        }
+    };
+
+    /**
+     * @Desc: 设置图标的展开关闭，以及展开时/关闭时是最后一级图标的处理
+     * @Param: $i_fnode： JQuery对象，表示一级图标节点
+     * @Param: $i_snode： JQuery对象，表示二级图标节点
+     */
+    DTree.prototype.operateIcon = function($i_fnode, $i_snode){
+        var _this = this;
+        var ficonClass = $i_fnode.attr("data-iconClass");
+        var iconClass = $i_snode.attr("data-iconClass");
+        return{
+            open: function(){
+                $i_fnode.attr("data-spread","open");
+                $i_snode.attr("data-spread","open");
+                if(!ficonClass) {
+                    $i_fnode.removeClass(_this.usefontStyle.fnode.node.close);
+                    $i_fnode.addClass(_this.usefontStyle.fnode.node.open);
+                }
+                if(!iconClass) {
+                    $i_snode.removeClass(_this.usefontStyle.snode.node.close);
+                    $i_snode.addClass(_this.usefontStyle.snode.node.open);
+                }
+            },
+            close: function(){
+                $i_fnode.attr("data-spread","close");
+                $i_snode.attr("data-spread","close");
+                if(!ficonClass) {
+                    $i_fnode.removeClass(_this.usefontStyle.fnode.node.open);
+                    $i_fnode.addClass(_this.usefontStyle.fnode.node.close);
+                }
+                if(!iconClass) {
+                    $i_snode.removeClass(_this.usefontStyle.snode.node.open);
+                    $i_snode.addClass(_this.usefontStyle.snode.node.close);
+                }
+            },
+            openWithLeaf: function(){
+                $i_fnode.attr("data-spread","open");
+                $i_snode.attr("data-spread","open");
+                if(!ficonClass) {
+                    $i_fnode.removeClass(_this.usefontStyle.fnode.leaf);
+                    $i_fnode.addClass(_this.usefontStyle.fnode.node.open);
+                }
+                if(!iconClass) {
+                    $i_snode.removeClass(_this.usefontStyle.snode.leaf);
+                    $i_snode.addClass(_this.usefontStyle.snode.node.open);
+                }
+            },
+            closeWithLeaf: function(){
+                $i_fnode.attr("data-spread","last");
+                $i_snode.attr("data-spread","last");
+
+                if(!ficonClass) {
+                    $i_fnode.removeClass(_this.usefontStyle.fnode.node.open);
+                    $i_fnode.removeClass(_this.usefontStyle.fnode.node.close);
+                    $i_fnode.addClass(_this.usefontStyle.fnode.leaf);
+                }
+
+                if(!iconClass) {
+                    $i_snode.removeClass(_this.usefontStyle.snode.node.open);
+                    $i_snode.removeClass(_this.usefontStyle.snode.node.close);
+                    $i_snode.addClass(_this.usefontStyle.snode.leaf);
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc: 显示树线
+     * @Param: $lis： JQuery对象，表示组成树的li节点集
+     */
+    DTree.prototype.showLine = function($lis){
+        var _this = this;
+        if(_this.line){
+            if($lis && $lis.length > 0) {
+                $lis.each(function(){
+                    _this.showLineLi($(this));
+                });
+            } else {
+                _this.obj.find("li[data-id]").each(function(){
+                    _this.showLineLi($(this));
+                });
+            }
+        }
+    }
+
+    /**
+     * @Desc: 真正显示树线的方法
+     * @Param: $li： JQuery对象，表示组成树的li节点
+     */
+    DTree.prototype.showLineLi = function($li){
+        var _this = this;
+        var $div = $li.children("div"),
+            $nextLi = $li.next("li"),
+            $ul = $li.parent("ul");
+        if($ul[0].id == _this.obj[0].id) {
+            // 根节点下的节点
+            $li.removeClass(LI_NAV_LINE);
+            $li.removeClass(LI_NAV_LAST_LINE);
+            $li.addClass(LI_NAV_FIRST_LINE);
+        } else {
+            // 非根节点下的节点
+            var $pnextLi = $ul.parent("li").next("li");
+            if($pnextLi.length == 0) {
+                if($nextLi.length == 0){
+                    $li.removeClass(LI_NAV_LINE);
+                    $li.removeClass(LI_NAV_FIRST_LINE);
+                    $li.addClass(LI_NAV_LAST_LINE);
+                } else {
+                    $li.removeClass(LI_NAV_FIRST_LINE);
+                    $li.removeClass(LI_NAV_LAST_LINE);
+                    $li.addClass(LI_NAV_LINE);
+                }
+            }else {
+                var $pnextdiv = $pnextLi.children("div");
+                if($nextLi.length == 0 && $div.children("cite").attr("data-leaf") == "leaf" && $pnextdiv.children("cite").attr("data-leaf") == "leaf") {
+                    $li.removeClass(LI_NAV_FIRST_LINE);
+                    $li.removeClass(LI_NAV_LINE);
+                    $li.addClass(LI_NAV_LAST_LINE);
+                } else {
+                    $li.removeClass(LI_NAV_FIRST_LINE);
+                    $li.removeClass(LI_NAV_LAST_LINE);
+                    $li.addClass(LI_NAV_LINE);
+                }
+            }
+        }
+    }
+
+    /******************** 初始化数据区域 ********************/
+    /**
+     * @Desc: 设置高度
+     */
+    DTree.prototype.autoHeight = function(){
+        var _this = this;
+        var height = _this.height;
+        if(height != "") {
+            if(_this.elem == _this.scroll){
+                _this.obj.parent().css("height", height + "px");
+            } else {
+                var $toolbarDiv = _this.obj.closest(_this.scroll);
+                $toolbarDiv.css("height", height + "px");
+            }
+        }
+    };
+
+    /**
+     * @Desc:  重载树
+     * @Param: options： dtree的所有属性的json对象
+     */
+    DTree.prototype.reload = function(options){
+        var _this = this;
+        _this.reloadSetting(options);
+        _this.init();
+    };
+
+    /**
+     * @Desc:  初始化加载
+     */
+    DTree.prototype.loadTreeInit = function(){
+    	var _this = this;
+    	var asyncLoad = _this.asyncLoad;
+    	// 初始化加载
+    	_this.init(function(){
+    		// ajax加载之后的回调
+    		if(asyncLoad && asyncLoad.length > 0) {
+    			_this.obj.addClass(NAV_SHOW);
+    			
+    			// 说明此时要异步加载子节点
+    			_this.loadChildTreeInit(asyncLoad, 0);
+    		}
+    	})
+    }
+    
+    /**
+     * @Desc:  初始化加载子节点
+     * @Param: asyncLoad： 需异步加载的层级，在基础属性中配置
+     * @Param: i： 已经加载到的层级
+     */
+    DTree.prototype.loadChildTreeInit = function(asyncLoad, i){
+    	var _this = this;
+    	if(i == asyncLoad.length) { // 满足条件，终止递归
+    		return ;
+    	}
+
+    	var $div = _this.getNode(asyncLoad[i]);
+    	
+    	if($div && $div.length > 0) {
+    		// 设置节点状态
+    		var $ul = $div.next("ul"),
+	    		$i_fnode = _this.getNodeDom($div).fnode(),
+	            $i_snode = _this.getNodeDom($div).snode();
+    		
+    		$ul.addClass(NAV_SHOW);
+    		_this.accordionUL($ul);
+    		_this.operateIcon($i_fnode, $i_snode).open();
+    		// 加载子节点
+    		_this.getChild($div, undefined, function(){
+    			// 继续递归
+    			_this.loadChildTreeInit(asyncLoad, ++i);
+    		});
+    	}
+    	
+    }
+    
+    /**
+     * @Desc:  初始化树
+     * @Param: callback： 异步加载完成之后的回调函数
+     */
+    DTree.prototype.init = function(callback){
+        var _this = this;
+        if (typeof _this !== "object") {
+            layer.msg("树组件未成功加载，请检查配置", {icon:5});
+            return ;
+        }
+
+        // 设置组件高度
+        _this.autoHeight();
+
+        if(_this.data) {
+        	_this.dataLoadTree(true, _this.obj, _this.data);
+        } else {
+        	_this.asyncLoadTree(true, _this.obj, callback);
+        }
+    };
+
+    /**
+     * @Desc:  加载子节点
+     * @Param: $div： JQuery对象，代表当前子节点的父节点div
+     * @Param: data： data方式加载的数据
+     * @Param: callback： 子节点加载完成之后的回调喊出
+     */
+    DTree.prototype.getChild = function($div, data, callback) {
+        var _this = this, $ul = $div.next("ul");
+
+        _this.setNodeParam($div);
+
+        if(typeof data !== 'undefined') {
+        	_this.dataLoadTree(false, $ul, data);
+        } else {
+        	_this.asyncLoadTree(false, $ul, callback);
+        }
+    };
+    
+    /**
+     * @Desc:  用data加载树
+     * @Param: first： 表示是否第一次加载
+     * @Param: $ul： JQuery对象，代表当前数据加载到的ul标签里
+     * @Param: data： data加载的数据
+     */
+    DTree.prototype.dataLoadTree = function(first, $ul, data){
+    	var _this = this;
+    	
+    	if(typeof data.length === 'undefined'){
+            layer.msg("数据解析异常，data数据格式不正确", {icon:5});
+            return ;
+        }
+
+        if(first && data.length == 0) {
+        	$ul.html(_this.getNoneDom().text());
+            return ;
+        }
+
+        //先将ul中的元素清空
+        $ul.html("");
+        
+        var index = _this.load ? layer.load(1) : "";
+
+        setTimeout(function () {
+            // 加载完毕后执行树解析前的回调
+            var returnData = _this.success(data, $ul, first);
+            if(returnData) {
+                data = returnData;
+            }
+
+            var pid = (first == true) ? $ul.attr("data-id") : _this.node.nodeId;
+            var level = (first == true) ? 1 : parseInt(_this.node.level)+1;
+            
+            // 解析树
+            if (_this.dataFormat == 'list'){
+                //1.构建一个存放节点的树组
+                var rootListData = _this.queryListTreeByPid(pid, data);
+                _this.loadListTree(rootListData, _this.data, level);
+            } else {
+                _this.loadTree(data, level);
+            }
+            
+            // 显示树线
+            _this.showLine();
+
+            // 这种情况下需要一开始就将toolbar显示在页面上
+            if(_this.toolbar && _this.toolbarWay != 'contextmenu') {
+                _this.setToolbarDom().setToolbarPlace(_this.toolbarMenu);
+            }
+
+            // 判断是否存在错误数据，并是否打印错误数据
+            _this.msgErrData();
+            
+            // 设置下拉树的初始值
+            if(first && _this.select && _this.selectInitVal){
+            	if(_this.checkbar) { // 复选框模式下
+            		_this.chooseDataInit(_this.selectInitVal);
+            		_this.selectCheckboxVal(_this.selectInitVal);
+            	} else { // 普通模式下
+            		_this.dataInit(_this.selectInitVal);
+            		_this.selectVal(_this.selectInitVal);
+            	}
+            }
+
+            // 保存树副本
+            _this.bak = _this.obj.html();
+            
+            // 加载完毕后的回调
+            _this.done(_this.data, $ul, first);
+            
+            if(_this.load){layer.close(index);}
+        }, 100);
+    }
+    
+    /**
+     * @Desc:  异步加载树
+     * @Param: first： 表示是否第一次加载
+     * @Param: $ul： JQuery对象，代表当前数据加载到的ul标签里
+     * @Param: callback： 异步加载完成之后的回调函数
+     */
+    DTree.prototype.asyncLoadTree = function(first, $ul, callback){
+    	var _this = this;
+    	
+    	if (!_this.url) {
+            layer.msg("数据请求异常，url参数未指定", {icon:5});
+            return ;
+        }
+
+        //先将ul中的元素清空
+        $ul.html("");
+
+        var index = "";
+
+        AjaxHelper.request({
+            async: _this.async,
+            headers: _this.headers,
+            type: _this.method,
+            url: _this.url,
+            dataType: _this.dataType,
+            contentType: _this.contentType,
+            withCredentials: _this.withCredentials,
+            data: _this.getFilterRequestParam(_this.getRequestParam()),
+            beforeSend: function(XMLHttpRequest, self){
+            	index = _this.load ? layer.load(1) : "";
+            	var returnFlag = _this.beforeSend(this, XMLHttpRequest, self);
+            	if(!returnFlag) {
+            		if(_this.load){layer.close(index);}
+            	}
+            	return returnFlag;
+            },
+            success: function(result) {
+                if (typeof result === 'string') {
+                    result = $.parseJSON(result);
+                }
+
+                // 加载完毕后执行树解析前的回调
+                var returnData = _this.success(result, $ul, first);
+                if(returnData) {
+                    result = returnData;
+                }
+
+                var code = "";
+                if (_this.dataStyle == 'layuiStyle'){
+                    code = result[_this.response.statusName];
+                } else {
+                    code = result.status[_this.response.statusName];
+                }
+
+                if (code == _this.response.statusCode) {
+                	
+                    var d = result[_this.response.rootName];
+
+                    if(first && typeof d.length === 'undefined'){
+                        $ul.html(_this.getNoneDom().errText("数据解析异常，url回调后的数据格式不正确"));
+                        //layer.msg("数据解析异常，url回调后的数据格式不正确", {icon:5});
+                        return ;
+                    }
+
+                    if(first && d.length == 0) {
+                        $ul.html(_this.getNoneDom().text());
+                        return ;
+                    }
+
+                    //1.识别根节点ul中的data-id标签，判断顶级父节点
+                    var pid = (first == true) ? $ul.attr("data-id") : _this.node.nodeId;
+                    var level = (first == true) ? 1 : parseInt(_this.node.level)+1;
+                    
+                    // 第一次解析树
+                    if (_this.dataFormat == 'list'){
+                        //1.构建一个存放节点的树组
+                        var rootListData = _this.queryListTreeByPid(pid, d);
+                        if(first) {
+                        	_this.loadListTree(rootListData, d, level);
+                        } else {
+                        	_this.loadListTree(rootListData, d, level, $ul);
+                        }
+                    } else {
+                    	if(first) {
+                    		 _this.loadTree(d, level);
+                        } else {
+                        	 _this.loadTree(d, level, $ul);
+                        }
+                    }
+
+                    // 显示树线
+                    _this.showLine();
+
+                    // 这种情况下需要一开始就将toolbar显示在页面上
+                    if(_this.toolbar && _this.toolbarWay != 'contextmenu') {
+                        _this.setToolbarDom().setToolbarPlace(_this.toolbarMenu);
+                    }
+
+                    // 判断是否存在错误数据，并是否打印错误数据
+                    _this.msgErrData();
+                    
+                    if(!first) {
+                    	$ul.addClass(NAV_SHOW);
+                    }
+                    
+                    // 设置下拉树的初始值
+                    if(first && _this.select && _this.selectInitVal){
+                    	if(_this.checkbar) { // 复选框模式下
+                    		_this.chooseDataInit(_this.selectInitVal);
+                    		_this.selectCheckboxVal(_this.selectInitVal);
+                    	} else { // 普通模式下
+                    		_this.dataInit(_this.selectInitVal);
+                    		_this.selectVal(_this.selectInitVal);
+                    	}
+                    }
+
+                    // 保存树副本
+                    _this.bak = _this.obj.html();
+                    
+                    // 加载完毕后的回调
+                    _this.done(result, $ul, first);
+                    
+                    callback && callback();
+                } else {
+                    // 如果打印不出任何信息说明是在这里，用了错误的数据格式， 或返回码不正确
+                    if (_this.dataStyle == 'layuiStyle'){
+                        _this.obj.html(_this.getNoneDom().errText(result[_this.response.message]));
+                        _this.error(null, code, result[_this.response.message]);
+                    } else {
+                        _this.obj.html(_this.getNoneDom().errText(result.status[_this.response.message]));
+                        _this.error(null, code, result.status[_this.response.message]);
+                    }
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){// 异步加载异常回调
+                _this.obj.html(_this.getNoneDom().errText(textStatus + ": " + errorThrown));
+                _this.error(XMLHttpRequest, textStatus, errorThrown);
+            },
+            complete: function(XMLHttpRequest, textStatus){// 异步加载完成回调
+                if(_this.load){layer.close(index);}
+                _this.complete(XMLHttpRequest, textStatus);
+            }
+        });
+    	
+    }
+
+    /**
+     * @Desc:  初始化渲染树或者拼接渲染树，list模式下
+     * @Param: nowListData： 表示当前需要被渲染的数据
+     * @Param: listData： 表示全部数据
+     * @Param: level： 当前渲染的层级
+     * @Param: $ul： JQuery对象，代表当前数据加载到的ul标签里
+     */
+    DTree.prototype.loadListTree = function(nowListData, listData, level, $ul){
+        var _this = this;
+        $ul = $ul || _this.getNodeDom().nowOrRootUl();	//当前选中的节点或根节点
+        if (nowListData.length > 0){
+            for (var i = 0; i < nowListData.length; i++) {
+                // 1.获取已知节点的全部数据
+                var data = nowListData[i];
+                if(typeof data !== "object") continue;
+                var parseData = _this.parseData(data);
+                var childListData = _this.queryListTreeByPid(parseData.treeId(), listData); // 根据已知数据的id判断该条数据是否还有子数据
+
+                // 3. 页面元素加载数据
+                $ul.append(_this.getLiItemDom(parseData.treeId(), parseData.parentId(), parseData.title(), parseData.fmtTitle(), parseData.last(childListData.length), parseData.ficonClass(), parseData.iconClass(), parseData.checkArr(), level, parseData.spread(level), parseData.disabled(), parseData.hide(), parseData.basicData(), parseData.recordData(), ($ul.hasClass(UL_ROOT) ? "root" : "item")));
+                // 4.有子数据的元素加载子节点
+                if(childListData.length > 0){
+                    var cLevel = parseInt(level)+1;
+                    _this.loadListTree(childListData, listData, cLevel, _this.obj.find("ul[data-id='"+parseData.treeId()+"']"));
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc:  根据父ID查找list数据中匹配的元素
+     * @Param: pid： 表示父ID
+     * @Param: listData： 表示全部数据
+     */
+    DTree.prototype.queryListTreeByPid = function(pid, listData){
+        var _this = this;
+        var rootListData = [];
+        if (listData) {
+            for (var i = 0; i < listData.length; i++) {
+                var data = listData[i];
+                if(typeof data !== "object") continue;
+                if(pid == "null" || pid == null){
+                    if(data[_this.response.parentId] == null) { rootListData.push(data); }
+                } else {
+                    if (data[_this.response.parentId] == pid){
+                        if (data[_this.response.treeId] == pid){
+                            _this.errData.push(data);
+                        } else {
+                            rootListData.push(data);
+                        }
+                    }
+                }
+            }
+        }
+        return rootListData;
+    };
+
+    /**
+     * @Desc:  初始化渲染树或者拼接渲染树，层级关系模式下
+     * @Param: listData： 表示全部数据
+     * @Param: level： 当前渲染的层级
+     * @Param: $ul： JQuery对象，代表当前数据加载到的ul标签里
+     */
+    DTree.prototype.loadTree = function(listData, level, $ul){
+        var _this = this;
+        if (listData) {
+            $ul = $ul || _this.getNodeDom().nowOrRootUl();	//当前选中的节点或根节点
+            for (var i = 0; i < listData.length; i++) {	// 遍历跟节点或追加的跟节点
+                var data = listData[i];
+                if(typeof data !== "object") continue;
+                if(data[_this.response.treeId] == data[_this.response.parentId]) { _this.errData.push(data); }
+                var parseData = _this.parseData(data);
+                var children = parseData.children();
+                $ul.append(_this.getLiItemDom(parseData.treeId(), parseData.parentId(), parseData.title(), parseData.fmtTitle(), parseData.last(children.length), parseData.ficonClass(), parseData.iconClass(), parseData.checkArr(), level, parseData.spread(level), parseData.disabled(), parseData.hide(), parseData.basicData(), parseData.recordData(), ($ul.hasClass(UL_ROOT) ? "root" : "item")));
+                if (children.length != 0) {
+                    var cLevel = parseInt(level)+1;
+                    _this.loadTree(children, cLevel, _this.obj.find("ul[data-id='"+parseData.treeId()+"']"));
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc:  判断在数据加载时是否存在错误数据，并是否打印错误数据
+     * @Param: 
+     */
+    DTree.prototype.msgErrData = function() {
+        var _this = this;
+        if(_this.errData.length > 0 && _this.errDataShow) {
+            var title = "";
+            for(var i=0; i<_this.errData.length; i++) {
+                var edata = _this.errData[i];
+                title += "数据：【"+edata[_this.response.title]+"】中节点id和上级id值一致！ \n";
+            }
+            layer.msg(title, {icon:2,time:5000});
+        }
+        // 显示之后，将错误数据制空
+        _this.errData = [];
+    };
+
+    /**
+     * @Desc:   解析单个数据
+     * @Param: data： 被解析的单个数据对象
+     */
+    DTree.prototype.parseData = function(data) {
+        var _this = this;
+
+        return {
+            treeId: function(){
+                return data[_this.response.treeId];
+            },
+            parentId: function(){
+                return data[_this.response.parentId];
+            },
+            fmtTitle: function(){
+                if(typeof _this.formatter.title === 'function'){
+                    var ftitle = _this.formatter.title(data);
+                    var tt = data[_this.response.title];
+                    tt = (ftitle == "" || ftitle == undefined || ftitle == null) ? tt : ftitle;
+                    return tt || "";
+                }
+                return data[_this.response.title];
+            },
+            title: function(){
+                return data[_this.response.title];
+            },
+            level: function(){
+                return data[_this.response.level] || "";
+            },
+            ficonClass: function(){
+                return data[_this.response.ficonClass] || "";
+            },
+            iconClass: function(){
+                return data[_this.response.iconClass] || "";
+            },
+            last: function(len){
+                return ((len == 0) ?
+                    ((typeof (data[_this.response.last]) === "boolean") ? data[_this.response.last] : true) :
+                    ((typeof (data[_this.response.last]) === "boolean") ? data[_this.response.last] : false));
+            },
+            spread: function(level){
+                return ((level < _this.initLevel) ?
+                    ((typeof (data[_this.response.spread]) === "boolean") ? data[_this.response.spread] : true) :
+                    ((typeof (data[_this.response.spread]) === "boolean") ? data[_this.response.spread] : false));
+            },
+            disabled: function(){
+                return (typeof (data[_this.response.disabled]) === "boolean") ? data[_this.response.disabled] : false;
+            },
+            hide: function(){
+                return (typeof (data[_this.response.hide]) === "boolean") ? data[_this.response.hide] : false;
+            },
+            checkArr: function(){
+                var checkArr = [];
+                var checkArrData = data[_this.response.checkArr];
+                if(typeof checkArrData === 'string'){
+                    if(checkArrData.indexOf("{") > -1 && checkArrData.indexOf("}") > -1){
+                        checkArrData = JSON.parse(checkArrData);
+                    } else {
+                        checkArrData = {"type":"0","checked":checkArrData};
+                    }
+                }
+                if((typeof checkArrData === 'object') && (checkArrData !== null)){
+                    if(typeof checkArrData.length === 'undefined'){
+                        checkArr.push(checkArrData);
+                    } else {
+                        checkArr = checkArrData;
+                    }
+                }
+
+                if(checkArr.length > 0 && checkArr.length > _this.checkArrLen){
+                    _this.checkArrLen = checkArr.length;		// 获取复选框个数
+                }
+                return checkArr;
+
+            },
+            children: function(){
+                return data[_this.response.childName] || [];
+            },
+            basicData: function(){
+                return event.escape(JSON.stringify(data[_this.response.basicData])) || JSON.stringify({});
+            },
+            recordData: function(){
+                var recordData = _this.record ? event.cloneObj(data, [_this.response.treeId,
+                    _this.response.parentId,
+                    _this.response.title,
+                    _this.response.iconClass,
+                    _this.response.childName,
+                    _this.response.last,
+                    _this.response.spread,
+                    _this.response.disabled,
+                    _this.response.hide,
+                    _this.response.checkArr,
+                    _this.response.checked,
+                    _this.response.type,
+                    _this.response.basicData]) : {};
+
+                return event.escape(JSON.stringify(recordData));
+            },
+            data: function(){
+                return data;
+            }
+        }
+
+    };
+
+    /**
+     * @Desc: 无节点数据、节点数据异常时显示dom
+     */
+    DTree.prototype.getNoneDom = function(){
+        var _this = this,
+            rootId = _this.obj[0].id,
+            noneTitle = _this.none;
+
+        return {
+            text: function(){
+                return "<div class='"+NONETITLE+"' dtree-id='"+rootId+"'>"+noneTitle+"</div>";
+            },
+            errText: function(errInfo){
+                return "<div class='"+NONETITLE+"' dtree-id='"+rootId+"'>"+errInfo+"</div>";
+            }
+        }
+    };
+
+    /**
+     * @Desc: 新增节点的dom值
+     * @Param: treeId： 节点ID
+     * @Param: parentId： 节点父ID
+     * @Param: title： 节点标题
+     * @Param: fmtTitle： 节点附加标题
+     * @Param: last： 是否最后一级节点
+     * @Param: ficonClass： 一级图标class
+     * @Param: iconClass： 二级图标class
+     * @Param: checkArr： 复选框
+     * @Param: spread： 是否展开
+     * @Param: disabled： 是否禁用
+     * @Param: hide： 是否隐藏
+     */
+    DTree.prototype.getDom = function(treeId, parentId, title, fmtTitle, last, ficonClass, iconClass, checkArr, level, spread, disabled, hide) {
+        var _this = this,
+            rootId = _this.obj[0].id,
+            toolbar = _this.toolbar,
+            checkbar = _this.checkbar;
+
+        return {
+            fnode: function() {	// + - 图标
+                // 获取图标的变量
+                var fnodeIcon = _this.fnodeIcon,
+                    fleafIcon = _this.fleafIcon;
+
+                var fleafIconLeaf = _this.usefontStyle.fnode.leaf,
+                    fnodeIconOpen =  _this.usefontStyle.fnode.node.open,
+                    fnodeIconClose =  _this.usefontStyle.fnode.node.close;
+
+                if(ficonClass){
+                    var iconfont = _this.iconfont;
+                    if(typeof iconfont === 'string') {
+                        fleafIconLeaf = iconfont + " " + ficonClass;
+                        fnodeIconOpen = iconfont + " " + ficonClass;
+                        fnodeIconClose = iconfont + " " + ficonClass;
+                    } else {
+                        fleafIconLeaf = iconfont[0] + " " + ficonClass;
+                        fnodeIconOpen = iconfont[0] + " " + ficonClass;
+                        fnodeIconClose = iconfont[0] + " " + ficonClass;
+                    }
+                }
+
+                if(fnodeIcon != "-1" && fleafIcon != "-1"){	// 都加载
+                    return last ? "<i class='"+fleafIconLeaf+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" : "<i class='"+fnodeIconClose+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }
+
+                if(fnodeIcon != "-1" && fleafIcon == "-1"){	// 加载node 隐藏leaf
+                    return last ? "<i class='"+fleafIconLeaf+" "+ICON_HIDE+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" : "<i class='"+fnodeIconClose+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }
+
+                if(fnodeIcon == "-1" && fleafIcon != "-1"){	// 隐藏node 加载leaf
+                    return last ? "<i class='"+fleafIconLeaf+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" : "<i class='"+fnodeIconClose+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }
+
+                if(fnodeIcon == "-1" && fleafIcon == "-1"){	// 都隐藏
+                    return last ? "<i class='"+fleafIconLeaf+" "+ICON_HIDE+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' style='display:none;'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"'></i>" : "<i class='"+fnodeIconClose+" "+_this.style.dfont+" "+_this.style.ficon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }
+            },
+            node: function() {	// 二级图标样式
+                // 获取图标的变量
+                var nodeIcon = _this.nodeIcon,
+                    leafIcon = _this.leafIcon;
+
+                var sleafIconLeaf = _this.usefontStyle.snode.leaf,
+                    snodeIconOpen =  _this.usefontStyle.snode.node.open,
+                    snodeIconClose =  _this.usefontStyle.snode.node.close;
+                if(iconClass){
+                    var iconfont = _this.iconfont;
+                    if(typeof iconfont === 'string') {
+                        sleafIconLeaf = iconfont + " " + iconClass;
+                        snodeIconOpen = iconfont + " " + iconClass;
+                        snodeIconClose = iconfont + " " + iconClass;
+                    } else {
+                        sleafIconLeaf = iconfont[0] + " " + iconClass;
+                        snodeIconOpen = iconfont[0] + " " + iconClass;
+                        snodeIconClose = iconfont[0] + " " + iconClass;
+                    }
+                }
+
+                if(nodeIcon != "-1" && leafIcon != "-1"){	// 都加载
+                    return last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }
+
+                if(nodeIcon != "-1" && leafIcon == "-1"){	// 加载node 隐藏leaf
+                    return last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }
+
+                if(nodeIcon == "-1" && leafIcon != "-1"){	// 隐藏node 加载leaf
+                    return last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }
+
+                if(nodeIcon == "-1" && leafIcon == "-1"){	// 都隐藏
+                    return last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }
+            },
+            checkbox: function() {	// 复选框
+                var flag = false;
+                if(_this.checkbarLoad == "node"){if (checkbar) {flag = true;}} else {if (last) {if (checkbar) {flag = true;}}}
+
+                if(flag){
+                    var result = "<div class='"+LI_DIV_CHECKBAR+"' data-id='"+treeId+"' dtree-id='"+rootId+"'>";
+                    if(checkArr && checkArr.length > 0){
+
+                        for (var i = 0; i < checkArr.length; i++) {
+                            var checkData = checkArr[i];
+                            var checked = checkData[_this.response.checked];
+                            var type = checkData[_this.response.type];
+                            var CHOOSE_CLASS = _this.usefontStyle.checkbox.out;
+                            if (checked == "2") {	//半选择
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.noall + " " + _this.style.chs;
+                            } else if (checked == "1") {	//选择
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.on + " " + _this.style.chs;
+                            } else {	//未选择或者无值
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.out;
+                            }
+                            var disClass = "";
+                            if(disabled){disClass = NAV_DIS;}
+                            result += "<i class='"+CHOOSE_CLASS+" "+_this.style.dfont+" "+_this.style.cbox+" "+disClass+"' data-id='"+treeId+"' dtree-id='"+rootId+"' data-checked='"+checked+"' data-initchecked='"+checked+"' data-type='"+type+"' dtree-click='"+eventName.checkNodeClick+"' data-par='."+LI_CLICK_CHECKBAR+"' dtree-disabled='"+disabled+"'></i>";
+                        }
+                    }
+                    result += "</div>";
+                    return result;
+                }
+
+                return "";
+            },
+            text: function() {	// 文字显示
+                var disClass = "";
+                if(disabled){disClass = NAV_DIS;}
+                return "<cite class='"+LI_DIV_TEXT_CLASS+" "+disClass+"' data-id='"+treeId+"' data-leaf='"+(last ? "leaf" : "node")+"' dtree-disabled='"+disabled+"' data-title='"+title+"' >"+fmtTitle+"</cite>";
+            },
+            ul: function() {	//子节点ul
+                return last ? "<ul class='"+LI_NAV_CHILD+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>" :
+                    (spread ? "<ul class='"+LI_NAV_CHILD+" "+NAV_SHOW+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>" : "<ul class='"+LI_NAV_CHILD+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>");
+            }
+        };
+    };
+
+    /**
+     * @Desc: 替换节点的dom值，或指定这些值
+     * @Param: $div： JQuery对象，表示当前被操作的节点
+     * @Param: treeId： 节点ID
+     * @Param: last： 是否最后一级节点
+     * @Param: spread： 是否展开
+     * @Param: disabled： 是否禁用
+     * @Param: hide： 是否隐藏
+     */
+    DTree.prototype.replaceDom = function($div, treeId, last, spread, disabled, hide) {
+        var _this = this,
+            rootId = _this.obj[0].id,
+            toolbar = _this.toolbar,
+            checkbar = _this.checkbar;
+
+        return {
+            fnode: function(ficonClass) {	// + - 图标
+                var fnode = "";
+
+                // 获取图标的变量
+                var fnodeIcon = _this.fnodeIcon,
+                    fleafIcon = _this.fleafIcon;
+
+                var fleafIconLeaf = _this.usefontStyle.fnode.leaf,
+                    fnodeIconOpen =  _this.usefontStyle.fnode.node.open,
+                    fnodeIconClose =  _this.usefontStyle.fnode.node.close;
+
+                if(ficonClass){
+                    var iconfont = _this.iconfont;
+                    if(typeof iconfont === 'string') {
+                        fleafIconLeaf = iconfont + " " + ficonClass;
+                        fnodeIconOpen = iconfont + " " + ficonClass;
+                        fnodeIconClose = iconfont + " " + ficonClass;
+                    } else {
+                        fleafIconLeaf = iconfont[0] + " " + ficonClass;
+                        fnodeIconOpen = iconfont[0] + " " + ficonClass;
+                        fnodeIconClose = iconfont[0] + " " + ficonClass;
+                    }
+                }
+
+                if(fnodeIcon != "-1" && leafIcon != "-1"){	// 都加载
+                    fnode = last ? "<i class='"+fleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+fnodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }else if(nodeIcon != "-1" && leafIcon == "-1"){	// 加载node 隐藏leaf
+                    fnode = last ? "<i class='"+fleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+fnodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }else if(nodeIcon == "-1" && leafIcon != "-1"){	// 隐藏node 加载leaf
+                    fnode = last ? "<i class='"+fleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+fnodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }else if(nodeIcon == "-1" && leafIcon == "-1"){	// 都隐藏
+                    fnode = last ? "<i class='"+fleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+fnodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+fnodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+ficonClass+"'></i>");
+                }
+                if(fnode != ""){_this.getNodeDom($div).fnode().replaceWith($(fnode));}
+            },
+            node: function(iconClass) {	// 二级图标样式
+                var snode = "";
+
+                // 获取图标的变量
+                var nodeIcon = _this.nodeIcon,
+                    leafIcon = _this.leafIcon;
+
+                var sleafIconLeaf = _this.usefontStyle.snode.leaf,
+                    snodeIconOpen =  _this.usefontStyle.snode.node.open,
+                    snodeIconClose =  _this.usefontStyle.snode.node.close;
+                if(iconClass){
+                    var iconfont = _this.iconfont;
+                    if(typeof iconfont === 'string') {
+                        sleafIconLeaf = iconfont + " " + iconClass;
+                        snodeIconOpen = iconfont + " " + iconClass;
+                        snodeIconClose = iconfont + " " + iconClass;
+                    } else {
+                        sleafIconLeaf = iconfont[0] + " " + iconClass;
+                        snodeIconOpen = iconfont[0] + " " + iconClass;
+                        snodeIconClose = iconfont[0] + " " + iconClass;
+                    }
+                }
+
+                if(nodeIcon != "-1" && leafIcon != "-1"){	// 都加载
+                    snode = last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }else if(nodeIcon != "-1" && leafIcon == "-1"){	// 加载node 隐藏leaf
+                    snode = last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }else if(nodeIcon == "-1" && leafIcon != "-1"){	// 隐藏node 加载leaf
+                    snode = last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }else if(nodeIcon == "-1" && leafIcon == "-1"){	// 都隐藏
+                    snode = last ? "<i class='"+sleafIconLeaf+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='last' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" :
+                        (spread ? "<i class='"+snodeIconOpen+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='open' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>" : "<i class='"+snodeIconClose+" "+DTREEFONTSPECIAL+" "+_this.style.dfont+" "+_this.style.icon+"' data-spread='close' data-id='"+treeId+"' dtree-id='"+rootId+"' data-iconClass='"+iconClass+"'></i>");
+                }
+                if(snode != ""){_this.getNodeDom($div).snode().replaceWith($(snode));}
+            },
+            checkbox: function(checkArr) {	// 复选框
+                var flag = false;
+                if(_this.checkbarLoad == "node"){if (checkbar) {flag = true;}} else {if (last) {if (checkbar) {flag = true;}}}
+
+                if(flag){
+                    var result = "<div class='"+LI_DIV_CHECKBAR+"' data-id='"+treeId+"' dtree-id='"+rootId+"'>";
+                    if(checkArr && checkArr.length > 0){
+
+                        for (var i = 0; i < checkArr.length; i++) {
+                            var checkData = checkArr[i];
+                            var checked = checkData[_this.response.checked];
+                            var type = checkData[_this.response.type];
+                            var CHOOSE_CLASS = _this.usefontStyle.checkbox.out;
+                            if (checked == "2") {	//半选择
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.noall + " " + _this.style.chs;
+                            } else if (checked == "1") {	//选择
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.on + " " + _this.style.chs;
+                            } else {	//未选择或者无值
+                                CHOOSE_CLASS = _this.usefontStyle.checkbox.out;
+                            }
+                            var disClass = "";
+                            if(disabled){disClass = NAV_DIS;}
+                            result += "<i class='"+CHOOSE_CLASS+" "+_this.style.dfont+" "+_this.style.cbox+" "+disClass+"' data-id='"+treeId+"' dtree-id='"+rootId+"' data-checked='"+checked+"' data-initchecked='"+checked+"' data-type='"+type+"' dtree-click='"+eventName.checkNodeClick+"' data-par='."+LI_CLICK_CHECKBAR+"' dtree-disabled='"+disabled+"'></i>";
+                        }
+                    }
+                    result += "</div>";
+                    _this.getNodeDom($div).snode().next("div").replaceWith($(result));
+                }
+            },
+            text: function(title) {	// 文字显示
+                var disClass = "";
+                if(disabled){disClass = NAV_DIS;}
+                var cite = "<cite class='"+LI_DIV_TEXT_CLASS+" "+disClass+"' data-id='"+treeId+"' data-leaf='"+(last ? "leaf" : "node")+"' dtree-disabled='"+disabled+"' >"+title+"</cite>"
+                _this.getNodeDom($div).cite().replaceWith($(cite));
+            },
+            ul: function() {	//子节点ul
+                var ul = last ? "<ul class='"+LI_NAV_CHILD+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>" :
+                    (spread ? "<ul class='"+LI_NAV_CHILD+" "+NAV_SHOW+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>" : "<ul class='"+LI_NAV_CHILD+"' data-id='"+treeId+"' dtree-id='"+rootId+"'></ul>");
+                _this.getNodeDom($div).nextUl().replaceWith($(ul));
+            },
+            div: function(){
+                $div.attr("data-id", treeId);
+            },
+            basicData: function(basicData){
+                basicData = (basicData == "{}") ? "" : basicData;
+                $div.attr("data-basic", basicData);
+            },
+            recordData: function(recordData){
+                recordData = (recordData == "{}") ? "" : recordData;
+                $div.attr("data-record", recordData);
+            },
+            p_li: function(pId){
+            	var $li = $div.parent("li");
+            	$li.attr("data-id", treeId);
+                if(pId) {
+                	$li.attr("data-pid", pId);
+                }
+                return $li;
+            }
+        };
+
+    };
+
+    /**
+     * @Desc: 获取拼接好的li的dom
+     * @Param: treeId： 节点ID
+     * @Param: parentId： 节点父ID
+     * @Param: title： 节点标题
+     * @Param: fmtTitle： 节点附加标题
+     * @Param: last： 是否最后一级节点
+     * @Param: ficonClass： 一级图标class
+     * @Param: iconClass： 二级图标class
+     * @Param: checkArr： 复选框
+     * @Param: level： 当前li的层级
+     * @Param: spread： 是否展开
+     * @Param: disabled： 是否禁用
+     * @Param: hide： 是否隐藏
+     * @Param: basicData： 自定义的扩展字段值（转义后的JSON字符）
+     * @Param: recordData： 开启记录模式的记录值（转义后的JSON字符）
+     * @Param: isRoot： 当前节点是否是根节点下的节点
+     */
+    DTree.prototype.getLiItemDom =  function(treeId, parentId, title, fmtTitle, last, ficonClass, iconClass, checkArr, level, spread, disabled, hide, basicData, recordData, isRoot) {
+        var _this = this,
+            rootId = _this.obj[0].id;
+
+        var dom = _this.getDom(treeId, parentId, title, fmtTitle, last, ficonClass, iconClass, checkArr, level, spread, disabled, hide);
+        basicData = (basicData == "{}") ? "" : basicData;
+        recordData = (recordData == "{}") ? "" : recordData;
+        var div = "<div class='"+LI_DIV_ITEM+" "+_this.style.item+"' data-id='"+treeId+"' dtree-id='"+rootId+"' dtree-click='"+eventName.itemNodeClick+"' data-basic='"+basicData+"' data-record='"+recordData+"' dtree-disabled='"+disabled+"' dtree-hide='"+hide+"' ";
+        if(_this.toolbar){
+            if(_this.toolbarWay == "contextmenu") {
+                if(_this.toolbarLoad == "node") { div += " d-contextmenu='true'>"; }
+                if(_this.toolbarLoad == "noleaf") { if(!last){ div += " d-contextmenu='true'>"; } else { div += " d-contextmenu='false'>";} }
+                if(_this.toolbarLoad == "leaf") { if(last){ div += " d-contextmenu='true'>"; } else { div += " d-contextmenu='false'>";} }
+            } else { div += " d-contextmenu='false'>"; }
+        } else { div += " d-contextmenu='false'>"; }
+
+        var hideClass = "";
+        var lineClass = "";
+        if(hide){hideClass = NAV_HIDE;}
+        var li = ["<li " + "class='"+LI_CLICK_CHECKBAR+" "+LI_NAV_ITEM+" "+hideClass+" "+lineClass+"'" + "data-id='"+treeId+"'" + "data-pid='"+(isRoot == "root" ? ((typeof parentId !== undefined && parentId != "") ? parentId : "-1") : parentId)+"'" + "dtree-id='"+rootId+"'" + "data-index='"+level+"'" + "dtree-hide='"+hide+"'" +">" +
+                  div ,
+		          dom.fnode(),
+		          dom.node(),
+		          dom.checkbox(),
+		          dom.text(),
+		          "</div>", dom.ul(), "</li>"].join("");
+
+        return li;
+    };
+
+    /**
+     * @Desc: 初始化节点，用于数据回显
+     * @Param: chooseId： 节点ID
+     */
+    DTree.prototype.dataInit = function(chooseId){
+        var _this = this;
+        var $div = _this.obj.find("div[data-id='"+chooseId+"']");
+        if($div && $div.length > 0) {
+        	_this.obj.find("."+NAV_THIS).removeClass(NAV_THIS);
+        	_this.obj.find("."+_this.style.itemThis).removeClass(_this.style.itemThis);
+        	$div.addClass(NAV_THIS);
+        	$div.addClass(_this.style.itemThis);
+        	_this.setNodeParam($div);
+        	// 将该节点的父节点全部展开
+        	var $li_parents = $div.parents("."+LI_NAV_ITEM);
+        	$li_parents.children("ul").addClass(NAV_SHOW);
+        	$li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.fnode.node.close)).addClass(_this.usefontStyle.fnode.node.open);
+        	$li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.fnode.node.close)).removeClass(_this.usefontStyle.fnode.node.close);
+        	$li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.snode.node.close)).addClass(_this.usefontStyle.snode.node.open);
+        	$li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.snode.node.close)).removeClass(_this.usefontStyle.snode.node.close);
+        }
+        return _this.getNowParam();
+    };
+    
+    /**
+     * @Desc: 基于备份的Html数据回滚
+     * @Param: chooseId： 节点ID
+     */
+    DTree.prototype.rollbackHtml = function(chooseId){
+    	var _this = this;
+    	if(_this.bak) {
+    		_this.obj.html(_this.bak);
+    		// 取消全部选中状态
+    		_this.cancelNavThis();
+    		if(_this.checkbar) {
+    			_this.cancelCheckedNode();
+    			_this.chooseDataInit(chooseId);
+    		} else {
+    			_this.dataInit(chooseId);
+    		}
+    		
+    		_this.bak = _this.obj.html();
+    	}
+    };
+
+    
+    /******************** 基础事件区域 ********************/
+    /**
+     * @Desc: 数据格式化
+     * @Param: html： 需要格式化的数据
+     */
+    DTree.prototype.escape = function(html){
+        return event.escape(html);
+    };
+
+    /**
+     * @Desc: 格式化数据转回正常数据
+     * @Param: str： 需要转回的数据
+     */
+    DTree.prototype.unescape = function(str){
+        return event.unescape(str);
+    };
+
+    /**
+     * @Desc: 取消选中当前选中的div
+     */
+    DTree.prototype.cancelNavThis = function(){
+        var _this = this;
+        _this.obj.find("div[data-id]").parent().find("."+NAV_THIS).removeClass(NAV_THIS);
+        _this.obj.find("div[data-id]").parent().find("."+_this.style.itemThis).removeClass(_this.style.itemThis);
+    }
+
+    /**
+     * @Desc: 选中div
+     * @Param: id： 当前div本身 / 当前选中div的id值
+     */
+    DTree.prototype.navThis = function(id){
+        var _this = this;
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        if($div != null) {
+            _this.cancelNavThis();
+            $div.addClass(NAV_THIS);
+            $div.addClass(_this.style.itemThis);
+        }
+    }
+
+    /**
+     * @Desc: 手风琴模式操作其他节点
+     * @Param: $ul： JQuery对象，表示dtree中的ul节点
+     */
+    DTree.prototype.accordionUL = function($ul) {
+        var _this = this;
+        if(_this.accordion) {
+            $ul.closest("li[data-index]").siblings("li[data-index]").children("ul[data-id]").removeClass(NAV_SHOW);
+            var $divs = $ul.closest("li[data-index]").siblings("li[data-index]").children("ul[data-id]").prev("div");
+            if($divs.length && $divs.length > 0) {
+                for (var i=0; i<$divs.length; i++) {
+                    var $div = $($divs[i]);
+                    var $i_fnode = _this.getNodeDom($div).fnode(),
+                        $i_snode = _this.getNodeDom($div).snode();
+                    if($i_fnode.attr("data-spread") != 'last'){
+                        _this.operateIcon($i_fnode, $i_snode).close();
+                    }
+                }
+            }
+
+        }
+    };
+
+    /**
+     * @Desc: 展开或隐藏节点  作用点： div
+     * @Param: $div： JQuery对象，表示当前操作的div节点
+     */
+    DTree.prototype.clickSpread = function($div) {
+        var _this = this;
+        var $i_fnode = _this.getNodeDom($div).fnode(),
+            $i_snode = _this.getNodeDom($div).snode(),
+            $cite = _this.getNodeDom($div).cite(),
+            spread = $i_fnode.attr("data-spread"),
+            $ul = $div.next("ul");
+
+        if ($ul.length > 0) {
+            if (spread == "close") {
+                if (_this.type=="load") {	//增加加载
+                    if (_this.cache) {	//开启缓存
+                        if ($ul.html()) {
+                            $ul.addClass(NAV_SHOW);
+                            _this.accordionUL($ul);
+                        } else {	//加载节点
+                            _this.getChild($div);
+                            _this.accordionUL($ul);
+                        }
+                    }else {	//每次取新的数据
+                        $ul.html("");
+                        _this.getChild($div);
+                        _this.accordionUL($ul);
+                    }
+                } else {	// 全量加载
+                    $ul.addClass(NAV_SHOW);
+                    _this.accordionUL($ul);
+                }
+                _this.operateIcon($i_fnode, $i_snode).open();
+            } else if (spread == "open") {
+                $ul.removeClass(NAV_SHOW);
+                _this.operateIcon($i_fnode, $i_snode).close();
+            }
+        }
+    };
+
+    /**
+     * @Desc: 设置节点为disabled
+     * @Param: disabledIds： 需要设置禁用的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.setDisabledNodes = function(disabledIds){
+        var _this = this;
+        var disabledId = [];
+        if(typeof disabledIds === "string") {
+        	disabledId = disabledIds.split(",");
+        } else {
+        	disabledId = disabledIds;
+        }
+        
+        if(disabledIds.length) {
+        	for (var i=0; i<disabledId.length; i++) {
+                _this.setDisabledNode(_this.getNodeDom(disabledId[i]).div());
+            }
+        } else {
+        	_this.setDisabledNode(_this.getNodeDom(disabledId+"").div());
+        }
+    };
+    
+    /**
+     * @Desc: 设置全部节点为disabled
+     * @Param: disabledIds： 需要设置禁用的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.setDisabledAllNodes = function(){
+    	var _this = this;
+    	_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"']").each(function(){
+    		var $div = $(this);
+    		_this.setDisabledNode($div);
+    	});
+    };
+    
+    /**
+     * @Desc: 设置节点为disabled
+     * @Param: $div： JQuery对象，需要设置禁用的节点
+     */
+    DTree.prototype.setDisabledNode = function($div){
+        var _this = this;
+        var $i = $div.children("div."+LI_DIV_CHECKBAR).children("i[data-par]");
+        var $cite = $div.children("cite[data-leaf]");
+        if($div != null && $div.attr("dtree-disabled") != "true") {
+            $div.attr("dtree-disabled", "true");
+            $i.attr("dtree-disabled", "true");
+            $i.addClass(NAV_DIS);
+            $cite.attr("dtree-disabled", "true");
+            $cite.addClass(NAV_DIS);
+        }
+    };
+
+    /**
+     * @Desc: 将节点的disabled取消
+     * @Param: disabledIds： 需要设置取消禁用的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.cancelDisabledNodes = function(disabledIds){
+        var _this = this;
+        var disabledId = [];
+        if(typeof disabledIds === "string") {
+        	disabledId = disabledIds.split(",");
+        } else {
+        	disabledId = disabledIds;
+        }
+        
+        if(disabledIds.length) {
+        	for (var i=0; i<disabledId.length; i++) {
+                _this.cancelDisabledNode(_this.getNodeDom(disabledId[i]).div());
+            }
+        } else {
+        	_this.cancelDisabledNode(_this.getNodeDom(disabledId+"").div());
+        }
+    };
+    
+    /**
+     * @Desc: 将节点的disabled取消
+     * @Param: $div： JQuery对象，需要设置取消禁用的节点
+     */
+    DTree.prototype.cancelDisabledNode = function($div){
+        var _this = this;
+        var $i = $div.children("div."+LI_DIV_CHECKBAR).children("i[data-par]");
+        var $cite = $div.children("cite[data-leaf]");
+        if($div != null && $div.attr("dtree-disabled") == "true") {
+            $div.attr("dtree-disabled", "false");
+            $i.attr("dtree-disabled", "false");
+            $i.removeClass(NAV_DIS);
+            $cite.attr("dtree-disabled", "false");
+            $cite.removeClass(NAV_DIS);
+        }
+    };
+
+    /**
+     * @Desc: 获取指定disabled节点的值
+     * @Param: disabledIds： 需要取值的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.getDisabledNodesParam = function(disabledIds){
+        var _this = this;
+        var disabledId = [];
+        if(typeof disabledIds === "string") {
+        	disabledId = disabledIds.split(",");
+        } else {
+        	disabledId = disabledIds;
+        }
+        
+        var disabledNodes = [];
+        if(disabledIds.length) {
+        	for (var i=0; i<disabledId.length; i++) {
+                var $div = _this.getNodeDom(disabledId[i]).div();
+                if($div != null && $div.attr("dtree-disabled") == "true") {
+                    disabledNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+                }
+            }
+        } else {
+        	var $div = _this.getNodeDom(disabledId+"").div();
+            if($div != null && $div.attr("dtree-disabled") == "true") {
+                disabledNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+            }
+        }
+        
+        return disabledNodes;
+    };
+    
+    /**
+     * @Desc: 获取全部disabled节点的值
+     * @Param: 
+     */
+    DTree.prototype.getAllDisabledNodesParam = function(){
+        var _this = this;
+        var disabledNodes = [];
+        _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][dtree-disabled='true']").each(function(){
+            var $div = $(this);
+            disabledNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+        });
+        return disabledNodes;
+    };
+
+    /**
+     * @Desc: 设置节点为hide
+     * @Param: hideIds： 需要隐藏的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.setHideNodes = function(hideIds){
+        var _this = this;
+        var hideId = [];
+        if(typeof hideIds === "string") {
+        	hideId = hideIds.split(",");
+        } else {
+        	hideId = hideIds;
+        }
+        
+        if(hideId.length) {
+        	for (var i=0; i<hideId.length; i++) {
+        		_this.setHideNode(_this.getNodeDom(hideId[i]).div());
+            }
+        } else {
+        	_this.setHideNode(_this.getNodeDom(hideId+"").div());
+        }
+    };
+    
+    /**
+     * @Desc: 设置节点为hide
+     * @Param: $div： JQuery对象，需要设置隐藏的节点
+     */
+    DTree.prototype.setHideNode = function($div){
+        var _this = this;
+        var $li = $div.parent("li[dtree-hide]");
+        if($div != null && $div.attr("dtree-hide") != "true") {
+            $div.attr("dtree-hide", "true");
+            $li.attr("dtree-hide", "true");
+            $li.addClass(NAV_HIDE);
+        }
+    };
+    
+    
+    /**
+     * @Desc: 将节点的hide取消
+     * @Param: hideIds： 需要取消隐藏的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.cancelHideNodes = function(hideIds){
+        var _this = this;
+        var hideId = [];
+        if(typeof hideIds === "string") {
+        	hideId = hideIds.split(",");
+        } else {
+        	hideId = hideIds;
+        }
+        
+        if(hideId.length) {
+        	for (var i=0; i<hideId.length; i++) {
+            	_this.cancelHideNode(_this.getNodeDom(hideId[i]).div());
+            }
+        } else {
+        	_this.cancelHideNode(_this.getNodeDom(hideId+"").div());
+        }
+        
+    };
+    
+    /**
+     * @Desc: 设置节点为hide
+     * @Param: $div： JQuery对象，需要设置取消隐藏的节点
+     */
+    DTree.prototype.cancelHideNode = function($div){
+        var _this = this;
+        var $li = $div.parent("li[dtree-hide]");
+        if($div != null && $div.attr("dtree-hide") == "true") {
+            $div.attr("dtree-hide", "false");
+            $li.attr("dtree-hide", "false");
+            $li.removeClass(NAV_HIDE);
+        }
+    };
+
+    /**
+     * @Desc:  获取指定hide节点的值
+     * @Param: hideIds： 需要取值的节点id字符串集合（用,分割）/id数组
+     */
+    DTree.prototype.getHideNodesParam = function(hideIds){
+        var _this = this;
+        var hideId = [];
+        if(typeof hideIds === "string") {
+        	hideId = hideIds.split(",");
+        } else {
+        	hideId = hideIds;
+        }
+        
+        var hideNodes = [];
+        if(hideId.length) {
+        	for (var i=0; i<hideId.length; i++) {
+                var $div = _this.getNodeDom(hideId[i]).div();
+                if($div != null && $div.attr("dtree-hide") == "true") {
+                    hideNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+                }
+            }
+        } else {
+        	var $div = _this.getNodeDom(hideId+"").div();
+            if($div != null && $div.attr("dtree-hide") == "true") {
+                hideNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+            }
+        }
+        return hideNodes;
+    };
+
+    /**
+     * @Desc:  获取全部hide节点的值
+     */
+    DTree.prototype.getAllHideNodesParam = function(){
+        var _this = this;
+        var hideNodes = [];
+        _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][dtree-hide='true']").each(function(){
+            var $div = $(this);
+            hideNodes.push(_this.getRequestParam(_this.getTempNodeParam($div)));
+        });
+        return hideNodes;
+    };
+
+    /**
+     * @Desc: 刷新树，1.清空树结构，2.清空参数，3.执行初始化方法
+     */
+    DTree.prototype.refreshTree = function(){
+        var _this = this;
+        _this.obj.html("");	// 清空树结构
+        _this.initNodeParam(); // 清空参数
+        _this.init(); // 执行初始化方法
+    }
+
+    /**
+     * @Desc: 局部刷新树--新增子节点时
+     * @Param: $div: JQuery对象，当前新增节点的父节点Div
+     * @Param: data： 当前需要渲染的数据，JSON对象、JSON集合，如不填，则调用getChild方法调用服务器加载数据
+     */
+    DTree.prototype.partialRefreshAdd = function($div, data){
+        var _this = this;
+        $ul = $div.next("ul");
+
+        // 判断当前点击的节点是否是最后一级节点，如果是，则需要修改节点的样式
+        var $icon_i = $div.find("i[data-spread]");
+        if ($icon_i.eq(0).attr("data-spread") == "last") {
+            _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).openWithLeaf();
+        } else {	//如果不是，也要修改节点样式
+            _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).open();
+        }
+        $ul.addClass(NAV_SHOW);	//展开UL
+        _this.accordionUL($ul);
+
+        if(data) {
+            if(data.length && data.length > 0) {
+                _this.getChild($div, data);
+            } else {
+                var parseData = _this.parseData(data);
+
+                if(parseData.treeId()){
+                    var level = parseInt($div.parent("li").attr("data-index"))+1;
+                    $ul.append(_this.getLiItemDom(parseData.treeId(), parseData.parentId(), parseData.title(), parseData.fmtTitle(), parseData.last(0), parseData.ficonClass(), parseData.iconClass(), parseData.checkArr(), level, parseData.spread(), parseData.disabled(), parseData.hide(), parseData.basicData(), parseData.recordData(), "item"));
+
+                    // 建造完毕后，选中该DIV
+                    $thisDiv = $ul.find("div[data-id='"+parseData.treeId()+"']");
+                    _this.setNodeParam($thisDiv);
+
+                    _this.showLine($ul.find("li"));
+                } else {
+                    layer.msg("添加失败,节点ID为undefined！",{icon:5});
+                    // 重新赋值
+                    _this.setNodeParam($div);
+                }
+            }
+        } else {
+            _this.getChild($div);
+        }
+    }
+
+    /**
+     * @Desc: 局部刷新树--编辑当前节点选中节点时
+     * @Param: $div: JQuery对象，当前编辑节点的Div
+     * @Param: data： 当前需要渲染的数据，JSON对象、字符串
+     */
+    DTree.prototype.partialRefreshEdit = function($div, data){
+        var _this = this;
+        $ul = $div.next("ul"),
+        $p_li = $div.parent("li");
+
+        if(data) {
+            if(typeof data === 'object') {
+                var parseData = _this.parseData(data);
+
+                if(parseData.treeId()){
+                    var replaceDom = _this.replaceDom($div, parseData.treeId(), parseData.last(0), parseData.spread(), parseData.disabled(), parseData.hide());
+                    replaceDom.div();
+                    replaceDom.node(parseData.iconClass());
+                    replaceDom.checkbox(parseData.checkArr());
+                    replaceDom.text(parseData.title());
+                    replaceDom.ul();
+                    replaceDom.basicData(parseData.basicData());
+                    replaceDom.recordData(parseData.recordData());
+                    
+                    var parentId = parseData.parentId();
+                    var oldParentId = $p_li.attr("data-pid");
+                    if(parentId && parentId != oldParentId) {
+                    	// 变更了父节点
+                    	$p_li = replaceDom.p_li(parentId);
+                    	
+                    	// 根据parentId找到下挂节点的ul
+                    	var $goto_div = _this.getNodeDom(parentId).div(), 
+                    		$goto_ul = _this.getNodeDom(parentId).nextUl();
+                    	// 判断父级ul中是否还存在li,如果不存在，则需要修改节点的样式
+                        if($goto_ul.children("li").length == 0){
+                            var $icon_i = $goto_div.find("i[data-spread]");
+                            _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).openWithLeaf();
+                            $goto_ul.addClass(NAV_SHOW);
+                        }
+                    	$goto_ul.append($p_li);
+                    } else {
+                    	replaceDom.p_li();
+                    }
+                    _this.setNodeParam($div);
+                } else {
+                    layer.msg("编辑失败,节点ID为undefined！",{icon:5});
+                    // 重新赋值
+                    _this.setNodeParam($div);
+                }
+            } else {
+                _this.getNodeDom($div).cite().html(data);
+            }
+        }
+    }
+
+    /**
+     * @Desc: 局部刷新树--当前节点选中被删除时
+     * @Param: $div: JQuery对象，当前被删除节点的Div
+     */
+    DTree.prototype.partialRefreshDel = function($div){
+        var _this = this;
+        $p_li = $div.parent("li");
+        $p_ul = _this.getNodeDom($div).parentUl();
+        $p_div = _this.getNodeDom($div).parentDiv();
+
+        $p_li.remove();
+        _this.showLine($p_ul.find("li"));
+        // 判断父级ul中是否还存在li,如果不存在，则需要修改节点的样式
+        if($p_ul.children("li").length == 0){
+            var $icon_i = $p_div.find("i[data-spread]");
+            _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).closeWithLeaf();
+        }
+        _this.initNodeParam();
+    }
+    
+    /***
+     * @Desc: 搜索节点，保留上级节点
+     * @param： value： 传入的节点名称
+     * layui-dtree群友： 没水平的水瓶提供。
+     */
+    DTree.prototype.fuzzySearch = function (value) {
+        var _this = this;
+        //
+        if (value.trim() == '') {
+            _this.obj.find("li").removeClass("layui-hide").attr("dtree-hide", false)
+            return
+        }
+        _this.obj.find("li").addClass("layui-hide").attr("dtree-hide", true)
+
+        var cites = []
+        var filterMode = _this.filterMode
+        /*if (filterMode == 'default') {
+            cites = _this.obj.find("li>div cite:contains('" + value + "')");
+        }*/
+        cites = _this.obj.find("li>div cite:contains('" + value + "')");
+        cites.each(function (index, cite) {
+            var li = $(cite).parent().parent();
+            var curNode = _this.getParam(li.attr("data-id"));
+            li.removeClass("layui-hide").attr("dtree-hide", false);
+            // 显示所有子级
+            li.find('ul li').removeClass("layui-hide").attr("dtree-hide", false);
+            // 显示所有父级
+            li.parents('li').removeClass("layui-hide").attr("dtree-hide", false);
+        })
+    }
+
+    /******************** 复选框区域 ********************/
+    /**
+     * @Desc: 初始化复选框的值
+     * @Param: chooseIds: 需要被选中的节点id字符串集合（用,分割）/id数组/id二维数组（多级复选框）
+     */
+    DTree.prototype.chooseDataInit = function(chooseIds){
+        var _this = this;
+        // 多级复选框二维数组
+        var chooseIdArrs = [];
+        var chooseId = [];
+        if(typeof chooseIds === "string") {
+        	chooseId = chooseIds.split(",");
+        } else {
+        	chooseId = chooseIds;
+        }
+        if(chooseId.length) {
+        	// 说明是数组
+        	for (var i=0; i<chooseId.length; i++) {
+        		var choose = chooseId[i];
+        		if(typeof chooseIds !== "string" && choose.length) {
+        			// 说明内部还是一个数组，将这个数组放入二维数组中
+        			chooseIdArrs.push(choose);
+        		}
+        	}
+        	if(chooseIdArrs.length == 0) {
+        		// 说明在上一步没有收获数组，那么chooseId只为一个id数组
+        		chooseIdArrs.push(chooseId);
+        	}
+
+        	// 遍历二维数组解析数据初始化选中
+        	for(var i=0; i<chooseIdArrs.length; i++) {
+        		var chooseIdArr = chooseIdArrs[i];
+        		for (var j=0; j<chooseIdArr.length; j++) {
+            		var $i = _this.obj.find("i[dtree-click='"+eventName.checkNodeClick+"'][data-type="+i+"][data-id="+chooseIdArr[j]+"]");
+            		_this.checkStatus($i).check();
+                }
+        	}
+        	
+        } else {
+        	var $i = _this.obj.find("i[dtree-click='"+eventName.checkNodeClick+"'][data-id="+chooseId+"]");
+        	_this.checkStatus($i).check();
+        }
+        
+        
+        // 展开选中节点的父节点
+        var $li_parents = _this.obj.find("i[dtree-click='"+eventName.checkNodeClick+"'][data-checked='1']").parents("."+LI_NAV_ITEM);
+        $li_parents.children("ul").addClass(NAV_SHOW);
+        $li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.fnode.node.close)).addClass(_this.usefontStyle.fnode.node.open);
+        $li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.fnode.node.close)).removeClass(_this.usefontStyle.fnode.node.close);
+        $li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.snode.node.close)).addClass(_this.usefontStyle.snode.node.open);
+        $li_parents.children("."+LI_DIV_ITEM).children("i[data-spread]."+event.trimToDot(_this.usefontStyle.snode.node.close)).removeClass(_this.usefontStyle.snode.node.close);
+        return _this.getCheckbarNodesParam();
+    };
+
+    /**
+     * @Desc: 实现复选框点击，子集选中父级也选中
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkAllOrNot =  function($i) {
+        var _this = this;
+        //$i 当前点击的checkbox
+        var dataPar = $i.attr("data-par"),
+            dataType = $i.attr("data-type"),
+            $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+            $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+            $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+        if ($i.attr("data-checked") == "1") {
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).noCheck();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).noCheck();
+
+            // 处理父级节点的选中状态
+            for (var i = 1, item = $parent_li; i < item.length; i++) {
+                var flag = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"'][data-checked='1']").length;
+                if (flag == 0) {
+                    //把父级去掉选中
+                    var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                    _this.checkStatus($item_i).noCheck();
+                }
+            }
+        } else {
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).check();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).check();
+
+            // 处理父级节点的选中状态
+            for (var i = 1, item = $parent_li; i < item.length; i++) {
+                var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                //把父级选中
+                _this.checkStatus($item_i).check();
+            }
+        }
+    };
+
+    /**
+     * @Desc: 实现复选框点击， no-all 子集选中父级半选中，子集全选父级选中
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkAllOrNoallOrNot =  function($i) {
+        var _this = this;
+        //$i 当前点击的checkbox
+        var $div = $i.closest("."+LI_DIV_ITEM),
+            dataPar = $i.attr("data-par"),
+            dataType = $i.attr("data-type"),
+            $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+            $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+            $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+        if ($i.attr("data-checked") == "1") {	//当前复选框为选中状态，点击后变为未选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).noCheck();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).noCheck();
+
+            // 处理父级节点的选中状态
+            for (var i = 1, item = $parent_li; i < item.length; i++) {
+                var flag = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"'][data-checked='1']").length;
+                var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                if (flag == 0) {
+                    //把父级去掉选中
+                    _this.checkStatus($item_i).noCheck();
+                } else {
+                    //把父级半选
+                    _this.checkStatus($item_i).noallCheck();
+                }
+            }
+        } else {		//当前复选框为未选中状态，点击后变为选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).check();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).check();
+
+            // 处理父级节点的选中状态
+            for (var i = 1, item = $parent_li; i < item.length; i++) {
+                var flag1 = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"'][data-checked='1']").length;
+                var flag2 = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']").length;
+                var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                if (flag1 != flag2) {
+                    // 父级复选框半选
+                    _this.checkStatus($item_i).noallCheck();
+                } else {
+                    // 父级复选框全选
+                    _this.checkStatus($item_i).check();
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc: 实现复选框点击，p-casc：父级选中子集全选，子集无法改变父级选中状态
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkAllOrPcascOrNot = function($i) {
+        var _this = this;
+        //$i 当前点击的checkbox
+        var $div = $i.closest("."+LI_DIV_ITEM),
+            dataPar = $i.attr("data-par"),
+            dataType = $i.attr("data-type"),
+            $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+            $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+            $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+        if ($i.attr("data-checked") == "1") {	//当前复选框为选中状态，点击后变为未选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).noCheck();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).noCheck();
+
+        } else {		//当前复选框为未选中状态，点击后变为选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).check();
+
+            // 处理子级节点的选中状态
+            var $child_li_i = $child_li.find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+            _this.checkStatus($child_li_i).check();
+        }
+    };
+
+    /**
+     * @Desc: 实现复选框点击，self：各自选中互不影响
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkOrNot = function($i) {
+        var _this = this;
+        //$i 当前点击的checkbox
+        var $div = $i.closest("."+LI_DIV_ITEM),
+            dataPar = $i.attr("data-par"),
+            dataType = $i.attr("data-type"),
+            $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+            $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+            $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+        if ($i.attr("data-checked") == "1") {	//当前复选框为选中状态，点击后变为未选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).noCheck();
+        } else {		//当前复选框为未选中状态，点击后变为选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).check();
+        }
+    };
+
+    /**
+     * @Desc: 实现复选框点击，only：只能选中1个复选框
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkOnly = function($i) {
+        var _this = this;
+        //$i 当前点击的checkbox
+        var $div = $i.closest("."+LI_DIV_ITEM),
+            dataPar = $i.attr("data-par"),
+            dataType = $i.attr("data-type"),
+            $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+            $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+            $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+        var checked = $i.attr("data-checked");
+        // 将全部节点全部设为未选中状态
+        var $all_i = _this.obj.find("i[data-checked]");
+        _this.checkStatus($all_i).noCheck();
+
+        if (checked != "1") {	//当前复选框为未选中状态，点击后变为选中状态
+            // 处理当前节点的选中状态
+            _this.checkStatus($i).check();
+        }
+    };
+
+    /**
+     * @Desc: 实现复选框点击汇总，分派具体的点击方式
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.changeCheck = function($i) {
+        var _this = this;
+        var temp = _this.temp;
+        if(typeof $i === 'undefined') {
+            $i = temp[0];
+        }
+        // 复选框选中事件
+        if (_this.checkbarType == "all") {
+            _this.checkAllOrNot($i);
+        } else if(_this.checkbarType == "no-all") {
+            _this.checkAllOrNoallOrNot($i);
+        } else if(_this.checkbarType == "p-casc") {
+            _this.checkAllOrPcascOrNot($i);
+        } else if(_this.checkbarType == "self") {
+            _this.checkOrNot($i);
+        } else if(_this.checkbarType == "only") {
+            _this.checkOnly($i);
+        } else {
+            _this.checkAllOrNot($i);
+        }
+
+        if(_this.select) {
+        	// 设置复选框模式中的下拉树的值
+        	_this.selectCheckboxVal();
+        }
+        
+        // 获取复选框选中节点的内容
+        var checkbarNodes = _this.setAndGetCheckbarNodesParam(true);
+        
+        // 用户自定义想做的事情
+        _this.checkbarFun.chooseDone(checkbarNodes);
+        layui.event.call(this, MOD_NAME, "chooseDone("+$(_this.obj)[0].id+")", {"checkbarParams": checkbarNodes});
+        _this.temp = [];
+    };
+
+    /**
+     * @Desc: 复选框半选状态初始化设置，树节点渲染完毕后重置半选状态
+     */
+    DTree.prototype.initNoAllCheck = function(){
+        var _this = this;
+        //1.获取所有选中节点
+        var $is = _this.obj.find("i[data-checked='1']");
+        if($is.length > 0){
+            for ( var key = 0; key < $is.length; key++) {
+                var $i = $($is[key]),
+                    dataPar = $i.attr("data-par"),
+                    dataType = $i.attr("data-type"),
+                    $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+                    $parent_li = $i.parents(dataPar),		//当前checkbox的所有父级li节点
+                    $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+                // 处理父级节点的选中状态
+                for (var i = 1, item = $parent_li; i < item.length; i++) {
+                    var flag1 = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"'][data-checked='1']").length;
+                    var flag2 = item.eq(i).find(">."+LI_NAV_CHILD+" ."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']").length;
+                    var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                    if (flag1 != flag2) {
+                        // 父级复选框半选
+                        _this.checkStatus($item_i).noallCheck();
+                    } else {
+                        // 父级复选框全选
+                        _this.checkStatus($item_i).check();
+                    }
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc: 复选框选中状态初始化设置，树节点渲染完毕后重置选中状态
+     */
+    DTree.prototype.initAllCheck = function(){
+        var _this = this;
+        //1.获取所有选中节点
+        var $is = _this.obj.find("i[data-checked='1']");
+        if($is.length > 0){
+            for ( var key = 0; key < $is.length; key++) {
+                var $i = $($is[key]),
+                    dataPar = $i.attr("data-par"),
+                    dataType = $i.attr("data-type"),
+                    $li = $i.closest(dataPar),		//当前checkbox的上级li节点
+                    $parent_li = $i.parents(dataPar),	//当前checkbox的所有父级li节点
+                    $child_li = $li.find(dataPar);	//当前checkbox的上级li节点下的所有子级li节点
+
+                // 处理父级节点的选中状态
+                for (var i = 1, item = $parent_li; i < item.length; i++) {
+                    var $item_i = item.eq(i).find(">."+LI_DIV_ITEM+">."+LI_DIV_CHECKBAR+">i[data-type='"+dataType+"']");
+                    // 父级复选框全选
+                    _this.checkStatus($item_i).check();
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc: 设置复选框选中/未选中/半选  _this.checkStatus($i).check();  _this.checkStatus($i).noCheck();   _this.checkStatus($i).noallCheck();
+     * @Param: $i: JQuery对象，表示当前点击的checkbox节点
+     */
+    DTree.prototype.checkStatus = function($i) {
+        var _this = this;
+        return {
+            check: function(){
+                $i.removeClass(_this.usefontStyle.checkbox.out);
+                $i.removeClass(_this.usefontStyle.checkbox.noall);
+                $i.addClass(_this.usefontStyle.checkbox.on);
+                $i.addClass(_this.style.chs);
+                $i.attr("data-checked","1");
+            },
+            noCheck: function(){
+                $i.removeClass(_this.usefontStyle.checkbox.noall);
+                $i.removeClass(_this.usefontStyle.checkbox.on);
+                $i.removeClass(_this.style.chs);
+                $i.addClass(_this.usefontStyle.checkbox.out);
+                $i.attr("data-checked","0");
+            },
+            noallCheck: function(){
+                $i.removeClass(_this.usefontStyle.checkbox.out);
+                $i.removeClass(_this.usefontStyle.checkbox.on);
+                $i.addClass(_this.usefontStyle.checkbox.noall);
+                $i.addClass(_this.style.chs);
+                $i.attr("data-checked","2");
+            }
+        }
+    };
+
+    /**
+     * @Desc: 设置树的复选框操作值的全部参数,并获取
+     * @Param: requestParamFlag: 设置复选框返回值的数据结构， true：基于请求类型的返回对象数组， false：原始的节点返回对象数组
+     */ 
+    DTree.prototype.setAndGetCheckbarNodesParam = function(requestParamFlag) {
+        var _this = this;
+        //操作前先清空
+        _this.checkbarNode = [];
+        // 选择所有复选框节点
+        if (_this.checkbarData == "change"){	//记录变更数据
+            _this.obj.find("i[data-par][dtree-disabled='false']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+                if ($i.attr("data-checked") != $i.attr("data-initchecked")) {
+                	if(requestParamFlag) {
+                		_this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+                	} else {
+                		_this.checkbarNode.push(_this.getCheckbarNodeParam($div, $i));
+                	}
+                }
+            });
+        } else if (_this.checkbarData == "all"){	//记录全部数据
+            _this.obj.find("i[data-par][data-checked][dtree-disabled='false']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+                if(requestParamFlag) {
+            		_this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+            	} else {
+            		_this.checkbarNode.push(_this.getCheckbarNodeParam($div, $i));
+            	}
+            });
+        } else if (_this.checkbarData == "choose"){	//记录选中数据
+            _this.obj.find("i[data-par][data-checked='1'][dtree-disabled='false']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+                if(requestParamFlag) {
+            		_this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+            	} else {
+            		_this.checkbarNode.push(_this.getCheckbarNodeParam($div, $i));
+            	}
+            });
+        } else if (_this.checkbarData == "halfChoose"){	//记录选中和半选数据
+            _this.obj.find("i[data-par][data-checked='1'][dtree-disabled='false']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+                if(requestParamFlag) {
+            		_this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+            	} else {
+            		_this.checkbarNode.push(_this.getCheckbarNodeParam($div, $i));
+            	}
+            });
+            _this.obj.find("i[data-par][data-checked='2'][dtree-disabled='false']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+                if(requestParamFlag) {
+            		_this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+            	} else {
+            		_this.checkbarNode.push(_this.getCheckbarNodeParam($div, $i));
+            	}
+            });
+        }
+        return _this.checkbarNode;
+    };
+
+    /**
+     * @Desc: 获取树的复选框操作值的全部参数
+     */ 
+    DTree.prototype.getCheckbarNodesParam = function() {
+        var _this = this;
+        return _this.setAndGetCheckbarNodesParam(true);
+    };
+
+    /**
+     * @Desc: 获取树的一个复选框的参数
+     * @Param: $div: JQuery对象，表示当前选中节点
+     * @Param: $i: JQuery对象，表示当前选中的复选框节点
+     */
+    DTree.prototype.getCheckbarNodeParam = function($div, $i){
+        var _this = this;
+        var temp_node = {};
+        temp_node.nodeId = $div.attr("data-id");
+        temp_node.parentId = _this.getNodeDom($div).parentLi().attr("data-pid");
+        temp_node.context = (typeof _this.formatter.title === 'function') ? _this.getNodeDom($div).cite().attr("data-title") : _this.getNodeDom($div).cite().text();
+        temp_node.leaf = _this.getNodeDom($div).cite().attr("data-leaf") == "leaf" ? true : false;
+        temp_node.level = _this.getNodeDom($div).parentLi().attr("data-index");
+        temp_node.spread = _this.getNodeDom($div).fnode().attr("data-spread") == "open" ? true : false;
+        
+        var basicData = $div.attr("data-basic");
+        if(basicData) {
+        	basicData = JSON.parse(event.unescape(basicData));
+        }
+        temp_node.basicData = basicData;
+        var recordData = $div.attr("data-record");
+        if(recordData) {
+        	recordData = JSON.parse(event.unescape(recordData));
+        }
+        temp_node.recordData = recordData;
+        
+        temp_node.dataType = $i.attr("data-type");
+        temp_node.checked = $i.attr("data-checked");
+        temp_node.initchecked = $i.attr("data-initchecked");
+        return temp_node;
+    };
+    
+    /**
+     * @Desc: 获取基于返回参数的树的复选框参数，选中数据横向存储
+     */
+    DTree.prototype.getCheckbarJsonArrParam = function(){
+    	var _this = this;
+    	var checkbarJsonArr = {
+			nodeId: [],		//节点ID
+            parentId: [],	//父节点ID
+            context: [],	//节点内容
+            leaf: [],		//是否叶子节点
+            level: [],		//层级
+            spread: [],		//节点展开状态
+            dataType: [],	//节点标记
+            checked: [],	//节点复选框选中状态
+            initchecked: [],	//节点复选框初始状态
+            basicData: [],		//用户自定义的记录节点数据
+            recordData: [],		//当前data数据（排除basicData和children字段）
+    	};
+    	// 获取全部复选框选中节点
+    	var params = _this.setAndGetCheckbarNodesParam(false);
+    	if(params && params.length > 0) {
+    		for(var i=0; i<params.length; i++) { 
+    			var param = params[i];
+    			checkbarJsonArr["nodeId"].push(param["nodeId"]);
+    			checkbarJsonArr["parentId"].push(param["parentId"]);
+    			checkbarJsonArr["context"].push(param["context"]);
+    			checkbarJsonArr["leaf"].push(param["leaf"]);
+    			checkbarJsonArr["level"].push(param["level"]);
+    			checkbarJsonArr["spread"].push(param["spread"]);
+    			checkbarJsonArr["dataType"].push(param["dataType"]);
+    			checkbarJsonArr["checked"].push(param["checked"]);
+    			checkbarJsonArr["initchecked"].push(param["initchecked"]);
+    			checkbarJsonArr["basicData"].push(param["basicData"]);
+    			checkbarJsonArr["recordData"].push(param["recordData"]);
+    		}
+    	}
+    	
+    	checkbarJsonArr = _this.getRequestParam(checkbarJsonArr);
+    	return checkbarJsonArr;
+    };
+
+    /**
+     * @Desc: 判断复选框是否发生变更
+     */
+    DTree.prototype.changeCheckbarNodes = function(){
+        var _this = this;
+        _this.obj.find("i[data-par]").each(function(){
+            var $i = $(this);
+            $div = $i.closest("."+LI_DIV_ITEM);
+
+            if ($i.attr("data-checked") != $i.attr("data-initchecked")) {
+                return true;
+            }
+        });
+        return false;
+    };
+    
+    /**
+     * @Desc: 点击节点选中/不选 复选框
+     * @Param: nodeId： 当前节点的ID
+     */
+    DTree.prototype.clickNodeCheckbar = function(nodeId){
+    	var _this = this;
+    	var $checkbar = _this.getNodeDom(nodeId).checkbox();
+    	_this.temp = [$checkbar];
+		_this.changeCheck();
+    }
+    
+    /**
+     * @Desc: 复选框全选
+     */
+    DTree.prototype.checkAllNode = function(){
+    	var _this = this;
+    	 var $i = _this.obj.find("i[data-par][data-checked!='1']");
+         if($i.length > 0) { _this.checkStatus($i).check(); }
+    }
+    
+    /**
+     * @Desc: 取消全部复选框选中
+     */
+    DTree.prototype.cancelCheckedNode = function(){
+    	var _this = this;
+    	var $i = _this.obj.find("i[data-par][data-checked!='0']");
+    	if($i.length > 0) { _this.checkStatus($i).noCheck(); }
+    }
+    
+    /**
+     * @Desc: 反选复选框
+     */
+    DTree.prototype.invertCheckedNode = function(){
+    	var _this = this;
+    	if(_this.obj.find("i[data-par]").length > 0) {
+            var flag = false;
+            _this.obj.find("i[data-par]").each(function(){
+                var $i = $(this);
+                if($i.attr("data-checked") == '2'){
+                	flag = true;
+                }else if($i.attr("data-checked") == '0') {
+                    _this.checkStatus($i).check();
+                }else if($i.attr("data-checked") == '1') {
+                    _this.checkStatus($i).noCheck();
+                }
+            });
+
+            if(flag) {
+                _this.initNoAllCheck();
+            } else {
+                _this.initAllCheck();
+            }
+        }
+    }
+    
+    /**
+     * @Desc: 删除选中节点
+     */
+    DTree.prototype.removeCheckedNode = function(){
+    	var _this = this;
+    	var len = _this.obj.find("i[data-par][data-checked='1']").length;
+        if(len == 0){
+            layer.msg("请至少选中一个节点",{icon:2});
+        }else{
+            //操作前先清空
+            _this.checkbarNode = [];
+            // 选择所有复选框节点
+            var i_node = {};
+            _this.obj.find("i[data-par][data-checked='1']").each(function(){
+                var $i = $(this), $div = $i.closest("."+LI_DIV_ITEM);
+
+                _this.checkbarNode.push(_this.getRequestParam(_this.getCheckbarNodeParam($div, $i)));
+            });
+
+            layer.confirm('确定要删除选中节点？', {icon: 3, title:'删除选中节点'}, function(index1){
+                var flag = _this.menubarFun.remove(_this.checkbarNode);
+                if(flag){
+                    _this.obj.find("i[data-par][data-checked='1']").closest("."+LI_DIV_ITEM).next("ul").remove();
+                    _this.obj.find("i[data-par][data-checked='1']").closest("."+LI_DIV_ITEM).remove();
+                    _this.checkbarNode=[];
+                }
+
+                layer.close(index1);
+            });
+        }
+    }
+
+    /******************** 工具栏及菜单栏区域 ********************/
+    /**
+     * @Desc: 初始化菜单栏和工具栏的div
+     */ 
+    DTree.prototype.initTreePlus = function(){
+        var _this = this;
+        // 初始化菜单栏和工具栏的div
+        _this.obj.prevAll('div#dtree_menubar_'+_this.obj[0].id).remove();
+        _this.toolbarMenu = {};
+        if(_this.menubar && _this.menubarTips.group && _this.menubarTips.group.length > 0) _this.obj.before("<div class='"+LI_DIV_MENUBAR+"' id='dtree_menubar_"+_this.obj[0].id+"'><div class='layui-btn-group'></div></div>");
+        if(_this.toolbar){
+            if(_this.toolbarWay == "contextmenu") {
+                _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).remove();
+                if(_this.toolbarShow && _this.toolbarShow.length > 0) {
+                    _this.obj.before("<div class='"+LI_DIV_TOOLBAR+" layui-nav' id='dtree_toolbar_"+_this.obj[0].id+"'><div class='layui-nav-item'><dl class='layui-nav-child layui-anim'></dl></div></div>");
+                }
+            }
+        }
+
+    };
+
+    /**
+     * @Desc: 开启工具栏和菜单栏
+     */ 
+    DTree.prototype.openTreePlus = function(){
+        var _this = this;
+        // 先对工具栏做处理，因为菜单栏可能会与工具栏产生关联。
+        var ggMenu = [];
+        if(_this.toolbar) _this.getToolbarDom();
+
+        if(_this.menubar) {
+            var menubarTips = _this.menubarTips,
+                mtbar = menubarTips.toolbar,
+                group = menubarTips.group,
+                freedom = menubarTips.freedom;
+            if(mtbar && mtbar.length > 0){
+                // 菜单栏吸附工具栏上
+                for(var i=0; i<mtbar.length; i++){
+                    var mt = mtbar[i];
+                    if(typeof mt === 'string'){
+                        _this.getMenubarToolDom(mt);
+                    }
+                    if(typeof mt === 'object'){
+                        _this.getExtMenubarToolDom(mt);
+                    }
+                }
+            }
+            if(group && group.length > 0){
+                // 菜单栏吸附在上方的按钮组div中
+                for(var i=0; i<group.length; i++){
+                    var gg = group[i];
+                    if(typeof gg === 'string'){
+                        ggMenu.push(_this.getMenubarDom(gg));
+                    }
+                    if(typeof gg === 'object'){
+                        ggMenu.push(_this.getExtMenubarDom(gg));
+                    }
+                }
+                _this.obj.prevAll('div#dtree_menubar_'+_this.obj[0].id).children('div.layui-btn-group').append(ggMenu.join(""));
+
+            }
+        }
+    };
+
+
+    /******************** 菜单栏区域 ********************/
+    /**
+     * @Desc: 获取菜单栏
+     * @Param: menu: 菜单栏的具体操作字符串
+     */
+    DTree.prototype.getMenubarDom = function(menu){
+        var _this = this;
+        var rootId = _this.obj[0].id;
+        var gg = "";
+        switch (menu) {
+            case defaultMenu.moveDown:
+                gg = "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.moveDown+"' title='展开全部节点'><i class='"+_this.usefontStyle.menubar.movedown+"'></i></button>";
+                break;
+            case defaultMenu.moveUp:
+                gg = "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.moveUp+"' title='收缩全部节点'><i class='"+_this.usefontStyle.menubar.moveup+"'></i></button>";
+                break;
+            case defaultMenu.refresh:
+                gg = "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.refresh+"' title='刷新'><i class='"+_this.usefontStyle.menubar.refresh+"'></i></button>";
+                break;
+            case defaultMenu.checkAll:
+                gg = (_this.checkbar && _this.checkbarType != 'only') ? "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.checkAll+"' title='全选节点'><i class='"+_this.usefontStyle.menubar.checkAll+"'></i></button>" : "";
+                break;
+            case defaultMenu.unCheckAll:
+                gg = (_this.checkbar && _this.checkbarType != 'only') ? "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.unCheckAll+"' title='全不选节点'><i class='"+_this.usefontStyle.menubar.unCheckAll+"'></i></button>" : "";
+                break;
+            case defaultMenu.invertAll:
+                gg = (_this.checkbar && _this.checkbarType != 'only') ? "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.invertAll+"' title='反选节点'><i class='"+_this.usefontStyle.menubar.invertAll+"'></i></button>" : "";
+                break;
+            case defaultMenu.remove:
+                gg = (_this.checkbar) ? "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.remove+"' title='删除选中节点'><i class='"+_this.usefontStyle.menubar.remove+"'></i></button>" : "";
+                break;
+            case defaultMenu.searchNode:
+                gg = "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+rootId+"' d-menu='"+defaultMenu.searchNode+"' title='查询节点'><i class='"+_this.usefontStyle.menubar.search+"'></i></button>";
+                break;
+        }
+        return gg;
+    };
+
+    /**
+     * @Desc: 获取扩展菜单栏
+     * @Param: menu: 扩展菜单栏的Json对象
+     */
+    DTree.prototype.getExtMenubarDom = function(menu){
+        var _this = this;
+        return "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' dtree-id='"+_this.obj[0].id+"' d-menu='"+menu.menubarId+"' title='"+menu.title+"'><i class='"+_this.usefontStyle.menubarExt+" "+menu.icon+"'></i></button>";
+    };
+
+    /**
+     * @Desc: 获取依附在工具栏的菜单栏
+     * @Param: menu: 菜单栏的具体操作字符串
+     */
+    DTree.prototype.getMenubarToolDom = function(menu){
+        var _this = this;
+        var rootId = _this.obj[0].id;
+        switch (menu) {
+            case defaultMenu.moveDown:
+                _this.toolbarMenu[defaultMenu.moveDown] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.moveDown, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.movedown, "展开全部");
+                break;
+            case defaultMenu.moveUp:
+                _this.toolbarMenu[defaultMenu.moveUp] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.moveUp, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.moveup, "收缩全部");
+                break;
+            case defaultMenu.refresh:
+                _this.toolbarMenu[defaultMenu.refresh] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.refresh, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.refresh, "刷新");
+                break;
+            case defaultMenu.checkAll:
+                if(_this.checkbar && _this.checkbarType != 'only')
+                    _this.toolbarMenu[defaultMenu.checkAll] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.checkAll, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.checkAll, "全选节点");
+                break;
+            case defaultMenu.unCheckAll:
+                if(_this.checkbar && _this.checkbarType != 'only')
+                    _this.toolbarMenu[defaultMenu.unCheckAll] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.unCheckAll, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.unCheckAll, "全不选节点");
+                break;
+            case defaultMenu.invertAll:
+                if(_this.checkbar && _this.checkbarType != 'only')
+                    _this.toolbarMenu[defaultMenu.invertAll] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.invertAll, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.invertAll, "反选节点");
+                break;
+            case defaultMenu.remove:
+                if(_this.checkbar)
+                    _this.toolbarMenu[defaultMenu.remove] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.remove, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.remove, "删除选中");
+                break;
+            case defaultMenu.searchNode:
+                _this.toolbarMenu[defaultMenu.searchNode] = _this.setToolbarDom().setMenuToolbarOption(defaultMenu.searchNode, _this.toolbarStyle.title, _this.usefontStyle.toolbar.menubar.searchNode, "查询");
+                break;
+        }
+    };
+
+    /**
+     * @Desc: 获取依附在工具栏的扩展菜单栏
+     * @Param: menu: 扩展菜单栏的Json对象
+     */
+    DTree.prototype.getExtMenubarToolDom = function(menu){
+        var _this = this;
+        _this.toolbarMenu[menu.menubarId] = _this.setToolbarDom().setMenuToolbarOption(menu.menubarId, menu.title, _this.usefontStyle.toolbar.menubarExt+" "+menu.icon, "");
+    };
+
+    /**
+     * @Desc: menubar内置方法
+     */
+    DTree.prototype.menubarMethod = function(){
+        var _this = this;
+        return {
+            openAllNode: function(obj){  // 展开所有节点
+                var $ulNode = obj || _this.obj.children("li").children("ul");
+                // 遍历所有ul子节点
+                for (var i = 0; i < $ulNode.length; i++) {
+                    // 获取当前节点的信息
+                    var $ul = $($ulNode[i]),
+                        $div = $ul.prev("div"),
+                        $i_fnode = _this.getNodeDom($div).fnode(),
+                        $i_snode = _this.getNodeDom($div).snode(),
+                        $cite = _this.getNodeDom($div).cite(),
+                        spread = $i_fnode.attr("data-spread"),
+                        leaf = $cite.attr("data-leaf");
+
+                    if (leaf == "leaf") {
+                        continue;
+                    }	// 说明是叶子了，则继续循环下一个
+
+                    if (spread == "open") {
+                        // 说明该节点已经展开了，则进行子节点循环
+                    } else {
+                        if (_this.type=="load") {	//是否全量加载
+                            if (_this.cache) {	//是否开启缓存
+                                if ($ul.html()) {
+                                    $ul.addClass(NAV_SHOW);
+                                } else {	//加载节点
+                                    _this.getChild($div);
+                                }
+                            }else {	//每次取新的数据
+                                $ul.html("");
+                                _this.getChild($div);
+                            }
+                        } else {	// 全量加载
+                            $ul.addClass(NAV_SHOW);
+                        }
+                        _this.operateIcon($i_fnode, $i_snode).open();
+
+                    }
+                    var $childUl = $ul.children("li").children("ul");
+                    _this.menubarMethod().openAllNode($childUl);
+                }
+            },
+            closeAllNode: function(){ //收缩所有节点
+                _this.obj.find("."+LI_NAV_CHILD).each(function(){
+                    // 获取当前节点的信息
+                    var $ul = $(this),
+                        $div = $ul.prev("div"),
+                        $i_fnode = _this.getNodeDom($div).fnode(),
+                        $i_snode = _this.getNodeDom($div).snode(),
+                        $cite = _this.getNodeDom($div).cite(),
+                        spread = $i_fnode.attr("data-spread"),
+                        leaf = $cite.attr("data-leaf");
+
+                    $ul.removeClass(NAV_SHOW);
+                    if(leaf !== "leaf") {
+                        _this.operateIcon($i_fnode, $i_snode).close();
+                    }
+                });
+            },
+            refreshTree: function(){// 刷新树
+                _this.refreshTree();
+            },
+            checkAll: function(){ // 全选节点
+            	_this.checkAllNode();
+            },
+            unCheckAll: function(){ // 全不选节点
+                _this.cancelCheckedNode();
+            },
+            invertAll: function(){ // 反选节点
+            	_this.invertCheckedNode();
+            },
+            remove: function(){// 删除选中节点
+            	_this.removeCheckedNode();
+            },
+            searchNode: function(){//模糊查询该值，展开该值节点
+                layer.prompt({
+                    formType: 0,
+                    value: "",
+                    title: '查询节点'
+                }, function(value, index1, elem){
+                    if (value) {
+                        var flag = _this.searchNode(value);
+                        if (!flag) {
+                            layer.msg("该名称节点不存在！", {icon:5});
+                        }
+                    } else {
+                        layer.msg("未指定查询节点名称", {icon:5});
+                    }
+                    layer.close(index1);
+                });
+            },
+            extMethod: function(menuId, $div, flag){
+                if(_this.menubar && _this.menubarTips.group && _this.menubarTips.group.length > 0 && flag == "group"){
+                    for(var i=0; i<_this.menubarTips.group.length; i++){
+                        var ext = _this.menubarTips.group[i];
+                        if (menuId == ext.menubarId){
+                            ext.handler(_this.getRequestParam(_this.getNodeParam($div), $div));
+                            break;
+                        }
+                    }
+                }
+                if(_this.menubar && _this.menubarTips.toolbar && _this.menubarTips.toolbar.length > 0 && flag == "toolbar"){
+                    for(var i=0; i<_this.menubarTips.toolbar.length; i++){
+                        var ext = _this.menubarTips.toolbar[i];
+                        if (menuId == ext.menubarId){
+                            ext.handler(_this.getRequestParam(_this.getNodeParam($div), $div));
+                            break;
+                        }
+                    }
+                }
+                if(_this.menubar && _this.menubarTips.freedom && _this.menubarTips.freedom.length > 0 && flag == "freedom"){
+                    for(var i=0; i<_this.menubarTips.freedom.length; i++){
+                        var ext = _this.menubarTips.freedom[i];
+                        if (menuId == ext.menubarId){
+                            ext.handler(_this.getRequestParam(_this.getNodeParam($div), $div));
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+    };
+
+    /**
+     * @Desc: menubar监听方法
+     * @Param: menuId：菜单栏的具体操作字符串
+     * @Param: flag：菜单栏的显示方式
+     */
+    DTree.prototype.menubarListener = function(menuId, flag){
+        var _this = this;
+        var $div = _this.getNodeDom().nowDiv();
+        switch (menuId) {
+            case defaultMenu.moveDown:	// 展开全部节点
+                _this.menubarMethod().openAllNode();
+                break;
+            case defaultMenu.moveUp:	// 收缩全部节点
+                _this.menubarMethod().closeAllNode();
+                break;
+            case defaultMenu.refresh:
+                _this.menubarMethod().refreshTree(); // 刷新树
+                break;
+            case defaultMenu.checkAll:
+                _this.menubarMethod().checkAll();
+                break;
+            case defaultMenu.unCheckAll:
+                _this.menubarMethod().unCheckAll();
+                break;
+            case defaultMenu.invertAll:
+                _this.menubarMethod().invertAll();
+                break;
+            case defaultMenu.remove:
+                _this.menubarMethod().remove();
+                break;
+            case defaultMenu.searchNode:
+                _this.menubarMethod().searchNode();
+                break;
+            default:
+                _this.menubarMethod().extMethod(menuId, $div, flag);
+                break;
+        }
+    };
+
+    /**
+     * @Desc: 模糊查询该值，展开该值节点
+     * @Param: value： 模糊查询的值
+     */
+    DTree.prototype.searchNode = function(value){
+        var _this = this;
+        var b = false;
+        var $lis = [];
+        _this.obj.find("cite[data-leaf]").each(function(){
+            var $nthis = $(this);
+            var html = $nthis.html();
+            if(html.indexOf(value) > -1){
+                if($nthis.attr("data-leaf") == "leaf") {
+                    // 叶子节点提供包含父节点的所有信息
+                    var title = "";
+                    $nthis.parents("li").each(function(){
+                        title = "-" + $(this).find("cite[data-leaf]").html() + title;
+                    });
+                    title = title.substring(1, title.length);
+                    $nthis.attr("title", title);
+                }
+                // 保存当前cite所在的li及父li中包含该值，则只保留父的
+                var i = 0;
+                $nthis.parents("li").each(function(){
+                    var html2 = $(this).find("cite[data-leaf]").html();
+                    if(html2.indexOf(value) > -1){
+                        i++;
+                    }
+                    if(i >= 2){
+                        return true;
+                    }
+                });
+                if (i < 2){
+                    $lis.push($nthis.closest("li").prop("outerHTML"));
+                }
+            }
+        });
+        if($lis.length > 0) {
+            b = true;
+            // 1.将树节点清空
+            _this.obj.html("");
+            // 2.遍历所有cite节点，展开当前cite节点
+            for(var i=0; i<$lis.length; i++){
+                _this.obj.append($lis[i]);
+            }
+        }
+        return b;
+    };
+
+
+    /******************** 工具栏区域 ********************/
+    /**
+     * @Desc: 获取工具栏
+     */
+    DTree.prototype.getToolbarDom = function(){
+        var _this = this;
+        var toolbarShow = _this.toolbarShow,
+            toolbarExt = _this.toolbarExt,
+            toolbarWay = _this.toolbarWay;
+
+        if(toolbarShow.length > 0){
+            for(var i=0; i<toolbarShow.length; i++){
+                var show = toolbarShow[i];
+                if(show == "pulldown"){
+                    _this.toolbarMenu[defaultTool.pulldown] = _this.setToolbarDom().setToolbarOption(defaultTool.pulldown, _this.toolbarStyle.title, _this.usefontStyle.toolbar.pulldown, "展开");
+                }
+                if(show == "pullup"){
+                    _this.toolbarMenu[defaultTool.pullup] = _this.setToolbarDom().setToolbarOption(defaultTool.pullup, _this.toolbarStyle.title, _this.usefontStyle.toolbar.pullup, "收缩");
+                }
+                if(show == "add"){
+                    _this.toolbarMenu[defaultTool.addTool] = _this.setToolbarDom().setToolbarOption(defaultTool.addTool, _this.toolbarStyle.title, _this.usefontStyle.toolbar.add, "新增");
+                }
+                if(show == "edit"){
+                    _this.toolbarMenu[defaultTool.editTool] = _this.setToolbarDom().setToolbarOption(defaultTool.editTool, _this.toolbarStyle.title, _this.usefontStyle.toolbar.edit, "编辑");
+                }
+                if(show == "delete"){
+                    _this.toolbarMenu[defaultTool.delTool] = _this.setToolbarDom().setToolbarOption(defaultTool.delTool, _this.toolbarStyle.title, _this.usefontStyle.toolbar.del, "删除");
+                }
+            }
+        }
+        if(toolbarExt.length > 0){
+            for(var i=0; i<toolbarExt.length; i++){
+                var ext = toolbarExt[i];
+                _this.toolbarMenu[ext.toolbarId] = _this.setToolbarDom().setToolbarOption(ext.toolbarId, ext.title, _this.usefontStyle.toolbarExt+" "+ext.icon, "");
+            }
+        }
+    };
+
+    /**
+     * @Desc: 设置工具栏按钮
+     */
+    DTree.prototype.setToolbarDom = function(){
+        var _this = this;
+        var toolbarWay = _this.toolbarWay;
+
+        return {
+            setToolbarOption: function(toolbarId, title, classId, other){
+                if(toolbarWay == "contextmenu") {
+                    return "<dd><a dtree-tool='"+toolbarId+"'><i class='"+classId+"'></i>&nbsp;"+other +title+"</a></dd>";
+                } else if(toolbarWay == "fixed" || toolbarWay == "follow") {
+                    return "<a dtree-tool='"+toolbarId+"' title='"+other + title+"'><i class='"+classId+"'></i></a>";
+                }
+            },
+            setMenuToolbarOption: function(menubarId, title, classId, other){
+                var rootId = _this.obj[0].id;
+                if(toolbarWay == "contextmenu") {
+                    return "<dd><a dtree-id='"+rootId+"' d-menu='"+menubarId+"'><i class='"+classId+"'></i>&nbsp;"+other +title+"</a></dd>";
+                } else if(toolbarWay == "fixed" || toolbarWay == "follow") {
+                    return "<a dtree-id='"+rootId+"' d-menu='"+menubarId+"' title='"+other + title+"'><i class='"+classId+"'></i></a>";
+                }
+            },
+            setToolbarPlace: function(toolbarMenu){
+                if(toolbarWay == "contextmenu") {
+                    if(toolbarMenu){
+                        _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).find('div.layui-nav-item>dl.layui-nav-child').html("");
+                        for(var key in toolbarMenu){
+                            _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).find('div.layui-nav-item>dl.layui-nav-child').append(toolbarMenu[key]);
+                        }
+                    }
+                } else if(toolbarWay == "fixed" || toolbarWay == "follow") {
+                    _this.obj.find("cite[data-leaf][dtree-disabled='false']").each(function(){
+                        var $cite = $(this);
+                        _this.dynamicToolbarDom($cite);
+                    });
+                }
+            }
+        }
+    };
+
+    /**
+     * @Desc: 在节点后动态绑定fixed和follow条件的工具栏
+     * @Param: $cite： JQuery对象，表示当前文本节点
+     */
+    DTree.prototype.dynamicToolbarDom = function($cite){
+        var _this = this;
+        var toolbarWay = _this.toolbarWay;
+        if($cite.next("em."+TOOLBAR_TOOL_EM).length == 0) {
+            var $div = $cite.parent("div");
+            var param = _this.getRequestParam(_this.getTempNodeParam($div));
+            var toolbarMenus = _this.toolbarFun.loadToolbarBefore(event.cloneObj(_this.toolbarMenu), param, $div);
+            var hideCls = (toolbarWay == "follow") ? NAV_HIDE : "";
+            var em = ["<em class='"+TOOLBAR_TOOL_EM+" "+hideCls+"'>"];
+            if(toolbarMenus){
+                for(var key in toolbarMenus){
+                    em.push(toolbarMenus[key]);
+                }
+            }
+            em.push("</em>");
+            $cite.after(em.join(''));
+        }
+    }
+
+    /**
+     * @Desc: 隐藏toolbar
+     */
+    DTree.prototype.toolbarHide = function() {
+        var _this = this;
+        if(_this.toolbar && _this.toolbarWay == "contextmenu") {
+            var $toolBarDiv = _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id);
+            $toolBarDiv.find(".layui-nav-child").removeClass('layui-anim-fadein layui-show');
+        }
+    }
+
+    /**
+     * @Desc: toolbar内置方法
+     */
+    DTree.prototype.toolbarMethod = function(){
+        var _this = this;
+        return {
+            pulldown: function(obj){ // 展开当前点击节点的下面全部节点
+                if(!obj) return;
+                var $ulNode = obj;
+                // 遍历所有ul子节点
+                for (var i = 0; i < $ulNode.length; i++) {
+                    // 获取当前节点的信息
+                    var $ul = $($ulNode[i]),
+                        $div = $ul.prev("div"),
+                        $i_fnode = _this.getNodeDom($div).fnode(),
+                        $i_snode = _this.getNodeDom($div).snode(),
+                        $cite = _this.getNodeDom($div).cite(),
+                        spread = $i_fnode.attr("data-spread"),
+                        leaf = $cite.attr("data-leaf");
+
+                    if (leaf == "leaf") { continue;	}	// 说明是叶子了，则继续循环下一个
+
+                    if (spread == "open") {
+                        // 说明该节点已经展开了，则进行子节点循环
+                    } else {
+                        if (_this.type=="load") {	//是否全量加载
+                            if (_this.cache) {	//是否开启缓存
+                                if ($ul.html()) {
+                                    $ul.addClass(NAV_SHOW);
+                                } else {	//加载节点
+                                    _this.getChild($div);
+                                }
+                            }else {	//每次取新的数据
+                                $ul.html("");
+                                _this.getChild($div);
+                            }
+                        } else {	// 全量加载
+                            $ul.addClass(NAV_SHOW);
+                        }
+                        _this.operateIcon($i_fnode, $i_snode).open();
+
+                    }
+                    var $childUl = $ul.children("li").children("ul");
+                    _this.toolbarMethod().pulldown($childUl);
+                }
+            },
+            pullup: function($li){ // 收缩当前点击节点的下面全部节点
+                $li.find("."+LI_NAV_CHILD).each(function(){
+                    // 获取当前节点的信息
+                    var $ul = $(this),
+                        $div = $ul.prev("div"),
+                        $i_fnode = _this.getNodeDom($div).fnode(),
+                        $i_snode = _this.getNodeDom($div).snode(),
+                        $cite = _this.getNodeDom($div).cite(),
+                        spread = $i_fnode.attr("data-spread"),
+                        leaf = $cite.attr("data-leaf");
+
+                    $ul.removeClass(NAV_SHOW);
+                    if(leaf !== "leaf") {
+                        _this.operateIcon($i_fnode, $i_snode).close();
+                    }
+                });
+            }
+        }
+    };
+
+    /**
+     * @Desc: toolbar监听方法
+     * @Param: tool: 工具栏的具体操作字符串
+     * @Param: $div: JQuery对象，表示当前操作节点
+     */
+    DTree.prototype.toolbarListener = function(tool, $div) {
+        var _this = this;
+        var $cite = $div.children("cite[data-leaf]"),
+            $ul = $div.next("ul"),
+            $p_li = $div.parent("li[data-index]"),	//当前选中节点的顶级li节点
+            $p_ul = $p_li.parent("ul"),	//当前选中节点的顶级li节点的父级ul
+            $p_div = $p_ul.prev("div"), //当前选中节点的顶级li节点的父级ul的前一个div
+            title = (typeof _this.formatter.title === 'function') ? $cite.attr("data-title") : $cite.text();
+        
+        switch (tool) {
+            case defaultTool.pulldown:
+                _this.toolbarMethod().pulldown($ul);
+                break;
+            case defaultTool.pullup:
+                _this.toolbarMethod().pullup($p_li);
+                break;
+            case defaultTool.addTool:
+                var content = _this.loadToolBar(title, defaultTool.addTool);
+
+                layer.open({
+                    title: "新增"+_this.toolbarStyle.title,
+                    type: 1,
+                    area: _this.toolbarStyle.area,
+                    content: content,
+                    success: function(layero, index){
+                        form.render();
+                        form.on("submit(dtree_addNode_" + _this.obj[0].id + "_form)",function(data){
+                            var data = data.field;
+                            var parentId = $div.attr("data-id"),
+                                id = $div.attr("data-id")+"_node_"+$ul[0].childNodes.length,
+                                leaf = true,
+                                checked = "0",
+                                level = parseInt($p_li.attr("data-index"))+1;
+
+                            var type = _this.response.type;
+                            var checked = _this.response.checked;
+                            // 创建子节点的DOM，添加子节点
+                            var checkArr = [];
+                            if (_this.checkArrLen > 0) {
+                                for (var i = 0; i < _this.checkArrLen; i++) {
+                                    checkArr.push({type: i, checked: "0"});
+                                }
+                            }
+
+                            $ul.append(_this.getLiItemDom(id, parentId, data.addNodeName, data.addNodeName, true, "", "", checkArr, level, false, false, false, "", "", "item"));
+                            // 先将li节点隐藏
+                            $ul.find("li[data-id='"+id+"']").hide();
+                            // 重新赋值
+                            var $addDiv = $ul.find("div[data-id='"+id+"']");
+                            node = _this.getNodeParam($addDiv);
+
+                            //获取组装后的requestNode,组合参数
+                            var requestNode = _this.getRequestParam(node);
+                            requestNode = $.extend(requestNode, data);
+
+                            _this.temp = [id, $ul, $div, level];
+                            // 用户自定义想做的事情
+                            _this.toolbarFun.addTreeNode(requestNode, $div);
+
+                            layer.close(index);
+                            return false;
+                        });
+                    }
+                });
+                break;
+            case defaultTool.editTool:
+                var content = _this.loadToolBar(title, defaultTool.editTool);
+
+                layer.open({
+                    title: "编辑"+_this.toolbarStyle.title,
+                    type: 1,
+                    area: _this.toolbarStyle.area,
+                    content: content,
+                    success: function(layero, index){
+                        _this.toolbarFun.editTreeLoad(_this.getRequestParam(_this.getNodeParam($div)));
+                        form.render();
+                        form.on("submit(dtree_editNode_" + _this.obj[0].id + "_form)",function(data){
+                            var data = data.field;
+                            $cite.html(data.editNodeName);
+                            node = _this.getNodeParam($div);
+                            var requestNode = _this.getRequestParam(node);
+                            requestNode = $.extend(requestNode, data);
+                            _this.temp = [$cite, $div, title, $p_div];
+                            _this.toolbarFun.editTreeNode(requestNode, $div);
+
+                            layer.close(index);
+                        });
+                    }
+                });
+                break;
+            case defaultTool.delTool:
+                layer.confirm('确定要删除该'+_this.toolbarStyle.title+'？', {icon: 3, title:'删除'+_this.toolbarStyle.title}, function(index){
+                    var node = _this.getNodeParam($div);
+                    _this.temp = [$p_li, $p_div];
+                    _this.toolbarFun.delTreeNode(_this.getRequestParam(_this.getNodeParam($div)), $div);
+
+                    layer.close(index);
+                });
+                break;
+            default:
+                if(_this.toolbarExt.length > 0){
+                    for(var i=0; i<_this.toolbarExt.length; i++){
+                        var ext = _this.toolbarExt[i];
+                        if (tool == ext.toolbarId){
+                            ext.handler(_this.getRequestParam(_this.getNodeParam($div)), $div);
+                            break;
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * @Desc: 加载toolbar中的内容
+     * @Param: title: 默认操作中的input输入框的值
+     * @Param: name: 工具栏的具体操作字符串
+     */
+    DTree.prototype.loadToolBar = function(title, name){
+        var _this = this;
+        var toolbarShow = _this.toolbarShow;
+        var nodeBarContents = _this.toolbarBtn;
+
+        var html = "";
+        switch (name) {
+            case defaultTool.addTool:
+                var addNodeBarDef = [{"label": "当前选中", "name": "nodeTitle", "type": "text", "value": title, "defElem": "nowChoose", "readonly": true},
+                    {"label": "新增"+_this.toolbarStyle.title, "name": "addNodeName", "type": "text", "value": "", "defElem": "nowChange", "verify": "required"},
+                    {"type": "submit", "value": "确认添加", "defElem": "btn", "filter": "dtree_addNode_" + _this.obj[0].id + "_form"}];
+
+                //2. 用户自定义的节点内容
+                var addNodeBar = ['<div class="'+TOOLBAR_TOOL+'"><form class="layui-form layui-form-pane" lay-filter="dtree_addNode_' + _this.obj[0].id + '_form">'];
+
+                if(nodeBarContents != null && nodeBarContents.length > 0){
+                    if(nodeBarContents[0] != null && nodeBarContents[0] != undefined && nodeBarContents[0].length > 0){
+                        var addNodeBarContents = nodeBarContents[0];
+                        // 1. 检查是否包含了now、newly、btn这三个默认项,将其他元素依次排列，将特殊元素至于栈顶
+                        for(var i=0; i<addNodeBarContents.length; i++){
+                            var defElem = addNodeBarContents[i].defElem;
+                            if(defElem == "nowChoose") {
+                                $.extend(addNodeBarDef[0], addNodeBarContents[i]);
+                            } else if(defElem == "nowChange") {
+                                $.extend(addNodeBarDef[1], addNodeBarContents[i]);
+                            } else if(defElem == "btn") {
+                                $.extend(addNodeBarDef[2], addNodeBarContents[i]);
+                            } else {
+                                addNodeBarDef.push(addNodeBarContents[i]);
+                            }
+                        }
+                    }
+                }
+
+                // 2. 遍历生成全部表单标签
+                for(var j=0; j<addNodeBarDef.length; j++){
+                    var type = addNodeBarDef[j].type;
+                    if(!type){type = "text";}
+                    switch (type) {
+                        case "text":
+                            addNodeBar.push(_this.loadToolBarDetail(addNodeBarDef[j]).text());
+                            break;
+                        case "textarea":
+                            addNodeBar.push(_this.loadToolBarDetail(addNodeBarDef[j]).textarea());
+                            break;
+                        case "select":
+                            addNodeBar.push(_this.loadToolBarDetail(addNodeBarDef[j]).select());
+                            break;
+                        case "hidden":
+                            addNodeBar.push(_this.loadToolBarDetail(addNodeBarDef[j]).hidden());
+                            break;
+
+                    }
+                }
+
+                var addBtn = ['<div class="layui-form-item">', '<div class="layui-input-block" style="margin-left:0px;text-align:center;">'];
+                // 3.遍历生成按钮
+                for(var j=0; j<addNodeBarDef.length; j++){
+                    var type = addNodeBarDef[j].type;
+                    if(!type){type = "text";}
+                    switch (type) {
+                        case "submit":
+                            addBtn.push(_this.loadToolBarDetail(addNodeBarDef[j]).submit());
+                            break;
+                        case "button":
+                            addBtn.push(_this.loadToolBarDetail(addNodeBarDef[j]).button());
+                            break;
+                        case "reset":
+                            addBtn.push(_this.loadToolBarDetail(addNodeBarDef[j]).reset());
+                            break;
+
+                    }
+                }
+                addBtn.push('</div></div>');
+                addNodeBar.push(addBtn.join(''));
+                addNodeBar.push('</form></div>');
+                html = addNodeBar.join('');
+                break;
+
+            case defaultTool.editTool:
+                var editNodeBarDef = [{"label": "当前选中", "name": "nodeTitle", "type": "text", "value": title, "defElem": "nowChoose", "readonly": true},
+                    {"label": "编辑"+_this.toolbarStyle.title, "name": "editNodeName", "type": "text", "value": "", "defElem": "nowChange", "verify": "required"},
+                    {"type": "submit", "value": "确认编辑", "defElem": "btn", "filter": "dtree_editNode_" + _this.obj[0].id + "_form"}];
+
+                var editNodeBar = ['<div class="'+TOOLBAR_TOOL+'"><form class="layui-form layui-form-pane" lay-filter="dtree_editNode_' + _this.obj[0].id + '_form">'];
+                //2. 用户自定义的节点内容
+                if(nodeBarContents != null && nodeBarContents.length > 0){
+
+                    if(nodeBarContents[1] != null && nodeBarContents[1] != undefined && nodeBarContents[1].length > 0){
+                        var editNodeBarContents = nodeBarContents[1];
+                        // 1. 检查是否包含了now、newly、btn这三个默认项,将其他元素依次排列，将特殊元素至于栈顶
+                        for(var i=0; i<editNodeBarContents.length; i++){
+                            var defElem = editNodeBarContents[i].defElem;
+                            if(defElem == "nowChoose") {
+                                $.extend(editNodeBarDef[0], editNodeBarContents[i]);
+                            } else if(defElem == "nowChange") {
+                                $.extend(editNodeBarDef[1], editNodeBarContents[i]);
+                            } else if(defElem == "btn") {
+                                $.extend(editNodeBarDef[2], editNodeBarContents[i]);
+                            } else {
+                                editNodeBarDef.push(editNodeBarContents[i]);
+                            }
+                        }
+
+                    }
+                }
+                // 2. 遍历生成全部表单标签
+                for(var j=0; j<editNodeBarDef.length; j++){
+                    var type = editNodeBarDef[j].type;
+                    if(!type){type = "text";}
+                    switch (type) {
+                        case "text":
+                            editNodeBar.push(_this.loadToolBarDetail(editNodeBarDef[j]).text());
+                            break;
+                        case "textarea":
+                            editNodeBar.push(_this.loadToolBarDetail(editNodeBarDef[j]).textarea());
+                            break;
+                        case "select":
+                            editNodeBar.push(_this.loadToolBarDetail(editNodeBarDef[j]).select());
+                            break;
+                        case "hidden":
+                            editNodeBar.push(_this.loadToolBarDetail(editNodeBarDef[j]).hidden());
+                            break;
+                    }
+                }
+
+                var editBtn = ['<div class="layui-form-item">', '<div class="layui-input-block" style="margin-left:0px;text-align:center;">'];
+                // 3.遍历生成按钮
+                for(var j=0; j<editNodeBarDef.length; j++){
+                    var type = editNodeBarDef[j].type;
+                    if(!type){type = "text";}
+                    switch (type) {
+                        case "submit":
+                            editBtn.push(_this.loadToolBarDetail(editNodeBarDef[j]).submit());
+                            break;
+                        case "button":
+                            editBtn.push(_this.loadToolBarDetail(editNodeBarDef[j]).button());
+                            break;
+                        case "reset":
+                            editBtn.push(_this.loadToolBarDetail(editNodeBarDef[j]).reset());
+                            break;
+
+                    }
+                }
+                editBtn.push('</div></div>');
+                editNodeBar.push(editBtn.join(''));
+                editNodeBar.push('</form></div>');
+                html = editNodeBar.join('');
+                break;
+        }
+        return html;
+    };
+
+    /**
+     * @Desc: 获取toolbar详细的标签信息
+     * @Param: nodeBarContents: 工具栏中的数据渲染内容JSON对象
+     */
+    DTree.prototype.loadToolBarDetail = function(nodeBarContents){
+        var _this = this;
+        var readonly = (typeof (nodeBarContents.readonly) === "boolean") ? nodeBarContents.readonly : false;
+        var disabled = (typeof (nodeBarContents.disabled) === "boolean") ? nodeBarContents.disabled : false;
+        var id = nodeBarContents.id ? nodeBarContents.id : "";
+        var name = nodeBarContents.name ? nodeBarContents.name : "";
+        var val = nodeBarContents.value ? nodeBarContents.value : "";
+        var verify = nodeBarContents.verify ? nodeBarContents.verify : "";
+        var placeholder = nodeBarContents.placeholder ? nodeBarContents.placeholder : val;
+        return{
+            text: function(){
+                return ['<div class="layui-form-item">',
+                    '<label class="layui-form-label" title="'+nodeBarContents.label+'">'+nodeBarContents.label+'：</label>',
+                    '<div class="layui-input-block f-input-par">',
+                    '<input type="text" class="layui-input f-input" value="'+val+'" placeholder="'+placeholder+'" lay-verify="'+verify+'" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    (readonly ? 'readonly ' : ''),
+                    (disabled ? 'disabled ' : ''),
+                    '/>',
+                    '</div>',
+                    '</div>'].join('');
+            },
+            textarea: function(){
+                return ['<div class="layui-form-item layui-form-text">',
+                    '<label class="layui-form-label" title="'+nodeBarContents.label+'">'+nodeBarContents.label+'：</label>',
+                    '<div class="layui-input-block f-input-par">',
+                    '<textarea class="layui-textarea f-input" value="'+val+'" placeholder="'+placeholder+'" lay-verify="'+verify+'" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    (readonly ? 'readonly ' : ''),
+                    (disabled ? 'disabled ' : ''),
+                    '>'+val+'</textarea>',
+                    '</div>',
+                    '</div>'].join('');
+            },
+            hidden: function(){
+                return ['<input type="hidden" class="layui-input f-input" value="'+val+'" lay-verify="'+verify+'" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    (readonly ? 'readonly ' : ''),
+                    (disabled ? 'disabled ' : ''),
+                    '/>'].join('');
+            },
+            select: function(){
+                var optionsData = (typeof nodeBarContents.optionsData === 'object') ? nodeBarContents.optionsData : nodeBarContents.optionsData();
+                var options = "";
+                for(var key in optionsData){
+                    if(val == optionsData[key]){
+                        options += "<option value='"+key+"' selected>"+optionsData[key]+"</option>";
+                    } else {
+                        options += "<option value='"+key+"'>"+optionsData[key]+"</option>";
+                    }
+                }
+                return ['<div class="layui-form-item">',
+                    '<label class="layui-form-label" title="'+nodeBarContents.label+'">'+nodeBarContents.label+'：</label>',
+                    '<div class="layui-input-block f-input-par">',
+                    '<select lay-verify="'+verify+'" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    (readonly ? 'readonly ' : ''),
+                    (disabled ? 'disabled ' : ''),
+                    '>',
+                    options,
+                    '</select>', '</div>', '</div>'].join('');
+            },
+            submit: function(){
+                var filter = nodeBarContents.filter;
+                return ['<button type="button" class="layui-btn layui-btn-normal btn-w100" lay-submit lay-filter="'+filter+'" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    '>'+val+'</button>'].join('');
+            },
+            button: function(){
+                return ['<button type="button" class="layui-btn layui-btn-normal btn-w100" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    ' >'+val+'</button>'].join('');
+            },
+            reset: function(){
+                return ['<button type="reset" class="layui-btn layui-btn-primary btn-w100" ',
+                    (id != "" ? 'id="'+id+'" ' : ''),
+                    (name != "" ? 'name="'+name+'" ' : ''),
+                    '>'+val+'</button>'].join('');
+            }
+        }
+    };
+
+    /**
+     * @Desc: 新增节点后改变节点内容
+     * @Param: returnID: 当前需要加载的内容，JSON对象、字符串、指定字符串（"refresh"）、true
+     */
+    DTree.prototype.changeTreeNodeAdd = function(returnID){
+        var _this = this;
+        var temp = _this.temp;
+        var id = temp[0], $ul = temp[1], $div = temp[2], level = temp[3];
+        var flag = false;
+        if(returnID){
+            var $thisDiv = _this.obj.find("[data-id='"+id+"']");
+            if(typeof returnID === "object"){
+                // 如果是JSON格式数据，则将当前DIV删除，重新建造DIV
+                $thisDiv.remove();
+                var parseData = _this.parseData(returnID);
+
+                if(parseData.treeId()){
+                    $ul.append(_this.getLiItemDom(parseData.treeId(), parseData.parentId(), parseData.title(), parseData.fmtTitle(), parseData.last(0), parseData.ficonClass(), parseData.iconClass(), parseData.checkArr(), level, parseData.spread(), parseData.disabled(), parseData.hide(), parseData.basicData(), parseData.recordData(), "item"));
+
+                    // 建造完毕后，选中该DIV
+                    $thisDiv = $ul.find("div[data-id='"+parseData.treeId()+"']");
+                    _this.setNodeParam($thisDiv)
+                } else {
+                    layer.msg("添加失败,节点ID为undefined！",{icon:5});
+                    // 将li节点删除
+                    $ul.find("li[data-id='"+id+"']").remove();
+                    // 重新赋值
+                    _this.setNodeParam($div);
+                    // 临时变量制空
+                    _this.temp = [];
+                    return ;
+                }
+            }else if(returnID == 'refresh' || returnID == true){
+                // 如果是设置为refresh参数，则向后台发送请求，获取新增节点下的真实参数，局部刷新树。
+                flag = true;
+            } else if(typeof returnID === "string" || typeof returnID === 'number'){
+                $thisDiv.attr("data-id", returnID);
+                // 将li节点展示
+                $ul.find("li[data-id='"+returnID+"']").show();
+                _this.setNodeParam($thisDiv)
+            }
+
+            // 判断当前点击的节点是否是最后一级节点，如果是，则需要修改节点的样式
+            var $icon_i = $div.find("i[data-spread]");
+            if ($icon_i.eq(0).attr("data-spread") == "last") {
+                _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).openWithLeaf();
+            } else {	//如果不是，也要修改节点样式
+                _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).open();
+            }
+            $ul.addClass(NAV_SHOW);	//展开UL
+            _this.accordionUL($ul);
+            if(flag) {
+                _this.getChild($div);
+            } else {
+                //		_this.showLine();
+                _this.showLine($ul.find("li"));
+                // 这种情况下需要在新增节点后对节点新增工具栏
+                if(_this.toolbar && _this.toolbarWay != 'contextmenu') {
+                    _this.dynamicToolbarDom($thisDiv.find("cite[data-leaf]"));
+                }
+            }
+
+        } else {
+            // 将li节点删除
+            $ul.find("li[data-id='"+id+"']").remove();
+            // 重新赋值
+            _this.setNodeParam($div);
+        }
+
+        _this.temp = []; // 临时变量制空
+
+    };
+
+    /**
+     * @Desc: 编辑页打开后显示编辑页内容
+     * @Param: param: 编辑页打开之后回显的数据集
+     */
+    DTree.prototype.changeTreeNodeDone = function(param){
+        var _this = this;
+        form.val('dtree_editNode_' + _this.obj[0].id + '_form', param);
+        form.render();
+    };
+
+    /**
+     * @Desc: 修改节点后改变节点内容
+     * @Param: returnID: 当前需要变更的内容，JSON对象
+     */
+    DTree.prototype.changeTreeNodeEdit = function(returnID){
+        var _this = this;
+        var temp = _this.temp;
+        var $cite = temp[0], $div = temp[1], title = temp[2], $p_div = temp[3];
+        var flag = false;
+        if(returnID){
+            if(typeof returnID === "object"){
+                var parseData = _this.parseData(data);
+
+                if(parseData.treeId()){
+                    var replaceDom = _this.replaceDom($div, parseData.treeId(), parseData.last(0), parseData.spread(), parseData.disabled(), parseData.hide());
+                    replaceDom.node(parseData.iconClass());
+                    replaceDom.checkbox(parseData.checkArr());
+                    replaceDom.text(parseData.title());
+                    replaceDom.ul();
+                    replaceDom.basicData(parseData.basicData());
+                    replaceDom.recordData(parseData.recordData());
+                    _this.setNodeParam($div);
+                } else {
+                    layer.msg("编辑失败,节点ID为undefined！",{icon:5});
+                    // 重新赋值
+                    _this.setNodeParam($div);
+                }
+            }
+        } else {
+            $cite.html(title);
+            _this.getNodeParam($div);
+        }
+
+        _this.temp = []; // 临时变量制空
+    };
+
+    /**
+     * @Desc: 删除节点后改变节点内容
+     * @Param: flag: 是否要删除节点
+     */
+    DTree.prototype.changeTreeNodeDel = function(flag){
+        var _this = this;
+        var temp = _this.temp;
+        var $p_li = temp[0],
+            $p_ul = $p_li.parent("ul"),
+            $p_div = temp[1];
+
+        if(flag){
+            $p_li.remove();
+            _this.showLine($p_ul.find("li"));
+            // 判断父级ul中是否还存在li,如果不存在，则需要修改节点的样式
+            if($p_ul.children("li").length == 0){
+                var $icon_i = $p_div.find("i[data-spread]");
+                _this.operateIcon($icon_i.eq(0), $icon_i.eq(1)).closeWithLeaf();
+            }
+            _this.initNodeParam();
+        }
+
+        _this.temp = []; // 临时变量制空
+    };
+
+    /******************** iframe区域 ********************/
+    /**
+     * @Desc: 加载iframe
+     * @Param: $div: JQuery对象，表示当前节点
+     * @Param: iframeParam: iframe加载的参数
+     */ 
+    DTree.prototype.loadIframe = function($div, iframeParam) {
+        var _this = this;
+        var $cite = _this.getNodeDom($div).cite();
+        if (!_this.useIframe) {		// 启用iframe
+            return false;
+        }
+        var iframeElem = _this.iframeElem,
+            iframeUrl = _this.iframeUrl,
+            iframeLoad = _this.iframeLoad;
+
+        var flag = iframeLoad == "leaf" ? (($cite.attr("data-leaf") == "leaf") ? true : false) : true;
+
+        if (flag) {
+            if ($(iframeElem).length > 0) {		//iframe存在
+                if (!iframeUrl) {
+                    layer.msg("数据请求异常，iframeUrl参数未指定", {icon:5});
+                    return false;
+                }
+                var param = AjaxHelper.serialize("?", iframeParam);
+                if(iframeUrl.indexOf("?")> -1){
+                    param = "&"+param.substring(1, param.length);
+                }
+                var url = iframeUrl + param;
+                $(iframeElem).attr("src", url);
+            } else {
+                layer.msg("iframe绑定异常，请确认页面中是否有iframe页对应的容器", {icon:5});
+                return false;
+            }
+        }
+        return flag;
+    };
+
+    /**
+     * @Desc: 获取传递出去的参数，根据iframe.iframeDefaultRequest、iframe.iframeRequest和node拼出发出请求的参数
+     * @Param: nodes: 需要传递出去的参数
+     */
+    DTree.prototype.getIframeRequestParam = function(nodes){
+        var _this = this;
+        var request = _this.iframeRequest,
+            defaultRequestNames = _this.iframeDefaultRequest,
+            node = nodes || _this.node,
+            requestParam = {};
+
+        // 先拼用户自定义的，在拼树生成的，这样的话用户可以自定义当树未生成时的节点的初始值
+        for ( var key in request) {
+            requestParam[key] = request[key];
+        }
+        for ( var key in defaultRequestNames) {
+            var paramName = defaultRequestNames[key];
+            var paramValue = node[key];
+            if(typeof paramValue === "boolean"){
+                requestParam[paramName] = paramValue;
+            }else {
+                if(paramValue){
+                    requestParam[paramName] = paramValue;
+                }
+            }
+        }
+
+        // 解决传递中文的乱码问题
+        var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;	//正则匹配中文
+        for(var key in requestParam){
+            if(reg.test(requestParam[key])) {
+                var str = requestParam[key];
+                requestParam[key] = encodeURI(encodeURI(str));
+            }
+        }
+
+        return requestParam;
+    };
+
+    /******************** 数据回调区域 ********************/
+    /**
+     * @Desc: 根据具体的id获取基于当前id的div以及对应的其他dom元素
+     * @Param: id: 节点的ID值
+     */
+    DTree.prototype.getNodeDom = function(id){
+        var _this = this;
+        // 获取当前div，如果id就是一个dom，则就是这个，如果不是则进行选择。如果选不中则为null
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        return {
+            div: function(){	// 获取当前div
+                return $div;
+            },
+            fnode: function(){	// 获取一级图标元素
+                return ($div == null) ? null : $div.find("i[data-spread]").eq(0);
+            },
+            snode: function(){	// 获取二级图标元素
+                return ($div == null) ? null : $div.find("i[data-spread]").eq(1);
+            },
+            checkbox: function(){		// 获取复选框元素
+                return ($div == null) ? null : $div.find("i[data-par]");
+            },
+            cite: function(){	// 获取cite元素
+                return ($div == null) ? null : $div.find("cite[data-leaf]");
+            },
+            nextUl: function(){	// 获取相邻的ul元素
+                return ($div == null) ? null : $div.next("ul");
+            },
+            parentLi: function(){	// 获取父级li元素
+                return ($div == null) ? null : $div.parent("li");
+            },
+            parentUl: function(){	// 获取基于当前$div的上级$ul
+                return ($div == null) ? null : $div.parent("li").parent("ul");
+            },
+            parentDiv: function(){  // 获取基于当前$div的上级$div
+                return ($div == null) ? null : $div.parent("li").parent("ul").prev("div");
+            },
+            nowDiv: function(){		// 获取当前选中节点，没有则返回null
+                return (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS).length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS);
+            },
+            nowOrRootDiv: function(){	// 获取当前选中节点，没有则返回根节点下的第一个div
+                return (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS).length == 0) ? _this.obj.children("li").eq(0).children("div").eq(0) : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS);
+            },
+            nowOrRootUl: function(){	// 获取当前选中节点下一个UL 或根节点。为了将新节点放入ul下
+                return (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS).length == 0) ? _this.obj : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id]").parent().find("."+NAV_THIS).next("ul");
+            }
+        }
+    };
+
+    /**
+     * @Desc: 获取当前选中节点下一个ul节点 或根节点。为了将新节点放入ul下
+     */
+    DTree.prototype.getNowNodeUl =  function() {
+        var _this = this;
+        return _this.getNodeDom().nowOrRootUl();
+    };
+
+    /**
+     * @Desc: 获取当前选中div节点 或第一个根div节点。
+     */
+    DTree.prototype.getNowNode =  function() {
+        var _this = this;
+        return _this.getNodeDom().nowOrRootDiv();
+    };
+
+    /**
+     * @Desc: 获取当前选中div节点 无则返回null。
+     */
+    DTree.prototype.getNowNodeOrNull =  function() {
+        var _this = this;
+        return _this.getNodeDom().nowDiv();
+    };
+
+    /**
+     * @Desc: 根据获取指定div节点。
+     * @Param: id： 指定节点的ID
+     */
+    DTree.prototype.getNode =  function(id) {
+        var _this = this;
+        return _this.getNodeDom(id).div();
+    };
+
+    /**
+     * @Desc: 设置当前选中节点的全部参数
+     * @Param: $div： 当前选中的节点
+     */
+    DTree.prototype.setNodeParam = function($div) {
+        var _this = this;
+        _this.node.nodeId = $div.attr("data-id");
+        _this.node.parentId = _this.getNodeDom($div).parentLi().attr("data-pid");
+        _this.node.context = (typeof _this.formatter.title === 'function') ? _this.getNodeDom($div).cite().attr("data-title") : _this.getNodeDom($div).cite().text();
+        _this.node.leaf = _this.getNodeDom($div).cite().attr("data-leaf") == "leaf" ? true : false;
+        _this.node.level = _this.getNodeDom($div).parentLi().attr("data-index");
+        _this.node.spread = _this.getNodeDom($div).fnode().attr("data-spread") == "open" ? true : false;
+
+        var basicData = $div.attr("data-basic");
+        if(basicData) {
+        	basicData = JSON.parse(event.unescape(basicData));
+        }
+        _this.node.basicData = basicData;
+        
+        var recordData = $div.attr("data-record");
+        if(recordData) {
+        	recordData = JSON.parse(event.unescape(recordData));
+        }
+        _this.node.recordData = recordData;
+        
+        if (_this.getNodeDom($div).checkbox()) {
+            var dataTypes = "", checkeds = "", initcheckeds = "";
+            _this.getNodeDom($div).checkbox().each(function(){
+                dataTypes += $(this).attr("data-type") + ",";
+                checkeds += $(this).attr("data-checked") + ",";
+                initcheckeds += $(this).attr("data-initchecked") + ",";
+            });
+            dataTypes = dataTypes.substring(0, dataTypes.length-1);
+            checkeds = checkeds.substring(0, checkeds.length-1);
+            initcheckeds = initcheckeds.substring(0, initcheckeds.length-1);
+
+            _this.node.dataType = dataTypes;
+            _this.node.checked = checkeds;
+            _this.node.initchecked = initcheckeds;
+        }
+    };
+
+    /**
+     * @Desc: 获取当前选中节点的全部参数
+     * @Param: $div： 当前选中的节点
+     */
+    DTree.prototype.getNodeParam = function($div) {
+        var _this = this;
+        if ($div) {
+            _this.setNodeParam($div);
+        } else {
+            if(_this.obj.find("div[data-id]").parent().find("."+NAV_THIS).length == 0){
+                _this.initNodeParam();
+            }
+        }
+        return this.node;
+    };
+
+    /**
+     * @Desc: 获取一个临时的node参数
+     * @Param: $div： 当前选中的节点
+     */
+    DTree.prototype.getTempNodeParam = function($div) {
+        var _this = this;
+        var temp_node = {};
+        temp_node.nodeId = $div.attr("data-id");
+        temp_node.parentId = _this.getNodeDom($div).parentLi().attr("data-pid");
+        temp_node.context = (typeof _this.formatter.title === 'function') ? _this.getNodeDom($div).cite().attr("data-title") : _this.getNodeDom($div).cite().text();
+        temp_node.leaf = _this.getNodeDom($div).cite().attr("data-leaf") == "leaf" ? true : false;
+        temp_node.level = _this.getNodeDom($div).parentLi().attr("data-index");
+        temp_node.spread = _this.getNodeDom($div).fnode().attr("data-spread") == "open" ? true : false;
+        
+        var basicData = $div.attr("data-basic");
+        if(basicData) {
+        	basicData = JSON.parse(event.unescape(basicData));
+        }
+        temp_node.basicData = basicData;
+        var recordData = $div.attr("data-record");
+        if(recordData) {
+        	recordData = JSON.parse(event.unescape(recordData));
+        }
+        temp_node.recordData = recordData;
+        
+        if (_this.getNodeDom($div).checkbox()) {
+            var dataTypes = "", checkeds = "", initcheckeds = "";
+            _this.getNodeDom($div).checkbox().each(function(){
+                dataTypes += $(this).attr("data-type") + ",";
+                checkeds += $(this).attr("data-checked") + ",";
+                initcheckeds += $(this).attr("data-initchecked") + ",";
+            });
+            dataTypes = dataTypes.substring(0, dataTypes.length-1);
+            checkeds = checkeds.substring(0, checkeds.length-1);
+            initcheckeds = initcheckeds.substring(0, initcheckeds.length-1);
+
+            temp_node.dataType = dataTypes;
+            temp_node.checked = checkeds;
+            temp_node.initchecked = initcheckeds;
+        }
+        return temp_node;
+    };
+
+    /**
+     * @Desc: 重置内置参数
+     */
+    DTree.prototype.initNodeParam = function(){
+        var _this = this;
+        _this.node.nodeId = "";
+        _this.node.parentId = "";
+        _this.node.context = "";
+        _this.node.leaf = "";
+        _this.node.level = "";
+        _this.node.spread = "";
+        _this.node.dataType = "";
+        _this.node.checked = "";
+        _this.node.initchecked = "";
+        _this.node.basicData = "";
+        _this.node.recordData = "";
+        
+        if(_this.select) {
+             _this.selectResetVal();
+        }
+    };
+
+    /**
+     * @Desc: 获取传递出去的参数，根据defaultRequest、request和node拼出发出请求的参数
+     * @Param: nodes：需要传递出去的参数
+     */
+    DTree.prototype.getRequestParam = function(nodes){
+        var _this = this;
+        var request = _this.request,
+            defaultRequestNames = _this.defaultRequest,
+            node = nodes || _this.node,
+            requestParam = {};
+
+        // 先拼用户自定义的，在拼树生成的，这样的话用户可以自定义当树未生成时的节点的初始值
+        for ( var key in request) {
+            requestParam[key] = request[key];
+        }
+        for ( var key in defaultRequestNames) {
+            var paramName = defaultRequestNames[key];
+            var paramValue = node[key];
+            if(typeof paramValue === "boolean"){
+                requestParam[paramName] = paramValue;
+            }else {
+                if(paramValue){
+                    requestParam[paramName] = paramValue;
+                }
+            }
+
+        }
+        return requestParam;
+    };
+
+    /**
+     * @Desc:  获取filterParam过滤后的requestParam
+     * @Param: requestParam：请求参数
+     */
+    DTree.prototype.getFilterRequestParam = function(requestParam){
+        var _this = this;
+        var filterRequest = _this.filterRequest;
+        return event.cloneObj(requestParam, filterRequest);
+    };
+
+    /**
+     * @Desc:  获取当前选中的请求参数
+     */
+    DTree.prototype.getNowParam = function(){
+        var _this = this;
+
+        return _this.getRequestParam(_this.getNodeParam());
+    };
+
+    /**
+     * @Desc:  根据id获取指定div节点选中参数
+     * @Param: id：节点的ID值
+     */
+    DTree.prototype.getParam = function(id){
+        var _this = this;
+
+        // 获取当前div，如果id就是一个dom，则就是这个，如果不是则进行选择。如果选不中则为null
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        if($div != null){ return _this.callbackData().node(_this.getTempNodeParam($div)); } else { return {}; }
+    };
+
+    /**
+     * @Desc:  根据id获取节点上级节点参数
+     * @Param: id：节点的ID值
+     */
+    DTree.prototype.getParentParam = function(id){
+        var _this = this;
+        // 获取当前div，如果id就是一个dom，则就是这个，如果不是则进行选择。如果选不中则为null
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        if($div != null){ return _this.callbackData().parentNode($div); } else { return {}; }
+    };
+
+    /**
+     * @Desc:  根据id获取节点的全部上级节点参数值
+     * @Param: id：节点的ID值
+     */
+    DTree.prototype.getAllParentParam = function(id){
+        var _this = this;
+        // 获取当前div，如果id就是一个dom，则就是这个，如果不是则进行选择。如果选不中则为null
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        var arr = [];
+        if($div != null){
+            var level = _this.getTempNodeParam($div).level;
+            for(var i=1; i<level; i++){  // 从1开始遍历，如果level等于1说明是根节点
+                arr.unshift(_this.callbackData().parentNode($div));
+                $div = _this.getNodeDom($div).parentDiv();
+            }
+        }
+        return arr;
+    };
+
+    /**
+     * @Desc:  根据id获取节点的下级节点
+     * @Param: id：节点的ID值
+     */
+    DTree.prototype.getChildParam = function(id){
+        var _this = this;
+        // 获取当前div，如果id就是一个dom，则就是这个，如果不是则进行选择。如果选不中则为null
+        var $div = (typeof id === 'object') ? id : (_this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']").length == 0) ? null : _this.obj.find("div[dtree-click='"+eventName.itemNodeClick+"'][data-id='"+id+"']");
+        if($div != null){ return _this.callbackData().childNode($div); } else { return []; }
+    };
+
+    /**
+     * @Desc: 参数获取集
+     */
+    DTree.prototype.callbackData = function(){
+        var _this = this;
+        return {
+            dom: function($dom){  // 获取dom
+                return $dom;
+            },
+            node: function(node){	// 获取当前节点值
+                return _this.getRequestParam(node);
+            },
+            childNode: function($div){	// 获取下级节点值
+                var $childDivs = $div.next("ul").find("li."+LI_NAV_ITEM+" div."+LI_DIV_ITEM);
+                var childNode = [];
+                if($childDivs && $childDivs.length > 0){
+                    $childDivs.each(function(){
+                        var $cDiv = $(this);
+                        childNode.push(_this.getRequestParam(_this.getTempNodeParam($cDiv)));
+                    });
+                }
+                return childNode;
+            },
+            parentNode: function($div){	// 获取上级节点值
+                var pId = _this.getNodeDom($div).parentLi().attr("data-pid");
+                var $pdiv = _this.obj.find("div[data-id='"+pId+"']");
+                if($pdiv.length > 0) {return _this.getRequestParam(_this.getTempNodeParam($pdiv));} else {return {};}
+
+            }
+        }
+    };
+
+    /******************** 事件回调区域 ********************/
+    /**
+     * @Desc: 绑定浏览器事件
+     */
+    DTree.prototype.bindBrowserEvent = function(){
+        var _this = this;
+        var rootId = _this.obj[0].id;
+
+        // 绑定文件夹展开/收缩的图标的点击事件，点击时给当前节点的div添加选中class
+        _this.obj.on("click", "i[data-spread]", function(event) {
+            event.stopPropagation();
+            var $i = $(this),
+                $div = $i.parent("div"),
+                node = _this.getNodeParam($div);
+
+            _this.toolbarHide();
+            _this.navThis($div);
+            _this.clickSpread($div);	// 展开或隐藏节点
+
+            // 树状态改变后，用户自定义想做的事情
+            layui.event.call(this, MOD_NAME, "changeTree("+$(_this.obj)[0].id+")",  {
+                dom: _this.callbackData().dom($i),
+                param: _this.callbackData().node(node),
+                show: _this.callbackData().dom($i).attr("data-spread") == "open" ? true : false
+            });
+        });
+
+        // 绑定所有子节点div的单击事件，点击时触发加载iframe或用户自定义想做的事情
+        _this.obj.on("click", "div[dtree-click='"+eventName.itemNodeClick+"'][dtree-disabled='false']", function(event) {
+            event.stopPropagation();
+            var $div = $(this),
+                $cite = $div.find("cite"),
+                node = _this.getNodeParam($div);
+            _this.toolbarHide();
+            _this.navThis($div);
+            
+            if(_this.select) {
+                _this.selectVal(node.nodeId);
+                $("div[dtree-id='" + rootId + "'][dtree-select='"+_this.selectDiv+"']").click();
+            }
+
+            if (_this.useIframe) {
+                var iframeParam = _this.getFilterRequestParam(_this.getIframeRequestParam(node));
+                var flag = _this.loadIframe($div, iframeParam);	// 加载iframe
+                if (flag) {
+                    // iframe加载完毕后，用户自定义想做的事情
+                    _this.iframeFun.iframeDone(iframeParam);
+
+                    layui.event.call(this, MOD_NAME, "iframeDone("+$(_this.obj)[0].id+")",  {
+                        "iframeParam": iframeParam,
+                        dom: _this.callbackData().dom($div)
+                    });
+                }
+            } else {
+                // 单击事件执行完毕后，用户自定义想做的事情
+                layui.event.call(this, MOD_NAME, "node("+$(_this.obj)[0].id+")", {
+                    param: _this.callbackData().node(node),
+                    childParams: _this.callbackData().childNode($div),
+                    parentParam: _this.callbackData().parentNode($div),
+                    dom: _this.callbackData().dom($div)
+                });
+            }
+        });
+
+        // 绑定所有子节点div的双击事件，暴露on给用户自定义
+        _this.obj.on("dblclick", "div[dtree-click='"+eventName.itemNodeClick+"'][dtree-disabled='false']", function(event) {
+            event.stopPropagation();
+            var $div = $(this),
+                $cite = $div.find("cite"),
+                node = _this.getNodeParam($div);
+            _this.toolbarHide();
+            _this.navThis($div);
+
+            if(_this.select) {
+                _this.selectVal(node.nodeId);
+                $("div[dtree-id='" + rootId + "'][dtree-select='"+_this.selectDiv+"']").click();
+            }
+
+            // 双击事件执行完毕后，用户自定义想做的事情
+            layui.event.call(this, MOD_NAME, "nodedblclick("+$(_this.obj)[0].id+")",  {
+                param: _this.callbackData().node(node),
+                childParams: _this.callbackData().childNode($div),
+                parentParam: _this.callbackData().parentNode($div),
+                dom: _this.callbackData().dom($div)
+            });
+        });
+
+        if(_this.checkbar) {
+            // 绑定cheboxbar的节点复选框
+            _this.obj.on("click", "i[dtree-click='"+eventName.checkNodeClick+"'][dtree-disabled='false']", function(event) {
+                _this.toolbarHide();
+                var $i = $(this),
+                    $div = $i.closest("div[dtree-click='"+eventName.itemNodeClick+"']"),
+                    node = _this.getNodeParam($div);
+                // 复选框选中前的回调
+                var flag = _this.checkbarFun.chooseBefore($i, _this.getRequestParam(node));
+                _this.temp = [$i];
+                if(flag){_this.changeCheck();}
+                
+                event.stopPropagation();
+            });
+        }
+
+        if(_this.menubar) {
+            // 绑定menubar的点击事件
+            _this.obj.prevAll('div#dtree_menubar_'+_this.obj[0].id).on("click", "button[d-menu]", function(event) {
+                event.stopPropagation();
+                _this.toolbarHide();
+                _this.menubarListener($(this).attr("d-menu"), "group");
+            });
+
+            // 绑定menubar的点击事件
+            _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).on("click", "a[d-menu]", function(event) {
+                event.stopPropagation();
+                _this.toolbarHide();
+                _this.menubarListener($(this).attr("d-menu"), "toolbar");
+            });
+
+            // 绑定menubar的点击按钮事件
+            _this.obj.closest('body').find("*[dtree-id='"+_this.obj[0].id+"'][dtree-menu]").on("click", function(event) {
+                event.stopPropagation();
+                _this.toolbarHide();
+                _this.menubarListener($(this).attr("dtree-menu"), "freedom");
+            });
+        }
+
+        if(_this.toolbar) {
+            if(_this.toolbarWay == "contextmenu") {
+                //绑定所有子节点div的右键点击事件，用于显示toolbar
+                _this.obj.on("contextmenu", "div[dtree-click='"+eventName.itemNodeClick+"'][d-contextmenu='true'][dtree-disabled='false']", function(e){
+                    var $div = $(this),
+                        node = _this.getNodeParam($div);
+
+                    _this.toolbarHide();
+                    // toolbar加载前执行的方法，执行完毕之后创建按钮
+                    _this.setToolbarDom().setToolbarPlace(_this.toolbarFun.loadToolbarBefore(event.cloneObj(_this.toolbarMenu), _this.getRequestParam(node), $div));
+
+                    var e = e || window.event,
+                        mx = e.pageX - $div.offset().left +45 ,
+                        my = $div.offset().top - _this.obj.closest(_this.scroll).offset().top +15;
+
+                    _this.navThis($div);
+                    var $toolBarDiv = _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id);
+                    $toolBarDiv.find(".layui-nav-child").addClass('layui-anim-fadein layui-show');
+                    $toolBarDiv.css({'left':mx+'px','top':my+'px'});
+
+                    e.stopPropagation();
+                    return false;
+                });
+
+                // 绑定装载树的上层出现滚动条的容器，让toolbar隐藏
+                _this.obj.closest(_this.scroll).scroll(function() {
+                    _this.toolbarHide();
+                });
+
+                // 绑定toolbar的点击事件
+                _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).on("click", "a[dtree-tool]", function(event) {
+                    event.stopPropagation();
+                    var $div = _this.getNodeDom().nowOrRootDiv(),
+                        node = _this.getNodeParam($div);
+                    _this.toolbarHide();
+                    var tool = $(this).attr("dtree-tool");
+                    _this.toolbarListener(tool, $div);
+                });
+            } else if(_this.toolbarWay == "fixed") {
+                // 绑定toolbar的点击事件
+                _this.obj.on("click", "a[dtree-tool]", function(event) {
+                    event.stopPropagation();
+                    var $a = $(this),
+                        $cite = $a.parent("em."+TOOLBAR_TOOL_EM).prev("cite"),	//当前选中节点的text
+                        $div = $cite.parent("div"),
+                        node = _this.getNodeParam($div);
+                    var tool = $a.attr("dtree-tool");
+
+                    _this.toolbarHide();
+                    _this.navThis($div);
+                    _this.toolbarListener(tool, $div);
+                });
+            } else if(_this.toolbarWay == "follow") {
+                //绑定所有子节点div的mouseover mouseout事件，用于显示或隐藏toolbar
+                _this.obj.on("mouseover mouseout", "div[dtree-click='"+eventName.itemNodeClick+"'][dtree-disabled='false']", function(event){
+                    var $div = $(this),
+                        $toolBarEm = $div.children("em."+TOOLBAR_TOOL_EM);
+                    if(event.type == "mouseover"){
+                        $toolBarEm.removeClass(NAV_HIDE);
+                        event.stopPropagation();
+                    } else if(event.type == "mouseout"){
+                        $toolBarEm.addClass(NAV_HIDE);
+                        event.stopPropagation();
+                    }
+                });
+
+                // 绑定toolbar的点击事件
+                _this.obj.on("click", "a[dtree-tool]", function(event) {
+                    event.stopPropagation();
+                    var $a = $(this),
+                        $cite = $a.parent("em."+TOOLBAR_TOOL_EM).prev("cite"),	//当前选中节点的text
+                        $div = $cite.parent("div"),
+                        node = _this.getNodeParam($div);
+                    var tool = $a.attr("dtree-tool");
+
+                    _this.toolbarHide();
+                    _this.navThis($div);
+                    _this.toolbarListener(tool, $div);
+                });
+            }
+        }
+
+        if(_this.select) {
+            // 绑定select的点击事件
+            $("div[dtree-id='" + rootId + "'][dtree-select='"+_this.selectDiv+"']").on("click", function(event){
+                event.stopPropagation();
+                var dl = $(this).find('dl');
+                //debugger;
+                $(this).toggleClass("layui-form-selected");
+                
+                var $card = $("div[dtree-id='" + rootId + "'][dtree-card='"+_this.selectCardDiv+"']");
+                
+                $card.toggleClass("dtree-select-show layui-anim layui-anim-upbit");
+                var top = $(this).offset().top + $(this).outerHeight() - $WIN.scrollTop() - 5,
+                	cardHeight = $card.height(),
+                	winHeight = $WIN.height();
+//                console.log("top =  $(this).offset().top: " + $(this).offset().top + " + $(this).outerHeight(): " + $(this).outerHeight() + " - $WIN.scrollTop(): " + $WIN.scrollTop() + " - 5 =" + top);
+//                console.log("winHeight = " + winHeight);
+                if($card.hasClass('dtree-select-up')) {
+            		$card.removeClass('dtree-select-up');
+            	} 
+                
+	            //上下定位识别
+                if(top + cardHeight > $WIN.height() && top >= cardHeight){
+                	console.log(" top + cardHeight : "+ top + " + " + cardHeight + " > $WIN.height() :" + $WIN.height() + " && top >= cardHeight :" + top + " > " + cardHeight);
+                	if($card.hasClass('dtree-select-up')) {
+                		$card.removeClass('dtree-select-up');
+                	} else {
+                		$card.addClass('dtree-select-up');
+                	}
+	            } else {
+	            	$card.removeClass('dtree-select-up');
+	            }
+                
+                // 下拉树面板开闭状态改变后，用户自定义想做的事情
+                layui.event.call(this, MOD_NAME, "changeSelect("+$(_this.obj)[0].id+")",  {
+                	show: $(this).hasClass("layui-form-selected"),
+                    param: _this.selectVal()
+                });
+            });
+
+        }
+    };
+
+    // 绑定body的单击，让本页面所有的toolbar隐藏
+    $BODY.on("click", function(event){
+        $("div."+LI_DIV_TOOLBAR).find(".layui-show").removeClass('layui-anim-fadein layui-show');
+       // $("div[dtree-id][dtree-select]").removeClass("layui-form-selected");
+       // $("div[dtree-id][dtree-card]").removeClass("dtree-select-show layui-anim layui-anim-upbit");
+        
+    });
+
+    // 解绑浏览器事件
+    DTree.prototype.unbindBrowserEvent = function(){
+        var _this = this;
+
+        // 本身事件解绑
+        _this.obj.unbind();
+        // 菜单栏解绑
+        if(_this.menubar){
+            _this.obj.prevAll('div#dtree_menubar_'+_this.obj[0].id).unbind();
+            if(_this.obj.closest('body').find("*[dtree-id='"+_this.obj[0].id+"'][dtree-menu]").length > 0){
+                _this.obj.closest('body').find("*[dtree-id='"+_this.obj[0].id+"'][dtree-menu]").unbind();
+            }
+        }
+
+        // 工具栏解绑
+        if(_this.toolbar){
+            if(_this.toolbarWay == "contextmenu") {
+                _this.obj.prevAll('div#dtree_toolbar_'+_this.obj[0].id).unbind();
+                if(_this.obj.closest(_this.scroll).length > 0){
+                    _this.obj.closest(_this.scroll).unbind();
+                }
+            }
+        }
+        
+        // 下拉树解绑
+        if(_this.select) {
+            // 解绑select的点击事件
+        	$("div[dtree-id='" + _this.obj[0].id + "'][dtree-select='"+_this.selectDiv+"']").removeClass("layui-form-selected");
+            $("div[dtree-id='" + _this.obj[0].id + "'][dtree-card='"+_this.selectCardDiv+"']").removeClass("dtree-select-show layui-anim layui-anim-upbit");
+            $("div[dtree-id='" + _this.obj[0].id + "'][dtree-select='"+_this.selectDiv+"']").unbind();
+        }
+    };
+
+
+    /** 外部访问 **/
+    var dtree = {
+        set: function(options){ //设置全局属性
+            if(typeof options !== 'undefined') {
+                $.extend(OPTIONS, options);
+            }
+        },
+        render: function(options){	// 初始化树
+            var dTree = null;
+            var id = event.getElemId(options);
+            if(id == "") {
+                layer.msg("页面中未找到绑定id", {icon:5});
+            } else {
+                dTree = DTrees[id];
+                if(typeof dTree === 'object'){
+                    dTree.unbindBrowserEvent();
+                }
+                // 创建树
+                dTree = new DTree(options);
+                // 添加到树数组中去
+                DTrees[id] = dTree;
+                dTree.initTreePlus();
+                dTree.openTreePlus();
+                dTree.loadTreeInit();
+                dTree.bindBrowserEvent();
+            }
+
+            return dTree;
+        },
+        renderSelect: function(options){ 	// 初始化下拉树
+            var dTree = null;
+            var id = event.getElemId(options);
+            if(id == "") {
+                layer.msg("页面中未找到绑定id", {icon:5});
+            } else {
+                dTree = DTrees[id];
+                if(typeof dTree === 'object'){
+                    dTree.unbindBrowserEvent();
+                }
+                // 创建下拉树
+                dTree = new DTree(options);
+                dTree.selectSetting();
+                // 添加到树数组中去
+                DTrees[id] = dTree;
+                dTree.initTreePlus();
+                dTree.openTreePlus();
+                dTree.loadTreeInit();
+                dTree.bindBrowserEvent();
+            }
+
+            return dTree;
+        },
+        reload: function(dTree, options){  // 重新加载树
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            dTree.reloadSetting(options);
+            dTree.initTreePlus();
+            dTree.openTreePlus();
+            dTree.initNodeParam();
+            dTree.loadTreeInit();
+            dTree.unbindBrowserEvent();
+            dTree.bindBrowserEvent();
+        },
+        on: function(events, callback) {	// 绑定事件
+            if(events.indexOf("'") > 0){
+                events = events.replace(/'/g,"");
+            }
+            if(events.indexOf('"') > 0) {
+                events = events.replace(/"/g,"");
+            }
+            return layui.onevent.call(this, MOD_NAME, events, callback);
+        },
+        click: function(dTree, id) { // 模拟单击事件
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            $("div[dtree-click='"+eventName.itemNodeClick+"'][dtree-id='"+dTree.obj[0].id+"'][data-id='"+id+"']").click();
+        },
+        getNowParam: function(dTree){  // 获取当前选中值
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.getNowParam();	// 获取当前选中值
+        },
+        getParam: function(dTree, id){  // 获取指定节点值
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.getParam(id);	// 获取指定节点值
+        },
+        getParentParam: function(dTree, id){  // 获取参数的上级节点
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.getParentParam(id);
+        },
+        getAllParentParam: function(dTree, id){  // 获取参数的全部上级节点
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.getAllParentParam(id);
+        },
+        getChildParam: function(dTree, id){  // 获取参数的全部下级节点
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.getChildParam(id);
+        },
+        getCheckbarNodesParam: function(dTree){  // 获取复选框选中值
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return {};
+            }
+            return dTree.getCheckbarNodesParam();	// 获取复选框选中值
+        },
+        getCheckbarJsonArrParam: function(dTree){  // 获取复选框选中值
+        	if(typeof dTree === "string"){
+        		dTree = DTrees[dTree];
+        	}
+        	if(typeof dTree === "undefined"){
+        		layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+        		return {};
+        	}
+        	return dTree.getCheckbarJsonArrParam();	// 获取复选框选中值
+        },
+        dataInit: function(dTree, chooseId){  // 初始化选中树，针对数据反选
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            if(chooseId){
+                return dTree.dataInit(chooseId);
+            }
+        },
+        chooseDataInit: function(dTree, chooseIds){	// 初始化复选框选中，针对数据反选
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            if(chooseIds){
+                return dTree.chooseDataInit(chooseIds);
+            }
+        },
+        changeCheckbarNodes: function(dTree){	//判断复选框是否发生变更
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.changeCheckbarNodes();
+        },
+        initNoAllCheck: function(dTree) { //复选框半选状态初始化设置
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.initNoAllCheck();
+        },
+        initAllCheck: function(dTree){ // 复选框选中状态初始化设置
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.initAllCheck();
+        },
+        selectVal: function(dTree, param){  // select模式设置输入框选中值
+            if(typeof dTree === "string"){
+                dTree = DTrees[dTree];
+            }
+            if(typeof dTree === "undefined"){
+                layer.msg("方法获取失败，请检查ID或对象传递是否正确",{icon:2});
+                return ;
+            }
+            return dTree.selectVal(param);	// select模式设置输入框选中值
+        },
+        escape: function(html){  // 字符串格式化
+            return event.escape(html);
+        },
+        unescape: function(str){  // 字符串反格式化
+            return event.unescape(str);
+        },
+        serialize: function(first, param) {  // 序列化JSON对象
+        	 return AjaxHelper.serialize(first, param);
+        },
+        version: function(){  //获取版本号
+            return VERSION;
+        }
+    };
+
+    exports('dtree', dtree);
+});

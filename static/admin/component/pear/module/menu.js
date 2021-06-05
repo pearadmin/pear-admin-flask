@@ -42,10 +42,11 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			}
 		} else {
 			//renderMenu中需要调用done事件，done事件中需要menu对象，但是此时还未返回menu对象，做个延时提前返回对象
-			window.setTimeout(function() {
-				renderMenu(option);
-			}, 500);
+			window.setTimeout(function() { renderMenu(option);}, 500);
 		}
+		
+		// 处理高度
+		$("#"+opt.elem).height(option.height)
 		return new pearMenu(opt);
 	}
 
@@ -194,7 +195,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 	}
 
 	function createMenu(option) {
-		var menuHtml = '<ul lay-filter="' + option.elem +
+		var menuHtml = '<div style="height:100%!important;" class="pear-side-scroll layui-side-scroll ' + option.theme + '"><ul lay-filter="' + option.elem +
 			'" class="layui-nav arrow   pear-menu layui-nav-tree pear-nav-tree">'
 		$.each(option.data, function(i, item) {
 			var content = '<li class="layui-nav-item" >';
@@ -227,7 +228,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			menuHtml += content;
 		});
 		// 结 束 菜 单 结 构 的 初 始 化
-		menuHtml += "</ul>";
+		menuHtml += "</ul></div>";
 		// 将 菜 单 拼 接 到 初 始 化 容 器 中
 		$("#" + option.elem).html(menuHtml);
 	}

@@ -54,7 +54,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 
         var notice = '<li class="layui-nav-item" lay-unselect="">' +
 			'<a href="#" class="notice layui-icon layui-icon-notice"><span class="layui-badge-dot"></span></a>' +
-			'<div class="layui-nav-child layui-tab pear-notice" style="left: -200px;">';
+			'<div class="layui-nav-child layui-tab pear-notice" style="margin-top: 0px;;left: -200px;">';
 
 		var noticeTitle = '<ul class="layui-tab-title">';
 		var noticeContent = '<div class="layui-tab-content" style="height:' + option.height + ';overflow-x: hidden;">';

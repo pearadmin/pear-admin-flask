@@ -48,9 +48,9 @@
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
 
-                        <input type="radio" name="status"{% if dept.status == 1 %}checked{% endif %} value="0" title="开启">
+                        <input type="radio" name="status"{% if dept.status == 1 %}checked{% endif %} value="1" title="开启">
 
-                        <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %} value="1" title="关闭"
+                        <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %} value="0" title="关闭"
                               >
                     </div>
                 </div>

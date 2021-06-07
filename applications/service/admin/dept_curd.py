@@ -13,6 +13,7 @@ def get_dept_dict():
 
 def save_dept(req):
 
+
     address = xss_escape(req.get("address"))
     deptName = xss_escape(req.get("deptName"))
     email = xss_escape(req.get("email"))

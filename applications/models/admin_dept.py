@@ -1,6 +1,6 @@
 import datetime
 from applications.models import db, ma
-from marshmallow import fields
+from marshmallow import fields,validate
 
 
 class Dept(db.Model):
@@ -25,7 +25,7 @@ class DeptSchema(ma.Schema):  # 序列化类
     deptName = fields.Str(attribute="dept_name")
     leader = fields.Str()
     phone = fields.Str()
-    email = fields.Str()
+    email = fields.Str(validate=validate.Email())
     address = fields.Str()
-    status = fields.Str()
-    sort = fields.Str()
+    status = fields.Str(validate=validate.OneOf(["0", "1"]))
+    sort = fields.Integer()

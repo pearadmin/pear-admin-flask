@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, jsonify
+from marshmallow import INCLUDE
+from applications.models.admin_dept import DeptSchema
 from applications.service.admin import dept_curd as dept_curd
 from applications.service.common.response import success_api, fail_api
+from applications.service.common.validate import check_data
 from applications.service.route_auth import authorize
 
 admin_dept = Blueprint('adminDept', __name__, url_prefix='/admin/dept')
@@ -44,6 +47,7 @@ def tree():
 @authorize("admin:dept:add", log=True)
 def save():
     req = request.json
+    check_data(DeptSchema(unknown=INCLUDE), req)
     dept_curd.save_dept(req)
     return success_api(msg="成功")
 
@@ -85,7 +89,9 @@ def disenable():
 @admin_dept.route('/update', methods=['PUT'])
 @authorize("admin:dept:edit", log=True)
 def update():
-    res = dept_curd.update_dept(request.json)
+    req = request.json
+    check_data(DeptSchema(unknown=INCLUDE), req)
+    res = dept_curd.update_dept(req)
     if not res:
         return fail_api(msg="更新失败")
     return success_api(msg="更新成功")

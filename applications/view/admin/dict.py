@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, jsonify
-
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape

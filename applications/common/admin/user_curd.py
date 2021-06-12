@@ -2,7 +2,8 @@ from flask import jsonify
 from flask_login import current_user
 from sqlalchemy import and_, desc
 from applications.extensions import db
-from applications.models import User, UserSchema
+from applications.models import User
+from applications.schemas import UserSchema
 from applications.models import Role
 from applications.models import AdminLog
 

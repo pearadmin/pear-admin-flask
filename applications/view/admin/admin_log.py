@@ -3,7 +3,8 @@ from sqlalchemy import desc
 
 from applications.common.utils.http import table_api
 from applications.common.utils.rights import authorize
-from applications.models import AdminLog, LogSchema
+from applications.models import AdminLog
+from applications.schemas import LogSchema
 from applications.common.curd import model_to_dicts
 
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')

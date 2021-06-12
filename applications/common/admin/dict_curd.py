@@ -1,6 +1,7 @@
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models import DictType, DictData, DictTypeSchema, DictDataSchema
+from applications.models import DictType, DictData
+from applications.schemas import DictTypeSchema, DictDataSchema
 from applications.common.curd import model_to_dicts
 
 

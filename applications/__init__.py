@@ -1,8 +1,6 @@
 import os
-
 from flask import Flask
 from flask_uploads import configure_uploads
-
 from applications.common.utils.upload import photos
 from applications.configs import common
 from applications.extensions import init_plugs

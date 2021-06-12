@@ -1,6 +1,5 @@
 import datetime
-from applications.extensions import db, ma
-from marshmallow import fields, validate
+from applications.extensions import db
 
 
 class Dept(db.Model):
@@ -17,15 +16,3 @@ class Dept(db.Model):
     address = db.Column(db.String(255), comment="详细地址")
     create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
-
-
-class DeptSchema(ma.Schema):  # 序列化类
-    deptId = fields.Integer(attribute="id")
-    parentId = fields.Integer(attribute="parent_id")
-    deptName = fields.Str(attribute="dept_name")
-    leader = fields.Str()
-    phone = fields.Str()
-    email = fields.Str(validate=validate.Email())
-    address = fields.Str()
-    status = fields.Str(validate=validate.OneOf(["0", "1"]))
-    sort = fields.Integer()

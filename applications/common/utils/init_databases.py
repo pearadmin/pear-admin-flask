@@ -1,14 +1,9 @@
-import sys
 from dotenv import dotenv_values
-
-sys.path.append('../')
 import sqlparse
 import pymysql
-
 config = dotenv_values('.env')
-
 # MySql配置信息
-HOST = config.get('MYSQL_PASSWORD') or '127.0.0.1'
+HOST = config.get('MYSQL_HOST') or '127.0.0.1'
 PORT = config.get('MYSQL_PORT') or 3306
 DATABASE = config.get('MYSQL_DATABASE') or 'PearAdminFlask'
 USERNAME = config.get('MYSQL_USERNAME') or 'root'
@@ -60,7 +55,7 @@ def init_db():
         return
     if init_database():
         print('数据库%s创建成功' % str(DATABASE))
-    execute_fromfile('pear.sql')
+    execute_fromfile(BASE_DIR + '../../../test/pear.sql')
     print('表创建成功')
     print('欢迎使用pear-admin-flask,请使用 flask run 命令启动程序')
 

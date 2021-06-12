@@ -4,7 +4,7 @@ from marshmallow import INCLUDE
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import check_data
-from applications.models import DeptSchema
+from applications.schemas import DeptSchema
 from applications.common.admin import dept_curd as dept_curd
 
 admin_dept = Blueprint('adminDept', __name__, url_prefix='/admin/dept')

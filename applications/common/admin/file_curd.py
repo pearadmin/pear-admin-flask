@@ -4,7 +4,8 @@ from sqlalchemy import desc
 
 from applications.common.utils.upload import photos
 from applications.extensions import db
-from applications.models import Photo, PhotoSchema
+from applications.models import Photo
+from applications.schemas import PhotoSchema
 from applications.common.curd import model_to_dicts
 
 

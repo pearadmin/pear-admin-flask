@@ -13,7 +13,7 @@ admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 #                               ----------------------------------------------------------
 
 
-@admin_log.route('/')
+@admin_log.get('/')
 @authorize("admin:log:main")
 def index():
     return render_template('admin/admin_log/main.html')
@@ -24,7 +24,7 @@ def index():
 #                               ==========================================================
 
 
-@admin_log.route('/loginLog')
+@admin_log.get('/loginLog')
 @authorize("admin:log:main")
 def loginLog():
     page = request.args.get('page', type=int)
@@ -43,7 +43,7 @@ def loginLog():
 #                               ==========================================================
 
 
-@admin_log.route('/operateLog')
+@admin_log.get('/operateLog')
 @authorize("admin:log:main")
 def operateLog():
     page = request.args.get('page', type=int)

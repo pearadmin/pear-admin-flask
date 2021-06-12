@@ -9,13 +9,13 @@ from applications.service.route_auth import authorize
 admin_dept = Blueprint('adminDept', __name__, url_prefix='/admin/dept')
 
 
-@admin_dept.route('/')
+@admin_dept.get('/')
 @authorize("admin:dept:main", log=True)
 def main():
     return render_template('admin/dept/main.html')
 
 
-@admin_dept.route('/data')
+@admin_dept.get('/data')
 @authorize("admin:dept:main", log=True)
 def data():
     power_data = dept_curd.get_dept_dict()
@@ -25,13 +25,13 @@ def data():
     return jsonify(res)
 
 
-@admin_dept.route('/add')
+@admin_dept.get('/add')
 @authorize("admin:dept:add", log=True)
 def add():
     return render_template('admin/dept/add.html')
 
 
-@admin_dept.route('/tree')
+@admin_dept.get('/tree')
 @authorize("admin:dept:main", log=True)
 def tree():
     power_data = dept_curd.get_dept_dict()
@@ -43,7 +43,7 @@ def tree():
     return jsonify(res)
 
 
-@admin_dept.route('/save', methods=['POST'])
+@admin_dept.post('/save')
 @authorize("admin:dept:add", log=True)
 def save():
     req = request.json
@@ -52,7 +52,7 @@ def save():
     return success_api(msg="成功")
 
 
-@admin_dept.route('/edit', methods=['GET', 'POST'])
+@admin_dept.get('/edit')
 @authorize("admin:dept:edit", log=True)
 def edit():
     id = request.args.get("deptId")
@@ -61,7 +61,7 @@ def edit():
 
 
 # 启用
-@admin_dept.route('/enable', methods=['PUT'])
+@admin_dept.put('/enable')
 @authorize("admin:dept:edit", log=True)
 def enable():
     id = request.json.get('deptId')
@@ -74,7 +74,7 @@ def enable():
 
 
 # 禁用
-@admin_dept.route('/disable', methods=['PUT'])
+@admin_dept.put('/disable')
 @authorize("admin:dept:edit", log=True)
 def disenable():
     id = request.json.get('deptId')
@@ -86,7 +86,7 @@ def disenable():
     return fail_api(msg="数据错误")
 
 
-@admin_dept.route('/update', methods=['PUT'])
+@admin_dept.put('/update')
 @authorize("admin:dept:edit", log=True)
 def update():
     req = request.json
@@ -97,7 +97,7 @@ def update():
     return success_api(msg="更新成功")
 
 
-@admin_dept.route('/remove/<int:id>', methods=['DELETE'])
+@admin_dept.delete('/remove/<int:id>')
 @authorize("admin:dept:remove", log=True)
 def remove(id):
     res = dept_curd.remove_dept(id)

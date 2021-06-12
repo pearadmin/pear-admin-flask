@@ -5,18 +5,19 @@ from applications.models.admin_photo import Photo
 from applications.service.admin import file_curd
 from applications.service.common.response import table_api, success_api, fail_api
 from applications.service.route_auth import authorize
+
 admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
 
 #  图片管理
-@admin_file.route('/')
+@admin_file.get('/')
 @authorize("admin:file:main", log=True)
 def index():
     return render_template('admin/photo/photo.html')
 
 
 #  图片数据
-@admin_file.route('/table')
+@admin_file.get('/table')
 @authorize("admin:file:main", log=True)
 def table():
     page = request.args.get('page', type=int)
@@ -25,24 +26,29 @@ def table():
     return table_api(data=data, count=count)
 
 
-#   上传接口
-@admin_file.route('/upload', methods=['GET', 'POST'])
+#   上传
+@admin_file.get('/upload')
 @authorize("admin:file:add", log=True)
 def upload():
-    if request.method == 'POST' and 'file' in request.files:
+    return render_template('admin/photo/photo_add.html')
+
+#   上传接口
+@admin_file.post('/upload')
+@authorize("admin:file:add", log=True)
+def upload_api():
+    if 'file' in request.files:
         photo = request.files['file']
         mime = request.files['file'].content_type
         file_url = file_curd.upload_one(photo=photo, mime=mime)
         res = {
             "msg": "上传成功",
             "code": 0,
-            "success":True,
+            "success": True,
             "data":
                 {"src": file_url}
         }
         return jsonify(res)
-
-    return render_template('admin/photo/photo_add.html')
+    return fail_api()
 
 
 #    图片删除

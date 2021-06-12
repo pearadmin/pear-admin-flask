@@ -6,13 +6,13 @@ from applications.service.route_auth import authorize
 admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
 
 
-@admin_power.route('/')
+@admin_power.get('/')
 @authorize("admin:power:main", log=True)
 def index():
     return render_template('admin/power/main.html')
 
 
-@admin_power.route('/data')
+@admin_power.get('/data')
 @authorize("admin:power:main", log=True)
 def data():
     power_data = power_curd.get_power_dict()
@@ -22,13 +22,13 @@ def data():
     return jsonify(res)
 
 
-@admin_power.route('/add')
+@admin_power.get('/add')
 @authorize("admin:power:add", log=True)
 def add():
     return render_template('admin/power/add.html')
 
 
-@admin_power.route('/selectParent')
+@admin_power.get('/selectParent')
 @authorize("admin:power:main", log=True)
 def selectParent():
     power_data = power_curd.select_parent()
@@ -41,7 +41,7 @@ def selectParent():
 
 
 # 增加
-@admin_power.route('/save', methods=['POST'])
+@admin_power.post('/save')
 @authorize("admin:power:add", log=True)
 def save():
     req = request.json
@@ -50,7 +50,7 @@ def save():
 
 
 # 权限编辑
-@admin_power.route('/edit/<int:id>', methods=['GET', 'POST'])
+@admin_power.get('/edit/<int:id>')
 @authorize("admin:power:edit", log=True)
 def edit(id):
     power = power_curd.get_power_by_id(id)
@@ -63,7 +63,7 @@ def edit(id):
 
 
 # 权限更新
-@admin_power.route('/update', methods=['PUT'])
+@admin_power.put('/update')
 @authorize("admin:power:edit", log=True)
 def update():
     res = power_curd.update_power(request.json)
@@ -73,7 +73,7 @@ def update():
 
 
 # 启用权限
-@admin_power.route('/enable', methods=['PUT'])
+@admin_power.put('/enable')
 @authorize("admin:power:edit", log=True)
 def enable():
     id = request.json.get('powerId')
@@ -86,7 +86,7 @@ def enable():
 
 
 # 禁用权限
-@admin_power.route('/disable', methods=['PUT'])
+@admin_power.put('/disable')
 @authorize("admin:power:edit", log=True)
 def disenable():
     id = request.json.get('powerId')
@@ -99,7 +99,7 @@ def disenable():
 
 
 # 权限删除
-@admin_power.route('/remove/<int:id>', methods=['DELETE'])
+@admin_power.delete('/remove/<int:id>')
 @authorize("admin:power:remove", log=True)
 def remove(id):
     r = power_curd.remove_power(id)
@@ -110,7 +110,7 @@ def remove(id):
 
 
 # 批量删除
-@admin_power.route('/batchRemove', methods=['DELETE'])
+@admin_power.delete('/batchRemove')
 @authorize("admin:power:remove", log=True)
 def batchRemove():
     ids = request.form.getlist('ids[]')

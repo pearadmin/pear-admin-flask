@@ -14,7 +14,7 @@ admin_Monitor = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 
 # 系统监控
-@admin_Monitor.route('/')
+@admin_Monitor.get('/')
 @authorize("admin:monitor:main", log=True)
 def main():
     # 主机名称
@@ -79,7 +79,7 @@ def main():
 
 
 # 图表api
-@admin_Monitor.route('/polling')
+@admin_Monitor.get('/polling')
 @authorize("admin:monitor:main")
 def ajax_polling():
     # 获取cup使用率

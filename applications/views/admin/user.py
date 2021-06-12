@@ -11,14 +11,14 @@ admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 
 
 # 用户管理
-@admin_user.route('/')
+@admin_user.get('/')
 @authorize("admin:user:main", log=True)
 def main():
     return render_template('admin/user/main.html')
 
 
 #   用户分页查询
-@admin_user.route('/data')
+@admin_user.get('/data')
 @authorize("admin:user:main", log=True)
 def data():
     page = request.args.get('page', type=int)
@@ -36,14 +36,14 @@ def data():
 
 
 # 用户增加
-@admin_user.route('/add')
+@admin_user.get('/add')
 @authorize("admin:user:add",log=True)
 def add():
     roles = Role.query.all()
     return render_template('admin/user/add.html', roles=roles)
 
 
-@admin_user.route('/save', methods=['POST'])
+@admin_user.post('/save')
 @authorize("admin:user:add", log=True)
 def save():
     req_json = request.json
@@ -66,7 +66,7 @@ def save():
 
 
 # 删除用户
-@admin_user.route('/remove/<int:id>', methods=['DELETE'])
+@admin_user.delete('/remove/<int:id>')
 @authorize("admin:user:remove", log=True)
 def delete(id):
     res = user_curd.delete_by_id(id)
@@ -76,7 +76,7 @@ def delete(id):
 
 
 #  编辑用户
-@admin_user.route('/edit/<int:id>', methods=['GET', 'POST'])
+@admin_user.get('/edit/<int:id>')
 @authorize("admin:user:edit", log=True)
 def edit(id):
     user = User.query.filter_by(id=id).first()
@@ -88,7 +88,7 @@ def edit(id):
 
 
 #  编辑用户
-@admin_user.route('/update', methods=['PUT'])
+@admin_user.put('/update')
 @authorize("admin:user:edit", log=True)
 def update():
     req_json = request.json
@@ -104,7 +104,7 @@ def update():
 
 
 # 个人中心
-@admin_user.route('/center')
+@admin_user.get('/center')
 @login_required
 def center():
     user_info = current_user
@@ -113,14 +113,14 @@ def center():
 
 
 # 修改头像
-@admin_user.route('/profile')
+@admin_user.get('/profile')
 @login_required
 def profile():
     return render_template('admin/user/profile.html')
 
 
 # 修改头像
-@admin_user.route('/updateAvatar', methods=['PUT'])
+@admin_user.put('/updateAvatar')
 @login_required
 def updateAvatar():
     url = request.json.get("avatar").get("src")
@@ -130,7 +130,7 @@ def updateAvatar():
 
 
 # 修改当前用户信息
-@admin_user.route('/updateInfo', methods=['PUT'])
+@admin_user.put('/updateInfo')
 @login_required
 def updateInfo():
     res_json = request.json
@@ -140,14 +140,14 @@ def updateInfo():
 
 
 # 修改当前用户密码
-@admin_user.route('/editPassword', methods=['GET'])
+@admin_user.get('/editPassword')
 @login_required
 def editPassword():
     return render_template('admin/user/edit_password.html')
 
 
 # 修改当前用户密码
-@admin_user.route('/editPassword', methods=['PUT'])
+@admin_user.put('/editPassword')
 @login_required
 def edit_password_put():
     res_json = request.json
@@ -155,7 +155,7 @@ def edit_password_put():
 
 
 # 启用用户
-@admin_user.route('/enable', methods=['PUT'])
+@admin_user.put('/enable')
 @authorize("admin:user:edit",log=True)
 def enable():
     id = request.json.get('userId')
@@ -168,7 +168,7 @@ def enable():
 
 
 # 禁用用户
-@admin_user.route('/disable', methods=['PUT'])
+@admin_user.put('/disable')
 @authorize("admin:user:edit",log=True)
 def disenable():
     id = request.json.get('userId')
@@ -181,7 +181,7 @@ def disenable():
 
 
 # 批量删除
-@admin_user.route('/batchRemove', methods=['DELETE'])
+@admin_user.delete('/batchRemove')
 @authorize("admin:user:remove", log=True)
 def batchRemove():
     ids = request.form.getlist('ids[]')

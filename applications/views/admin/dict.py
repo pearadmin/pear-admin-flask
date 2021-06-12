@@ -9,13 +9,13 @@ admin_dict = Blueprint('adminDict', __name__, url_prefix='/admin/dict')
 
 
 # 数据字典
-@admin_dict.route('/')
+@admin_dict.get('/')
 @authorize("admin:dict:main", log=True)
 def main():
     return render_template('admin/dict/main.html')
 
 
-@admin_dict.route('/dictType/data')
+@admin_dict.get('/dictType/data')
 @authorize("admin:dict:main", log=True)
 def dictType_data():
     page = request.args.get('page', type=int)
@@ -25,13 +25,13 @@ def dictType_data():
     return table_api(data=data,count=count)
 
 
-@admin_dict.route('/dictType/add')
+@admin_dict.get('/dictType/add')
 @authorize("admin:dict:add", log=True)
 def dictType_add():
     return render_template('admin/dict/add.html')
 
 
-@admin_dict.route('/dictType/save', methods=['POST'])
+@admin_dict.post('/dictType/save')
 @authorize("admin:dict:add", log=True)
 def dictType_save():
     req_json = request.json
@@ -42,7 +42,7 @@ def dictType_save():
 
 
 #  编辑字典类型
-@admin_dict.route('/dictType/edit', methods=['GET', 'POST'])
+@admin_dict.get('/dictType/edit')
 @authorize("admin:dict:edit", log=True)
 def dictType_edit():
     id = request.args.get('dictTypeId', type=int)
@@ -51,7 +51,7 @@ def dictType_edit():
 
 
 #  编辑字典类型
-@admin_dict.route('/dictType/update', methods=['PUT'])
+@admin_dict.put('/dictType/update')
 @authorize("admin:dict:edit", log=True)
 def dictType_update():
     req_json = request.json
@@ -60,7 +60,7 @@ def dictType_update():
 
 
 # 启用字典
-@admin_dict.route('/dictType/enable', methods=['PUT'])
+@admin_dict.put('/dictType/enable')
 @authorize("admin:dict:edit", log=True)
 def dictType_enable():
     id = request.json.get('id')
@@ -73,7 +73,7 @@ def dictType_enable():
 
 
 # 禁用字典
-@admin_dict.route('/dictType/disable', methods=['PUT'])
+@admin_dict.put('/dictType/disable')
 @authorize("admin:dict:edit", log=True)
 def dictType_disenable():
     id = request.json.get('id')
@@ -86,7 +86,7 @@ def dictType_disenable():
 
 
 # 删除字典类型
-@admin_dict.route('/dictType/remove/<int:id>', methods=['DELETE'])
+@admin_dict.delete('/dictType/remove/<int:id>')
 @authorize("admin:dict:remove", log=True)
 def dictType_delete(id):
     res = dict_curd.delete_type_by_id(id)
@@ -95,7 +95,7 @@ def dictType_delete(id):
     return success_api(msg="删除成功")
 
 
-@admin_dict.route('/dictData/data')
+@admin_dict.get('/dictData/data')
 @authorize("admin:dict:main", log=True)
 def dictCode_data():
     page = request.args.get('page', type=int)
@@ -106,7 +106,7 @@ def dictCode_data():
 
 
 # 增加字典数据
-@admin_dict.route('/dictData/add')
+@admin_dict.get('/dictData/add')
 @authorize("admin:dict:add", log=True)
 def dictData_add():
     type_code = request.args.get('typeCode', type=str)
@@ -114,18 +114,18 @@ def dictData_add():
 
 
 # 增加字典数据
-@admin_dict.route('/dictData/save', methods=['POST'])
+@admin_dict.get('/dictData/save')
 @authorize("admin:dict:add", log=True)
 def dictData_save():
     req_json = request.json
     res = dict_curd.save_dict_data(req_json=req_json)
-    if res == None:
+    if not res:
         return jsonify(success=False, msg="增加失败")
     return jsonify(success=True, msg="增加成功")
 
 
 #  编辑字典数据
-@admin_dict.route('/dictData/edit', methods=['GET', 'POST'])
+@admin_dict.get('/dictData/edit')
 @authorize("admin:dict:edit", log=True)
 def dictData_edit():
     id = request.args.get('dataId', type=str)
@@ -134,7 +134,7 @@ def dictData_edit():
 
 
 #  编辑字典数据
-@admin_dict.route('/dictData/update', methods=['PUT'])
+@admin_dict.put('/dictData/update')
 @authorize("admin:dict:edit", log=True)
 def dictData_update():
     req_json = request.json
@@ -143,7 +143,7 @@ def dictData_update():
 
 
 # 启用字典数据
-@admin_dict.route('/dictData/enable', methods=['PUT'])
+@admin_dict.put('/dictData/enable')
 @authorize("admin:dict:edit", log=True)
 def dictData_enable():
     id = request.json.get('dataId')
@@ -156,7 +156,7 @@ def dictData_enable():
 
 
 # 禁用字典数据
-@admin_dict.route('/dictData/disable', methods=['PUT'])
+@admin_dict.put('/dictData/disable')
 @authorize("admin:dict:edit", log=True)
 def dictData_disenable():
     id = request.json.get('dataId')
@@ -169,7 +169,7 @@ def dictData_disenable():
 
 
 # 删除字典类型
-@admin_dict.route('dictData/remove/<int:id>', methods=['DELETE'])
+@admin_dict.delete('dictData/remove/<int:id>')
 @authorize("admin:dict:remove", log=True)
 def dictData_delete(id):
     res = dict_curd.delete_data_by_id(id)

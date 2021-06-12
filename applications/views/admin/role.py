@@ -9,14 +9,14 @@ admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
 
 # 用户管理
-@admin_role.route('/')
+@admin_role.get('/')
 @authorize("admin:role:main", log=True)
 def main():
     return render_template('admin/role/main.html')
 
 
 # 表格数据
-@admin_role.route('/data')
+@admin_role.get('/data')
 @authorize("admin:role:main", log=True)
 def table():
     page = request.args.get('page', type=int)
@@ -33,7 +33,7 @@ def table():
 
 
 # 角色增加
-@admin_role.route('/add')
+@admin_role.get('/add')
 @authorize("admin:role:add", log=True)
 @login_required
 def add():
@@ -41,7 +41,7 @@ def add():
 
 
 # 角色增加
-@admin_role.route('/save', methods=['POST'])
+@admin_role.post('/save')
 @authorize("admin:role:add", log=True)
 def save():
     req = request.json
@@ -50,14 +50,14 @@ def save():
 
 
 # 角色授权
-@admin_role.route('/power/<int:id>')
+@admin_role.get('/power/<int:id>')
 @authorize("admin:role:power", log=True)
 def power(id):
     return render_template('admin/role/power.html', id=id)
 
 
 # 获取角色权限
-@admin_role.route('/getRolePower/<int:id>')
+@admin_role.get('/getRolePower/<int:id>')
 @authorize("admin:role:main", log=True)
 def getRolePower(id):
     powers = role_curd.get_role_power(id)
@@ -69,7 +69,7 @@ def getRolePower(id):
 
 
 # 保存角色权限
-@admin_role.route('/saveRolePower', methods=['PUT'])
+@admin_role.put('/saveRolePower')
 @authorize("admin:role:edit", log=True)
 def saveRolePower():
     req_form = request.form
@@ -81,7 +81,7 @@ def saveRolePower():
 
 
 # 角色编辑
-@admin_role.route('/edit/<int:id>', methods=['GET', 'POST'])
+@admin_role.get('/edit/<int:id>')
 @authorize("admin:role:edit", log=True)
 def edit(id):
     role = role_curd.get_role_by_id(id)
@@ -89,7 +89,7 @@ def edit(id):
 
 
 # 更新角色
-@admin_role.route('/update', methods=['PUT'])
+@admin_role.put('/update')
 @authorize("admin:role:edit", log=True)
 def update():
     res = role_curd.update_role(request.json)
@@ -99,7 +99,7 @@ def update():
 
 
 # 启用用户
-@admin_role.route('/enable', methods=['PUT'])
+@admin_role.put('/enable')
 @authorize("admin:role:edit", log=True)
 def enable():
     id = request.json.get('roleId')
@@ -113,7 +113,7 @@ def enable():
 
 
 # 禁用用户
-@admin_role.route('/disable', methods=['PUT'])
+@admin_role.put('/disable')
 @authorize("admin:role:edit", log=True)
 def disenable():
     id = request.json.get('roleId')
@@ -126,7 +126,7 @@ def disenable():
 
 
 # 角色删除
-@admin_role.route('/remove/<int:id>', methods=['DELETE'])
+@admin_role.delete('/remove/<int:id>')
 @authorize("admin:role:remove", log=True)
 def remove(id):
     res = role_curd.remove_role(id)
@@ -136,7 +136,7 @@ def remove(id):
 
 
 # 批量删除
-@admin_role.route('/batchRemove', methods=['DELETE'])
+@admin_role.delete('/batchRemove')
 @authorize("admin:role:remove", log=True)
 @login_required
 def batchRemove():

@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_uploads import configure_uploads, patch_request_class
+from flask_uploads import configure_uploads
 from applications.config import database, common
 from applications.models import db
 from applications.service.debug_tool import open_debug_tool
@@ -27,7 +27,6 @@ def create_app():
     init_flask_login(app)
     # 文件上传
     configure_uploads(app, photos)
-    patch_request_class(app)
     # 调试工具栏
     open_debug_tool(app)
     # logo

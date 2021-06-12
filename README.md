@@ -57,90 +57,23 @@ Pear Admin Flask 分为 Common / Simple 两个版本：
 
 ```
 Pear Admin Flask
-│
-├─applications
-│  │
-│  ├─config
-│  │  │  
-│  │  ├─ common.py #普通配置
-│  │  │  
-│  │  └─ database.py #数据库配置
-│  │
-│  ├─models
-│  │  │  
-│  │  └─admin.py #基本模型
-│  │
-│  ├─service
-│  │  │  
-│  │  ├─admin
-│  │  │  │
-│  │  │  ├─ file.py #file视图的数据操作
-│  │  │  │		 		   	
-│  │  │  ├─ index.py #index视图的数据操作
-│  │  │  │				
-│  │  │  ├─ power.py #power视图的数据操作
-│  │  │  │				
-│  │  │  ├─ role.py #role视图的数据操作
-│  │  │  │					
-│  │  │  └─ user.py #user视图的数据操作
-│  │  │  					
-│  │  ├─ admin_log.py #存储日志
-│  │  │  
-│  │  ├─ deBug.py #deBug工具栏初始化
-│  │  │  
-│  │  ├─ login.py #flask_login初始化					
-│  │  │  
-│  │  ├─ CaptchaTool.py	#验证码
-│  │  │  
-│  │  ├─ OriginalDb.py #原生sql查询封装
-│  │  │  
-│  │  ├─ route_auth.py #权限
-│  │  │  
-│  │  └─ upload.py #上传
-│  │
-│  └─views
-│     │
-│     ├─admin #前台视图
-│     │	 │     					
-│     │  ├─index.py #主视图
-│     │  │     
-│     │  ├─user.py #用户视图
-│     │  │     
-│     │  ├─role.py #角色视图
-│     │  │     
-│     │  ├─power.py #权限视图
-│     │  │     
-│     │  ├─monitor.py #系统监控
-│     │  │     
-│     │  ├─file.py #文件上传
-│     │  │     
-│     │  ├─admin_log.py #系统日志
-│     │  │     
-│     │  ├─context_processor.py	#全局模板函数注册
-│     │  │     
-│     │  ├─error.py #错误处理
-│     │  │     
-│     │  └─init.py #蓝图注册
-│     │
-│     └─index #前台视图
-│ 
-├─dev #数据库初始化
-│
-├─migrations	
-│					
-├─readmes
-│
-├─static #静态资源
-│  │
-│  └─upload #文件上传地址
-│
-└─templates
-    │
-    ├─admin #前台模板
-    │
-    ├─errors #错误模板
-    │ 
-    └─index #前台模板
+├─applications  # 应用
+│  ├─configs  # 配置文件
+│  │  ├─ common.py  # 普通配置
+│  │  └─ config.py  # 配置文件对象
+│  ├─extensions  # 注册插件
+│  ├─models  # 数据模型
+│  ├─static  # 静态资源文件
+│  ├─templates  # 静态模板文件
+│  └─views  # 视图部分
+│     ├─admin  # 后台管理视图模块
+│     └─index  # 前台视图模块
+├─docs  # 文档说明（占坑）
+├─migrations  # 迁移文件记录
+├─requirement  # 依赖文件
+├─test # 测试文件夹（占坑）
+└─.env # 项目的配置文件
+
 ```
 
 
@@ -152,10 +85,10 @@ Pear Admin Flask
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
 # 安 装
-pip install -r requirement.txt
+pip install -r requirement\requirement-dev.txt
 
 # 配 置
-applications\config\database.py
+.env
 
 ```
 
@@ -189,14 +122,8 @@ python -m venv venv
 #### 运行项目
 
 ```bash
-# 进 入 目 录
-cd dev
-
 # 初 始 化 数 据 库
-python initDb.py
-
-# 如 果 报 模 块 路 径 错 误
-python dev/initDb.py
+python test\init_databases.py
 
 ```
 
@@ -207,6 +134,6 @@ python dev/initDb.py
 
 |  |  |
 |---------------------|---------------------|
-| ![](readmes/1.jpg)  | ![](readmes/2.jpg)  |
-| ![](readmes/3.jpg)|  ![](readmes/4.jpg)   |
-| ![](readmes/5.jpg) |  ![](readmes/6.jpg)   |
+| ![](docs/assets/1.jpg)  | ![](docs/assets/2.jpg)  |
+| ![](docs/assets/3.jpg)|  ![](docs/assets/4.jpg)   |
+| ![](docs/assets/5.jpg) |  ![](docs/assets/6.jpg)   |

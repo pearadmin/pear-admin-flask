@@ -1,7 +1,6 @@
 import datetime
-from applications.models import db, ma
+from applications.extensions import db, ma
 from marshmallow import fields
-from applications.models import admin_role_power
 
 
 class Role(db.Model):

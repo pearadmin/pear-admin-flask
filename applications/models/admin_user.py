@@ -1,10 +1,9 @@
 import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from applications.models import db, ma
+from applications.extensions import db, ma
 from marshmallow import fields
-from applications.models import admin_user_role
-from applications.models.admin_dept import Dept
+from applications.models import Dept
 
 
 class User(db.Model, UserMixin):
@@ -43,4 +42,3 @@ class UserSchema(ma.Schema):
             return Dept.query.filter_by(id=obj.dept_id).first().dept_name
         else:
             return None
-

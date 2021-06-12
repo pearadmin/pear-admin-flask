@@ -1,6 +1,6 @@
 import datetime
 
-from applications.models import db, ma
+from applications.extensions import db, ma
 from marshmallow import fields
 
 

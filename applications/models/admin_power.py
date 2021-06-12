@@ -1,5 +1,5 @@
 import datetime
-from applications.models import db, ma
+from applications.extensions import db, ma
 from marshmallow import fields
 
 
@@ -47,4 +47,3 @@ class PowerSchema2(ma.Schema):  # 序列化类
     create_time = fields.DateTime()
     update_time = fields.DateTime()
     enable = fields.Integer()
-

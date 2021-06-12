@@ -1,4 +1,5 @@
-from applications.models import db
+from applications.extensions import db
+
 # 创建中间表
 role_power = db.Table(
     "admin_role_power",  # 中间表名称

@@ -1,6 +1,7 @@
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models import Dept, DeptSchema
+from applications.models import Dept
+from applications.schemas import DeptSchema
 from applications.models import User
 from applications.common.curd import model_to_dicts
 

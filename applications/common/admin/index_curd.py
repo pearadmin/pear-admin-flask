@@ -3,7 +3,7 @@ from flask import session, make_response, current_app
 from flask_login import current_user
 
 from applications.common.utils.gen_captcha import gen_captcha
-from applications.models.admin_power import PowerSchema
+from applications.schemas import PowerSchema
 
 
 # 授权路由存入session

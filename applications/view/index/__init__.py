@@ -1,6 +1,4 @@
-from flask import Blueprint
-
-index_bp = Blueprint('Index', __name__, url_prefix='/')
+from applications.view.index.index import index_bp
 
 from . import index
 

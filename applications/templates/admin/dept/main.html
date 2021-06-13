@@ -78,7 +78,7 @@
     let treetable = layui.treetable
     let popup = layui.popup
 
-    let MODULE_PATH = '/admin/dept/'
+    let MODULE_PATH = '/dept/'
 
     window.render = function () {
       treetable.render({
@@ -91,7 +91,7 @@
         treeDefaultClose: false,
         toolbar: '#dept-toolbar',
         elem: '#dept-table',
-        url: '/admin/dept/data',
+        url: '/dept/data',
         page: false,
         cols: [
           [
@@ -153,7 +153,8 @@
       } else if (obj.event === 'refresh') {
         window.refresh()
       } else if (obj.event === 'batchRemove') {
-        window.batchRemove(obj)
+        {#window.batchRemove(obj)#}
+        console.log(table.checkStatus(obj.config.id).data)
       }
     })
 
@@ -166,7 +167,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: '/admin/dept/' + operate,
+        url: '/dept/' + operate,
         data: JSON.stringify({ deptId: this.value }),
         dataType: 'json',
         contentType: 'application/json',

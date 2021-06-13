@@ -26,7 +26,7 @@
     </div>
     <div class="layui-form-item">
         <input placeholder="验证码 : " name="captcha" hover class="code layui-input layui-input-inline"/>
-        <img src="{{ url_for('adminIndex.get_captcha') }}" class="codeImage" id="captchaImage"/>
+        <img src="{{ url_for('passport.get_captcha') }}" class="codeImage" id="captchaImage"/>
     </div>
     <div class="layui-form-item">
         <input type="checkbox" name="remember-me" title="记住密码" lay-skin="primary">
@@ -45,7 +45,7 @@
         let layer = layui.layer;
         let button = layui.button;
         let popup = layui.popup;
-        let captchaPath = "{{ url_for('adminIndex.get_captcha') }}";
+        let captchaPath = "{{ url_for('passport.get_captcha') }}";
 
         form.on('submit(login)', function (data) {
             let loader = layer.load();
@@ -59,7 +59,7 @@
                     btn.stop(function () {
                         if (result.success) {
                             popup.success(result.msg, function () {
-                                location.href = "{{ url_for('adminIndex.index') }}";
+                                location.href = "{{ url_for('admin.index') }}";
                             })
                         } else {
                             popup.failure(result.msg, function () {
@@ -81,7 +81,7 @@
     })
 </script>
 <script>
-    if (window != top) {
+    if (window !== top) {
         top.location.href = location.href;
     }
 </script>

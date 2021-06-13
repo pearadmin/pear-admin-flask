@@ -28,21 +28,27 @@ def make_menu_tree():
     # power1 = Power.query.filter(
     #     Power.type == 1
     # ).all()
+    # 获取当前用户的角色
     role = current_user.role
     power0 = []
     power1 = []
     for i in role:
+        # 如果角色没有被启用就直接跳过
         if i.enable == 0:
             continue
+        # 变量角色用户的权限
         for p in i.power:
+            # 如果权限关闭了就直接跳过
             if p.enable == 0:
                 continue
+            # 一级菜单
             if int(p.type) == 0:
                 power0.append(p)
+            # 二级菜单
             else:
                 power1.append(p)
 
-    power_schema = PowerSchema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
+    power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
     power0_dict = power_schema.dump(power0)  # 生成可序列化对象
     power1_dict = power_schema.dump(power1)  # 生成可序列化对象
     power0_dict = sorted(power0_dict, key=lambda i: i['sort'])
@@ -84,7 +90,7 @@ def get_render_config():
         # 菜单配置
     }, menu={
         # 菜单数据来源
-        "data": "/admin/menu",
+        "data": "/rights/menu",
         "collaspe": True,
         # 是否同时只打开一个菜单目录
         "accordion": True,

@@ -24,10 +24,12 @@
         <!-- 顶 部 右 侧 菜 单 -->
         <div id="control" class="layui-layout-control"></div>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item layui-hide-xs"><a href="#"
-                                                        class="fullScreen layui-icon layui-icon-screen-full"></a></li>
-            <li class="layui-nav-item layui-hide-xs"><a href="http://www.pearadmin.com"
-                                                        class="layui-icon layui-icon-website"></a></li>
+            <li class="layui-nav-item layui-hide-xs">
+                <a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs">
+                <a href="http://www.pearadmin.com" class="layui-icon layui-icon-website"></a>
+            </li>
             <li class="layui-nav-item layui-hide-xs message"></li>
             <li class="layui-nav-item user">
                 <!-- 头 像 -->
@@ -81,7 +83,7 @@
     // 你可以通过 admin.setConfigPath 方法修改配置文件位置
     // 你可以通过 admin.setConfigType 方法修改配置文件类型
     admin.setConfigType('json')
-    admin.setConfigPath("{{ url_for('adminIndex.configs') }}")
+    admin.setConfigPath("{{ url_for('rights.configs') }}")
 
     admin.render()
 
@@ -89,7 +91,7 @@
     admin.logout(function () {
       let loading = layer.load()
       $.ajax({
-        url: '/admin/logout',
+        url: '/passport/logout',
         dataType: 'json',
         type: 'post',
         success: function (result) {

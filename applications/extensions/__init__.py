@@ -8,7 +8,7 @@ from .init_error_views import init_error_views
 
 
 def init_plugs(app: Flask) -> None:
-    init_debug_tool(app)
+    # init_debug_tool(app)
     init_login_manager(app)
     init_databases(app)
     init_template_directives(app)

@@ -99,7 +99,7 @@
 
     form.on('submit(dept-update)', function (data) {
       $.ajax({
-        url: '/admin/dept/update',
+        url: '/dept/update',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

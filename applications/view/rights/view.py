@@ -1,37 +1,37 @@
-from flask import Blueprint, render_template, request, jsonify
-from applications.common.admin import power_curd
-from applications.common.utils.http import success_api, fail_api
-from applications.common.utils.rights import authorize
+from flask import render_template, request, jsonify
 
-admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
+from . import rights_bp
+from ...common.admin import rights_curd
+from ...common.utils.http import success_api, fail_api
+from ...common.utils.rights import authorize
 
 
-@admin_power.get('/')
+@rights_bp.get('/')
 @authorize("admin:power:main", log=True)
 def index():
     return render_template('admin/power/main.html')
 
 
-@admin_power.get('/data')
+@rights_bp.get('/data')
 @authorize("admin:power:main", log=True)
 def data():
-    power_data = power_curd.get_power_dict()
+    power_data = rights_curd.get_power_dict()
     res = {
         "data": power_data
     }
     return jsonify(res)
 
 
-@admin_power.get('/add')
+@rights_bp.get('/add')
 @authorize("admin:power:add", log=True)
 def add():
     return render_template('admin/power/add.html')
 
 
-@admin_power.get('/selectParent')
+@rights_bp.get('/selectParent')
 @authorize("admin:power:main", log=True)
 def select_parent():
-    power_data = power_curd.select_parent()
+    power_data = rights_curd.select_parent()
     res = {
         "status": {"code": 200, "message": "默认"},
         "data": power_data
@@ -41,19 +41,19 @@ def select_parent():
 
 
 # 增加
-@admin_power.post('/save')
+@rights_bp.post('/save')
 @authorize("admin:power:add", log=True)
 def save():
     req = request.json
-    power_curd.save_power(req)
+    rights_curd.save_power(req)
     return success_api(msg="成功")
 
 
 # 权限编辑
-@admin_power.get('/edit/<int:_id>')
+@rights_bp.get('/edit/<int:_id>')
 @authorize("admin:power:edit", log=True)
 def edit(_id):
-    power = power_curd.get_power_by_id(_id)
+    power = rights_curd.get_power_by_id(_id)
     icon = str(power.icon).split()
     if len(icon) == 2:
         icon = icon[1]
@@ -63,22 +63,22 @@ def edit(_id):
 
 
 # 权限更新
-@admin_power.put('/update')
+@rights_bp.put('/update')
 @authorize("admin:power:edit", log=True)
 def update():
-    res = power_curd.update_power(request.json)
+    res = rights_curd.update_power(request.json)
     if not res:
         return fail_api(msg="更新权限失败")
     return success_api(msg="更新权限成功")
 
 
 # 启用权限
-@admin_power.put('/enable')
+@rights_bp.put('/enable')
 @authorize("admin:power:edit", log=True)
 def enable():
     _id = request.json.get('powerId')
     if id:
-        res = power_curd.enable_status(_id)
+        res = rights_curd.enable_status(_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启用成功")
@@ -86,12 +86,12 @@ def enable():
 
 
 # 禁用权限
-@admin_power.put('/disable')
+@rights_bp.put('/disable')
 @authorize("admin:power:edit", log=True)
 def dis_enable():
     _id = request.json.get('powerId')
     if id:
-        res = power_curd.disable_status(_id)
+        res = rights_curd.disable_status(_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -99,10 +99,10 @@ def dis_enable():
 
 
 # 权限删除
-@admin_power.delete('/remove/<int:_id>')
+@rights_bp.delete('/remove/<int:_id>')
 @authorize("admin:power:remove", log=True)
 def remove(_id):
-    r = power_curd.remove_power(_id)
+    r = rights_curd.remove_power(_id)
     if r:
         return success_api(msg="删除成功")
     else:
@@ -110,9 +110,9 @@ def remove(_id):
 
 
 # 批量删除
-@admin_power.delete('/batchRemove')
+@rights_bp.delete('/batchRemove')
 @authorize("admin:power:remove", log=True)
 def batch_remove():
     ids = request.form.getlist('ids[]')
-    power_curd.batch_remove(ids)
+    rights_curd.batch_remove(ids)
     return success_api(msg="批量删除成功")

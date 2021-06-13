@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 from marshmallow import fields
 from marshmallow.validate import (
     URL, Email, Range, Length, Equal, Regexp,
@@ -47,8 +48,10 @@ fields.Boolean.default_error_messages = {
 
 db = SQLAlchemy()
 ma = Marshmallow()
+migrate = Migrate()
 
 
 def init_databases(app: Flask):
     db.init_app(app)
     ma.init_app(app)
+    migrate.init_app(app, db)

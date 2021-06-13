@@ -92,7 +92,7 @@
     let treetable = layui.treetable
     let popup = layui.popup
 
-    let MODULE_PATH = '/admin/power/'
+    let MODULE_PATH = '/rights/'
 
     window.render = function () {
       treetable.render({
@@ -105,7 +105,7 @@
         treeDefaultClose: true,
         toolbar: '#power-toolbar',
         elem: '#power-table',
-        url: '/admin/power/data',
+        url: '{{ url_for('rights.data') }}',
         page: false,
         cols: [
           [
@@ -180,7 +180,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: '/admin/power/' + operate,
+        url: MODULE_PATH + operate,
         data: JSON.stringify({ powerId: this.value }),
         dataType: 'json',
         contentType: 'application/json',

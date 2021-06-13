@@ -1,8 +1,8 @@
-"""empty message
+"""init
 
-Revision ID: ec21e19825ff
+Revision ID: 296c80a9d6e8
 Revises: 
-Create Date: 2021-04-27 11:54:00.453274
+Create Date: 2021-06-14 00:44:22.947817
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ec21e19825ff'
+revision = '296c80a9d6e8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,6 +28,21 @@ def upgrade():
     sa.Column('success', sa.Integer(), nullable=True),
     sa.Column('user_agent', sa.Text(), nullable=True),
     sa.Column('create_time', sa.DateTime(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('admin_dept',
+    sa.Column('id', sa.Integer(), nullable=False, comment='部门ID'),
+    sa.Column('parent_id', sa.Integer(), nullable=True, comment='父级编号'),
+    sa.Column('dept_name', sa.String(length=50), nullable=True, comment='部门名称'),
+    sa.Column('sort', sa.Integer(), nullable=True, comment='排序'),
+    sa.Column('leader', sa.String(length=50), nullable=True, comment='负责人'),
+    sa.Column('phone', sa.String(length=20), nullable=True, comment='联系方式'),
+    sa.Column('email', sa.String(length=50), nullable=True, comment='邮箱'),
+    sa.Column('status', sa.Integer(), nullable=True, comment='状态(1开启,0关闭)'),
+    sa.Column('remark', sa.Text(), nullable=True, comment='备注'),
+    sa.Column('address', sa.String(length=255), nullable=True, comment='详细地址'),
+    sa.Column('create_at', sa.DateTime(), nullable=True, comment='创建时间'),
+    sa.Column('update_at', sa.DateTime(), nullable=True, comment='创建时间'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('admin_dict_data',
@@ -64,16 +79,17 @@ def upgrade():
     op.create_table('admin_power',
     sa.Column('id', sa.Integer(), nullable=False, comment='权限编号'),
     sa.Column('name', sa.String(length=255), nullable=True, comment='权限名称'),
-    sa.Column('type', sa.String(length=1), nullable=True, comment='权限类型'),
+    sa.Column('type', sa.SmallInteger(), nullable=True, comment='权限类型'),
     sa.Column('code', sa.String(length=30), nullable=True, comment='权限标识'),
     sa.Column('url', sa.String(length=255), nullable=True, comment='权限路径'),
     sa.Column('open_type', sa.String(length=10), nullable=True, comment='打开方式'),
-    sa.Column('parent_id', sa.Integer(), nullable=True, comment='父类编号'),
     sa.Column('icon', sa.String(length=128), nullable=True, comment='图标'),
     sa.Column('sort', sa.Integer(), nullable=True, comment='排序'),
     sa.Column('create_time', sa.DateTime(), nullable=True, comment='创建时间'),
     sa.Column('update_time', sa.DateTime(), nullable=True, comment='更新时间'),
     sa.Column('enable', sa.Integer(), nullable=True, comment='是否开启'),
+    sa.Column('parent_id', sa.Integer(), nullable=True, comment='父类编号'),
+    sa.ForeignKeyConstraint(['parent_id'], ['admin_power.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('admin_role',
@@ -96,6 +112,7 @@ def upgrade():
     sa.Column('remark', sa.String(length=255), nullable=True, comment='备注'),
     sa.Column('password_hash', sa.String(length=128), nullable=True, comment='哈希密码'),
     sa.Column('enable', sa.Integer(), nullable=True, comment='启用'),
+    sa.Column('dept_id', sa.Integer(), nullable=True, comment='部门id'),
     sa.Column('create_at', sa.DateTime(), nullable=True, comment='创建时间'),
     sa.Column('update_at', sa.DateTime(), nullable=True, comment='创建时间'),
     sa.PrimaryKeyConstraint('id')
@@ -129,5 +146,6 @@ def downgrade():
     op.drop_table('admin_photo')
     op.drop_table('admin_dict_type')
     op.drop_table('admin_dict_data')
+    op.drop_table('admin_dept')
     op.drop_table('admin_admin_log')
     # ### end Alembic commands ###

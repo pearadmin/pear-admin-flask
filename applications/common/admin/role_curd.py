@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
 from applications.models import Role, RoleSchema
-from applications.models.admin_power import Power, PowerSchema2
+from applications.models.rights.power import Power, PowerSchema2
 from applications.models import User
 
 # 获取角色对象

@@ -105,7 +105,7 @@
 
     dtree.renderSelect({
       elem: '#selectParent',
-      url: '/admin/power/selectParent',
+      url: '{{ url_for('rights.select_parent')}}',
       method: 'get',
       selectInputName: { nodeId: 'parentId', context: 'powerName' },
       skin: 'layui',
@@ -138,7 +138,7 @@
     form.on('submit(power-save)', function (data) {
       data.field.icon = 'layui-icon ' + data.field.icon
       $.ajax({
-        url: '/admin/power/update',
+        url: '{{ url_for('rights.update') }}',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -191,7 +191,7 @@
       }
     }
 
-    window.init("{{ power.type}}")
+    window.init("{{ power.type }}")
   })
 </script>
 <script>

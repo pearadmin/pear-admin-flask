@@ -1,6 +1,6 @@
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models.admin_power import Power, PowerSchema2
+from applications.models.rights.power import Power, PowerSchema2
 from applications.models import Role
 from applications.common.curd import model_to_dicts
 

@@ -24,10 +24,12 @@
         <!-- 顶 部 右 侧 菜 单 -->
         <div id="control" class="layui-layout-control"></div>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item layui-hide-xs"><a href="#"
-                                                        class="fullScreen layui-icon layui-icon-screen-full"></a></li>
-            <li class="layui-nav-item layui-hide-xs"><a href="http://www.pearadmin.com"
-                                                        class="layui-icon layui-icon-website"></a></li>
+            <li class="layui-nav-item layui-hide-xs">
+                <a href="#" class="fullScreen layui-icon layui-icon-screen-full"></a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs">
+                <a href="http://www.pearadmin.com" class="layui-icon layui-icon-website"></a>
+            </li>
             <li class="layui-nav-item layui-hide-xs message"></li>
             <li class="layui-nav-item user">
                 <!-- 头 像 -->
@@ -71,43 +73,42 @@
 <!-- 依 赖 脚 本 -->
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['admin', 'jquery', 'layer', 'popup'], function () {
-        let admin = layui.admin;
-        let $ = layui.jquery;
-        let layer = layui.layer;
-        let popup = layui.popup;
+  layui.use(['admin', 'jquery', 'layer', 'popup'], function () {
+    let admin = layui.admin
+    let $ = layui.jquery
+    let layer = layui.layer
+    let popup = layui.popup
 
-        // 框架初始化时会读取 根目录下 pear.configs.yml 文件作为初始化配置
-        // 你可以通过 admin.setConfigPath 方法修改配置文件位置
-        // 你可以通过 admin.setConfigType 方法修改配置文件类型
-        admin.setConfigType("json");
-        admin.setConfigPath("{{ url_for('adminIndex.configs') }}");
+    // 框架初始化时会读取 根目录下 pear.configs.yml 文件作为初始化配置
+    // 你可以通过 admin.setConfigPath 方法修改配置文件位置
+    // 你可以通过 admin.setConfigType 方法修改配置文件类型
+    admin.setConfigType('json')
+    admin.setConfigPath("{{ url_for('rights.configs') }}")
 
-        admin.render();
+    admin.render()
 
-
-        // 注销实现
-        admin.logout(function () {
-            let loading = layer.load();
-            $.ajax({
-                url: '/admin/logout',
-                dataType: 'json',
-                type: 'post',
-                success: function (result) {
-                    layer.close(loading);
-                    if (result.success) {
-                        popup.success(result.msg, function () {
-                            location.href = "/admin";
-                        });
-                        return true;
-                    }
-                }
+    // 注销实现
+    admin.logout(function () {
+      let loading = layer.load()
+      $.ajax({
+        url: '/passport/logout',
+        dataType: 'json',
+        type: 'post',
+        success: function (result) {
+          layer.close(loading)
+          if (result.success) {
+            popup.success(result.msg, function () {
+              location.href = '/admin'
             })
-        });
-
-        // 初始化消息事件
-        admin.message();
+            return true
+          }
+        }
+      })
     })
+
+    // 初始化消息事件
+    admin.message()
+  })
 </script>
 </body>
 </html>

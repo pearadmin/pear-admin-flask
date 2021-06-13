@@ -16,6 +16,8 @@ class BaseConfig:
     MYSQL_PORT = int(os.getenv('MYSQL_PORT') or 3306)
     MYSQL_DATABASE = os.getenv('MYSQL_DATABASE') or "PearAdminFlask"
 
+    UPLOADED_PHOTOS_DEST = '/static'
+
     # mysql 数据库的配置信息
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
     # 默认日志等级

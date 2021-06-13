@@ -12,21 +12,21 @@
                 <div class="layui-form-item layui-hide">
                     <label class="layui-form-label">编号</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{dict_type.id}}" name="id" lay-verify="title" autocomplete="off"
+                        <input type="text" value="{{ dict_type.id }}" name="id" lay-verify="title" autocomplete="off"
                                placeholder="请输入标题" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{dict_type.type_name}}" name="typeName" lay-verify="title"
+                        <input type="text" value="{{ dict_type.type_name }}" name="typeName" lay-verify="title"
                                autocomplete="off" placeholder="请输入标题" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">标识</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{dict_type.type_code}}" readonly name="typeCode"
+                        <input type="text" value="{{ dict_type.type_code }}" readonly name="typeCode"
                                lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
                     </div>
                 </div>
@@ -42,8 +42,8 @@
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">描述</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入描述"  name="description"
-                                  class="layui-textarea">{{dict_type.description}}</textarea>
+                        <textarea placeholder="请输入描述" name="description"
+                                  class="layui-textarea">{{ dict_type.description }}</textarea>
                     </div>
                 </div>
             </div>
@@ -63,33 +63,33 @@
         </div>
     </div>
 </form>
- {% include 'admin/common/footer.html' %}
+{% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['form', 'jquery'], function () {
-        let form = layui.form;
-        let $ = layui.jquery;
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
 
-        form.on('submit(dict-type-update)', function (data) {
-            $.ajax({
-                url: '/admin/dict/dictType/update',
-                data: JSON.stringify(data.field),
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'put',
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                            parent.layui.table.reload("dict-type-table");
-                        });
-                    } else {
-                        layer.msg(result.msg, {icon: 2, time: 1000});
-                    }
-                }
-            });
-            return false;
-        });
+    form.on('submit(dict-type-update)', function (data) {
+      $.ajax({
+        url: '/admin/dict/dictType/update',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layui.table.reload('dict-type-table')
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
     })
+  })
 </script>
 <script>
 </script>

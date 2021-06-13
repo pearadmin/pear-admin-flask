@@ -7,16 +7,20 @@ from applications.common.utils.validate import check_data
 from applications.schemas import DeptSchema
 from applications.common.admin import dept_curd as dept_curd
 
-admin_dept = Blueprint('adminDept', __name__, url_prefix='/admin/dept')
+dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
 
 
-@admin_dept.get('/')
+def register_dept_views(app):
+    app.register_blueprint(dept_bp)
+
+
+@dept_bp.get('/')
 @authorize("admin:dept:main", log=True)
 def main():
     return render_template('admin/dept/main.html')
 
 
-@admin_dept.get('/data')
+@dept_bp.get('/data')
 @authorize("admin:dept:main", log=True)
 def data():
     power_data = dept_curd.get_dept_dict()
@@ -26,13 +30,13 @@ def data():
     return jsonify(res)
 
 
-@admin_dept.get('/add')
+@dept_bp.get('/add')
 @authorize("admin:dept:add", log=True)
 def add():
     return render_template('admin/dept/add.html')
 
 
-@admin_dept.get('/tree')
+@dept_bp.get('/tree')
 @authorize("admin:dept:main", log=True)
 def tree():
     power_data = dept_curd.get_dept_dict()
@@ -44,7 +48,7 @@ def tree():
     return jsonify(res)
 
 
-@admin_dept.post('/save')
+@dept_bp.post('/save')
 @authorize("admin:dept:add", log=True)
 def save():
     req = request.json
@@ -53,7 +57,7 @@ def save():
     return success_api(msg="成功")
 
 
-@admin_dept.get('/edit')
+@dept_bp.get('/edit')
 @authorize("admin:dept:edit", log=True)
 def edit():
     _id = request.args.get("deptId")
@@ -62,7 +66,7 @@ def edit():
 
 
 # 启用
-@admin_dept.put('/enable')
+@dept_bp.put('/enable')
 @authorize("admin:dept:edit", log=True)
 def enable():
     _id = request.json.get('deptId')
@@ -75,7 +79,7 @@ def enable():
 
 
 # 禁用
-@admin_dept.put('/disable')
+@dept_bp.put('/disable')
 @authorize("admin:dept:edit", log=True)
 def dis_enable():
     _id = request.json.get('deptId')
@@ -87,7 +91,7 @@ def dis_enable():
     return fail_api(msg="数据错误")
 
 
-@admin_dept.put('/update')
+@dept_bp.put('/update')
 @authorize("admin:dept:edit", log=True)
 def update():
     req = request.json
@@ -98,7 +102,7 @@ def update():
     return success_api(msg="更新成功")
 
 
-@admin_dept.delete('/remove/<int:_id>')
+@dept_bp.delete('/remove/<int:_id>')
 @authorize("admin:dept:remove", log=True)
 def remove(_id):
     res = dept_curd.remove_dept(_id)

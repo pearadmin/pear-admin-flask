@@ -14,7 +14,7 @@ def fail_api(msg: str = "失败"):
 def table_api(msg: str = "", count=0, data=None, limit=10):
     """ 动态表格渲染响应 """
     res = {
-        'message': msg,
+        'msg': msg,
         'code': 0,
         'data': data,
         'count': count,

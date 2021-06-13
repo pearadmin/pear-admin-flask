@@ -26,21 +26,24 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">负责人</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{ dept.leader }}" name="leader" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" value="{{ dept.leader }}" name="leader" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">邮箱</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{ dept.email }}" name="email" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" value="{{ dept.email }}" name="email" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系方式</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{ dept.phone }}" name="phone" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" value="{{ dept.phone }}" name="phone" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
@@ -48,16 +51,19 @@
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
 
-                        <input type="radio" name="status"{% if dept.status == 1 %}checked{% endif %} value="1" title="开启">
+                        <input type="radio" name="status" {% if dept.status == 1 %}checked{% endif %} value="1"
+                               title="开启">
 
-                        <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %} value="0" title="关闭"
-                              >
+                        <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %} value="0"
+                               title="关闭"
+                        >
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
-                        <input type="text" name="sort" value="{{ dept.sort }}" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" name="sort" value="{{ dept.sort }}" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
@@ -87,31 +93,31 @@
 </form>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['form', 'jquery'], function () {
-        let form = layui.form;
-        let $ = layui.jquery;
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
 
-        form.on('submit(dept-update)', function (data) {
-            $.ajax({
-                url: '/admin/dept/update',
-                data: JSON.stringify(data.field),
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'put',
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                            parent.render();
-                        });
-                    } else {
-                        layer.msg(result.msg, {icon: 2, time: 1000});
-                    }
-                }
-            });
-            return false;
-        });
+    form.on('submit(dept-update)', function (data) {
+      $.ajax({
+        url: '/dept/update',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.render()
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
     })
+  })
 </script>
 <script>
 </script>

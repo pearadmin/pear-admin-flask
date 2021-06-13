@@ -3,7 +3,7 @@
 <head>
     <title>首页</title>
     {% include 'admin/common/header.html' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/console2.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/console2.css') }}"/>
 </head>
 <body class="pear-container">
 <div class="layui-row layui-col-space10">
@@ -19,13 +19,13 @@
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">核心数</div>
-                                    <div class="count pear-text" >{{ cpu_count }}</div>
+                                    <div class="count pear-text">{{ cpu_count }}</div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
                                 <div class="pear-card2">
                                     <div class="title">空闲率</div>
-                                    <div class="count pear-text"  ></div>
+                                    <div class="count pear-text"></div>
                                 </div>
                             </div>
                             <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
@@ -96,20 +96,20 @@
             <div class="layui-card-header">磁盘信息</div>
             <div class="layui-card-body">
                 <ul class="pear-card-status">
-                         {% for i in disk_partitions_list %}
-                    <li >
-                        <p >{{ i.device }}</p>
-                        <p >{{ i.fstype }}</p>
-                        磁盘大小&nbsp;<span >{{ i.total }}M</span>&nbsp;&nbsp;
-                        空闲大小&nbsp;<span>{{ i.free }}M</span>&nbsp;&nbsp;
-                        <br/>
-                        <br/>
-                        已经使用&nbsp;<span>{{ i.used }}M</span>&nbsp;&nbsp;
-                        使用概率&nbsp;<span>{{ i.percent }}%</span>
-                        <br/>
-                        <a href="javascript:;" data-id="1" class="pear-btn pear-btn-xs pear-btn-primary pear-reply">详情</a>
-                    </li>
-                         {% endfor %}
+                    {% for i in disk_partitions_list %}
+                        <li>
+                            <p>{{ i.device }}</p>
+                            <p>{{ i.fstype }}</p>
+                            磁盘大小&nbsp;<span>{{ i.total }}M</span>&nbsp;&nbsp;
+                            空闲大小&nbsp;<span>{{ i.free }}M</span>&nbsp;&nbsp;
+                            <br/>
+                            <br/>
+                            已经使用&nbsp;<span>{{ i.used }}M</span>&nbsp;&nbsp;
+                            使用概率&nbsp;<span>{{ i.percent }}%</span>
+                            <br/>
+                            <a href="javascript:;" data-id="1" class="pear-btn pear-btn-xs pear-btn-primary pear-reply">详情</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -153,14 +153,14 @@
 </div>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['layer', 'echarts','popup'], function() {
+    layui.use(['layer', 'echarts', 'popup'], function () {
         var $ = layui.jquery,
             echarts = layui.echarts;
         let popup = layui.popup;
 
         var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
 
-        $("body").on("click", "[data-url]", function() {
+        $("body").on("click", "[data-url]", function () {
             parent.layui.tab.addTabOnlyByElem("content", {
                 id: $(this).attr("data-id"),
                 title: $(this).attr("data-title"),
@@ -215,7 +215,7 @@
             },
             tooltip: {
                 trigger: "axis",
-                formatter: function(params) {
+                formatter: function (params) {
                     let html = '';
                     params.forEach(v => {
                         html +=
@@ -364,22 +364,22 @@
 
         echartsRecords.setOption(option);
 
-        window.onresize = function() {
+        window.onresize = function () {
             echartsRecords.resize();
-        }
+        };
 
-        setInterval(ajaxPolling, 1000 * 10)
+        setInterval(ajaxPolling, 1000 * 10);
 
         function ajaxPolling() {
-             $.ajax({
+            $.ajax({
                 url: "/admin/monitor/polling",
-                success: function(data) {
+                success: function (data) {
                     echartData.push({
                         name: data.time_now,
                         cpu_percent: data.cups_percent,
                         memory_percent: data.memory_used
                     });
-                    if(echartData.length>8){
+                    if (echartData.length > 8) {
                         echartData.shift();
                     }
 
@@ -387,20 +387,19 @@
                     yAxisData1 = echartData.map(v => v.cpu_percent);
                     yAxisData2 = echartData.map(v => v.memory_percent);
 
-                    option.xAxis[0].data=xAxisData
-                    option.series[0].data=yAxisData1
-                    option.series[1].data=yAxisData2
+                    option.xAxis[0].data = xAxisData;
+                    option.series[0].data = yAxisData1;
+                    option.series[1].data = yAxisData2;
 
                     echartsRecords.setOption(option);
 
                 },
-                error: function(xhr, type, errorThrown) {
+                error: function (xhr, type, errorThrown) {
                     popup.failure("api错误");
                 }
-                    })
+            })
 
-                }
-
+        }
 
 
     });

@@ -40,74 +40,74 @@
 </script>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
-        let table = layui.table;
-        let form = layui.form;
+  layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
+    let table = layui.table
+    let form = layui.form
 
-        let MODULE_PATH = "/admin/log/";
+    let MODULE_PATH = '/admin/log/'
 
-        let cols = [
-            [
-                {title: 'ID', field: 'id', align: 'center'},
-                {title: '请求方式', field: 'method', align: 'center'},
-                {title: '接口', field: 'url', align: 'center'},
-                {title: '浏览器', field: 'user_agent', align: 'center'},
-                {title: '操作地址', field: 'ip', align: 'center'},
-                {title: '访问时间', field: 'create_time', templet: '#log-createTime', align: 'center'},
-                {title: '操作人ID', field: 'uid', align: 'center'},
-                {title: '描述', field: 'desc', align: 'center'},
-                {title: '访问状态', templet: '#log-status', align: 'center'}
-            ]
-        ];
+    let cols = [
+      [
+        { title: 'ID', field: 'id', align: 'center' },
+        { title: '请求方式', field: 'method', align: 'center' },
+        { title: '接口', field: 'url', align: 'center' },
+        { title: '浏览器', field: 'user_agent', align: 'center' },
+        { title: '操作地址', field: 'ip', align: 'center' },
+        { title: '访问时间', field: 'create_time', templet: '#log-createTime', align: 'center' },
+        { title: '操作人ID', field: 'uid', align: 'center' },
+        { title: '描述', field: 'desc', align: 'center' },
+        { title: '访问状态', templet: '#log-status', align: 'center' }
+      ]
+    ]
 
-        table.render({
-            elem: '#log-operate-table',
-            url: MODULE_PATH + 'operateLog',
-            page: true,
-            cols: cols,
-            skin: 'line',
-            toolbar: false
-        });
-
-        table.render({
-            elem: '#log-login-table',
-            url: MODULE_PATH + 'loginLog',
-            page: true,
-            cols: cols,
-            skin: 'line',
-            toolbar: false
-        });
-
-        form.on('submit(dict-type-query)', function (data) {
-            table.reload('dict-type-table', {where: data.field});
-            return false;
-        });
-
-        table.on('tool(log-operate-table)', function (obj) {
-            if (obj.event === 'details') {
-                window.info(obj);
-            }
-        });
-
-        table.on('tool(log-login-table)', function (obj) {
-            if (obj.event === 'details') {
-                window.info(obj);
-            }
-        });
-
-        window.info = function (obj) {
-            layer.open({
-                type: 2,
-                title: '详细信息',
-                shade: 0,
-                area: ['400px', '400px'],
-                content: MODULE_PATH + "info",
-                success: function (layero) {
-                    let iframeWin = window[layero.find('iframe')[0]['name']];
-                    iframeWin.show(obj.data);
-                }
-            });
-        }
+    table.render({
+      elem: '#log-operate-table',
+      url: MODULE_PATH + 'operateLog',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: false
     })
+
+    table.render({
+      elem: '#log-login-table',
+      url: MODULE_PATH + 'loginLog',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: false
+    })
+
+    form.on('submit(dict-type-query)', function (data) {
+      table.reload('dict-type-table', { where: data.field })
+      return false
+    })
+
+    table.on('tool(log-operate-table)', function (obj) {
+      if (obj.event === 'details') {
+        window.info(obj)
+      }
+    })
+
+    table.on('tool(log-login-table)', function (obj) {
+      if (obj.event === 'details') {
+        window.info(obj)
+      }
+    })
+
+    window.info = function (obj) {
+      layer.open({
+        type: 2,
+        title: '详细信息',
+        shade: 0,
+        area: ['400px', '400px'],
+        content: MODULE_PATH + 'info',
+        success: function (layero) {
+          let iframeWin = window[layero.find('iframe')[0]['name']]
+          iframeWin.show(obj.data)
+        }
+      })
+    }
+  })
 </script>
 </html>

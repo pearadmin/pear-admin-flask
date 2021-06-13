@@ -35,10 +35,10 @@
                     <label class="layui-form-label">角色</label>
                     <div class="layui-input-block">
 
-                         {% for role in roles %}
-                        <input
-                               value="{{role.id}}" title="{{role.name}}" type="checkbox"
-                               name="roleIds" lay-skin="primary">
+                        {% for role in roles %}
+                            <input
+                                    value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
+                                    name="roleIds" lay-skin="primary">
                         {% endfor %}
 
                     </div>
@@ -61,37 +61,37 @@
 </form>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['form', 'jquery'], function () {
-        let form = layui.form;
-        let $ = layui.jquery;
-        form.on('submit(user-save)', function (data) {
-            let roleIds = "";
-            $('input[type=checkbox]:checked').each(function () {
-                roleIds += $(this).val() + ",";
-            });
-            roleIds = roleIds.substr(0, roleIds.length - 1);
-            data.field.roleIds = roleIds;
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+    form.on('submit(user-save)', function (data) {
+      let roleIds = ''
+      $('input[type=checkbox]:checked').each(function () {
+        roleIds += $(this).val() + ','
+      })
+      roleIds = roleIds.substr(0, roleIds.length - 1)
+      data.field.roleIds = roleIds
 
-            $.ajax({
-                url: '/admin/user/save',
-                data: JSON.stringify(data.field),
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'post',
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                            parent.layui.table.reload("user-table");
-                        });
-                    } else {
-                        layer.msg(result.msg, {icon: 2, time: 1000});
-                    }
-                }
-            });
-            return false;
-        });
+      $.ajax({
+        url: '/admin/user/save',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layui.table.reload('user-table')
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
     })
+  })
 </script>
 <script>
 </script>

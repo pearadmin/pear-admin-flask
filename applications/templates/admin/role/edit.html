@@ -11,7 +11,7 @@
                 <div class="layui-form-item layui-hide">
                     <label class="layui-form-label">编号</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{role.id}}" name="roleId" lay-verify="title"
+                        <input type="text" value="{{ role.id }}" name="roleId" lay-verify="title"
                                autocomplete="off" placeholder="请输入标题" class="layui-input">
                     </div>
                 </div>
@@ -32,14 +32,17 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="enable" {% if role.enable == 0  %}checked {% endif %}value="0" title="开启">
-                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %} value="1" title="关闭">
+                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %}value="0"
+                               title="开启">
+                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %} value="1"
+                               title="关闭">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
-                        <input type="text" name="sort" value="{{ role.sort }}" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" name="sort" value="{{ role.sort }}" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
@@ -47,7 +50,7 @@
                     <label class="layui-form-label">描述</label>
                     <div class="layui-input-block">
                         <textarea placeholder="请输入内容" name="details"
-                                  class="layui-textarea">{{role.details}}</textarea>
+                                  class="layui-textarea">{{ role.details }}</textarea>
                     </div>
                 </div>
             </div>
@@ -69,31 +72,31 @@
 </form>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['form', 'jquery'], function () {
-        let form = layui.form;
-        let $ = layui.jquery;
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
 
-        form.on('submit(role-update)', function (data) {
-            $.ajax({
-                url: '/admin/role/update',
-                data: JSON.stringify(data.field),
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'put',
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                            parent.layui.table.reload("role-table");
-                        });
-                    } else {
-                        layer.msg(result.msg, {icon: 2, time: 1000});
-                    }
-                }
+    form.on('submit(role-update)', function (data) {
+      $.ajax({
+        url: '/admin/role/update',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layui.table.reload('role-table')
             })
-            return false;
-        });
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
     })
+  })
 </script>
 <script>
 </script>

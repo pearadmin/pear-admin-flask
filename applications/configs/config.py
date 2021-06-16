@@ -22,6 +22,15 @@ class BaseConfig:
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
     # 默认日志等级
     LOG_LEVEL = logging.WARN
+    #
+    MAIL_SERVER = os.getenv('MAIL_SERVER') or 'smtp.qq.com'
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_PORT = 465
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME') or '123@qq.com'
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD') or 'XXXXX'  # 生成的授权码
+    # 默认发件人的邮箱,这里填写和MAIL_USERNAME一致即可
+    MAIL_DEFAULT_SENDER = ('pear admin', os.getenv('MAIL_USERNAME') or '123@qq.com')
 
 
 class TestingConfig(BaseConfig):

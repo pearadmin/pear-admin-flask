@@ -8,6 +8,7 @@ from applications.view.admin.power import admin_power
 from applications.view.admin.role import admin_role
 from applications.view.admin.user import admin_user
 from applications.view.admin.monitor import admin_monitor_bp
+from applications.view.admin.task import admin_task
 
 
 def register_admin_views(app: Flask):
@@ -19,3 +20,4 @@ def register_admin_views(app: Flask):
     app.register_blueprint(admin_power)
     app.register_blueprint(admin_role)
     app.register_blueprint(admin_dict)
+    app.register_blueprint(admin_task)

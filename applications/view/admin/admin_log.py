@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template
 from sqlalchemy import desc
-
 from applications.common.utils.http import table_api
 from applications.common.utils.rights import authorize
 from applications.models import AdminLog

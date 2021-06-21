@@ -4,7 +4,7 @@ from marshmallow import fields, validate
 
 
 class Dept(db.Model):
-    __tablename__ = 'admin_dept'
+    __tablename__ = 'cp_dept'
     id = db.Column(db.Integer, primary_key=True, comment="部门ID")
     parent_id = db.Column(db.Integer, comment="父级编号")
     dept_name = db.Column(db.String(50), comment="部门名称")

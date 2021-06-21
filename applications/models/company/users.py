@@ -3,14 +3,14 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from applications.extensions import db, ma
 from marshmallow import fields
-from applications.models import Dept
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'admin_user'
+    __tablename__ = 'cp_user'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
     username = db.Column(db.String(20), comment='用户名')
     realname = db.Column(db.String(20), comment='真实名字')
+    mobile = db.Column(db.String(11), comment='电话号码')
     avatar = db.Column(db.String(255), comment='头像', default="/static/admin/admin/images/avatar.jpg")
     remark = db.Column(db.String(255), comment='备注')
     password_hash = db.Column(db.String(128), comment='哈希密码')
@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     dept_id = db.Column(db.Integer, comment='部门id')
     create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
-    role = db.relationship('Role', secondary="admin_user_role", backref=db.backref('user'), lazy='dynamic')
+    role = db.relationship('Role', secondary="rt_user_role", backref=db.backref('user'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -38,6 +38,7 @@ class UserSchema(ma.Schema):
     dept = fields.Method("get_dept")
 
     def get_dept(self, obj):
+        from applications.models import Dept
         if obj.dept_id != None:
             return Dept.query.filter_by(id=obj.dept_id).first().dept_name
         else:

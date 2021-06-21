@@ -1,8 +1,8 @@
-from applications.common.utils.validate import xss_escape
 from applications.extensions import db
 from applications.models import Dept, DeptSchema
 from applications.models import User
 from applications.common.curd import model_to_dicts
+from flask import escape
 
 
 def get_dept_dict():
@@ -12,14 +12,14 @@ def get_dept_dict():
 
 
 def save_dept(req):
-    address = xss_escape(req.get("address"))
-    deptName = xss_escape(req.get("deptName"))
-    email = xss_escape(req.get("email"))
-    leader = xss_escape(req.get("leader"))
-    parentId = xss_escape(req.get("parentId"))
-    phone = xss_escape(req.get("phone"))
-    sort = xss_escape(req.get("sort"))
-    status = xss_escape(req.get("status"))
+    address = escape(req.get("address"))
+    deptName = escape(req.get("deptName"))
+    email = escape(req.get("email"))
+    leader = escape(req.get("leader"))
+    parentId = escape(req.get("parentId"))
+    phone = escape(req.get("phone"))
+    sort = escape(req.get("sort"))
+    status = escape(req.get("status"))
     dept = Dept(
         parent_id=parentId,
         dept_name=deptName,
@@ -35,25 +35,26 @@ def save_dept(req):
     return r
 
 
-def get_dept_by_id(id):
-    d = Dept.query.filter_by(id=id).first()
+def get_dept_by_id(_id):
+    """根据 id 获取部门"""
+    d = Dept.query.filter_by(id=_id).first()
     return d
 
 
-# 启动权限
-def enable_status(id):
+def enable_status(_id):
+    """ 启用权限 """
     enable = 1
-    d = Dept.query.filter_by(id=id).update({"status": enable})
+    d = Dept.query.filter_by(id=_id).update({"status": enable})
     if d:
         db.session.commit()
         return True
     return False
 
 
-# 停用权限
-def disable_status(id):
+def disable_status(_id):
+    """ 停用权限 """
     enable = 0
-    d = Dept.query.filter_by(id=id).update({"status": enable})
+    d = Dept.query.filter_by(id=_id).update({"status": enable})
     if d:
         db.session.commit()
         return True
@@ -61,27 +62,28 @@ def disable_status(id):
 
 
 def update_dept(json):
-    id = json.get("deptId"),
+    """ 更新部门信息 """
+    _id = json.get("deptId"),
     data = {
-        "dept_name": xss_escape(json.get("deptName")),
-        "sort": xss_escape(json.get("sort")),
-        "leader": xss_escape(json.get("leader")),
-        "phone": xss_escape(json.get("phone")),
-        "email": xss_escape(json.get("email")),
-        "status": xss_escape(json.get("status")),
-        "address": xss_escape(json.get("address"))
+        "dept_name": escape(json.get("deptName")),
+        "sort": escape(json.get("sort")),
+        "leader": escape(json.get("leader")),
+        "phone": escape(json.get("phone")),
+        "email": escape(json.get("email")),
+        "status": escape(json.get("status")),
+        "address": escape(json.get("address"))
     }
-    d = Dept.query.filter_by(id=id).update(data)
+    d = Dept.query.filter_by(id=_id).update(data)
     if not d:
         return False
     db.session.commit()
     return True
 
 
-def remove_dept(id):
-    d = Dept.query.filter_by(id=id).delete()
+def remove_dept(_id):
+    d = Dept.query.filter_by(id=_id).delete()
     if not d:
         return False
-    User.query.filter_by(dept_id=id).update({"dept_id": None})
+    User.query.filter_by(dept_id=_id).update({"dept_id": None})
     db.session.commit()
     return True

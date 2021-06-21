@@ -77,7 +77,7 @@ def create_admin_power():
             (1, '系统管理', '0', '', None, None, '0', 'layui-icon layui-icon-set-fill', 1, None, None, 1),
             (3, '用户管理', '1', 'admin:user:main', '/admin/user/', '_iframe', '1',
              'layui-icon layui-icon layui-icon layui-icon layui-icon-rate', 1, None, None, 1),
-            (4, '权限管理', '1', 'admin:power:main', '/admin/power/', '_iframe', '1', None, 2, None, None, 1),
+            (4, '权限管理', '1', 'admin:power:main', '/rights/', '_iframe', '1', None, 2, None, None, 1),
             (9, '角色管理', '1', 'admin:role:main', '/admin/role', '_iframe', '1', 'layui-icon layui-icon-username', 2,
              '2021-03-16 22:24:58', '2021-03-25 19:15:24', 1),
             (
@@ -227,7 +227,7 @@ def create_admin_role_power():
 
     # add_data(_fields, _data_list, UserRole)
     for data in _data_list:
-        db.session.execute('insert into admin_role_power VALUES (%s, %s, %s);' % data)
+        db.session.execute('insert into rt_role_power VALUES (%s, %s, %s);' % data)
     db.session.commit()
 
 
@@ -260,7 +260,7 @@ def create_admin_user():
     add_data(_fields, _data_list, User)
 
 
-def create_admin_user_role():
+def create_admin_user_role() -> object:
     from applications.extensions import db
 
     _data_list = [
@@ -271,7 +271,7 @@ def create_admin_user_role():
 
     # add_data(_fields, _data_list, UserRole)
     for data in _data_list:
-        db.session.execute('insert into admin_user_role VALUES (%s, %s, %s);' % data)
+        db.session.execute('insert into rt_user_role VALUES (%s, %s, %s);' % data)
     db.session.commit()
 
 

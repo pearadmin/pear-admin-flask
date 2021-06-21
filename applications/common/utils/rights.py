@@ -9,7 +9,7 @@ def authorize(power: str, log: bool = False):
         @login_required
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if not power in session.get('permissions'):
+            if power not in session.get('permissions'):
                 if log:
                     admin_log(request=request, is_access=False)
                 if request.method == 'GET':

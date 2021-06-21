@@ -5,7 +5,7 @@ from marshmallow import fields
 
 
 class Photo(db.Model):
-    __tablename__ = 'admin_photo'
+    __tablename__ = 'file_photo'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     href = db.Column(db.String(255))

@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, escape
 from flask_login import login_required
 from applications.common.admin import role_curd
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
+
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
@@ -21,8 +21,8 @@ def main():
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    role_name = xss_escape(request.args.get('roleName', type=str))
-    role_code = xss_escape(request.args.get('roleCode', type=str))
+    role_name = escape(request.args.get('roleName', type=str))
+    role_code = escape(request.args.get('roleCode', type=str))
     filters = {}
     if role_name:
         filters["name"] = ('%' + role_name + '%')

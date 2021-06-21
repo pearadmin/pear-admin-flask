@@ -1,9 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, escape
 from flask_login import login_required, current_user
 
 from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
-from applications.common.utils.validate import xss_escape
 from applications.models import User
 from applications.models import Role
 from applications.common.admin import user_curd
@@ -24,8 +23,8 @@ def main():
 def data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    real_name = xss_escape(request.args.get('realName', type=str))
-    username = xss_escape(request.args.get('username', type=str))
+    real_name = escape(request.args.get('realName', type=str))
+    username = escape(request.args.get('username', type=str))
     dept_id = request.args.get('deptId', type=int)
     filters = {}
     if real_name:
@@ -49,9 +48,9 @@ def add():
 def save():
     req_json = request.json
     a = req_json.get("roleIds")
-    username = xss_escape(req_json.get('username'))
-    real_name = xss_escape(req_json.get('realName'))
-    password = xss_escape(req_json.get('password'))
+    username = escape(req_json.get('username'))
+    real_name = escape(req_json.get('realName'))
+    password = escape(req_json.get('password'))
     role_ids = a.split(',')
 
     if not username or not real_name or not password:
@@ -93,11 +92,11 @@ def edit(_id):
 @authorize("admin:user:edit", log=True)
 def update():
     req_json = request.json
-    a = xss_escape(req_json.get("roleIds"))
-    _id = xss_escape(req_json.get("userId"))
-    username = xss_escape(req_json.get('username'))
-    real_name = xss_escape(req_json.get('realName'))
-    dept_id = xss_escape(req_json.get('deptId'))
+    a = escape(req_json.get("roleIds"))
+    _id = escape(req_json.get("userId"))
+    username = escape(req_json.get('username'))
+    real_name = escape(req_json.get('realName'))
+    dept_id = escape(req_json.get('deptId'))
     role_ids = a.split(',')
     user_curd.update_user(id, username, real_name, dept_id)
     user_curd.update_user_role(_id, role_ids)

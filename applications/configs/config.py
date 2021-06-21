@@ -31,8 +31,11 @@ class TestingConfig(BaseConfig):
 
 class DevelopmentConfig(BaseConfig):
     """ 开发配置 """
+    # SQLALCHEMY_DATABASE_URI = r'sqlite:///../sql_pear_admin.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = False
+
+    UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(os.path.abspath(__name__)), 'applications', 'static', 'upload')
 
 
 class ProductionConfig(BaseConfig):

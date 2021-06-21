@@ -18,15 +18,15 @@ def get_role_data(page, limit, filters):
     return role, count
 
 
-# 获取角色dict
 def get_role_data_dict(page, limit, filters):
+    """ 获取角色dict """
     role, count = get_role_data(page, limit, filters)
     data = model_to_dicts(Schema=RoleSchema, model=role.items)
     return data, count
 
 
-# 增加角色
 def add_role(req):
+    """ 增加角色 """
     details = xss_escape(req.get("details"))
     enable = xss_escape(req.get("enable"))
     roleCode = xss_escape(req.get("roleCode"))
@@ -43,15 +43,15 @@ def add_role(req):
     db.session.commit()
 
 
-# 通过id获取角色
-def get_role_by_id(id):
-    r = Role.query.filter_by(id=id).first()
+def get_role_by_id(_id):
+    """ 通过id获取角色 """
+    r = Role.query.filter_by(id=_id).first()
     return r
 
 
-# 更新角色
 def update_role(req_json):
-    id = req_json.get("roleId")
+    """ 更新角色 """
+    _id = req_json.get("roleId")
     data = {
         "code": xss_escape(req_json.get("roleCode")),
         "name": xss_escape(req_json.get("roleName")),
@@ -59,14 +59,14 @@ def update_role(req_json):
         "enable": xss_escape(req_json.get("enable")),
         "details": xss_escape(req_json.get("details"))
     }
-    role = Role.query.filter_by(id=id).update(data)
+    role = Role.query.filter_by(id=_id).update(data)
     db.session.commit()
     return role
 
 
-# 获取角色的权限
-def get_role_power(id):
-    role = Role.query.filter_by(id=id).first()
+def get_role_power(_id):
+    """ 获取角色的权限 """
+    role = Role.query.filter_by(id=_id).first()
     check_powers = role.power
     check_powers_list = []
     for cp in check_powers:
@@ -82,14 +82,12 @@ def get_role_power(id):
     return output
 
 
-# 更新角色权限
-def update_role_power(id, power_list):
-    role = Role.query.filter_by(id=id).first()
+def update_role_power(_id, power_list):
+    """ 更新角色权限 """
+    role = Role.query.filter_by(id=_id).first()
     power_id_list = []
     for p in role.power:
         power_id_list.append(p.id)
-        # print(p.id)
-    # print(power_id_list)
     powers = Power.query.filter(Power.id.in_(power_id_list)).all()
     for p in powers:
         role.power.remove(p)
@@ -99,29 +97,29 @@ def update_role_power(id, power_list):
     db.session.commit()
 
 
-# 启动角色
-def enable_status(id):
+def enable_status(_id):
+    """ 启用角色 """
     enable = 1
-    role = Role.query.filter_by(id=id).update({"enable": enable})
+    role = Role.query.filter_by(id=_id).update({"enable": enable})
     if role:
         db.session.commit()
         return True
     return False
 
 
-# 停用角色
-def disable_status(id):
+def disable_status(_id):
+    """ 停用角色 """
     enable = 0
-    role = Role.query.filter_by(id=id).update({"enable": enable})
+    role = Role.query.filter_by(id=_id).update({"enable": enable})
     if role:
         db.session.commit()
         return True
     return False
 
 
-# 删除角色
-def remove_role(id):
-    role = Role.query.filter_by(id=id).first()
+def remove_role(_id):
+    """ 删除角色 """
+    role = Role.query.filter_by(id=_id).first()
     # 删除该角色的权限
     power_id_list = []
     for p in role.power:
@@ -141,9 +139,7 @@ def remove_role(id):
     return r
 
 
-# 批量删除
 def batch_remove(ids):
-    # role = Role.query.filter(Role.id.in_(ids)).delete(synchronize_session=False)
-    # db.session.commit()
-    for id in ids:
-        remove_role(id)
+    """ 批量删除 """
+    for _id in ids:
+        remove_role(_id)

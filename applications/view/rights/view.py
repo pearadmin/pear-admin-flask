@@ -116,3 +116,11 @@ def batch_remove():
     ids = request.form.getlist('ids[]')
     rights_curd.batch_remove(ids)
     return success_api(msg="批量删除成功")
+
+
+"""
+    https://developer.aliyun.com/article/778501
+    四位权限值： 增删改查
+    八位部门值： 流量 接待&转化 讲师 运营 1111 1111
+    四位公司值： 
+"""

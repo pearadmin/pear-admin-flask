@@ -108,5 +108,5 @@ def remove_power(id):
 
 # 批量删除权限
 def batch_remove(ids):
-    for id in ids:
-        remove_power(id)
+    for _id in ids:
+        remove_power(_id)

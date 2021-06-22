@@ -44,7 +44,7 @@
                     <label class="layui-form-label">角色</label>
                     <div class="layui-input-block">
                         {% for role in roles %}
-                            <input{% if role.id in checked_roles %}
+                            <input {% if role.id in checked_roles %}
                                 checked
                             {% endif %}
                                 value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
@@ -57,8 +57,7 @@
     </div>
     <div class="bottom">
         <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
-                    lay-filter="user-update">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="user-update">
                 <i class="layui-icon layui-icon-ok"></i>
                 提交
             </button>
@@ -94,7 +93,7 @@
       roleIds = roleIds.substr(0, roleIds.length - 1)
       data.field.roleIds = roleIds
       $.ajax({
-        url: '/admin/user/update',
+        url: '/users/' + data.userId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, escape
+from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
 from applications.common.admin import role_curd
 from applications.common.utils.http import table_api, success_api, fail_api
@@ -21,8 +21,8 @@ def main():
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    role_name = escape(request.args.get('roleName', type=str))
-    role_code = escape(request.args.get('roleCode', type=str))
+    role_name = request.args.get('roleName', type=str)
+    role_code = request.args.get('roleCode', type=str)
     filters = {}
     if role_name:
         filters["name"] = ('%' + role_name + '%')

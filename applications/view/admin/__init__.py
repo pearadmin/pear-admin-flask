@@ -5,13 +5,13 @@ from applications.view.admin.dict import admin_dict
 from applications.view.admin.index import admin_bp
 from applications.view.admin.file import admin_file
 from applications.view.admin.role import admin_role
-from applications.view.admin.user import admin_user
+from applications.view.company.users import users_bp
 from applications.view.admin.monitor import admin_monitor_bp
 
 
 def register_admin_views(app: Flask):
     app.register_blueprint(admin_bp)
-    app.register_blueprint(admin_user)
+    app.register_blueprint(users_bp)
     app.register_blueprint(admin_file)
     app.register_blueprint(admin_monitor_bp)
     app.register_blueprint(admin_log)

@@ -1,6 +1,5 @@
 from sqlalchemy import and_
 
-from applications.common.utils.validate import xss_escape
 from applications.extensions import db
 from applications.models import Role, RoleSchema
 from applications.models.rights.power import Power, PowerSchema2
@@ -11,6 +10,7 @@ from applications.common.curd import model_to_dicts
 
 
 def get_role_data(page, limit, filters):
+    print(page, limit, filters)
     role = Role.query.filter(and_(*[getattr(Role, k).like(v) for k, v in filters.items()])).paginate(page=page,
                                                                                                      per_page=limit,
                                                                                                      error_out=False)
@@ -27,11 +27,11 @@ def get_role_data_dict(page, limit, filters):
 
 def add_role(req):
     """ 增加角色 """
-    details = xss_escape(req.get("details"))
-    enable = xss_escape(req.get("enable"))
-    roleCode = xss_escape(req.get("roleCode"))
-    roleName = xss_escape(req.get("roleName"))
-    sort = xss_escape(req.get("sort"))
+    details = req.get("details")
+    enable = req.get("enable")
+    roleCode = req.get("roleCode")
+    roleName = req.get("roleName")
+    sort = req.get("sort")
     role = Role(
         details=details,
         enable=enable,
@@ -53,11 +53,11 @@ def update_role(req_json):
     """ 更新角色 """
     _id = req_json.get("roleId")
     data = {
-        "code": xss_escape(req_json.get("roleCode")),
-        "name": xss_escape(req_json.get("roleName")),
-        "sort": xss_escape(req_json.get("sort")),
-        "enable": xss_escape(req_json.get("enable")),
-        "details": xss_escape(req_json.get("details"))
+        "code": req_json.get("roleCode"),
+        "name": req_json.get("roleName"),
+        "sort": req_json.get("sort"),
+        "enable": req_json.get("enable"),
+        "details": req_json.get("details")
     }
     role = Role.query.filter_by(id=_id).update(data)
     db.session.commit()

@@ -1,4 +1,4 @@
-from applications.common.utils.validate import xss_escape
+from flask import escape
 from applications.extensions import db
 from applications.models import DictType, DictData, DictTypeSchema, DictDataSchema
 from applications.common.curd import model_to_dicts
@@ -39,10 +39,10 @@ def get_dict_data(page, limit, type_code):
 
 # 增加 dict type
 def save_dict_type(req_json):
-    description = xss_escape(req_json.get("description"))
-    enable = xss_escape(req_json.get("enable"))
-    type_code = xss_escape(req_json.get("typeCode"))
-    type_name = xss_escape(req_json.get("typeName"))
+    description = escape(req_json.get("description"))
+    enable = escape(req_json.get("enable"))
+    type_code = escape(req_json.get("typeCode"))
+    type_name = escape(req_json.get("typeName"))
     d = DictType(type_name=type_name, type_code=type_code, enable=enable, description=description)
     db.session.add(d)
     db.session.commit()
@@ -51,11 +51,11 @@ def save_dict_type(req_json):
 
 # 编辑字典类型
 def update_dict_type(req_json):
-    id = xss_escape(req_json.get("id"))
-    description = xss_escape(req_json.get("description"))
-    enable = xss_escape(req_json.get("enable"))
-    type_code = xss_escape(req_json.get("typeCode"))
-    type_name = xss_escape(req_json.get("typeName"))
+    id = escape(req_json.get("id"))
+    description = escape(req_json.get("description"))
+    enable = escape(req_json.get("enable"))
+    type_code = escape(req_json.get("typeCode"))
+    type_name = escape(req_json.get("typeName"))
     DictType.query.filter_by(id=id).update({
         "description": description,
         "enable": enable,
@@ -95,11 +95,11 @@ def delete_type_by_id(id):
 
 # 增加dictdata
 def save_dict_data(req_json):
-    data_label = xss_escape(req_json.get("dataLabel"))
-    data_value = xss_escape(req_json.get("dataValue"))
-    enable = xss_escape(req_json.get("enable"))
-    remark = xss_escape(req_json.get("remark"))
-    type_code = xss_escape(req_json.get("typeCode"))
+    data_label = escape(req_json.get("dataLabel"))
+    data_value = escape(req_json.get("dataValue"))
+    enable = escape(req_json.get("enable"))
+    remark = escape(req_json.get("remark"))
+    type_code = escape(req_json.get("typeCode"))
     d = DictData(data_label=data_label, data_value=data_value, enable=enable, remark=remark, type_code=type_code)
     db.session.add(d)
     db.session.commit()
@@ -110,11 +110,11 @@ def save_dict_data(req_json):
 def update_dict_data(req_json):
     id = req_json.get("dataId")
     DictData.query.filter_by(id=id).update({
-        "data_label": xss_escape(req_json.get("dataLabel")),
-        "data_value": xss_escape(req_json.get("dataValue")),
-        "enable": xss_escape(req_json.get("enable")),
-        "remark": xss_escape(req_json.get("remark")),
-        "type_code": xss_escape(req_json.get("typeCode"))
+        "data_label": escape(req_json.get("dataLabel")),
+        "data_value": escape(req_json.get("dataValue")),
+        "enable": escape(req_json.get("enable")),
+        "remark": escape(req_json.get("remark")),
+        "type_code": escape(req_json.get("typeCode"))
     })
     db.session.commit()
     return

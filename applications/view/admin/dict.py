@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, escape
+from flask import Blueprint, render_template, request, jsonify
 
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
@@ -20,7 +20,7 @@ def main():
 def dict_type_data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    type_name = escape(request.args.get('typeName', type=str))
+    type_name = request.args.get('typeName', type=str)
     data, count = dict_curd.get_dict_type(page=page, limit=limit, type_name=type_name)
     return table_api(data=data,count=count)
 
@@ -100,7 +100,7 @@ def dict_type_delete(_id):
 def dict_code_data():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    type_code = escape(request.args.get('typeCode', type=str))
+    type_code = request.args.get('typeCode', type=str)
     data, count = dict_curd.get_dict_data(page=page, limit=limit, type_code=type_code)
     return table_api(data=data,count=count)
 

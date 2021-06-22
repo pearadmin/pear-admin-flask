@@ -1,4 +1,4 @@
-from applications.common.utils.validate import xss_escape
+from flask import escape
 from applications.extensions import db
 from applications.models.rights.power import Power, PowerSchema2
 from applications.models import Role
@@ -21,14 +21,14 @@ def select_parent():
 
 # 增加权限
 def save_power(req):
-    icon = xss_escape(req.get("icon"))
-    openType = xss_escape(req.get("openType"))
-    parentId = xss_escape(req.get("parentId"))
-    powerCode = xss_escape(req.get("powerCode"))
-    powerName = xss_escape(req.get("powerName"))
-    powerType = xss_escape(req.get("powerType"))
-    powerUrl = xss_escape(req.get("powerUrl"))
-    sort = xss_escape(req.get("sort"))
+    icon = escape(req.get("icon"))
+    openType = escape(req.get("openType"))
+    parentId = escape(req.get("parentId"))
+    powerCode = escape(req.get("powerCode"))
+    powerName = escape(req.get("powerName"))
+    powerType = escape(req.get("powerType"))
+    powerUrl = escape(req.get("powerUrl"))
+    sort = escape(req.get("sort"))
     power = Power(
         icon=icon,
         open_type=openType,
@@ -55,14 +55,14 @@ def get_power_by_id(id):
 def update_power(req_json):
     id = req_json.get("powerId")
     data = {
-        "icon": xss_escape(req_json.get("icon")),
-        "open_type": xss_escape(req_json.get("openType")),
-        "parent_id": xss_escape(req_json.get("parentId")),
-        "code": xss_escape(req_json.get("powerCode")),
-        "name": xss_escape(req_json.get("powerName")),
-        "type": xss_escape(req_json.get("powerType")),
-        "url": xss_escape(req_json.get("powerUrl")),
-        "sort": xss_escape(req_json.get("sort"))
+        "icon": escape(req_json.get("icon")),
+        "open_type": escape(req_json.get("openType")),
+        "parent_id": escape(req_json.get("parentId")),
+        "code": escape(req_json.get("powerCode")),
+        "name": escape(req_json.get("powerName")),
+        "type": escape(req_json.get("powerType")),
+        "url": escape(req_json.get("powerUrl")),
+        "sort": escape(req_json.get("sort"))
     }
     # print(data)
     power = Power.query.filter_by(id=id).update(data)

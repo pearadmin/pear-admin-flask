@@ -39,51 +39,56 @@
 </form>
 {% include 'admin/common/footer.html' %}
 <script>
-    layui.use(['form', 'jquery', 'layer', 'button', 'popup'], function () {
-        let form = layui.form;
-        let $ = layui.jquery;
-        let layer = layui.layer;
-        let button = layui.button;
-        let popup = layui.popup;
-        let captchaPath = "{{ url_for('passport.get_captcha') }}";
+  layui.use(['form', 'jquery', 'layer', 'button', 'popup'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+    let layer = layui.layer
+    let button = layui.button
+    let popup = layui.popup
+    let captchaPath = "{{ url_for('passport.get_captcha') }}"
 
-        form.on('submit(login)', function (data) {
-            let loader = layer.load();
-            let btn = button.load({elem: '.login'});
-            $.ajax({
-                data: data.field,
-                type: "post",
-                dataType: 'json',
-                success: function (result) {
-                    layer.close(loader);
-                    btn.stop(function () {
-                        if (result.success) {
-                            popup.success(result.msg, function () {
-                                location.href = "{{ url_for('admin.index') }}";
-                            })
-                        } else {
-                            popup.failure(result.msg, function () {
-                                document.getElementById("captchaImage").src = captchaPath + "?" + Math.random();
-                            });
-                        }
-                    })
-                }
-            });
-            return false;
-        });
-
-        $("#captchaImage").click(function () {
-            document.getElementById("captchaImage").src = captchaPath + "?" + Math.random();
-        });
-        setInterval(function () {
-            document.getElementById("captchaImage").src = captchaPath + "?" + Math.random();
-        }, 30 * 1000);
+    form.on('submit(login)', function (data) {
+      // data 是表单的数据
+      let loader = layer.load()  // 加载按钮
+      let btn = button.load({ elem: '.login' })
+      $.ajax({
+        data: data.field,
+        type: 'post',
+        dataType: 'json',
+        // 请求成功之后返回的数据
+        success: function (result) {
+          layer.close(loader)  // 关闭加载按钮
+          btn.stop(function () {
+            if (result.success) {
+              popup.success(result.msg, function () {
+                location.href = "{{ url_for('admin.index') }}"
+              })
+            } else {
+              popup.failure(result.msg, function () {
+                document.getElementById('captchaImage').src = captchaPath + '?' + Math.random()
+              })
+            }
+          })
+        }
+      })
+      return false
     })
+
+    // 点击按钮更新验证码
+    $('#captchaImage').click(function () {
+      document.getElementById('captchaImage').src = captchaPath + '?' + Math.random()
+    })
+
+    // 定时器，定时更新验证码
+    setInterval(function () {
+      document.getElementById('captchaImage').src = captchaPath + '?' + Math.random()
+    }, 30 * 1000)
+  })
 </script>
 <script>
-    if (window !== top) {
-        top.location.href = location.href;
-    }
+  if (window !== top) {
+    top.location.href = location.href
+  }
 </script>
 </body>
 </html>

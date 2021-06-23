@@ -97,6 +97,7 @@
     let form = layui.form
     let $ = layui.jquery
 
+    // 当点击更新之后，获取数据
     form.on('submit(dept-update)', function (data) {
       $.ajax({
         url: '/dept/update',
@@ -107,7 +108,7 @@
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layer.close(parent.layer.getFrameIndex(window.name)) //关闭当前页
               parent.render()
             })
           } else {

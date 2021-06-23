@@ -106,7 +106,7 @@
         toolbar: '#power-toolbar',
         elem: '#power-table',
         url: '{{ url_for('rights.data') }}',
-        page: false,
+                page: false,
         cols: [
           [
             {% if authorize("admin:role:remove") %}
@@ -212,7 +212,7 @@
         title: '修改',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'edit/' + obj.data['powerId']
+        content: MODULE_PATH + 'power/' + obj.data['powerId']
       })
     }
     window.remove = function (obj) {
@@ -220,7 +220,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'remove/' + obj.data['powerId'],
+          url: MODULE_PATH + 'power/' + obj.data['powerId'],
           dataType: 'json',
           type: 'delete',
           success: function (result) {

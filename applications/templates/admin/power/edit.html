@@ -137,8 +137,9 @@
 
     form.on('submit(power-save)', function (data) {
       data.field.icon = 'layui-icon ' + data.field.icon
+      console.log(data.field)
       $.ajax({
-        url: '{{ url_for('rights.update') }}',
+        url: '/rights/power/' + data.field.powerId ,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

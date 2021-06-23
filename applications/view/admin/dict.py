@@ -22,7 +22,7 @@ def dict_type_data():
     limit = request.args.get('limit', type=int)
     type_name = request.args.get('typeName', type=str)
     data, count = dict_curd.get_dict_type(page=page, limit=limit, type_name=type_name)
-    return table_api(data=data,count=count)
+    return table_api(data=data, count=count)
 
 
 @admin_dict.get('/dictType/add')

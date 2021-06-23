@@ -12,14 +12,14 @@
         <div class="layui-tab layui-tab-card">
             <ul class="layui-tab-title">
                 <li class="layui-this">登录日志</li>
-                <li>操作日志</li>
+                <li>访问日志</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <table style="margin-top: 10px;" id="log-login-table" lay-filter="log-login-table"></table>
                 </div>
                 <div class="layui-tab-item">
-                    <table style="margin-top: 10px;" id="log-operate-table" lay-filter="log-operate-table"></table>
+                    <table style="margin-top: 10px;" id="log-access-table" lay-filter="log-access-table"></table>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
     let table = layui.table
     let form = layui.form
 
-    let MODULE_PATH = '/admin/log/'
+    let MODULE_PATH = '/logs/'
 
     let cols = [
       [
@@ -61,8 +61,8 @@
     ]
 
     table.render({
-      elem: '#log-operate-table',
-      url: MODULE_PATH + 'operateLog',
+      elem: '#log-access-table',
+      url: MODULE_PATH + 'access_log',
       page: true,
       cols: cols,
       skin: 'line',
@@ -71,7 +71,7 @@
 
     table.render({
       elem: '#log-login-table',
-      url: MODULE_PATH + 'loginLog',
+      url: MODULE_PATH + 'login_log',
       page: true,
       cols: cols,
       skin: 'line',

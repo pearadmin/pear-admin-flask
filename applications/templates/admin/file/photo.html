@@ -210,7 +210,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: "{{ url_for('adminFile.batch_remove') }}",
+          url: "{{ url_for('file.batch_remove') }}",
           data: { ids: ids },
           dataType: 'json',
           type: 'POST',

@@ -302,7 +302,7 @@ course_data = [
 
 phase_data = [
     {'name': '基础课'},
-    {'name': '进阶'},
+    {'name': '高级开发'},
     {'name': '爬虫'},
     {'name': '数据分析'},
     {'name': '全栈课程'}

@@ -2,7 +2,6 @@ from applications.extensions import db
 from applications.models import Dept, DeptSchema
 from applications.models import User
 from applications.common.curd import model_to_dicts
-from flask import escape
 
 
 def get_dept_dict():
@@ -12,14 +11,14 @@ def get_dept_dict():
 
 
 def save_dept(req):
-    address = escape(req.get("address"))
-    deptName = escape(req.get("deptName"))
-    email = escape(req.get("email"))
-    leader = escape(req.get("leader"))
-    parentId = escape(req.get("parentId"))
-    phone = escape(req.get("phone"))
-    sort = escape(req.get("sort"))
-    status = escape(req.get("status"))
+    address = req.get("address")
+    deptName = req.get("deptName")
+    email = req.get("email")
+    leader = req.get("leader")
+    parentId = req.get("parentId")
+    phone = req.get("phone")
+    sort = req.get("sort")
+    status = req.get("status")
     dept = Dept(
         parent_id=parentId,
         dept_name=deptName,
@@ -65,13 +64,13 @@ def update_dept(json):
     """ 更新部门信息 """
     _id = json.get("deptId"),
     data = {
-        "dept_name": escape(json.get("deptName")),
-        "sort": escape(json.get("sort")),
-        "leader": escape(json.get("leader")),
-        "phone": escape(json.get("phone")),
-        "email": escape(json.get("email")),
-        "status": escape(json.get("status")),
-        "address": escape(json.get("address"))
+        "dept_name": json.get("deptName"),
+        "sort": json.get("sort"),
+        "leader": json.get("leader"),
+        "phone": json.get("phone"),
+        "email": json.get("email"),
+        "status": json.get("status"),
+        "address": json.get("address")
     }
     d = Dept.query.filter_by(id=_id).update(data)
     if not d:

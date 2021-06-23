@@ -1,10 +1,10 @@
 from flask import Blueprint, session, redirect, url_for, render_template, request, make_response
 from flask_login import current_user, login_user, login_required, logout_user
 from flask_restful import Resource, Api, reqparse
-from applications.common.admin import index_curd
 from applications.common.admin_log import login_log
 from applications.common.utils.http import fail_api, success_api
 from applications.models import User
+from ._utils import get_captcha_image, add_auth_session
 
 passport_bp = Blueprint('passport', __name__, url_prefix='/passport')
 passport_api = Api(passport_bp)
@@ -17,7 +17,7 @@ def register_passport_views(app):
 # 获取验证码
 @passport_bp.get('/getCaptcha')
 def get_captcha():
-    resp, code = index_curd.get_captcha()
+    resp, code = get_captcha_image()
     session["code"] = code
     return resp
 
@@ -57,7 +57,7 @@ class Login(Resource):
             # 记录登录日志
             login_log(request, uid=user.id, is_access=True)
             # 存入权限
-            index_curd.add_auth_session()
+            add_auth_session()
             return success_api(msg="登录成功")
         login_log(request, uid=user.id, is_access=False)
         return fail_api(msg="用户名或密码错误")

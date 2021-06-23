@@ -163,13 +163,16 @@
 
     /*表格的工具栏*/
     table.on('toolbar(dept-table)', function (obj) {
+      console.log(obj)
       if (obj.event === 'add') {
         window.add()
       } else if (obj.event === 'refresh') {
         window.refresh()
       } else if (obj.event === 'batchRemove') {
         {#window.batchRemove(obj)#}
-        console.log(table.checkStatus(obj.config.id).data)
+        layer.msg('禁止批量删除')
+        return false
+        {#console.log(table.checkStatus(obj.config.id).data)#}
       }
     })
 

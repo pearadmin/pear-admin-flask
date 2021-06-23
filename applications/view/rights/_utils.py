@@ -1,75 +1,10 @@
-from collections import OrderedDict
 import copy
+from collections import OrderedDict
 
-from io import BytesIO
-from flask import session, make_response, current_app
+from flask import current_app
 from flask_login import current_user
 
-from applications.common.utils.gen_captcha import gen_captcha
-from applications.models.rights.power import PowerSchema
-
-
-# 授权路由存入session
-def add_auth_session():
-    role = current_user.role
-    user_power = []
-    for i in role:
-        if i.enable == 0:
-            continue
-        for p in i.power:
-            if p.enable == 0:
-                continue
-            user_power.append(p.code)
-    session['permissions'] = user_power
-
-
-# 生成菜单树
-def make_menu_tree():
-    role = current_user.role
-    powers = []
-    for i in role:
-        # 如果角色没有被启用就直接跳过
-        if i.enable == 0:
-            continue
-        # 变量角色用户的权限
-        for p in i.power:
-            # 如果权限关闭了就直接跳过
-            if p.enable == 0:
-                continue
-            # 一二级菜单
-            if p.type == 0 or p.type == 1:
-                powers.append(p)
-
-    power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
-    power_dict = power_schema.dump(powers)  # 生成可序列化对象
-    power_dict.sort(key=lambda x: x['id'], reverse=True)
-
-    menu_dict = OrderedDict()
-    for _dict in power_dict:
-        if _dict['id'] in menu_dict:
-            # 当前节点添加子节点
-            _dict['children'] = copy.deepcopy(menu_dict[_dict['id']])
-            # 删除子节点
-            del menu_dict[_dict['id']]
-
-        if _dict['parent_id'] not in menu_dict:
-            menu_dict[_dict['parent_id']] = [_dict]
-        else:
-            menu_dict[_dict['parent_id']].append(_dict)
-
-    return menu_dict.get(0)
-
-
-# 生成验证码
-def get_captcha():
-    code, image = gen_captcha()
-    out = BytesIO()
-    session["code"] = code
-    image.save(out, 'png')
-    out.seek(0)
-    resp = make_response(out.read())
-    resp.content_type = 'image/png'
-    return resp, code
+from applications.models import PowerSchema
 
 
 def get_render_config():
@@ -142,3 +77,41 @@ def get_render_config():
         "autoHead": False
     }, header=False)
     return config
+
+
+# 生成菜单树
+def make_menu_tree():
+    role = current_user.role
+    powers = []
+    for i in role:
+        # 如果角色没有被启用就直接跳过
+        if i.enable == 0:
+            continue
+        # 变量角色用户的权限
+        for p in i.power:
+            # 如果权限关闭了就直接跳过
+            if p.enable == 0:
+                continue
+            # 一二级菜单
+            if p.type == 0 or p.type == 1:
+                powers.append(p)
+
+    power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
+    power_dict = power_schema.dump(powers)  # 生成可序列化对象
+    power_dict.sort(key=lambda x: x['id'], reverse=True)
+
+    menu_dict = OrderedDict()
+    for _dict in power_dict:
+        if _dict['id'] in menu_dict:
+            # 当前节点添加子节点
+            _dict['children'] = copy.deepcopy(menu_dict[_dict['id']])
+            # 删除子节点
+            del menu_dict[_dict['id']]
+
+        if _dict['parent_id'] not in menu_dict:
+            menu_dict[_dict['parent_id']] = [_dict]
+        else:
+            menu_dict[_dict['parent_id']].append(_dict)
+
+    return menu_dict.get(0)
+

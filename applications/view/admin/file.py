@@ -7,18 +7,18 @@ from applications.extensions import db
 from applications.models import Photo
 from applications.common.admin import file_curd
 
-admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
+file_bp = Blueprint('file', __name__, url_prefix='/file')
 
 
 #  图片管理
-@admin_file.get('/')
+@file_bp.get('/')
 @authorize("admin:file:main", log=True)
 def index():
-    return render_template('admin/photo/photo.html')
+    return render_template('admin/file/photo.html')
 
 
 #  图片数据
-@admin_file.get('/table')
+@file_bp.get('/table')
 @authorize("admin:file:main", log=True)
 def table():
     page = request.args.get('page', type=int)
@@ -28,14 +28,14 @@ def table():
 
 
 #   上传
-@admin_file.get('/upload')
+@file_bp.get('/upload')
 @authorize("admin:file:add", log=True)
 def upload():
-    return render_template('admin/photo/photo_add.html')
+    return render_template('admin/file/photo_add.html')
 
 
 #   上传接口
-@admin_file.post('/upload')
+@file_bp.post('/upload')
 @authorize("admin:file:add", log=True)
 def upload_api():
     if 'file' in request.files:
@@ -54,7 +54,7 @@ def upload_api():
 
 
 #    图片删除
-@admin_file.route('/delete', methods=['GET', 'POST'])
+@file_bp.route('/delete', methods=['GET', 'POST'])
 @authorize("admin:file:delete", log=True)
 def delete():
     _id = request.form.get('id')
@@ -66,7 +66,7 @@ def delete():
 
 
 # 图片批量删除
-@admin_file.route('/batchRemove', methods=['GET', 'POST'])
+@file_bp.route('/batchRemove', methods=['GET', 'POST'])
 @authorize("admin:file:delete", log=True)
 def batch_remove():
     ids = request.form.getlist('ids[]')

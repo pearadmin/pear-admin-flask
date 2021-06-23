@@ -69,7 +69,7 @@
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layer.close(parent.layer.getFrameIndex(window.name)) //关闭当前页
               parent.layui.table.reload('dict-type-table')
             })
           } else {

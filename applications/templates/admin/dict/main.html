@@ -92,7 +92,9 @@
 </script>
 
 <script type="text/html" id="dict-type-enable">
-    <input type="checkbox" value="{{ "{{ d.id }}" }}" lay-skin="switch" lay-text="启用|禁用" lay-filter="dict-type-enable"
+    <input type="checkbox" value="{{ "{{ d.id }}" }}"
+           lay-skin="switch" lay-text="启用|禁用"
+           lay-filter="dict-type-enable"
             {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
 
@@ -108,9 +110,11 @@
 </script>
 
 <script type="text/html" id="dict-data-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
+        <i class="layui-icon layui-icon-edit"></i>
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+        <i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
 

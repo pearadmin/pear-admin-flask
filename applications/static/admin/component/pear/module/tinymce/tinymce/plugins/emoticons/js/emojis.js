@@ -2011,7 +2011,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     category: "people"
   },
   school_satchel: {
-    keywords: [ "student", "education", "bag", "backpack" ],
+    keywords: [ "vip", "education", "bag", "backpack" ],
     "char": "\ud83c\udf92",
     fitzpatrick_scale: false,
     category: "people"
@@ -4999,7 +4999,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     category: "travel_and_places"
   },
   school: {
-    keywords: [ "building", "student", "education", "learn", "teach" ],
+    keywords: [ "building", "vip", "education", "learn", "teach" ],
     "char": "\ud83c\udfeb",
     fitzpatrick_scale: false,
     category: "travel_and_places"

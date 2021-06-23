@@ -5,7 +5,7 @@ from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 
 
-admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
+admin_role = Blueprint('role', __name__, url_prefix='/admin/role')
 
 
 # 用户管理
@@ -57,10 +57,10 @@ def power(_id):
 
 
 # 获取角色权限
-@admin_role.get('/getRolePower/<int:id>')
+@admin_role.get('/getRolePower/<int:_id>')
 @authorize("admin:role:main", log=True)
-def get_role_power(id):
-    powers = role_curd.get_role_power(id)
+def get_role_power(_id):
+    powers = role_curd.get_role_power(_id)
     res = {
         "data": powers,
         "status": {"code": 200, "message": "默认"}
@@ -76,7 +76,7 @@ def save_role_power():
     power_ids = req_form.get("powerIds")
     power_list = power_ids.split(',')
     role_id = req_form.get("roleId")
-    role_curd.update_role_power(id=role_id, power_list=power_list)
+    role_curd.update_role_power(_id=role_id, power_list=power_list)
     return success_api(msg="授权成功")
 
 

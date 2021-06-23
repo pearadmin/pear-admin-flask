@@ -4,7 +4,7 @@ from applications.view.admin.admin_log import admin_log
 from applications.view.admin.dict import admin_dict
 from applications.view.admin.index import admin_bp
 from applications.view.admin.file import admin_file
-from applications.view.admin.role import admin_role
+from applications.view.rights.role import admin_role
 from applications.view.company.users import users_bp
 from applications.view.admin.monitor import admin_monitor_bp
 

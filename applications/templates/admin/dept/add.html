@@ -12,6 +12,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">上级部门</label>
                     <div class="layui-input-block">
+                        {#渲染树形选择器#}
                         <ul id="selectParent" name="parentId" class="dtree" data-id="0"></ul>
                     </div>
                 </div>
@@ -86,6 +87,7 @@
     let $ = layui.jquery
     let dtree = layui.dtree
 
+    /*渲染下拉选择组件*/
     dtree.renderSelect({
       elem: '#selectParent',
       url: '/dept/tree',
@@ -97,6 +99,7 @@
       selectInitVal: '1'
     })
 
+    /*表单组件，提交按钮之后触发的事件*/
     form.on('submit(dept-save)', function (data) {
       $.ajax({
         url: '/dept/save',

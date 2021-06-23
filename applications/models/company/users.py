@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     dept_id = db.Column(db.Integer, comment='部门id')
     create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
+
     role = db.relationship('Role', secondary="rt_user_role", backref=db.backref('user'), lazy='dynamic')
 
     def set_password(self, password):

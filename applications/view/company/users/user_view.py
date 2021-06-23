@@ -72,7 +72,7 @@ class CURDUser(Resource):
         real_name = req_json.get('realName')
         dept_id = req_json.get('deptId')
         role_ids = a.split(',')
-        user_curd.update_user(id, username, real_name, dept_id)
+        user_curd.update_user(user_id, username, real_name, dept_id)
         user_curd.update_user_role(_id, role_ids)
         return success_api(msg="更新成功")
 

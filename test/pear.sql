@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 03/06/2021 11:23:03
+ Date: 24/06/2021 13:16:14
 */
 
 SET NAMES utf8mb4;
@@ -32,7 +32,7 @@ CREATE TABLE `admin_admin_log`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   `success` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 641 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1451 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_admin_log
@@ -56,7 +56,7 @@ CREATE TABLE `admin_dept`  (
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin_dept
@@ -148,7 +148,7 @@ CREATE TABLE `admin_power`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `enable` int(11) NULL DEFAULT NULL COMMENT '是否开启',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_power
@@ -177,10 +177,15 @@ INSERT INTO `admin_power` VALUES (44, '数据字典', '1', 'admin:dict:main', '/
 INSERT INTO `admin_power` VALUES (45, '字典增加', '2', 'admin:dict:add', '', '', '44', 'layui-icon ', 1, '2021-04-16 14:00:59', '2021-04-16 14:00:59', 1);
 INSERT INTO `admin_power` VALUES (46, '字典修改', '2', 'admin:dict:edit', '', '', '44', 'layui-icon ', 2, '2021-04-16 14:01:33', '2021-04-16 14:01:33', 1);
 INSERT INTO `admin_power` VALUES (47, '字典删除', '2', 'admin:dict:remove', '', '', '44', 'layui-icon ', 3, '2021-04-16 14:02:06', '2021-04-16 14:02:06', 1);
-INSERT INTO `admin_power` VALUES (48, '部门管理', '1', 'admin:dept:main', '/dept', '_iframe', '1', 'layui-icon layui-icon-group', 3, '2021-06-01 16:22:11', '2021-06-01 16:22:11', 1);
+INSERT INTO `admin_power` VALUES (48, '部门管理', '1', 'admin:dept:main', '/admin/dept', '_iframe', '1', 'layui-icon layui-icon-group', 3, '2021-06-01 16:22:11', '2021-06-01 16:22:11', 1);
 INSERT INTO `admin_power` VALUES (49, '部门增加', '2', 'admin:dept:add', '', '', '48', 'layui-icon None', 1, '2021-06-01 17:35:52', '2021-06-01 17:36:15', 1);
 INSERT INTO `admin_power` VALUES (50, '部门编辑', '2', 'admin:dept:edit', '', '', '48', 'layui-icon ', 2, '2021-06-01 17:36:41', '2021-06-01 17:36:41', 1);
 INSERT INTO `admin_power` VALUES (51, '部门删除', '2', 'admin:dept:remove', '', '', '48', 'layui-icon None', 3, '2021-06-01 17:37:15', '2021-06-01 17:37:26', 1);
+INSERT INTO `admin_power` VALUES (52, '定时任务', '0', '', '', '', '0', 'layui-icon layui-icon-log', 3, '2021-06-22 21:09:01', '2021-06-22 21:09:01', 1);
+INSERT INTO `admin_power` VALUES (53, '任务管理', '1', 'admin:task:main', '/admin/task', '_iframe', '52', 'layui-icon ', 1, '2021-06-22 21:15:00', '2021-06-22 21:15:00', 1);
+INSERT INTO `admin_power` VALUES (54, '任务增加', '2', 'admin:task:add', '', '', '53', 'layui-icon ', 1, '2021-06-22 22:20:54', '2021-06-22 22:20:54', 1);
+INSERT INTO `admin_power` VALUES (55, '任务修改', '2', 'admin:task:edit', '', '', '53', 'layui-icon ', 2, '2021-06-22 22:21:34', '2021-06-22 22:21:34', 1);
+INSERT INTO `admin_power` VALUES (56, '任务删除', '2', 'admin:task:remove', '', '', '53', 'layui-icon ', 3, '2021-06-22 22:22:18', '2021-06-22 22:22:18', 1);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -218,39 +223,11 @@ CREATE TABLE `admin_role_power`  (
   INDEX `role_id`(`role_id`) USING BTREE,
   CONSTRAINT `admin_role_power_ibfk_1` FOREIGN KEY (`power_id`) REFERENCES `admin_power` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `admin_role_power_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `admin_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 275 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 367 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admin_role_power
 -- ----------------------------
-INSERT INTO `admin_role_power` VALUES (237, 1, 1);
-INSERT INTO `admin_role_power` VALUES (238, 3, 1);
-INSERT INTO `admin_role_power` VALUES (239, 4, 1);
-INSERT INTO `admin_role_power` VALUES (240, 9, 1);
-INSERT INTO `admin_role_power` VALUES (241, 12, 1);
-INSERT INTO `admin_role_power` VALUES (242, 13, 1);
-INSERT INTO `admin_role_power` VALUES (243, 17, 1);
-INSERT INTO `admin_role_power` VALUES (244, 18, 1);
-INSERT INTO `admin_role_power` VALUES (245, 21, 1);
-INSERT INTO `admin_role_power` VALUES (246, 22, 1);
-INSERT INTO `admin_role_power` VALUES (247, 23, 1);
-INSERT INTO `admin_role_power` VALUES (248, 24, 1);
-INSERT INTO `admin_role_power` VALUES (249, 25, 1);
-INSERT INTO `admin_role_power` VALUES (250, 26, 1);
-INSERT INTO `admin_role_power` VALUES (251, 27, 1);
-INSERT INTO `admin_role_power` VALUES (252, 28, 1);
-INSERT INTO `admin_role_power` VALUES (253, 29, 1);
-INSERT INTO `admin_role_power` VALUES (254, 30, 1);
-INSERT INTO `admin_role_power` VALUES (255, 31, 1);
-INSERT INTO `admin_role_power` VALUES (256, 32, 1);
-INSERT INTO `admin_role_power` VALUES (257, 44, 1);
-INSERT INTO `admin_role_power` VALUES (258, 45, 1);
-INSERT INTO `admin_role_power` VALUES (259, 46, 1);
-INSERT INTO `admin_role_power` VALUES (260, 47, 1);
-INSERT INTO `admin_role_power` VALUES (261, 48, 1);
-INSERT INTO `admin_role_power` VALUES (262, 49, 1);
-INSERT INTO `admin_role_power` VALUES (263, 50, 1);
-INSERT INTO `admin_role_power` VALUES (264, 51, 1);
 INSERT INTO `admin_role_power` VALUES (265, 1, 2);
 INSERT INTO `admin_role_power` VALUES (266, 3, 2);
 INSERT INTO `admin_role_power` VALUES (267, 4, 2);
@@ -261,6 +238,39 @@ INSERT INTO `admin_role_power` VALUES (271, 17, 2);
 INSERT INTO `admin_role_power` VALUES (272, 18, 2);
 INSERT INTO `admin_role_power` VALUES (273, 44, 2);
 INSERT INTO `admin_role_power` VALUES (274, 48, 2);
+INSERT INTO `admin_role_power` VALUES (334, 1, 1);
+INSERT INTO `admin_role_power` VALUES (335, 3, 1);
+INSERT INTO `admin_role_power` VALUES (336, 4, 1);
+INSERT INTO `admin_role_power` VALUES (337, 9, 1);
+INSERT INTO `admin_role_power` VALUES (338, 12, 1);
+INSERT INTO `admin_role_power` VALUES (339, 13, 1);
+INSERT INTO `admin_role_power` VALUES (340, 17, 1);
+INSERT INTO `admin_role_power` VALUES (341, 18, 1);
+INSERT INTO `admin_role_power` VALUES (342, 21, 1);
+INSERT INTO `admin_role_power` VALUES (343, 22, 1);
+INSERT INTO `admin_role_power` VALUES (344, 23, 1);
+INSERT INTO `admin_role_power` VALUES (345, 24, 1);
+INSERT INTO `admin_role_power` VALUES (346, 25, 1);
+INSERT INTO `admin_role_power` VALUES (347, 26, 1);
+INSERT INTO `admin_role_power` VALUES (348, 27, 1);
+INSERT INTO `admin_role_power` VALUES (349, 28, 1);
+INSERT INTO `admin_role_power` VALUES (350, 29, 1);
+INSERT INTO `admin_role_power` VALUES (351, 30, 1);
+INSERT INTO `admin_role_power` VALUES (352, 31, 1);
+INSERT INTO `admin_role_power` VALUES (353, 32, 1);
+INSERT INTO `admin_role_power` VALUES (354, 44, 1);
+INSERT INTO `admin_role_power` VALUES (355, 45, 1);
+INSERT INTO `admin_role_power` VALUES (356, 46, 1);
+INSERT INTO `admin_role_power` VALUES (357, 47, 1);
+INSERT INTO `admin_role_power` VALUES (358, 48, 1);
+INSERT INTO `admin_role_power` VALUES (359, 49, 1);
+INSERT INTO `admin_role_power` VALUES (360, 50, 1);
+INSERT INTO `admin_role_power` VALUES (361, 51, 1);
+INSERT INTO `admin_role_power` VALUES (362, 52, 1);
+INSERT INTO `admin_role_power` VALUES (363, 53, 1);
+INSERT INTO `admin_role_power` VALUES (364, 54, 1);
+INSERT INTO `admin_role_power` VALUES (365, 55, 1);
+INSERT INTO `admin_role_power` VALUES (366, 56, 1);
 
 -- ----------------------------
 -- Table structure for admin_user

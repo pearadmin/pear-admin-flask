@@ -5,7 +5,7 @@ from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import check_data
 from applications.models import DeptSchema
-from applications.common.admin import dept_curd as dept_curd
+from applications.view.company.department import dept_curd as dept_curd
 
 dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
 

@@ -162,10 +162,10 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: 'delete',
+          url: 'upload',
           data: { id: obj.data['id'] },
           dataType: 'json',
-          type: 'POST',
+          type: 'delete',
           success: function (res) {
             layer.close(loading)
             if (res.success) {

@@ -2,11 +2,10 @@ from flask import render_template, request, make_response
 from flask_restful import Resource
 from applications.extensions import db
 
-from applications.common.admin import user_curd
 from applications.common.utils.http import fail_api, success_api
 from applications.common.utils.rights import authorize
 from applications.models import User, Role
-from applications.view.company.users import user_api, users_bp
+from applications.view.company.users import user_api, users_bp, user_curd
 
 
 @user_api.resource('/')

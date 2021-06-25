@@ -2,8 +2,6 @@ import json
 
 from flask import Flask
 
-from applications.extensions.init_databases.data import user_data
-
 
 def add_data(fields, data_list, obj):
     from applications.extensions import db
@@ -79,7 +77,7 @@ def create_admin_power():
     _data_list = \
         [
             (1, '系统管理', '0', '', None, None, '0', 'layui-icon layui-icon-set-fill', 1, None, None, 1),
-            (3, '用户管理', '1', 'admin:user:main', '/admin/user/', '_iframe', '1',
+            (3, '用户管理', '1', 'admin:user:main', '/users/', '_iframe', '1',
              'layui-icon layui-icon layui-icon layui-icon layui-icon-rate', 1, None, None, 1),
             (4, '权限管理', '1', 'admin:power:main', '/rights/', '_iframe', '1', None, 2, None, None, 1),
             (9, '角色管理', '1', 'admin:role:main', '/admin/role', '_iframe', '1', 'layui-icon layui-icon-username', 2,
@@ -88,11 +86,11 @@ def create_admin_power():
                 12, '系统监控', '1', 'admin:monitor:main', '/admin/monitor', '_iframe', '1',
                 'layui-icon layui-icon-vercode', 5,
                 '2021-03-18 22:05:19', '2021-03-25 19:15:27', 1),
-            (13, '日志管理', '1', 'admin:log:main', '/admin/log', '_iframe', '1', 'layui-icon layui-icon-read', 4,
+            (13, '日志管理', '1', 'admin:log:main', '/logs', '_iframe', '1', 'layui-icon layui-icon-read', 4,
              '2021-03-18 22:37:10', '2021-06-03 11:06:25', 1),
             (17, '文件管理', '0', '', '', '', '0', 'layui-icon layui-icon-camera', 2, '2021-03-19 18:56:23',
              '2021-03-25 19:15:08', 1),
-            (18, '图片上传', '1', 'admin:file:main', '/admin/file', '_iframe', '17', 'layui-icon layui-icon-camera', 5,
+            (18, '图片上传', '1', 'admin:file:main', '/file', '_iframe', '17', 'layui-icon layui-icon-camera', 5,
              '2021-03-19 18:57:19', '2021-03-25 19:15:13', 1),
             (21, '权限增加', '2', 'admin:power:add', '', '', '4', 'layui-icon layui-icon-add-circle', 1,
              '2021-03-22 19:43:52',
@@ -288,27 +286,6 @@ def create_example():
     add_data(_fields, _data_list, DictData)
 
 
-course_data = [
-    {'id': 1, 'name': '基础课'},
-    {'id': 2, 'name': '进阶课'},
-    {'id': 3, 'name': '爬虫课'},
-    {'id': 4, 'name': '数据分析课'},
-    {'id': 5, 'name': '全栈课程'},
-    {'id': 6, 'name': '自动化办公专题'},
-    {'id': 7, 'name': '反反爬专题'},
-    {'id': 8, 'name': 'JavaScript解密专题'},
-    {'id': 9, 'name': 'Scrapy框架专题'},
-]
-
-phase_data = [
-    {'name': '基础课'},
-    {'name': '高级开发'},
-    {'name': '爬虫'},
-    {'name': '数据分析'},
-    {'name': '全栈课程'}
-]
-
-
 def register_script(app: Flask):
     @app.cli.command()
     def init_db():
@@ -327,110 +304,3 @@ def register_script(app: Flask):
         from applications.extensions import db
         db.drop_all()
         db.create_all()
-
-    @app.cli.command()
-    def init_vip_member():
-        from applications.models.vip import VipMember, Course, Phase
-        from applications.extensions import db
-
-        course_list = []
-
-        for data in course_data:
-            course = Course()
-            course.name = data.get('name')
-            db.session.add(course)
-            course_list.append(course_list)
-
-        for _phase in phase_data:
-            for i in range(1, 11):
-                print(_phase['name'], i)
-                phase = Phase()
-                phase.name = _phase['name']
-                phase.phase = i
-                db.session.add(phase)
-
-        db.session.commit()
-        base_course = Course.query.get(1)
-        adv_course = Course.query.get(2)
-        spider_course = Course.query.get(3)
-        ana_course = Course.query.get(4)
-        stack_course = Course.query.get(5)
-
-        for data in user_data:
-            user = VipMember()
-            user.id = int(data['id'])
-            user.create_at = data['date']
-            user.username = data['name']
-            user.wx = data['wx']
-            user.qq = data['qq']
-            user.account = data['account']
-            user.phase = int(data['phase'])
-            user.remark = data['remark']
-            print('rights', data['rights'])
-            rights = int(data['rights']) if data['rights'] else 0
-
-            user.courses.append(base_course)
-            if rights == 1:
-                user.courses.append(adv_course)
-            if rights == 3:
-                user.courses.append(spider_course)
-            if rights == 4:
-                user.courses.append(adv_course)
-                user.courses.append(base_course)
-            if rights == 5:
-                user.courses.append(ana_course)
-            if rights == 7:
-                user.courses.append(stack_course)
-            if rights == 8:
-                user.courses.append(spider_course)
-                user.courses.append(ana_course)
-            if rights == 9:
-                user.courses.append(adv_course)
-                user.courses.append(spider_course)
-                user.courses.append(ana_course)
-            if rights == 10:
-                user.courses.append(spider_course)
-                user.courses.append(stack_course)
-            if rights == 11:
-                user.courses.append(adv_course)
-                user.courses.append(spider_course)
-                user.courses.append(stack_course)
-            if rights == 16:
-                user.courses.append(adv_course)
-                user.courses.append(spider_course)
-                user.courses.append(ana_course)
-                user.courses.append(stack_course)
-
-            if data['base']:
-                base_list = data['base'].replace('，', ',').split(',')
-                print(base_list)
-                for rou in base_list:
-                    print('rou', rou)
-                    x = Phase.query.filter(Phase.name == '基础课').filter(Phase.phase == int(rou)).first()
-                    user.phases.append(x)
-                    print(x)
-            if data['adv']:
-                adv_list = data['adv'].replace('，', ',').split(',')
-                for rou in adv_list:
-                    x = Phase.query.filter(Phase.name == '高级开发').filter(Phase.phase == int(rou)).first()
-                    user.phases.append(x)
-                print(adv_list)
-            if data['spider']:
-                spider_list = data['spider'].replace('，', ',').split(',')
-                for rou in spider_list:
-                    x = Phase.query.filter(Phase.name == '爬虫').filter(Phase.phase == int(rou)).first()
-                    user.phases.append(x)
-                print(spider_list)
-            if data['ana']:
-                ana_list = data['ana'].replace('，', ',').split(',')
-                for rou in ana_list:
-                    x = Phase.query.filter(Phase.name == '数据分析').filter(Phase.phase == int(rou)).first()
-                    user.phases.append(x)
-                print(ana_list)
-            if data['stack']:
-                stack_list = data['stack'].replace('，', ',').split(',')
-                for rou in stack_list:
-                    x = Phase.query.filter(Phase.name == '全栈课程').filter(Phase.phase == int(rou)).first()
-                    user.phases.append(x)
-                print(stack_list)
-            db.session.commit()

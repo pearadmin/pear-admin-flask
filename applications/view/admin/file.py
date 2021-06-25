@@ -1,13 +1,14 @@
 import os
-from flask import Blueprint, request, render_template, jsonify, current_app
-
+from flask import Blueprint, request, render_template, jsonify, current_app, make_response
+from flask_restful import Api, Resource
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import Photo
-from applications.common.admin import file_curd
+from applications.view.admin import file_curd
 
 file_bp = Blueprint('file', __name__, url_prefix='/file')
+file_api = Api(file_bp)
 
 
 #  图片管理
@@ -27,42 +28,36 @@ def table():
     return table_api(data=data, count=count)
 
 
-#   上传
-@file_bp.get('/upload')
-@authorize("admin:file:add", log=True)
-def upload():
-    return render_template('admin/file/photo_add.html')
+@file_api.resource('/upload')
+class Upload(Resource):
+    @authorize("admin:file:add", log=True)
+    def get(self):
+        return make_response(render_template('admin/file/photo_add.html'))
 
+    @authorize("admin:file:add", log=True)
+    def post(self):
+        if 'file' in request.files:
+            photo = request.files['file']
+            mime = request.files['file'].content_type
+            file_url = file_curd.upload_one(photo=photo, mime=mime)
+            res = {
+                "msg": "上传成功",
+                "code": 0,
+                "success": True,
+                "data":
+                    {"src": file_url}
+            }
+            return jsonify(res)
+        return fail_api()
 
-#   上传接口
-@file_bp.post('/upload')
-@authorize("admin:file:add", log=True)
-def upload_api():
-    if 'file' in request.files:
-        photo = request.files['file']
-        mime = request.files['file'].content_type
-        file_url = file_curd.upload_one(photo=photo, mime=mime)
-        res = {
-            "msg": "上传成功",
-            "code": 0,
-            "success": True,
-            "data":
-                {"src": file_url}
-        }
-        return jsonify(res)
-    return fail_api()
-
-
-#    图片删除
-@file_bp.route('/delete', methods=['GET', 'POST'])
-@authorize("admin:file:delete", log=True)
-def delete():
-    _id = request.form.get('id')
-    res = file_curd.delete_photo_by_id(_id)
-    if res:
-        return success_api(msg="删除成功")
-    else:
-        return fail_api(msg="删除失败")
+    @authorize("admin:file:delete", log=True)
+    def delete(self):
+        _id = request.form.get('id')
+        res = file_curd.delete_photo_by_id(_id)
+        if res:
+            return success_api(msg="删除成功")
+        else:
+            return fail_api(msg="删除失败")
 
 
 # 图片批量删除

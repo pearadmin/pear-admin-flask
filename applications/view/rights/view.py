@@ -1,8 +1,7 @@
 from flask import render_template, request, jsonify, make_response
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 
-from . import rights_bp, rights_api
-from ...common.admin import rights_curd
+from . import rights_bp, rights_api, rights_curd
 from ...common.utils.http import success_api, fail_api
 from ...common.utils.rights import authorize
 
@@ -98,7 +97,7 @@ def enable():
 @authorize("admin:power:edit", log=True)
 def dis_enable():
     _id = request.json.get('powerId')
-    if id:
+    if _id:
         res = rights_curd.disable_status(_id)
         if not res:
             return fail_api(msg="出错啦")
@@ -113,11 +112,3 @@ def batch_remove():
     ids = request.form.getlist('ids[]')
     rights_curd.batch_remove(ids)
     return success_api(msg="批量删除成功")
-
-
-"""
-    https://developer.aliyun.com/article/778501
-    四位权限值： 增删改查
-    八位部门值： 流量 接待&转化 讲师 运营 1111 1111
-    四位公司值： 
-"""

@@ -1,7 +1,6 @@
 from flask import Blueprint, request, render_template
 from flask_restful import Api
 
-from applications.common.admin import user_curd
 from applications.common.utils.http import table_api
 from applications.common.utils.rights import authorize
 from applications.models import Role
@@ -36,5 +35,5 @@ def add():
     return render_template('admin/user/add.html', roles=roles)
 
 
-from . import profile
+from . import profile, user_curd
 from . import user_view

@@ -1,19 +1,21 @@
 from applications.extensions import db
-from applications.models.rights.power import Power, PowerSchema2
+from applications.models.rights.power import Power
 from applications.models import Role
-from applications.common.curd import model_to_dicts
+
+from flask_restful import marshal
+from applications.common.serialization import power_fields
 
 
 def get_power_dict():
     power = Power.query.all()
-    res = model_to_dicts(Schema=PowerSchema2, model=power)
+    res = marshal(power, power_fields)
     return res
 
 
 # 选择父节点
 def select_parent():
     power = Power.query.all()
-    res = model_to_dicts(Schema=PowerSchema2, model=power)
+    res = marshal(power, power_fields)
     res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
     return res
 

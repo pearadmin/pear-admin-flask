@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, jsonify
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.models import DictType, DictData
-from applications.common.admin import dict_curd
+from applications.view.admin import dict_curd
 
 admin_dict = Blueprint('adminDict', __name__, url_prefix='/admin/dict')
 

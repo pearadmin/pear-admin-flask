@@ -1,5 +1,4 @@
-from applications.models.company import Dept, DeptSchema, User, UserSchema
-from .dict_models import DictType, DictData, DictTypeSchema, DictDataSchema
+from applications.models.company import Dept, DeptSchema, User
 from .log import AdminLog, LogSchema
 from applications.models.file.photo import Photo, PhotoSchema
 from applications.models.rights.power import Power, PowerSchema

@@ -3,8 +3,11 @@ from collections import OrderedDict
 
 from flask import current_app
 from flask_login import current_user
+from flask_restful import marshal
 
-from applications.models import PowerSchema
+from applications.common.serialization import power_fields
+from applications.extensions import db
+from applications.models import PowerSchema, Power, Role, User
 
 
 def get_render_config():
@@ -115,3 +118,65 @@ def make_menu_tree():
 
     return menu_dict.get(0)
 
+
+# 选择父节点
+def select_power_dict():
+    power = Power.query.all()
+    res = marshal(power, power_fields)
+    res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
+    return res
+
+
+def get_power_dict():
+    power = Power.query.all()
+    res = marshal(power, power_fields)
+    return res
+
+
+# 删除权限（目前没有判断父节点自动删除子节点）
+def remove_power(power_id):
+    power = Power.query.filter_by(id=power_id).first()
+    role_id_list = []
+    roles = power.role
+    for role in roles:
+        role_id_list.append(role.id)
+    roles = Role.query.filter(Role.id.in_(role_id_list)).all()
+    for p in roles:
+        power.role.remove(p)
+    r = Power.query.filter_by(id=power_id).delete()
+    db.session.commit()
+    return r
+
+
+# 批量删除权限
+def batch_remove_power(ids):
+    for _id in ids:
+        remove_power(_id)
+
+
+def remove_role(_id):
+    """ 删除角色 """
+    role = Role.query.filter_by(id=_id).first()
+    # 删除该角色的权限
+    power_id_list = []
+    for p in role.power:
+        power_id_list.append(p.id)
+
+    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    for p in powers:
+        role.power.remove(p)
+    user_id_list = []
+    for u in role.user:
+        user_id_list.append(u.id)
+    users = User.query.filter(User.id.in_(user_id_list)).all()
+    for u in users:
+        role.user.remove(u)
+    r = Role.query.filter_by(id=_id).delete()
+    db.session.commit()
+    return r
+
+
+def batch_remove_role(ids):
+    """ 批量删除 """
+    for _id in ids:
+        remove_role(_id)

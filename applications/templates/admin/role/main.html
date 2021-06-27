@@ -137,14 +137,14 @@
     form.on('switch(role-enable)', function (obj) {
       let operate
       if (obj.elem.checked) {
-        operate = 'enable'
+        operate = 1
       } else {
-        operate = 'disable'
+        operate = 0
       }
       let loading = layer.load()
       $.ajax({
-        url: '/admin/role/' + operate,
-        data: JSON.stringify({ roleId: this.value }),
+        url: '/admin/role/enable',
+        data: JSON.stringify({ roleId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
         type: 'put',
@@ -194,7 +194,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'remove/' + obj.data['id'],
+          url: MODULE_PATH + 'role_power/' + obj.data['id'],
           dataType: 'json',
           type: 'delete',
           success: function (result) {

@@ -1,18 +1,24 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, make_response
 from flask_login import login_required
+
+from flask_restful import Resource, Api, reqparse
 
 from applications.extensions import db
 from applications.models import Role, Power
-from applications.view.rights import role_curd
+# from applications.view.rights import role_curd
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from flask_restful import reqparse, marshal
 
 from applications.common.serialization import power_fields
+
+from ._utils import remove_role, batch_remove_role
+
 role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
+role_api = Api(role_bp)
 
 
-# 用户管理
+# 角色而管理
 @role_bp.get('/')
 @authorize("admin:role:main", log=True)
 def main():
@@ -53,120 +59,137 @@ def table():
     ], count=paginate.total)
 
 
-# 角色增加
-@role_bp.get('/add')
-@authorize("admin:role:add", log=True)
-@login_required
-def add():
-    return render_template('admin/role/add.html')
+@role_api.resource('/add')
+class AddRole(Resource):
+    @authorize("admin:role:add", log=True)
+    def get(self):
+        return make_response(render_template('admin/role/add.html'))
+
+    @authorize("admin:role:add", log=True)
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('details', type=str)
+        parser.add_argument('enable', type=int)
+        parser.add_argument('roleCode', type=str, dest='role_code')
+        parser.add_argument('roleName', type=str, dest='role_name')
+        parser.add_argument('sort', type=int)
+
+        res = parser.parse_args()
+
+        role = Role(
+            details=res.details,
+            enable=res.enable,
+            code=res.role_code,
+            name=res.role_name,
+            sort=res.sort
+        )
+        db.session.add(role)
+        db.session.commit()
+        return success_api(msg="成功")
 
 
-# 角色增加
-@role_bp.post('/save')
-@authorize("admin:role:add", log=True)
-def save():
-    parser = reqparse.RequestParser()
-    parser.add_argument('details', type=str)
-    parser.add_argument('enable', type=int)
-    parser.add_argument('roleCode', type=str, dest='role_code')
-    parser.add_argument('roleName', type=str, dest='role_name')
-    parser.add_argument('sort', type=int)
-
-    res = parser.parse_args()
-
-    role = Role(
-        details=res.details,
-        enable=res.enable,
-        code=res.role_code,
-        name=res.role_name,
-        sort=res.sort
-    )
-    db.session.add(role)
-    db.session.commit()
-    return success_api(msg="成功")
-
-
-# 角色授权
+# 角色授权操作
 @role_bp.get('/power/<int:_id>')
 @authorize("admin:role:power", log=True)
 def power(_id):
     return render_template('admin/role/power.html', id=_id)
 
 
-# 获取角色权限
-@role_bp.get('/getRolePower/<int:_id>')
-@authorize("admin:role:main", log=True)
-def get_role_power(_id):
-    role = Role.query.filter_by(id=_id).first()
-    # 获取权限列表的 id
-    check_powers_list = [rp.id for rp in role.power]
-    powers = Power.query.all()  # 获取所有的权限
-    # power_schema = PowerSchema2(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
-    # 将所有的权限生产可序列化对象 json
-    # powers = power_schema.dump(powers)  # 生成可序列化对象
-    powers = marshal(powers, power_fields)
-    for i in powers:
-        if int(i.get("powerId")) in check_powers_list:
-            i["checkArr"] = "1"
-        else:
-            i["checkArr"] = "0"
-    res = {
-        "data": powers,
-        "status": {"code": 200, "message": "默认"}
-    }
-    return jsonify(res)
+@role_api.resource('/role_power/<int:role_id>')
+class RolePower(Resource):
+
+    @authorize("admin:role:main", log=True)
+    def get(self, role_id):
+        # 获取角色权限
+        role = Role.query.filter_by(id=role_id).first()
+        # 获取权限列表的 id
+        check_powers_list = [rp.id for rp in role.power]
+        powers = Power.query.all()  # 获取所有的权限
+        # power_schema = PowerSchema2(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
+        # 将所有的权限生产可序列化对象 json
+        # powers = power_schema.dump(powers)  # 生成可序列化对象
+        powers = marshal(powers, power_fields)
+        for i in powers:
+            if int(i.get("powerId")) in check_powers_list:
+                i["checkArr"] = "1"
+            else:
+                i["checkArr"] = "0"
+        res = {
+            "data": powers,
+            "status": {"code": 200, "message": "默认"}
+        }
+        return jsonify(res)
+
+    # 保存角色权限
+    @authorize("admin:role:edit", log=True)
+    def put(self, role_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument('powerIds', dest='power_ids')
+        parser.add_argument('roleId', dest='role_id')
+
+        res = parser.parse_args()
+        power_list = res.power_ids.split(',')
+
+        """ 更新角色权限 """
+        role = Role.query.filter_by(id=role_id).first()
+        power_id_list = []
+        for p in role.power:
+            power_id_list.append(p.id)
+        powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+        for p in powers:
+            role.power.remove(p)
+        powers = Power.query.filter(Power.id.in_(power_list)).all()
+        for p in powers:
+            role.power.append(p)
+        db.session.commit()
+        return success_api(msg="授权成功")
+
+    # 角色删除
+    @authorize("admin:role:remove", log=True)
+    def delete(self, role_id):
+        print(role_id)
+        res = remove_role(role_id)
+        print(res)
+        if not res:
+            return fail_api(msg="角色删除失败")
+        return success_api(msg="角色删除成功")
 
 
-# 保存角色权限
-@role_bp.put('/saveRolePower')
-@authorize("admin:role:edit", log=True)
-def save_role_power():
-    parser = reqparse.RequestParser()
-    parser.add_argument('powerIds', dest='power_ids')
-    parser.add_argument('roleId', dest='role_id')
+@role_api.resource('/edit/<int:role_id>')
+class EditRole(Resource):
 
-    res = parser.parse_args()
-    power_list = res.power_ids.split(',')
+    # 角色编辑
+    @authorize("admin:role:edit", log=True)
+    def get(self, role_id):
+        role = Role.query.filter_by(id=role_id).first()
+        return make_response(render_template('admin/role/edit.html', role=role))
 
-    role_curd.update_role_power(_id=res.role_id, power_list=power_list)
-    return success_api(msg="授权成功")
+    # 更新角色
+    @authorize("admin:role:edit", log=True)
+    def put(self, role_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument('roleId', dest='role_id', type=int)
+        parser.add_argument('roleCode', dest='role_code', type=str)
+        parser.add_argument('roleName', dest='role_name', type=str)
+        parser.add_argument('sort', type=int)
+        parser.add_argument('enable', type=int)
+        parser.add_argument('details', type=str)
 
+        res = parser.parse_args()
 
-# 角色编辑
-@role_bp.get('/edit/<int:_id>')
-@authorize("admin:role:edit", log=True)
-def edit(_id):
-    role = Role.query.filter_by(id=_id).first()
-    return render_template('admin/role/edit.html', role=role)
+        data = {
+            "code": res.role_code,
+            "name": res.role_name,
+            "sort": res.sort,
+            "enable": res.enable,
+            "details": res.details
+        }
 
-
-# 更新角色
-@role_bp.put('/update')
-@authorize("admin:role:edit", log=True)
-def update():
-    parser = reqparse.RequestParser()
-    parser.add_argument('roleId', dest='role_id', type=int)
-    parser.add_argument('roleCode', dest='role_code', type=str)
-    parser.add_argument('roleName', dest='role_name', type=str)
-    parser.add_argument('sort', type=int)
-    parser.add_argument('enable', type=int)
-    parser.add_argument('details', type=str)
-
-    res = parser.parse_args()
-
-    data = {
-        "code": res.role_code,
-        "name": res.role_name,
-        "sort": res.sort,
-        "enable": res.enable,
-        "details": res.details
-    }
-
-    role = Role.query.filter_by(id=res.role_id).update(data)
-    db.session.commit()
-    if not role:
-        return fail_api(msg="更新角色失败")
-    return success_api(msg="更新角色成功")
+        role = Role.query.filter_by(id=role_id).update(data)
+        db.session.commit()
+        if not role:
+            return fail_api(msg="更新角色失败")
+        return success_api(msg="更新角色成功")
 
 
 # 启用用户
@@ -175,35 +198,16 @@ def update():
 def enable():
     parser = reqparse.RequestParser()
     parser.add_argument('roleId', dest='role_id', required=True, type=int)
+    parser.add_argument('operate', required=True, type=int)
+
     res = parser.parse_args()
-    ret = Role.query.filter_by(id=res.role_id).update({"enable": 1})
+    ret = Role.query.filter_by(id=res.role_id).update({"enable": res.operate})
     db.session.commit()
+
+    message = "启动成功" if res.operate else "禁用成功"
     if not ret:
         return fail_api(msg="出错啦")
-    return success_api(msg="启动成功")
-
-
-# 禁用用户
-@role_bp.put('/disable')
-@authorize("admin:role:edit", log=True)
-def dis_enable():
-    parser = reqparse.RequestParser()
-    parser.add_argument('roleId', dest='role_id', required=True, type=int)
-    res = parser.parse_args()
-    ret = role_curd.disable_status(res.role_id)
-    if not ret:
-        return fail_api(msg="出错啦")
-    return success_api(msg="禁用成功")
-
-
-# 角色删除
-@role_bp.delete('/remove/<int:_id>')
-@authorize("admin:role:remove", log=True)
-def remove(_id):
-    res = role_curd.remove_role(_id)
-    if not res:
-        return fail_api(msg="角色删除失败")
-    return success_api(msg="角色删除成功")
+    return success_api(msg=message)
 
 
 # 批量删除
@@ -216,5 +220,5 @@ def batch_remove():
 
     res = parser.parse_args()
 
-    role_curd.batch_remove(res.ids)
+    batch_remove_role(res.ids)
     return success_api(msg="批量删除成功")

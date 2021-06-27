@@ -7,7 +7,9 @@ from flask_restful import marshal
 
 from applications.common.serialization import power_fields
 from applications.extensions import db
-from applications.models import PowerSchema, Power, Role, User
+from applications.models import Power, Role, User
+
+from applications.common.serialization import power2_fields
 
 
 def get_render_config():
@@ -99,8 +101,7 @@ def make_menu_tree():
             if p.type == 0 or p.type == 1:
                 powers.append(p)
 
-    power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
-    power_dict = power_schema.dump(powers)  # 生成可序列化对象
+    power_dict = marshal(powers, power2_fields)  # 生成可序列化对象
     power_dict.sort(key=lambda x: x['id'], reverse=True)
 
     menu_dict = OrderedDict()
@@ -115,7 +116,6 @@ def make_menu_tree():
             menu_dict[_dict['parent_id']] = [_dict]
         else:
             menu_dict[_dict['parent_id']].append(_dict)
-
     return menu_dict.get(0)
 
 

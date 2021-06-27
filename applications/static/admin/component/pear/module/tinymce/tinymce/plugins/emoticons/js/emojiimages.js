@@ -2024,7 +2024,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     category: "people"
   },
   school_satchel: {
-    keywords: [ "vip", "education", "bag", "backpack" ],
+    keywords: [ "student", "education", "bag", "backpack" ],
     "char": '<img data-emoticon="true" style="width:1em;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em" draggable="false" alt="\ud83c\udf92" src="1f392.png"/>',
     fitzpatrick_scale: false,
     category: "people"
@@ -5012,7 +5012,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     category: "travel_and_places"
   },
   school: {
-    keywords: [ "building", "vip", "education", "learn", "teach" ],
+    keywords: [ "building", "student", "education", "learn", "teach" ],
     "char": '<img data-emoticon="true" style="width:1em;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em" draggable="false" alt="\ud83c\udfeb" src="1f3eb.png"/>',
     fitzpatrick_scale: false,
     category: "travel_and_places"

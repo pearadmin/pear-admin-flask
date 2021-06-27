@@ -1,18 +1,8 @@
 import os
 from flask import current_app
-from sqlalchemy import desc
-
 from applications.common.utils.upload import photos
 from applications.extensions import db
-from applications.models import Photo, PhotoSchema
-from applications.common.curd import model_to_dicts
-
-
-def get_photo(page, limit):
-    photo = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit, error_out=False)
-    count = Photo.query.count()
-    data = model_to_dicts(Schema=PhotoSchema, model=photo.items)
-    return data, count
+from applications.models import Photo
 
 
 def upload_one(photo, mime):

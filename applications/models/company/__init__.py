@@ -1,2 +1,2 @@
-from .dept import Dept, DeptSchema
+from .dept import Dept
 from .users import User

@@ -1,8 +1,7 @@
 import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from applications.extensions import db, ma
-from marshmallow import fields
+from applications.extensions import db
 
 
 class User(db.Model, UserMixin):

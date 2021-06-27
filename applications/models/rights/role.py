@@ -1,6 +1,5 @@
 import datetime
-from applications.extensions import db, ma
-from marshmallow import fields
+from applications.extensions import db
 
 
 class Role(db.Model):
@@ -15,15 +14,3 @@ class Role(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
     update_time = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='更新时间')
     power = db.relationship('Power', secondary="rt_role_power", backref=db.backref('role'))
-
-
-class RoleSchema(ma.Schema):
-    id = fields.Integer()
-    roleName = fields.Str(attribute="name")
-    roleCode = fields.Str(attribute="code")
-    enable = fields.Str()
-    remark = fields.Str()
-    details = fields.Str()
-    sort = fields.Integer()
-    create_at = fields.DateTime()
-    update_at = fields.DateTime()

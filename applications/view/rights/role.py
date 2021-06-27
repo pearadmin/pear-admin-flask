@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, request, jsonify, make_response
+from flask import Blueprint, render_template, jsonify, make_response
 from flask_login import login_required
 
 from flask_restful import Resource, Api, reqparse
 
 from applications.extensions import db
 from applications.models import Role, Power
-# from applications.view.rights import role_curd
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from flask_restful import reqparse, marshal

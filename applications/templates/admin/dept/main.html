@@ -180,14 +180,14 @@
     form.on('switch(dept-enable)', function (obj) {
       let operate
       if (obj.elem.checked) {
-        operate = 'enable'
+        operate = 1
       } else {
-        operate = 'disable'
+        operate = 0
       }
       let loading = layer.load()
       $.ajax({
-        url: '/dept/' + operate,
-        data: JSON.stringify({ deptId: this.value }),
+        url: '/dept/enable',
+        data: JSON.stringify({ deptId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
         type: 'put',
@@ -218,7 +218,7 @@
         title: '修改',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'edit?deptId=' + obj.data['deptId']  /*编辑修改窗口从那里来*/
+        content: MODULE_PATH + 'edit/' + obj.data['deptId']  /*编辑修改窗口从那里来*/
       })
     }
 
@@ -227,7 +227,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'remove/' + obj.data['deptId'],
+          url: MODULE_PATH + 'edit/' + obj.data['deptId'],
           dataType: 'json',
           type: 'delete',
           success: function (result) {

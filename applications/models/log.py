@@ -1,6 +1,5 @@
 from datetime import datetime
-from applications.extensions import db, ma
-from marshmallow import fields
+from applications.extensions import db
 
 
 class AdminLog(db.Model):
@@ -14,15 +13,3 @@ class AdminLog(db.Model):
     success = db.Column(db.Integer)
     user_agent = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.now)
-
-
-class LogSchema(ma.Schema):  # 序列化类
-    id = fields.Integer()
-    method = fields.Str()
-    uid = fields.Str()
-    url = fields.Str()
-    desc = fields.Str()
-    ip = fields.Str()
-    user_agent = fields.Str()
-    success = fields.Bool()
-    create_time = fields.DateTime()

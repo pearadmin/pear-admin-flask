@@ -1,6 +1,5 @@
 import datetime
-from applications.extensions import db, ma
-from marshmallow import fields
+from applications.extensions import db
 
 
 class Power(db.Model):
@@ -19,21 +18,3 @@ class Power(db.Model):
     enable = db.Column(db.Integer, comment='是否开启')
 
     parent = db.relationship("Power", remote_side=[id])  # 自关联
-
-
-# 权限 models 序列化类
-class PowerSchema(ma.Schema):
-    id = fields.Integer()
-    title = fields.Str(attribute="name")
-    type = fields.Str()
-    code = fields.Str()
-    href = fields.Str(attribute="url")
-    openType = fields.Str(attribute="open_type")
-    parent_id = fields.Integer()
-    icon = fields.Str()
-    sort = fields.Integer()
-    create_time = fields.DateTime()
-    update_time = fields.DateTime()
-    enable = fields.Integer()
-
-

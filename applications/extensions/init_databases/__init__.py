@@ -1,13 +1,20 @@
-import json
-
 from flask import Flask
+import re
+from datetime import datetime
+
+date_str = re.compile('\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d$')
 
 
 def add_data(fields, data_list, obj):
     from applications.extensions import db
+
     for _data in data_list:
         dept = obj()
         for key, value in dict(zip(fields, _data)).items():
+
+            if isinstance(value, str) and date_str.match(value):
+                value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+
             setattr(dept, key, value)
         db.session.add(dept)
     db.session.commit()
@@ -29,8 +36,10 @@ def create_dept_data():
     ]
     _fields = ['id', 'parent_id', 'dept_name', 'sort', 'leader', 'phone', 'email', 'status', 'remark', 'address',
                'create_at', 'update_at']
-    add_data(_fields, _data_list, Dept)
 
+    _data_list = [item for item in _data_list]
+
+    add_data(_fields, _data_list, Dept)
 
 
 def create_admin_photo():
@@ -65,10 +74,6 @@ def create_admin_power():
             (4, '权限管理', '1', 'admin:power:main', '/rights/', '_iframe', '1', None, 2, None, None, 1),
             (9, '角色管理', '1', 'admin:role:main', '/admin/role', '_iframe', '1', 'layui-icon layui-icon-username', 2,
              '2021-03-16 22:24:58', '2021-03-25 19:15:24', 1),
-            (
-                12, '系统监控', '1', 'admin:monitor:main', '/admin/monitor', '_iframe', '1',
-                'layui-icon layui-icon-vercode', 5,
-                '2021-03-18 22:05:19', '2021-03-25 19:15:27', 1),
             (13, '日志管理', '1', 'admin:log:main', '/logs', '_iframe', '1', 'layui-icon layui-icon-read', 4,
              '2021-03-18 22:37:10', '2021-06-03 11:06:25', 1),
             (17, '文件管理', '0', '', '', '', '0', 'layui-icon layui-icon-camera', 2, '2021-03-19 18:56:23',
@@ -158,7 +163,6 @@ def create_admin_role():
 
 
 def create_admin_role_power():
-    from applications.models import user_role
     from applications.extensions import db
 
     _data_list = [
@@ -252,15 +256,6 @@ def create_admin_user_role() -> object:
     db.session.commit()
 
 
-def create_example():
-    from applications.models import DictData
-
-    _fields = []
-    _data_list = []
-
-    add_data(_fields, _data_list, DictData)
-
-
 def register_script(app: Flask):
     @app.cli.command()
     def init_db():
@@ -275,6 +270,7 @@ def register_script(app: Flask):
 
     @app.cli.command()
     def turn():
+        """清空数据库"""
         from applications.extensions import db
         db.drop_all()
         db.create_all()

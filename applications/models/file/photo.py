@@ -1,7 +1,6 @@
 import datetime
 
-from applications.extensions import db, ma
-from marshmallow import fields
+from applications.extensions import db
 
 
 class Photo(db.Model):
@@ -13,12 +12,3 @@ class Photo(db.Model):
     size = db.Column(db.CHAR(30), nullable=False)
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
 
-
-class PhotoSchema(ma.Schema):
-    id = fields.Integer()
-    name = fields.Str()
-    href = fields.Str()
-    mime = fields.Str()
-    size = fields.Str()
-    ext = fields.Str()
-    create_time = fields.DateTime()

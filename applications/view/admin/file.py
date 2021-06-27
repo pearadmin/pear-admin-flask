@@ -1,11 +1,15 @@
 import os
 from flask import Blueprint, request, render_template, jsonify, current_app, make_response
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource, marshal
+from sqlalchemy import desc
+
+from applications.common.serialization import photo_fields
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import Photo
-from applications.view.admin import file_curd
+
+from ._utils import delete_photo_by_id, upload_one
 
 file_bp = Blueprint('file', __name__, url_prefix='/file')
 file_api = Api(file_bp)
@@ -24,8 +28,9 @@ def index():
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    data, count = file_curd.get_photo(page=page, limit=limit)
-    return table_api(data=data, count=count)
+    photo_paginate = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit, error_out=False)
+    data = marshal(photo_paginate.items, photo_fields)
+    return table_api(data=data, count=photo_paginate.total)
 
 
 @file_api.resource('/upload')
@@ -39,7 +44,8 @@ class Upload(Resource):
         if 'file' in request.files:
             photo = request.files['file']
             mime = request.files['file'].content_type
-            file_url = file_curd.upload_one(photo=photo, mime=mime)
+            file_url = upload_one(photo=photo, mime=mime)
+
             res = {
                 "msg": "上传成功",
                 "code": 0,
@@ -53,7 +59,7 @@ class Upload(Resource):
     @authorize("admin:file:delete", log=True)
     def delete(self):
         _id = request.form.get('id')
-        res = file_curd.delete_photo_by_id(_id)
+        res = delete_photo_by_id(_id)
         if res:
             return success_api(msg="删除成功")
         else:

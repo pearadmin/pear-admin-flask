@@ -32,23 +32,6 @@ def create_dept_data():
     add_data(_fields, _data_list, Dept)
 
 
-def create_admin_dict_data():
-    from applications.models import DictData, DictType
-
-    _fields = ['id', 'data_label', 'data_value', 'type_code', 'is_default', 'enable', 'remark', 'create_time',
-               'update_time', ]
-    _data_list = [
-        (8, '男', 'boy', 'user_sex', None, 1, '男 : body', '2021-04-16 13:36:34', '2021-04-16 14:05:06'),
-        (9, '女', 'girl', 'user_sex', None, 1, '女 : girl', '2021-04-16 13:36:55', '2021-04-16 13:36:55'),
-    ]
-
-    add_data(_fields, _data_list, DictData)
-    _fields = ['id', 'type_name', 'type_code', 'description', 'enable', 'create_time', 'update_time', ]
-    _data_list = [
-        (1, '用户性别', 'user_sex', '用户性别', 1, None, '2021-04-16 13:37:11')
-    ]
-    add_data(_fields, _data_list, DictType)
-
 
 def create_admin_photo():
     from applications.models import Photo
@@ -125,14 +108,6 @@ def create_admin_power():
             (32, '图片删除', '2', 'admin:file:delete', '', '', '18', 'layui-icon layui-icon-delete', 2,
              '2021-03-22 19:58:45',
              '2021-03-25 19:15:29', 1),
-            (44, '数据字典', '1', 'admin:dict:main', '/admin/dict', '_iframe', '1', 'layui-icon layui-icon-console', 6,
-             '2021-04-16 13:59:49', '2021-04-16 13:59:49', 1),
-            (45, '字典增加', '2', 'admin:dict:add', '', '', '44', 'layui-icon ', 1,
-             '2021-04-16 14:00:59', '2021-04-16 14:00:59', 1),
-            (46, '字典修改', '2', 'admin:dict:edit', '', '', '44', 'layui-icon ', 2, '2021-04-16 14:01:33',
-             '2021-04-16 14:01:33', 1),
-            (47, '字典删除', '2', 'admin:dict:remove', '', '', '44', 'layui-icon ', 3, '2021-04-16 14:02:06',
-             '2021-04-16 14:02:06', 1),
             (48, '部门管理', '1', 'admin:dept:main', '/dept', '_iframe', '1', 'layui-icon layui-icon-group', 3,
              '2021-06-01 16:22:11', '2021-06-01 16:22:11', 1),
             (49, '部门增加', '2', 'admin:dept:add', '', '', '48', 'layui-icon None', 1, '2021-06-01 17:35:52',
@@ -291,7 +266,6 @@ def register_script(app: Flask):
     def init_db():
         """数据库初始化"""
         create_dept_data()
-        create_admin_dict_data()
         create_admin_photo()
         create_admin_power()
         create_admin_role()

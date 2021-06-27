@@ -106,7 +106,7 @@
         toolbar: '#power-toolbar',
         elem: '#power-table',
         url: '{{ url_for('rights.data') }}',
-                page: false,
+        page: false,
         cols: [
           [
             {% if authorize("admin:role:remove") %}
@@ -174,14 +174,14 @@
     form.on('switch(power-enable)', function (obj) {
       let operate
       if (obj.elem.checked) {
-        operate = 'enable'
+        operate = 1  /*启用*/
       } else {
-        operate = 'disable'
+        operate = 0  /*禁用*/
       }
       let loading = layer.load()
       $.ajax({
-        url: MODULE_PATH + operate,
-        data: JSON.stringify({ powerId: this.value }),
+        url: MODULE_PATH + 'enable',
+        data: JSON.stringify({ powerId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
         type: 'put',
@@ -202,7 +202,7 @@
         title: '新增',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'add'
+        content: MODULE_PATH + 'power'
       })
     }
 

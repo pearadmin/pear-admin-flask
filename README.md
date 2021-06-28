@@ -30,17 +30,23 @@
 </div>
 
 #### 项目简介
->Pear Admin Flask 基于 Flask  的后台管理系统，拥抱应用广泛的python语言，通过使用本系统，即可快速构建你的功能业务
->
->项目旨在为python开发者提供一个后台管理系统的模板，成为您构建信息管理系统，物联网后台....等等应用时灵活，简单的工具
->
->各位Python爱好者多多指教
+Pear Admin Flask 基于 Flask 生态的后台管理系统，该项目旨在为 python 开发者提供一个快速开发前后端半分离的后台管理系统的模板
 
-Pear Admin Flask 分为 Common / Simple 两个版本：					
+在使用本项目之前最好掌握以下知识点
 
-[** Common 通用版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
++ html、css、JavaScript
++ jQuery
++ layui
++ flask
++ flask-login
++ flask-sqlalchemy
++ flask-restful
 
-[** Simple 简洁版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+
+Pear Admin Flask 分为 Common / Simple 两个版本：
+
+[Common 通用版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
+[Simple 简洁版本](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
 
 ####  内置功能
 
@@ -49,9 +55,7 @@ Pear Admin Flask 分为 Common / Simple 两个版本：
 - [x] 角色管理：角色菜单权限分配。
 - [x] 操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
 - [x] 登录日志：系统登录日志记录查询包含登录异常。
-- [x] 服务监控：监视当前系统CPU、内存、磁盘、python版本,运行时长等相关信息。
-- [x] 文件上传:   图片上传示例
-- [ ] 代码生成:   构想中....
+- [x] 文件上传: 图片上传示例
 
 ####  项目结构
 
@@ -73,62 +77,46 @@ Pear Admin Flask
 ├─requirement  # 依赖文件
 ├─test # 测试文件夹（占坑）
 └─.env # 项目的配置文件
-
 ```
 
+#### 项目启动
 
-
-#### 项目安装
-
+##### 1. 下载源码
 ```bash
-# 下 载
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
-# 安 装
-pip install -r requirement\requirement-dev.txt
-
-# 配 置
-.env
-
+# 切换分支
+git checkout v2
 ```
 
-#### 修改配置
-
-```python
-# 主 机
-HOST = '127.0.0.1'
-
-# 端 口
-PORT = '3306'
-
-# 数 据 库
-DATABASE = 'PearAdminFlask'
-
-# 账 户
-USERNAME = 'root'
-
-# 密 码
-PASSWORD = 'root'
-
-```
-
-#### Venv 安装
-
+##### 2. 安装依赖
 ```bash
+# 创建虚拟环境
 python -m venv venv
 
+# 然后使虚拟环境生效（windows，Linux自行解决）
+venv\Scripts\activate 
+
+# 安装依赖
+pip install -r requirement\requirement-dev.txt
 ```
 
-#### 运行项目
-
+##### 3. 数据迁移
+默认的使用 `sqlite3` 作为开发环境的数据库进行演示，如果需要二次开发，建议改成 `mysql` 。
 ```bash
-# 初 始 化 数 据 库
-python test\init_databases.py
+flask db init
+flask db migrate -m '数据初始化'
+flask db upgrade
 
+flask init-db
 ```
 
-执行 flask run 命令启动项目
 
+##### 4. 其他事项
+
+如果需要在开发环境使用 mysql 作为数据库，请查看 `applications/configs/config.py` 文件里面的相关配置文件
+
+如果需要修改数据的配置信息，请在 `.flaskenv` 里面调整即可 
 
 #### 预览项目
 

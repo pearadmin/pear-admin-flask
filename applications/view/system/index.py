@@ -16,4 +16,4 @@ def index():
 @admin_bp.get('/welcome')
 @login_required
 def welcome():
-    return render_template('admin/console/console.html')
+    return render_template('admin/console/welcome.html')

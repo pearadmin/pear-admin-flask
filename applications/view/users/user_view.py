@@ -5,7 +5,7 @@ from applications.extensions import db
 from applications.common.utils.http import fail_api, success_api
 from applications.common.utils.rights import authorize
 from applications.models import User, Role
-from applications.view.company.users import user_api, users_bp, _utils
+from applications.view.users import user_api, users_bp, _utils
 
 
 @user_api.resource('/add')

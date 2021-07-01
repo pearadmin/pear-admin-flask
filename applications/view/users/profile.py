@@ -7,7 +7,7 @@ from sqlalchemy import desc
 from applications.common.utils.http import fail_api, success_api
 from applications.extensions import db
 from applications.models import User, AdminLog
-from applications.view.company.users import users_bp, user_api
+from applications.view.users import users_bp, user_api
 
 
 @users_bp.get('/center')

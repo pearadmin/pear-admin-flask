@@ -11,7 +11,7 @@ from flask_restful import reqparse, marshal
 
 from applications.common.serialization import power_fields
 
-from ._utils import remove_role, batch_remove_role
+from applications.view.roles._utils import remove_role, batch_remove_role
 
 role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
 role_api = Api(role_bp)

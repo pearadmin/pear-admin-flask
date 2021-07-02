@@ -2,7 +2,7 @@ from flask import Flask
 
 from applications.view.system.logs import admin_log
 from applications.view.system.index import admin_bp
-from applications.view.upload.file import file_bp
+from applications.view.file.file import file_bp
 from applications.view.roles.role import role_bp
 from applications.view.users import users_bp
 

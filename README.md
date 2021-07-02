@@ -86,7 +86,7 @@ Pear Admin Flask
 git clone https://gitee.com/pear-admin/pear-admin-flask
 
 # 切换分支
-git checkout v2
+git checkout mini
 ```
 
 ##### 2. 安装依赖

@@ -111,7 +111,7 @@
     let dtree = layui.dtree
     let popup = layui.popup
     let common = layui.common
-    let MODULE_PATH = '/admin/user/'
+    let MODULE_PATH = '/users/'
 
     // 表格数据
     let cols = [
@@ -211,14 +211,14 @@
     form.on('switch(user-enable)', function (obj) {
       let operate
       if (obj.elem.checked) {
-        operate = 'enable'
+        operate = 1
       } else {
-        operate = 'disable'
+        operate = 0
       }
       let loading = layer.load()
       $.ajax({
-        url: '/admin/user/' + operate,
-        data: JSON.stringify({ userId: this.value }),
+        url: MODULE_PATH + 'enable',
+        data: JSON.stringify({ operate: operate, userId: this.value }),
         dataType: 'json',
         contentType: 'application/json',
         type: 'put',
@@ -249,7 +249,7 @@
         title: '修改',
         shade: 0.1,
         area: ['550px', '500px'],
-        content: MODULE_PATH + 'edit/' + obj.data['id']
+        content: MODULE_PATH + obj.data['id']
       })
     }
 
@@ -258,7 +258,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'remove/' + obj.data['id'],
+          url: MODULE_PATH + obj.data['id'],
           dataType: 'json',
           type: 'delete',
           success: function (result) {

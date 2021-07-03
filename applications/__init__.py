@@ -30,8 +30,27 @@ def create_app(config_name=None):
     configure_uploads(app, photos)
 
     logo()
-
+    register_shell(app)
     return app
+
+
+def register_shell(app: Flask):
+    @app.cli.command()
+    def create():
+        """测试关系"""
+        from .extensions import db
+        from .models import Power, User
+        from .models import PowerSchema
+        power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
+        user = User.query.get(1)
+        power_list = []
+        for role in user.role:
+            if role.enable:
+                for power in role.power:
+                    # 权限被启用
+                    if power.enable and power:
+                        power_list.append(power)
+        power_dict = sorted(power_list, key=lambda i: i['sort'])
 
 
 def logo():

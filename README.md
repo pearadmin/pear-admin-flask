@@ -28,17 +28,31 @@
 </div>
 
 #### 项目简介
->Pear Admin Flask 基于 Flask 1.12 的后台管理系统模板，得益于Python 的生态广泛应用，通过使用本系统，即可快速构建你的功能业务，努力成为最顺手的工具。
+>Pear Admin Flask 基于 Flask  的后台管理系统，拥抱应用广泛的python语言，通过使用本系统，即可快速构建你的功能业务
 >
->目前Flask后台管理系统几乎处于空白状态，本项目希望获得各位Python爱好者的改正与指点
+>项目旨在为python开发者提供一个后台管理系统的模板，成为您构建信息管理系统，物联网后台....等等应用时灵活，简单的工具
+>
+>众人拾柴火焰高，欢迎pythoner参与项目~
 
-#### 版本说明
+Pear Admin Flask 有以下几个版本：					
 
-​		Pear Admin Flask 分为俩个版本：					
+[master分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
-​					**[数据库权限管理版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)    开发中**
+>	flask 2.1	+	flask-sqlalchemy	+	mysql	+	权限验证	+	Flask-APScheduler	定时任务	+	marshmallow 序列化与数据验证
 
-​					[**yaml权限管理版本（简洁版）**](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+[Mini 分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)
+
+>flask 2.1	+	flask-sqlalchemy	+	sqllite	+	权限验证	+	Flask-RESTful	 序列化与数据验证
+
+[v1 分支版本(不再更新，仅供参考) ](https://gitee.com/pear-admin/pear-admin-flask/tree/v1/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql		+	权限验证	+	marshmallow 序列化与数据验证
+
+[simple 分支版本(不再更新，仅供参考) ](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql	+	极简权限	+	marshmallow 序列化与数据验证
+>
+>项目最简版本
 
 #### 环境要求
 

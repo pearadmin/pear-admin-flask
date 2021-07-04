@@ -43,10 +43,26 @@ Pear Admin Flask 基于 Flask 生态的后台管理系统，该项目旨在为 p
 + flask-restful
 
 
-Pear Admin Flask 分为 Common / Simple 两个版本：
+Pear Admin Flask 有以下几个版本：					
 
-[Common 通用版本](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
-[Simple 简洁版本](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+[master分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
+
+>	flask 2.1	+	flask-sqlalchemy	+	mysql	+	权限验证	+	Flask-APScheduler	定时任务	+	marshmallow 序列化与数据验证
+
+[Mini 分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)
+
+>flask 2.1	+	flask-sqlalchemy	+	sqllite	+	权限验证	+	Flask-RESTful	 序列化与数据验证
+
+[v1 分支版本(不再更新，仅供参考) ](https://gitee.com/pear-admin/pear-admin-flask/tree/v1/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql		+	权限验证	+	marshmallow 序列化与数据验证
+
+[simple 分支版本(不再更新，仅供参考) ](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql	+	极简权限	+	marshmallow 序列化与数据验证
+>
+>项目最简版本
+
 
 ####  内置功能
 

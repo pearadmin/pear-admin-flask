@@ -34,13 +34,27 @@
 >
 >项目旨在为python开发者提供一个后台管理系统的模板，成为您构建信息管理系统，物联网后台....等等应用时灵活，简单的工具
 >
->各位Python爱好者多多指教
+>众人拾柴火焰高，欢迎pythoner参与项目~
 
-Pear Admin Flask 分为 Common / Simple 两个版本：					
+Pear Admin Flask 有以下几个版本：					
 
-[** Common 通用版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
+[** master分支版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
-[** Simple 简洁版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+>	flask 2.1	+	flask-sqlalchemy	+	mysql	+	权限验证	+	Flask-APScheduler	定时任务	+	marshmallow 序列化与数据验证
+
+[** Mini 分支版本 **](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)
+
+>flask 2.1	+	flask-sqlalchemy	+	sqllite	+	权限验证	+	Flask-RESTful	 序列化与数据验证
+
+[** v1 分支版本(不再更新，仅供参考) **](https://gitee.com/pear-admin/pear-admin-flask/tree/v1/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql		+	权限验证	+	marshmallow 序列化与数据验证
+
+[** simple 分支版本(不再更新，仅供参考) **](https://gitee.com/pear-admin/pear-admin-flask/tree/simple/)
+
+>flask 1.12	+	flask-sqlalchemy	+ mysql	+	极简权限	+	marshmallow 序列化与数据验证
+>
+>项目最简版本
 
 ####  内置功能
 
@@ -51,6 +65,7 @@ Pear Admin Flask 分为 Common / Simple 两个版本：
 - [x] 登录日志：系统登录日志记录查询包含登录异常。
 - [x] 服务监控：监视当前系统CPU、内存、磁盘、python版本,运行时长等相关信息。
 - [x] 文件上传:   图片上传示例
+- [x] 定时任务:   简单的定时任务
 - [ ] 代码生成:   构想中....
 
 ####  项目结构

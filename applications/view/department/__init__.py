@@ -7,8 +7,6 @@ from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import Dept, User
 
-# from applications.view.company.department import dept_curd
-
 dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
 dept_api = Api(dept_bp)
 

@@ -1,4 +1,4 @@
-from applications.models.company import Dept, User
+from applications.models.users import Dept, User
 from applications.models.log import AdminLog
 from applications.models.file.photo import Photo
 from applications.models.rights.power import Power

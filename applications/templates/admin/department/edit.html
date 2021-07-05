@@ -100,7 +100,7 @@
     // 当点击更新之后，获取数据
     form.on('submit(dept-update)', function (data) {
       $.ajax({
-        url: '/dept/edit' + data.field.deptId,
+        url: '/dept/edit/' + data.field.deptId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

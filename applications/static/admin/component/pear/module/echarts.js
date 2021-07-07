@@ -14205,8 +14205,8 @@
 
       var isUpdate = animationType === 'update';
       var isRemove = animationType === 'remove';
-      var animationPayload; // Check if there is global animation configuration from dataZoom/resize can override the configs in option.
-      // If animation is enabled. Will use this animation configs in payload.
+      var animationPayload; // Check if there is global animation configuration from dataZoom/resize can override the config in option.
+      // If animation is enabled. Will use this animation config in payload.
       // If animation is disabled. Just ignore it.
 
       if (animatableModel && animatableModel.ecModel) {
@@ -18731,7 +18731,7 @@
         if (isArray(mediaOnRoot)) {
           each(mediaOnRoot, function (singleMedia) {
             if ("development" !== 'production') {
-              // Real case of wrong configs.
+              // Real case of wrong config.
               if (singleMedia && !singleMedia.option && isObject(singleMedia.query) && isObject(singleMedia.query.option)) {
                 error('Illegal media option. Must be like { media: [ { query: {}, option: {} } ] }');
               }
@@ -18748,7 +18748,7 @@
           });
         } else {
           if ("development" !== 'production') {
-            // Real case of wrong configs.
+            // Real case of wrong config.
             error('Illegal media option. Must be an array. Like { media: [ {...}, {...} ] }');
           }
         }
@@ -19508,7 +19508,7 @@
       // readonly frozen: boolean;
       function SourceImpl(fields) {
         this.data = fields.data || (fields.sourceFormat === SOURCE_FORMAT_KEYED_COLUMNS ? {} : []);
-        this.sourceFormat = fields.sourceFormat || SOURCE_FORMAT_UNKNOWN; // Visit configs
+        this.sourceFormat = fields.sourceFormat || SOURCE_FORMAT_UNKNOWN; // Visit config
 
         this.seriesLayoutBy = fields.seriesLayoutBy || SERIES_LAYOUT_BY_COLUMN;
         this.startIndex = fields.startIndex || 0;
@@ -21392,18 +21392,18 @@
      *     source: [...]
      * }, {
      *     // By default from 0.
-     *     transform: { type: 'filter', configs: {...} }
+     *     transform: { type: 'filter', config: {...} }
      * }, {
      *     // Piped.
      *     transform: [
-     *         { type: 'filter', configs: {...} },
-     *         { type: 'sort', configs: {...} }
+     *         { type: 'filter', config: {...} },
+     *         { type: 'sort', config: {...} }
      *     ]
      * }, {
      *     id: 'regressionData',
      *     fromDatasetIndex: 1,
      *     // Third-party transform
-     *     transform: { type: 'ecStat:regression', configs: {...} }
+     *     transform: { type: 'ecStat:regression', config: {...} }
      * }, {
      *     // retrieve the extra result.
      *     id: 'regressionFormula',
@@ -23545,7 +23545,7 @@
               // performed. Because is a series is filtered, most of the tasks will not
               // be performed. A stream-dependent operation probably cause wrong biz logic.
               // Perhaps we should not provide a separate callback for this case instead
-              // of providing the configs `performRawSeries`. The stream-dependent operaions
+              // of providing the config `performRawSeries`. The stream-dependent operaions
               // and stream-independent operations should better not be mixed.
 
               performArgs.skip = !stageHandler.performRawSeries && ecModel.isSeriesFiltered(task.context.model);
@@ -25599,9 +25599,9 @@
             hostEl.setTextConfig({
               // Force to set local false.
               local: false,
-              // Ignore position and rotation configs on the host el if x or y is changed.
+              // Ignore position and rotation config on the host el if x or y is changed.
               position: layoutOption.x != null || layoutOption.y != null ? null : defaultLabelAttr.attachedPos,
-              // Ignore rotation configs on the host el if rotation is changed.
+              // Ignore rotation config on the host el if rotation is changed.
               rotation: layoutOption.rotate != null ? layoutOption.rotate * degreeToRadian : defaultLabelAttr.attachedRot,
               offset: [layoutOption.dx || 0, layoutOption.dy || 0]
             });
@@ -52007,7 +52007,7 @@
       }
       /**
        * Init a tree data structure from data in option series
-       * @param  option  the object used to configs echarts view
+       * @param  option  the object used to config echarts view
        * @return storage initial data
        */
 
@@ -61948,7 +61948,7 @@
       /**
        * Init a graph data structure from data in option series
        *
-       * @param  {Object} option  the object used to configs echarts view
+       * @param  {Object} option  the object used to config echarts view
        * @return {module:echarts/data/List} storage initial data
        */
 
@@ -64102,7 +64102,7 @@
           this._effectCfg ? this.updateEffectAnimation(effectCfg) : this.startEffectAnimation(effectCfg);
           this._effectCfg = effectCfg;
         } else {
-          // Not keep old effect configs
+          // Not keep old effect config
           this._effectCfg = null;
           this.stopEffectAnimation();
 
@@ -64222,7 +64222,7 @@
         progressive: 0,
         // When to show the effect, option: 'render'|'emphasis'
         showEffectOn: 'render',
-        // Ripple effect configs
+        // Ripple effect config
         rippleEffect: {
           period: 4,
           // Scale of ripple
@@ -69537,7 +69537,7 @@
      * generete shape and style at the first time rather than always do that).
      * So we still use "merge" rather than "erase all". If users need "erase all", they can
      * simple always set all of the props each time.
-     * Some "object-like" configs like `textConfig`, `textContent`, `style` which are not needed for
+     * Some "object-like" config like `textConfig`, `textContent`, `style` which are not needed for
      * every elment, so we replace them only when user specify them. And the that is a total replace.
      *
      * TODO: there is no hint of 'isFirst' to users. So the performance enhancement can not be
@@ -70410,7 +70410,7 @@
        *
        * [Compat]: since ec5, RectText has been separated from its hosts el.
        * so `api.style()` will only return the style from `itemStyle` but not handle `label`
-       * any more. But `series.label` configs is never published in doc.
+       * any more. But `series.label` config is never published in doc.
        * We still compat it in `api.style()`. But not encourage to use it and will still not
        * to pulish it to doc.
        * @public
@@ -87018,7 +87018,7 @@
               color: thisOption.color.slice().reverse()
             };
           } // Compatible with previous logic, always give a defautl color, otherwise
-          // simple configs with no inRange and outOfRange will not work.
+          // simple config with no inRange and outOfRange will not work.
           // Originally we use visualMap.color as the default color, but setOption at
           // the second time the default color will be erased. So we change to use
           // constant DEFAULT_COLOR.
@@ -89581,7 +89581,7 @@
 
       if (!isObjectNotArray(exprOption)) {
         if ("development" !== 'production') {
-          errMsg = makePrintable('Illegal configs. Expect a plain object but actually', exprOption);
+          errMsg = makePrintable('Illegal config. Expect a plain object but actually', exprOption);
         }
 
         throwError(errMsg);
@@ -89722,7 +89722,7 @@
       // PEDING: enhance to filter by index rather than create new data
       transform: function (params) {
         // [Caveat] Fail-Fast:
-        // Do not return the whole dataset unless user configs indicate it explicitly.
+        // Do not return the whole dataset unless user config indicate it explicitly.
         // For example, if no condition specified by mistake, return an empty result
         // is better than return the entire raw soruce for user to find the mistake.
         var upstream = params.upstream;
@@ -89780,7 +89780,7 @@
     var sampleLog = '';
 
     if ("development" !== 'production') {
-      sampleLog = ['Valid configs is like:', '{ dimension: "age", order: "asc" }', 'or [{ dimension: "age", order: "asc"], { dimension: "date", order: "desc" }]'].join(' ');
+      sampleLog = ['Valid config is like:', '{ dimension: "age", order: "asc" }', 'or [{ dimension: "age", order: "asc"], { dimension: "date", order: "desc" }]'].join(' ');
     }
 
     var sortTransform = {
@@ -89789,15 +89789,15 @@
         var upstream = params.upstream;
         var config = params.config;
         var errMsg = ''; // Normalize
-        // const orderExprList: OrderExpression[] = isArray(configs[0])
-        //     ? configs as OrderExpression[]
-        //     : [configs as OrderExpression];
+        // const orderExprList: OrderExpression[] = isArray(config[0])
+        //     ? config as OrderExpression[]
+        //     : [config as OrderExpression];
 
         var orderExprList = normalizeToArray(config);
 
         if (!orderExprList.length) {
           if ("development" !== 'production') {
-            errMsg = 'Empty `configs` in sort transform.';
+            errMsg = 'Empty `config` in sort transform.';
           }
 
           throwError(errMsg);
@@ -89812,7 +89812,7 @@
 
           if (dimLoose == null) {
             if ("development" !== 'production') {
-              errMsg = 'Sort transform configs must has "dimension" specified.' + sampleLog;
+              errMsg = 'Sort transform config must has "dimension" specified.' + sampleLog;
             }
 
             throwError(errMsg);
@@ -89820,7 +89820,7 @@
 
           if (order !== 'asc' && order !== 'desc') {
             if ("development" !== 'production') {
-              errMsg = 'Sort transform configs must has "order" specified.' + sampleLog;
+              errMsg = 'Sort transform config must has "order" specified.' + sampleLog;
             }
 
             throwError(errMsg);
@@ -89850,7 +89850,7 @@
 
           if (!dimInfo) {
             if ("development" !== 'production') {
-              errMsg = makePrintable('Can not find dimension info via: ' + dimLoose + '.\n', 'Existing dimensions: ', upstream.cloneAllDimensionInfo(), '.\n', 'Illegal configs:', orderExpr, '.\n');
+              errMsg = makePrintable('Can not find dimension info via: ' + dimLoose + '.\n', 'Existing dimensions: ', upstream.cloneAllDimensionInfo(), '.\n', 'Illegal config:', orderExpr, '.\n');
             }
 
             throwError(errMsg);
@@ -89860,7 +89860,7 @@
 
           if (parserName && !parser) {
             if ("development" !== 'production') {
-              errMsg = makePrintable('Invalid parser name ' + parserName + '.\n', 'Illegal configs:', orderExpr, '.\n');
+              errMsg = makePrintable('Invalid parser name ' + parserName + '.\n', 'Illegal config:', orderExpr, '.\n');
             }
 
             throwError(errMsg);

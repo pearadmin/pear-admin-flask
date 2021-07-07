@@ -4107,14 +4107,14 @@
       var me = __assign(__assign(__assign({}, wrappedExtra), wrappedApis), {
         revoke: curry(revokeBehaviour, name),
         config: function (spec) {
-          var prepared = asRawOrDie(name + '-configs', configSchema, spec);
+          var prepared = asRawOrDie(name + '-config', configSchema, spec);
           return {
             key: name,
             value: {
               config: prepared,
               me: me,
               configAsRaw: cached(function () {
-                return asRawOrDie(name + '-configs', configSchema, spec);
+                return asRawOrDie(name + '-config', configSchema, spec);
               }),
               initialConfig: spec,
               state: state

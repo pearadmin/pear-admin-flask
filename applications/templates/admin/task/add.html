@@ -8,40 +8,34 @@
     <div class="mainBox">
         <div class="main-container">
             <div class="main-container">
+              <div class="layui-form-item">
+                    <label class="layui-form-label">协议类型</label>
+                    <div class="layui-input-block">
+                       <select name="type" lay-verify="required" lay-search>
+        <option value="http">http</option>
+        <option value="https">https</option>
+      </select>
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="roleName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">标识</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="roleCode" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                               class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="enable" value="0" title="开启">
-                        <input type="radio" name="enable" value="1" title="关闭" checked>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                               class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">描述</label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="请输入描述" name="details" class="layui-textarea"></textarea>
-                    </div>
-                </div>
+    <label class="layui-form-label">查询间隔时间</label>
+    <div class="layui-input-block">
+      <select name="frequency" lay-verify="required" lay-search>
+        {% for task in task_frequency_render %}
+            <option value="{{ task.key }}">{{ task.value}}</option>
+          {% endfor %}
+
+
+      </select>
+    </div>
+  </div>
             </div>
         </div>
     </div>
@@ -66,7 +60,7 @@
 
     form.on('submit(role-save)', function (data) {
       $.ajax({
-        url: '/admin/role/save',
+        url: '/task/save',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

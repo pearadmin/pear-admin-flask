@@ -52,7 +52,8 @@ layui.define(["jquery","layer"], function (exports) {
 		style += '.layui-elem-quote{border-left: 5px solid '+ color +'}';
 		style += '.layui-timeline-axis{color:' + color + '}';
 		style += '.layui-laydate .layui-this{background-color:'+color+'!important}';
-		style += '.pear-text{color:' + color + '!important}';
+		style += '.pear-this,.pear-text{color:' + color + '!important}';
+		style += '.pear-back{background-color:'+ color +'!important}';
 		style += '.pear-collasped-pe{background-color:'+color+'!important}'
 		style += '.layui-form-select dl dd.layui-this{background-color:'+color+'}'
 		style += '.tag-item-normal{background:'+color+'!important}';

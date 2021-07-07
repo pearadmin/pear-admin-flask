@@ -55,10 +55,6 @@ def init_db():
         return
     if init_database():
         print('数据库%s创建成功' % str(DATABASE))
-    execute_fromfile(BASE_DIR + '../../../test/pear.sql')
+    execute_fromfile('test/pear.sql')
     print('表创建成功')
     print('欢迎使用pear-admin-flask,请使用 flask run 命令启动程序')
-
-
-if __name__ == '__main__':
-    init_db()

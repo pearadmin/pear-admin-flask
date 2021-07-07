@@ -24,6 +24,10 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 		}
 		setTimeout(function(){
 			element.init();
+			$(opt.elem+" li").click(function(e){
+				$(this).siblings().removeClass('pear-this');
+				$(this).addClass('pear-this');
+			})
 		},300);
 		return new message(option);
 	}
@@ -61,9 +65,8 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 
 		// 根据 data 便利数据
 		$.each(option.data, function(i, item) {
-
 			if (i === 0) {
-				noticeTitle += '<li class="layui-this">' + item.title + '</li>';
+				noticeTitle += '<li class="pear-this">' + item.title + '</li>';
 				noticeContent += '<div class="layui-tab-item layui-show">';
 			} else {
 				noticeTitle += '<li>' + item.title + '</li>';
@@ -77,7 +80,6 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 					'<span>' + note.title + '</span>' +
 					'<span>' + note.time + '</span>' +
 					'</div>';
-
 			})
 			noticeContent += '</div>';
 		})

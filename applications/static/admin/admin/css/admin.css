@@ -35,8 +35,12 @@ body,
 }
 
 .pear-admin .layui-layout-control {
-	left: 120px;
+	left: 140px;
 	position: absolute;
+}
+
+.pear-admin .layui-layout-control .layui-nav{
+	padding: 0px;
 }
 
 .pear-admin .layui-logo {
@@ -45,7 +49,6 @@ body,
 	line-height: 60px;
 	position: relative;
 	background-color: #28333E;
-
 }
 
 .pear-admin .layui-logo img {

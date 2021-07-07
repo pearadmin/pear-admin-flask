@@ -444,7 +444,7 @@ layui.define(function (exports) {
          */
         MD5: function (options) {
             /**
-             * Private configs properties. You may need to tweak these to be compatible with
+             * Private config properties. You may need to tweak these to be compatible with
              * the server-side, but the defaults work in most cases.
              * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
              */
@@ -681,7 +681,7 @@ layui.define(function (exports) {
          */
         SHA1: function (options) {
             /**
-             * Private configs properties. You may need to tweak these to be compatible with
+             * Private config properties. You may need to tweak these to be compatible with
              * the server-side, but the defaults work in most cases.
              * See {@link Hashes.MD5#method-setUpperCase} and {@link Hashes.SHA1#method-setUpperCase}
              */

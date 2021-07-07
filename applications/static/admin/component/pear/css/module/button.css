@@ -14,8 +14,7 @@
 	font-size: 14px;
 	background-color: white;
 	border: 1px solid #dcdfe6;
-	border-radius: 4px;
-	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+	border-radius: 2px;
 }
 
 .pear-btn i {
@@ -34,6 +33,8 @@
 .pear-btn-warming,
 .pear-btn-success,
 .pear-btn-primary {
+	height: 37px;
+	line-height: 37px;
 	color: #fff !important
 }
 /** Button 主题 */

@@ -16,6 +16,10 @@
 	line-height: 48px;
 }
 
+.pear-nav-tree  .layui-nav-item>a .layui-nav-more {
+	padding: 0px;
+}
+
 .pear-side-scroll::-webkit-scrollbar {
 	width: 0px;
 	height: 0px;

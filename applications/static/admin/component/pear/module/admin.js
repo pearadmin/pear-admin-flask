@@ -26,7 +26,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 
 			// 默认配置
 			var configType = 'yml';
-			var configPath = 'pear.configs.yml';
+			var configPath = 'pear.config.yml';
 
 			this.setConfigPath = function(path) {
 				configPath = path;
@@ -93,6 +93,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 					height: '100%',
 					method: param.menu.method,
 					control: param.menu.control ? 'control' : false, // control
+					controlWidth: param.menu.controlWidth,
 					defaultMenu: 0,
 					accordion: param.menu.accordion,
 					url: param.menu.data,
@@ -103,6 +104,7 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 					},
 					done: function() {
 						sideMenu.selectItem(param.menu.select);
+						pearAdmin.collaspe(param);
 					}
 				});
 			}
@@ -194,6 +196,14 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 				setTimeout(function() {
 					$(".loader-main").fadeOut(200);
 				}, param.other.keepLoad)
+			}
+
+			this.collaspe = function(param) {
+				if (param.menu.collaspe) {
+					if ($(window).width() >= 768) {
+						collaspe()
+					}
+				}
 			}
 
 			this.themeRender = function(option) {
@@ -454,8 +464,9 @@ layui.define(['message', 'table', 'jquery', 'element', 'yaml', 'form', 'tab', 'm
 		function buildLinkHtml() {
 			var links = "";
 			$.each(config.links, function(i, value) {
-                // value.target 存在，则为新窗口打开，增加 target="_blank" 属性
-				links += '<a class="more-menu-item" href="' + value.href + '" '+(value.target?' target="_blank" ':'')+'>' +
+				// value.target 存在，则为新窗口打开，增加 target="_blank" 属性
+				links += '<a class="more-menu-item" href="' + value.href + '" ' + (value.target ? ' target="_blank" ' : '') +
+					'>' +
 					'<i class="' + value.icon + '" style="font-size: 19px;"></i> ' + value.title +
 					'</a>'
 			})

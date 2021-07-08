@@ -120,5 +120,5 @@ dmypy.json
 # 数据库文件
 *.db
 #上传到本地的图片文件
-*upload*
+*upload/
 migrations/

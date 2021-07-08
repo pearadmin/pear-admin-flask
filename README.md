@@ -111,3 +111,6 @@ flask db upgrade
 
 flask init-db
 ```
+
+
+## 服务器部署

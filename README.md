@@ -114,3 +114,30 @@ flask init-db
 
 
 ## 服务器部署
+### wsgi
+采用 gunicorn ,配置文件请查看 `gunicorn.conf.py` 。暂时未使用 nginx 作为反向代理，需要的可以自行配置。
+
+### 守护进程
+使用下面的命令安装Supervisor：
+```shell script
+$ sudo apt install supervisor
+```
+
+编辑配置文件
+$ sudo vim /etc/supervisor/conf.d/pear.conf
+
+写入项目配置
+```shell script
+[program:pear]
+command=bash /home/ubuntu/pear-admin-flask/start.sh
+user=root
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+```
+
+管理项目进程
+```shell script
+$ sudo supervisorctl
+```

@@ -34,9 +34,9 @@ def data():
     # 查询参数构造
     mf = ModelFilter()
     if real_name:
-        mf.vague(field_name="name", value=real_name)
+        mf.contains(field_name="realname", value=real_name)
     if username:
-        mf.vague(field_name="username", value=username)
+        mf.contains(field_name="username", value=username)
     if dept_id:
         mf.exact(field_name="dept_id", value=dept_id)
     # orm查询

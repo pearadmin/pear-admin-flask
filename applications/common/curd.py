@@ -1,5 +1,37 @@
+from applications.extensions import db
+
+
 def model_to_dicts(Schema, model):
     # 如果是分页器返回，需要传入model.items
     common_schema = Schema(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = common_schema.dump(model)  # 生成可序列化对象
     return output
+
+
+def get_one_by_id(model, id):
+    """
+    :param model: 模型类
+    :param id: id
+    :return: 返回单个查询结果
+    """
+    return model.query.filter_by(id=id).first()
+
+
+# 启动状态
+def enable_status(model, id):
+    enable = 1
+    role = model.query.filter_by(id=id).update({"enable": enable})
+    if role:
+        db.session.commit()
+        return True
+    return False
+
+
+# 停用状态
+def disable_status(model, id):
+    enable = 0
+    role = model.query.filter_by(id=id).update({"enable": enable})
+    if role:
+        db.session.commit()
+        return True
+    return False

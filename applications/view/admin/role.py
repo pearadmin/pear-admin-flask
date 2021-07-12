@@ -1,9 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required
-from applications.common.admin import role_curd
+from applications.common.curd import model_to_dicts, enable_status, disable_status, get_one_by_id
+from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
+from applications.extensions import db
+from applications.models import Role, Power, User
+from applications.schemas import RoleSchema, PowerSchema2
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
@@ -23,19 +27,20 @@ def table():
     limit = request.args.get('limit', type=int)
     role_name = xss_escape(request.args.get('roleName', type=str))
     role_code = xss_escape(request.args.get('roleCode', type=str))
-    filters = {}
+    mf = ModelFilter()
     if role_name:
-        filters["name"] = ('%' + role_name + '%')
+        mf.vague(field_name="name", value=role_name)
     if role_code:
-        filters["code"] = ('%' + role_code + '%')
-    data, count = role_curd.get_role_data_dict(page=page, limit=limit, filters=filters)
+        mf.vague(field_name="code", value=role_code)
+    role = Role.query.filter(mf.get_filter(Role)).paginate(page=page, per_page=limit, error_out=False)
+    count = Role.query.count()
+    data = model_to_dicts(Schema=RoleSchema, model=role.items)
     return table_api(data=data, count=count)
 
 
 # 角色增加
 @admin_role.get('/add')
 @authorize("admin:role:add", log=True)
-@login_required
 def add():
     return render_template('admin/role/add.html')
 
@@ -45,7 +50,20 @@ def add():
 @authorize("admin:role:add", log=True)
 def save():
     req = request.json
-    role_curd.add_role(req=req)
+    details = xss_escape(req.get("details"))
+    enable = xss_escape(req.get("enable"))
+    roleCode = xss_escape(req.get("roleCode"))
+    roleName = xss_escape(req.get("roleName"))
+    sort = xss_escape(req.get("sort"))
+    role = Role(
+        details=details,
+        enable=enable,
+        code=roleCode,
+        name=roleName,
+        sort=sort
+    )
+    db.session.add(role)
+    db.session.commit()
     return success_api(msg="成功")
 
 
@@ -60,9 +78,21 @@ def power(_id):
 @admin_role.get('/getRolePower/<int:id>')
 @authorize("admin:role:main", log=True)
 def get_role_power(id):
-    powers = role_curd.get_role_power(id)
+    role = Role.query.filter_by(id=id).first()
+    check_powers = role.power
+    check_powers_list = []
+    for cp in check_powers:
+        check_powers_list.append(cp.id)
+    powers = Power.query.all()
+    power_schema = PowerSchema2(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
+    output = power_schema.dump(powers)  # 生成可序列化对象
+    for i in output:
+        if int(i.get("powerId")) in check_powers_list:
+            i["checkArr"] = "1"
+        else:
+            i["checkArr"] = "0"
     res = {
-        "data": powers,
+        "data": output,
         "status": {"code": 200, "message": "默认"}
     }
     return jsonify(res)
@@ -76,7 +106,19 @@ def save_role_power():
     power_ids = req_form.get("powerIds")
     power_list = power_ids.split(',')
     role_id = req_form.get("roleId")
-    role_curd.update_role_power(id=role_id, power_list=power_list)
+    role = Role.query.filter_by(id=role_id).first()
+    power_id_list = []
+    for p in role.power:
+        power_id_list.append(p.id)
+        # print(p.id)
+    # print(power_id_list)
+    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    for p in powers:
+        role.power.remove(p)
+    powers = Power.query.filter(Power.id.in_(power_list)).all()
+    for p in powers:
+        role.power.append(p)
+    db.session.commit()
     return success_api(msg="授权成功")
 
 
@@ -84,16 +126,26 @@ def save_role_power():
 @admin_role.get('/edit/<int:_id>')
 @authorize("admin:role:edit", log=True)
 def edit(_id):
-    role = role_curd.get_role_by_id(_id)
-    return render_template('admin/role/edit.html', role=role)
+    r = get_one_by_id(model=Role, id=id)
+    return render_template('admin/role/edit.html', role=r)
 
 
 # 更新角色
 @admin_role.put('/update')
 @authorize("admin:role:edit", log=True)
 def update():
-    res = role_curd.update_role(request.json)
-    if not res:
+    req_json = request.json
+    id = req_json.get("roleId")
+    data = {
+        "code": xss_escape(req_json.get("roleCode")),
+        "name": xss_escape(req_json.get("roleName")),
+        "sort": xss_escape(req_json.get("sort")),
+        "enable": xss_escape(req_json.get("enable")),
+        "details": xss_escape(req_json.get("details"))
+    }
+    role = Role.query.filter_by(id=id).update(data)
+    db.session.commit()
+    if not role:
         return fail_api(msg="更新角色失败")
     return success_api(msg="更新角色成功")
 
@@ -103,9 +155,8 @@ def update():
 @authorize("admin:role:edit", log=True)
 def enable():
     id = request.json.get('roleId')
-    # print(id)
     if id:
-        res = role_curd.enable_status(id)
+        res = enable_status(Role, id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启动成功")
@@ -118,7 +169,7 @@ def enable():
 def dis_enable():
     _id = request.json.get('roleId')
     if _id:
-        res = role_curd.disable_status(_id)
+        res = disable_status(Role, _id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -126,11 +177,27 @@ def dis_enable():
 
 
 # 角色删除
-@admin_role.delete('/remove/<int:_id>')
+@admin_role.delete('/remove/<int:id>')
 @authorize("admin:role:remove", log=True)
-def remove(_id):
-    res = role_curd.remove_role(_id)
-    if not res:
+def remove(id):
+    role = Role.query.filter_by(id=id).first()
+    # 删除该角色的权限
+    power_id_list = []
+    for p in role.power:
+        power_id_list.append(p.id)
+
+    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    for p in powers:
+        role.power.remove(p)
+    user_id_list = []
+    for u in role.user:
+        user_id_list.append(u.id)
+    users = User.query.filter(User.id.in_(user_id_list)).all()
+    for u in users:
+        role.user.remove(u)
+    r = Role.query.filter_by(id=id).delete()
+    db.session.commit()
+    if not r:
         return fail_api(msg="角色删除失败")
     return success_api(msg="角色删除成功")
 
@@ -141,5 +208,22 @@ def remove(_id):
 @login_required
 def batch_remove():
     ids = request.form.getlist('ids[]')
-    role_curd.batch_remove(ids)
+    for id in ids:
+        role = Role.query.filter_by(id=id).first()
+        # 删除该角色的权限
+        power_id_list = []
+        for p in role.power:
+            power_id_list.append(p.id)
+
+        powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+        for p in powers:
+            role.power.remove(p)
+        user_id_list = []
+        for u in role.user:
+            user_id_list.append(u.id)
+        users = User.query.filter(User.id.in_(user_id_list)).all()
+        for u in users:
+            role.user.remove(u)
+        r = Role.query.filter_by(id=id).delete()
+        db.session.commit()
     return success_api(msg="批量删除成功")

@@ -1,12 +1,16 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+from sqlalchemy import and_, desc
 
+from applications.common.curd import model_to_dicts, enable_status, disable_status
+from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
-from applications.models import User
+from applications.extensions import db
+from applications.models import User, AdminLog
 from applications.models import Role
-from applications.common.admin import user_curd
+from applications.schemas import UserSchema
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
 
@@ -27,13 +31,19 @@ def data():
     real_name = xss_escape(request.args.get('realName', type=str))
     username = xss_escape(request.args.get('username', type=str))
     dept_id = request.args.get('deptId', type=int)
-    filters = {}
+    mf = ModelFilter()
     if real_name:
-        filters["realname"] = ('%' + real_name + '%')
+        mf.vague(field_name="name", value=real_name)
     if username:
-        filters["username"] = ('%' + username + '%')
-    user_data, count = user_curd.get_user_data_dict(page=page, limit=limit, filters=filters, deptId=dept_id)
-    return table_api(data=user_data, count=count)
+        mf.vague(field_name="username", value=username)
+    if dept_id:
+        mf.exact(field_name="dept_id", value=dept_id)
+    user = User.query.filter(mf.get_filter(model=User)).paginate(page=page,
+                                                                 per_page=limit,
+                                                                 error_out=False)
+    count = User.query.count()
+    data = model_to_dicts(Schema=UserSchema, model=user.items)
+    return table_api(data=data, count=count)
 
 
 # 用户增加
@@ -57,30 +67,42 @@ def save():
     if not username or not real_name or not password:
         return fail_api(msg="账号姓名密码不得为空")
 
-    if user_curd.is_user_exists(username):
+    if bool(User.query.filter_by(username=username).count()):
         return fail_api(msg="用户已经存在")
-
-    _id = user_curd.add_user(username, real_name, password)
-    user_curd.add_user_role(_id, role_ids)
-
+    user = User(username=username, realname=real_name)
+    user.set_password(password)
+    db.session.add(user)
+    user = User.query.filter_by(id=id).first()
+    roles = Role.query.filter(Role.id.in_(role_ids)).all()
+    for r in roles:
+        user.role.append(r)
+    db.session.commit()
     return success_api(msg="增加成功")
 
 
 # 删除用户
-@admin_user.delete('/remove/<int:_id>')
+@admin_user.delete('/remove/<int:id>')
 @authorize("admin:user:remove", log=True)
-def delete(_id):
-    res = user_curd.delete_by_id(_id)
+def delete(id):
+    user = User.query.filter_by(id=id).first()
+    roles_id = []
+    for role in user.role:
+        roles_id.append(role.id)
+    roles = Role.query.filter(Role.id.in_(roles_id)).all()
+    for r in roles:
+        user.role.remove(r)
+    res = User.query.filter_by(id=id).delete()
+    db.session.commit()
     if not res:
         return fail_api(msg="删除失败")
     return success_api(msg="删除成功")
 
 
 #  编辑用户
-@admin_user.get('/edit/<int:_id>')
+@admin_user.get('/edit/<int:id>')
 @authorize("admin:user:edit", log=True)
-def edit(_id):
-    user = User.query.filter_by(id=_id).first()
+def edit(id):
+    user = User.query.filter_by(id=id).first()
     roles = Role.query.all()
     checked_roles = []
     for r in user.role:
@@ -99,8 +121,18 @@ def update():
     real_name = xss_escape(req_json.get('realName'))
     dept_id = xss_escape(req_json.get('deptId'))
     role_ids = a.split(',')
-    user_curd.update_user(id, username, real_name, dept_id)
-    user_curd.update_user_role(_id, role_ids)
+    User.query.filter_by(id=id).update({'username': username, 'realname': real_name, 'dept_id': dept_id})
+    u = User.query.filter_by(id=id).first()
+    roles_id = []
+    for role in u.role:
+        roles_id.append(role.id)
+    roles = Role.query.filter(Role.id.in_(roles_id)).all()
+    for r in roles:
+        u.role.remove(r)
+    roles = Role.query.filter(Role.id.in_(role_ids)).all()
+    for r in roles:
+        u.role.append(r)
+    db.session.commit()
     return success_api(msg="更新成功")
 
 
@@ -109,7 +141,8 @@ def update():
 @login_required
 def center():
     user_info = current_user
-    user_logs = user_curd.get_current_user_logs()
+    user_logs = AdminLog.query.filter_by(url='/admin/login').filter_by(uid=current_user.id).order_by(
+        desc(AdminLog.create_time)).limit(10)
     return render_template('admin/user/center.html', user_info=user_info, user_logs=user_logs)
 
 
@@ -125,7 +158,9 @@ def profile():
 @login_required
 def update_avatar():
     url = request.json.get("avatar").get("src")
-    if not user_curd.update_avatar(url):
+    r = User.query.filter_by(id=current_user.id).update({"avatar": url})
+    db.session.commit()
+    if not r:
         return fail_api(msg="出错啦")
     return success_api(msg="修改成功")
 
@@ -134,8 +169,11 @@ def update_avatar():
 @admin_user.put('/updateInfo')
 @login_required
 def update_info():
-    res_json = request.json
-    if not user_curd.update_current_user_info(req_json=res_json):
+    req_json = request.json
+    r = User.query.filter_by(id=current_user.id).update(
+        {"realname": req_json.get("realName"), "remark": req_json.get("details")})
+    db.session.commit()
+    if not r:
         return fail_api(msg="出错啦")
     return success_api(msg="更新成功")
 
@@ -152,7 +190,18 @@ def edit_password():
 @login_required
 def edit_password_put():
     res_json = request.json
-    return user_curd.edit_password(res_json=res_json)
+    if res_json.get("newPassword") == '':
+        return fail_api("新密码不得为空")
+    if res_json.get("newPassword") != res_json.get("confirmPassword"):
+        return fail_api("俩次密码不一样")
+    user = current_user
+    is_right = user.validate_password(res_json.get("oldPassword"))
+    if not is_right:
+        return fail_api("旧密码错误")
+    user.set_password(res_json.get("newPassword"))
+    db.session.add(user)
+    db.session.commit()
+    return success_api("更改成功")
 
 
 # 启用用户
@@ -161,7 +210,7 @@ def edit_password_put():
 def enable():
     _id = request.json.get('userId')
     if _id:
-        res = user_curd.enable_status(_id)
+        res = enable_status(model=User, id=_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启动成功")
@@ -174,7 +223,7 @@ def enable():
 def dis_enable():
     _id = request.json.get('userId')
     if _id:
-        res = user_curd.disable_status(_id)
+        res = disable_status(model=User,id=_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -186,5 +235,14 @@ def dis_enable():
 @authorize("admin:user:remove", log=True)
 def batch_remove():
     ids = request.form.getlist('ids[]')
-    user_curd.batch_remove(ids)
+    for id in ids:
+        user = User.query.filter_by(id=id).first()
+        roles_id = []
+        for role in user.role:
+            roles_id.append(role.id)
+        roles = Role.query.filter(Role.id.in_(roles_id)).all()
+        for r in roles:
+            user.role.remove(r)
+        res = User.query.filter_by(id=id).delete()
+        db.session.commit()
     return success_api(msg="批量删除成功")

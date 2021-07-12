@@ -8,7 +8,7 @@ def model_to_dicts(Schema, model):
     return output
 
 
-def get_one_by_id(model, id):
+def get_one_by_id(model: db.Model, id):
     """
     :param model: 模型类
     :param id: id
@@ -17,8 +17,19 @@ def get_one_by_id(model, id):
     return model.query.filter_by(id=id).first()
 
 
+def delete_one_by_id(model: db.Model, id):
+    """
+    :param model: 模型类
+    :param id: id
+    :return: 返回单个查询结果
+    """
+    r = model.query.filter_by(id=id).delete()
+    db.session.commit()
+    return r
+
+
 # 启动状态
-def enable_status(model, id):
+def enable_status(model: db.Model, id):
     enable = 1
     role = model.query.filter_by(id=id).update({"enable": enable})
     if role:
@@ -28,7 +39,7 @@ def enable_status(model, id):
 
 
 # 停用状态
-def disable_status(model, id):
+def disable_status(model: db.Model, id):
     enable = 0
     role = model.query.filter_by(id=id).update({"enable": enable})
     if role:

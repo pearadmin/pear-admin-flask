@@ -1,5 +1,5 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy, BaseQuery
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
 from marshmallow.validate import (
@@ -45,7 +45,20 @@ fields.Boolean.default_error_messages = {
     "invalid": "不是合法布尔值"
 }
 
-db = SQLAlchemy()
+
+class Query(BaseQuery):
+    def layui_paginate(self):
+        """
+        layui表格分页
+        page
+        limit
+        """
+        return self.paginate(page=request.args.get('page', type=int),
+                             per_page=request.args.get('limit', type=int),
+                             error_out=False)
+
+
+db = SQLAlchemy(query_class=Query)
 ma = Marshmallow()
 
 

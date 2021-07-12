@@ -1,7 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify
+
+from applications.common import curd
 from applications.common.admin import power_curd
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
+from applications.common.utils.validate import xss_escape
+from applications.extensions import db
+from applications.models import Power
+from applications.schemas import PowerSchema2
 
 admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
 
@@ -15,9 +21,10 @@ def index():
 @admin_power.get('/data')
 @authorize("admin:power:main", log=True)
 def data():
-    power_data = power_curd.get_power_dict()
+    power = Power.query.all()
+    res = curd.model_to_dicts(Schema=PowerSchema2, model=power)
     res = {
-        "data": power_data
+        "data": res
     }
     return jsonify(res)
 
@@ -31,10 +38,12 @@ def add():
 @admin_power.get('/selectParent')
 @authorize("admin:power:main", log=True)
 def select_parent():
-    power_data = power_curd.select_parent()
+    power = Power.query.all()
+    res = curd.model_to_dicts(Schema=PowerSchema2, model=power)
+    res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
     res = {
         "status": {"code": 200, "message": "默认"},
-        "data": power_data
+        "data": res
 
     }
     return jsonify(res)
@@ -45,7 +54,27 @@ def select_parent():
 @authorize("admin:power:add", log=True)
 def save():
     req = request.json
-    power_curd.save_power(req)
+    icon = xss_escape(req.get("icon"))
+    openType = xss_escape(req.get("openType"))
+    parentId = xss_escape(req.get("parentId"))
+    powerCode = xss_escape(req.get("powerCode"))
+    powerName = xss_escape(req.get("powerName"))
+    powerType = xss_escape(req.get("powerType"))
+    powerUrl = xss_escape(req.get("powerUrl"))
+    sort = xss_escape(req.get("sort"))
+    power = Power(
+        icon=icon,
+        open_type=openType,
+        parent_id=parentId,
+        code=powerCode,
+        name=powerName,
+        type=powerType,
+        url=powerUrl,
+        sort=sort,
+        enable=1
+    )
+    r = db.session.add(power)
+    db.session.commit()
     return success_api(msg="成功")
 
 
@@ -53,7 +82,7 @@ def save():
 @admin_power.get('/edit/<int:_id>')
 @authorize("admin:power:edit", log=True)
 def edit(_id):
-    power = power_curd.get_power_by_id(_id)
+    power = curd.get_one_by_id(Power, _id)
     icon = str(power.icon).split()
     if len(icon) == 2:
         icon = icon[1]
@@ -66,7 +95,20 @@ def edit(_id):
 @admin_power.put('/update')
 @authorize("admin:power:edit", log=True)
 def update():
-    res = power_curd.update_power(request.json)
+    req_json = request.json
+    id = request.json.get("powerId")
+    data = {
+        "icon": xss_escape(req_json.get("icon")),
+        "open_type": xss_escape(req_json.get("openType")),
+        "parent_id": xss_escape(req_json.get("parentId")),
+        "code": xss_escape(req_json.get("powerCode")),
+        "name": xss_escape(req_json.get("powerName")),
+        "type": xss_escape(req_json.get("powerType")),
+        "url": xss_escape(req_json.get("powerUrl")),
+        "sort": xss_escape(req_json.get("sort"))
+    }
+    res = Power.query.filter_by(id=id).update(data)
+    db.session.commit()
     if not res:
         return fail_api(msg="更新权限失败")
     return success_api(msg="更新权限成功")
@@ -78,7 +120,7 @@ def update():
 def enable():
     _id = request.json.get('powerId')
     if id:
-        res = power_curd.enable_status(_id)
+        res = curd.enable_status(Power,_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启用成功")
@@ -91,7 +133,7 @@ def enable():
 def dis_enable():
     _id = request.json.get('powerId')
     if id:
-        res = power_curd.disable_status(_id)
+        res = curd.disable_status(Power,_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")

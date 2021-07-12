@@ -1,9 +1,13 @@
 from flask import Blueprint, render_template, request, jsonify
+
+from applications.common import curd
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
+from applications.extensions import db
 from applications.models import DictType, DictData
 from applications.common.admin import dict_curd
+from applications.schemas import DictTypeSchema, DictDataSchema
 
 admin_dict = Blueprint('adminDict', __name__, url_prefix='/admin/dict')
 
@@ -18,11 +22,14 @@ def main():
 @admin_dict.get('/dictType/data')
 @authorize("admin:dict:main", log=True)
 def dict_type_data():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
     type_name = xss_escape(request.args.get('typeName', type=str))
-    data, count = dict_curd.get_dict_type(page=page, limit=limit, type_name=type_name)
-    return table_api(data=data,count=count)
+    dict_all = DictType.query
+    if type_name:
+        dict_all = dict_all.filter(DictType.type_name.like('%' + type_name + '%'))
+    dict_all = dict_all.layui_paginate()
+    count = DictType.query.count()
+    data = curd.model_to_dicts(Schema=DictTypeSchema, model=dict_all.items)
+    return table_api(data=data, count=count)
 
 
 @admin_dict.get('/dictType/add')
@@ -35,8 +42,14 @@ def dict_type_add():
 @authorize("admin:dict:add", log=True)
 def dict_type_save():
     req_json = request.json
-    res = dict_curd.save_dict_type(req_json=req_json)
-    if res is None:
+    description = xss_escape(req_json.get("description"))
+    enable = xss_escape(req_json.get("enable"))
+    type_code = xss_escape(req_json.get("typeCode"))
+    type_name = xss_escape(req_json.get("typeName"))
+    d = DictType(type_name=type_name, type_code=type_code, enable=enable, description=description)
+    db.session.add(d)
+    db.session.commit()
+    if d.id is None:
         return fail_api(msg="增加失败")
     return success_api(msg="增加成功")
 
@@ -98,11 +111,11 @@ def dict_type_delete(_id):
 @admin_dict.get('/dictData/data')
 @authorize("admin:dict:main", log=True)
 def dict_code_data():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
     type_code = xss_escape(request.args.get('typeCode', type=str))
-    data, count = dict_curd.get_dict_data(page=page, limit=limit, type_code=type_code)
-    return table_api(data=data,count=count)
+    dict_data = DictData.query.filter_by(type_code=type_code).layui_paginate()
+    count = DictType.query.count()
+    data = curd.model_to_dicts(Schema=DictDataSchema, model=dict_data.items)
+    return table_api(data=data, count=count)
 
 
 # 增加字典数据
@@ -118,8 +131,15 @@ def dict_data_add():
 @authorize("admin:dict:add", log=True)
 def dict_data_save():
     req_json = request.json
-    res = dict_curd.save_dict_data(req_json=req_json)
-    if not res:
+    data_label = xss_escape(req_json.get("dataLabel"))
+    data_value = xss_escape(req_json.get("dataValue"))
+    enable = xss_escape(req_json.get("enable"))
+    remark = xss_escape(req_json.get("remark"))
+    type_code = xss_escape(req_json.get("typeCode"))
+    d = DictData(data_label=data_label, data_value=data_value, enable=enable, remark=remark, type_code=type_code)
+    db.session.add(d)
+    db.session.commit()
+    if not d.id:
         return jsonify(success=False, msg="增加失败")
     return jsonify(success=True, msg="增加成功")
 
@@ -129,7 +149,7 @@ def dict_data_save():
 @authorize("admin:dict:edit", log=True)
 def dict_data_edit():
     _id = request.args.get('dataId', type=str)
-    dict_data = DictData.query.filter_by(id=_id).first()
+    dict_data = curd.get_one_by_id(DictData, _id)
     return render_template('admin/dict/data/edit.html', dict_data=dict_data)
 
 
@@ -138,7 +158,15 @@ def dict_data_edit():
 @authorize("admin:dict:edit", log=True)
 def dict_data_update():
     req_json = request.json
-    dict_curd.update_dict_data(req_json)
+    id = req_json.get("dataId")
+    DictData.query.filter_by(id=id).update({
+        "data_label": xss_escape(req_json.get("dataLabel")),
+        "data_value": xss_escape(req_json.get("dataValue")),
+        "enable": xss_escape(req_json.get("enable")),
+        "remark": xss_escape(req_json.get("remark")),
+        "type_code": xss_escape(req_json.get("typeCode"))
+    })
+    db.session.commit()
     return success_api(msg="更新成功")
 
 
@@ -148,7 +176,7 @@ def dict_data_update():
 def dict_data_enable():
     _id = request.json.get('dataId')
     if _id:
-        res = dict_curd.enable_dict_data_status(_id)
+        res = curd.enable_status(model=DictData, id=_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="启动成功")
@@ -161,7 +189,7 @@ def dict_data_enable():
 def dict_data_disenable():
     _id = request.json.get('dataId')
     if _id:
-        res = dict_curd.disable_dict_data_status(_id)
+        res = curd.disable_status(model=DictData, id=_id)
         if not res:
             return fail_api(msg="出错啦")
         return success_api(msg="禁用成功")
@@ -172,7 +200,7 @@ def dict_data_disenable():
 @admin_dict.delete('dictData/remove/<int:id>')
 @authorize("admin:dict:remove", log=True)
 def dict_data_delete(id):
-    res = dict_curd.delete_data_by_id(id)
+    res = curd.delete_one_by_id(model=DictData, id=id)
     if not res:
         return fail_api(msg="删除失败")
     return success_api(msg="删除成功")

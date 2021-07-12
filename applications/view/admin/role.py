@@ -23,8 +23,6 @@ def main():
 @admin_role.get('/data')
 @authorize("admin:role:main", log=True)
 def table():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
     role_name = xss_escape(request.args.get('roleName', type=str))
     role_code = xss_escape(request.args.get('roleCode', type=str))
     mf = ModelFilter()
@@ -32,7 +30,7 @@ def table():
         mf.vague(field_name="name", value=role_name)
     if role_code:
         mf.vague(field_name="code", value=role_code)
-    role = Role.query.filter(mf.get_filter(Role)).paginate(page=page, per_page=limit, error_out=False)
+    role = Role.query.filter(mf.get_filter(Role)).layui_paginate()
     count = Role.query.count()
     data = model_to_dicts(Schema=RoleSchema, model=role.items)
     return table_api(data=data, count=count)

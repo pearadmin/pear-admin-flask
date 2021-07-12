@@ -28,11 +28,7 @@ def index():
 @admin_log.get('/loginLog')
 @authorize("admin:log:main")
 def login_log():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
-    log = AdminLog.query.filter_by(url='/admin/login').order_by(desc(AdminLog.create_time)).paginate(page=page,
-                                                                                                     per_page=limit,
-                                                                                                     error_out=False)
+    log = AdminLog.query.filter_by(url='/admin/login').order_by(desc(AdminLog.create_time)).layui_paginate()
     count = AdminLog.query.filter_by(url='/admin/login').count()
     data = model_to_dicts(Schema=LogSchema, model=log.items)
 

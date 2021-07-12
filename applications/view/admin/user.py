@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from sqlalchemy import and_, desc
 
+from applications.common import curd
 from applications.common.curd import model_to_dicts, enable_status, disable_status
 from applications.common.helper import ModelFilter
 from applications.common.utils.http import table_api, fail_api, success_api
@@ -26,8 +27,6 @@ def main():
 @admin_user.get('/data')
 @authorize("admin:user:main", log=True)
 def data():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
     real_name = xss_escape(request.args.get('realName', type=str))
     username = xss_escape(request.args.get('username', type=str))
     dept_id = request.args.get('deptId', type=int)
@@ -38,9 +37,7 @@ def data():
         mf.vague(field_name="username", value=username)
     if dept_id:
         mf.exact(field_name="dept_id", value=dept_id)
-    user = User.query.filter(mf.get_filter(model=User)).paginate(page=page,
-                                                                 per_page=limit,
-                                                                 error_out=False)
+    user = User.query.filter(mf.get_filter(model=User)).layui_paginate()
     count = User.query.count()
     data = model_to_dicts(Schema=UserSchema, model=user.items)
     return table_api(data=data, count=count)
@@ -102,7 +99,7 @@ def delete(id):
 @admin_user.get('/edit/<int:id>')
 @authorize("admin:user:edit", log=True)
 def edit(id):
-    user = User.query.filter_by(id=id).first()
+    user = curd.get_one_by_id(User,id)
     roles = Role.query.all()
     checked_roles = []
     for r in user.role:

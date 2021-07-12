@@ -40,11 +40,11 @@ Pear Admin Flask 有以下几个版本：
 
 [master分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/master/)  
 
->	flask 2.1	+	flask-sqlalchemy	+	mysql	+	权限验证	+	Flask-APScheduler	定时任务	+	marshmallow 序列化与数据验证
+>	flask 2.0.1	+	flask-sqlalchemy	+	mysql	+	权限验证	+	Flask-APScheduler	定时任务	+	marshmallow 序列化与数据验证
 
 [Mini 分支版本 ](https://gitee.com/pear-admin/pear-admin-flask/tree/mini/)
 
->flask 2.1	+	flask-sqlalchemy	+	sqllite	+	权限验证	+	Flask-RESTful	 序列化与数据验证
+>flask 2.0.1	+	flask-sqlalchemy	+	sqllite	+	权限验证	+	Flask-RESTful	 序列化与数据验证
 
 [v1 分支版本(不再更新，仅供参考) ](https://gitee.com/pear-admin/pear-admin-flask/tree/v1/)
 

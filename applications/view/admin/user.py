@@ -27,9 +27,11 @@ def main():
 @admin_user.get('/data')
 @authorize("admin:user:main", log=True)
 def data():
+    # 获取请求参数
     real_name = xss_escape(request.args.get('realName', type=str))
     username = xss_escape(request.args.get('username', type=str))
     dept_id = request.args.get('deptId', type=int)
+    # 查询参数构造
     mf = ModelFilter()
     if real_name:
         mf.vague(field_name="name", value=real_name)
@@ -37,10 +39,12 @@ def data():
         mf.vague(field_name="username", value=username)
     if dept_id:
         mf.exact(field_name="dept_id", value=dept_id)
+    # orm查询
+    # 使用分页获取data需要.items
     user = User.query.filter(mf.get_filter(model=User)).layui_paginate()
     count = User.query.count()
-    data = model_to_dicts(Schema=UserSchema, model=user.items)
-    return table_api(data=data, count=count)
+    # 返回api
+    return table_api(data=model_to_dicts(schema=UserSchema, data=user.items), count=count)
 
 
 # 用户增加

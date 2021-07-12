@@ -9,46 +9,32 @@ from applications.common.curd import model_to_dicts
 admin_log = Blueprint('adminLog', __name__, url_prefix='/admin/log')
 
 
-#                               ----------------------------------------------------------
-#                               -------------------------  日志管理 --------------------------
-#                               ----------------------------------------------------------
-
-
+# 日志管理
 @admin_log.get('/')
 @authorize("admin:log:main")
 def index():
     return render_template('admin/admin_log/main.html')
 
 
-#                               ==========================================================
-#                                                            登录日志
-#                               ==========================================================
-
-
+# 登录日志
 @admin_log.get('/loginLog')
 @authorize("admin:log:main")
 def login_log():
-    log = AdminLog.query.filter_by(url='/admin/login').order_by(desc(AdminLog.create_time)).layui_paginate()
-    count = AdminLog.query.filter_by(url='/admin/login').count()
-    data = model_to_dicts(Schema=LogSchema, model=log.items)
-
-    return table_api(data=data, count=count)
-
-
-#                               ==========================================================
-#                                                            操作日志
-#                               ==========================================================
+    # orm查询
+    # 使用分页获取data需要.items
+    log = AdminLog.query.filter_by(url='/passport/login').order_by(desc(AdminLog.create_time)).layui_paginate()
+    count = AdminLog.query.filter_by(url='/passport/login').count()
+    return table_api(data= model_to_dicts(schema=LogSchema, data=log.items), count=count)
 
 
+# 操作日志
 @admin_log.get('/operateLog')
 @authorize("admin:log:main")
 def operate_log():
-    page = request.args.get('page', type=int)
-    limit = request.args.get('limit', type=int)
+    # orm查询
+    # 使用分页获取data需要.items
     log = AdminLog.query.filter(
-        AdminLog.url != '/admin/login').order_by(
-        desc(AdminLog.create_time)).paginate(
-        page=page, per_page=limit, error_out=False)
-    count = AdminLog.query.filter(AdminLog.url != '/admin/login').count()
-    data = model_to_dicts(Schema=LogSchema, model=log.items)
-    return table_api(data=data, count=count)
+        AdminLog.url != '/passport/login').order_by(
+        desc(AdminLog.create_time)).layui_paginate()
+    count = AdminLog.query.filter(AdminLog.url != '/passport/login').count()
+    return table_api(data=model_to_dicts(schema=LogSchema, data=log.items), count=count)

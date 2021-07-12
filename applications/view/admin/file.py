@@ -5,7 +5,7 @@ from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import Photo
-from applications.common.admin import file_curd
+from applications.common.utils import upload as upload_curd
 
 admin_file = Blueprint('adminFile', __name__, url_prefix='/admin/file')
 
@@ -23,7 +23,7 @@ def index():
 def table():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
-    data, count = file_curd.get_photo(page=page, limit=limit)
+    data, count = upload_curd.get_photo(page=page, limit=limit)
     return table_api(data=data, count=count)
 
 
@@ -41,7 +41,7 @@ def upload_api():
     if 'file' in request.files:
         photo = request.files['file']
         mime = request.files['file'].content_type
-        file_url = file_curd.upload_one(photo=photo, mime=mime)
+        file_url = upload_curd.upload_one(photo=photo, mime=mime)
         res = {
             "msg": "上传成功",
             "code": 0,
@@ -58,7 +58,7 @@ def upload_api():
 @authorize("admin:file:delete", log=True)
 def delete():
     _id = request.form.get('id')
-    res = file_curd.delete_photo_by_id(_id)
+    res = upload_curd.delete_photo_by_id(_id)
     if res:
         return success_api(msg="删除成功")
     else:

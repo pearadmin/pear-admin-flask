@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, jsonify
 
 from applications.common import curd
-from applications.common.admin import power_curd
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models import Power
+from applications.models import Power, Role
 from applications.schemas import PowerSchema2
 
 admin_power = Blueprint('adminPower', __name__, url_prefix='/admin/power')
@@ -22,9 +21,8 @@ def index():
 @authorize("admin:power:main", log=True)
 def data():
     power = Power.query.all()
-    res = curd.model_to_dicts(Schema=PowerSchema2, model=power)
     res = {
-        "data": res
+        "data": curd.model_to_dicts(schema=PowerSchema2, data=power)
     }
     return jsonify(res)
 
@@ -39,7 +37,7 @@ def add():
 @authorize("admin:power:main", log=True)
 def select_parent():
     power = Power.query.all()
-    res = curd.model_to_dicts(Schema=PowerSchema2, model=power)
+    res = curd.model_to_dicts(schema=PowerSchema2, data=power)
     res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
     res = {
         "status": {"code": 200, "message": "默认"},
@@ -141,10 +139,19 @@ def dis_enable():
 
 
 # 权限删除
-@admin_power.delete('/remove/<int:_id>')
+@admin_power.delete('/remove/<int:id>')
 @authorize("admin:power:remove", log=True)
-def remove(_id):
-    r = power_curd.remove_power(_id)
+def remove(id):
+    power = Power.query.filter_by(id=id).first()
+    role_id_list = []
+    roles = power.role
+    for role in roles:
+        role_id_list.append(role.id)
+    roles = Role.query.filter(Role.id.in_(role_id_list)).all()
+    for p in roles:
+        power.role.remove(p)
+    r = Power.query.filter_by(id=id).delete()
+    db.session.commit()
     if r:
         return success_api(msg="删除成功")
     else:
@@ -156,5 +163,15 @@ def remove(_id):
 @authorize("admin:power:remove", log=True)
 def batch_remove():
     ids = request.form.getlist('ids[]')
-    power_curd.batch_remove(ids)
+    for id in ids:
+        power = Power.query.filter_by(id=id).first()
+        role_id_list = []
+        roles = power.role
+        for role in roles:
+            role_id_list.append(role.id)
+        roles = Role.query.filter(Role.id.in_(role_id_list)).all()
+        for p in roles:
+            power.role.remove(p)
+        r = Power.query.filter_by(id=id).delete()
+        db.session.commit()
     return success_api(msg="批量删除成功")

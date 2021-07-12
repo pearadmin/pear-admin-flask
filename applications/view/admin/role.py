@@ -23,17 +23,21 @@ def main():
 @admin_role.get('/data')
 @authorize("admin:role:main", log=True)
 def table():
+    # 获取请求参数
     role_name = xss_escape(request.args.get('roleName', type=str))
     role_code = xss_escape(request.args.get('roleCode', type=str))
+    # 查询参数构造
     mf = ModelFilter()
     if role_name:
         mf.vague(field_name="name", value=role_name)
     if role_code:
         mf.vague(field_name="code", value=role_code)
+    # orm查询
+    # 使用分页获取data需要.items
     role = Role.query.filter(mf.get_filter(Role)).layui_paginate()
     count = Role.query.count()
-    data = model_to_dicts(Schema=RoleSchema, model=role.items)
-    return table_api(data=data, count=count)
+    # 返回api
+    return table_api(data=model_to_dicts(schema=RoleSchema, data=role.items), count=count)
 
 
 # 角色增加

@@ -73,7 +73,6 @@ def save():
     user = User(username=username, realname=real_name)
     user.set_password(password)
     db.session.add(user)
-    user = User.query.filter_by(id=id).first()
     roles = Role.query.filter(Role.id.in_(role_ids)).all()
     for r in roles:
         user.role.append(r)

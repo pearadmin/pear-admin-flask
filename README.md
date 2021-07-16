@@ -110,40 +110,54 @@ pip install -r requirement\requirement-dev.txt
 #### 修改配置
 
 ```python
-# 主 机
-HOST = '127.0.0.1'
+.env
+# MySql配置信息
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_DATABASE=PearAdminFlask
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=root
 
-# 端 口
-PORT = '3306'
+# Redis 配置
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
 
-# 数 据 库
-DATABASE = 'PearAdminFlask'
+# 密钥配置
+SECRET_KEY='pear-admin-flask'
 
-# 账 户
-USERNAME = 'root'
-
-# 密 码
-PASSWORD = 'root'
-
+# 邮箱配置
+MAIL_SERVER='smtp.qq.com'
+MAIL_USERNAME='123@qq.com'
+MAIL_PASSWORD='XXXXX' # 生成的授权码
 ```
 
 #### Venv 安装
 
 ```bash
 python -m venv venv
-
 ```
 
 #### 运行项目
 
 ```bash
 # 初 始 化 数 据 库
-python test\init_databases.py
 
+flask init
 ```
 
 执行 flask run 命令启动项目
 
+#### 命令行创建视图
+
+```bash
+# 初 始 化 数 据 库
+# 示例
+
+flask new --type view --name test/a
+
+# 自动注册蓝图
+# 访问http://127.0.0.1:5000/test/a/
+```
 
 #### 预览项目
 

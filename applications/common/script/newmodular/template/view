@@ -1,0 +1,8 @@
+from flask import Blueprint
+
+{{name.replace('/','_')}} = Blueprint('{{name.replace('/','_')}}', __name__, url_prefix='/{{name}}')
+
+
+@{{name.replace('/','_')}}.route('/')
+def index():
+    return "这是{{name}}路由"

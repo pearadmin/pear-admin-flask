@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask_uploads import configure_uploads
+
+from applications.common.script import init_script
 from applications.common.utils.upload import photos
 from applications.configs import common
 from applications.extensions import init_plugs
@@ -18,11 +20,15 @@ def create_app(config_name=None):
     # 引入数据库配置
     app.config.from_object(common)
     app.config.from_object(config[config_name])
+
     # 注册各种插件
     init_plugs(app)
 
     # 注册路由
     init_view(app)
+
+    # 注册命令
+    init_script(app)
 
     # 文件上传
     configure_uploads(app, photos)

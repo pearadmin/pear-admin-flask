@@ -51,7 +51,7 @@ def execute_fromfile(filename):
 
 def init_db():
     if is_exist_database():
-        print('数据库已经存在,为防止误初始化，请收动删除 %s 数据库' % str(DATABASE))
+        print('数据库已经存在,为防止误初始化，请手动删除 %s 数据库' % str(DATABASE))
         return
     if init_database():
         print('数据库%s创建成功' % str(DATABASE))

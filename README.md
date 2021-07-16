@@ -150,7 +150,6 @@ flask init
 #### 命令行创建视图
 
 ```bash
-# 初 始 化 数 据 库
 # 示例
 
 flask new --type view --name test/a

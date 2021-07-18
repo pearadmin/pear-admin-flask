@@ -31,7 +31,7 @@ def dict_type_data():
     # orm查询
     # 使用分页获取data需要.items
     dict_all = DictType.query.filter(mf.get_filter(DictType)).layui_paginate()
-    count = DictType.query.count()
+    count = DictType.query.filter(mf.get_filter(DictType)).count()
     data = curd.model_to_dicts(schema=DictTypeSchema, data=dict_all.items)
     return table_api(data=data, count=count)
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
-from sqlalchemy import and_, desc
+from sqlalchemy import desc
 
 from applications.common import curd
 from applications.common.curd import model_to_dicts, enable_status, disable_status
@@ -9,8 +9,8 @@ from applications.common.utils.http import table_api, fail_api, success_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
-from applications.models import User, AdminLog
 from applications.models import Role
+from applications.models import User, AdminLog
 from applications.schemas import UserSchema
 
 admin_user = Blueprint('adminUser', __name__, url_prefix='/admin/user')
@@ -42,7 +42,7 @@ def data():
     # orm查询
     # 使用分页获取data需要.items
     user = User.query.filter(mf.get_filter(model=User)).layui_paginate()
-    count = User.query.count()
+    count = User.query.filter(mf.get_filter(model=User)).count()
     # 返回api
     return table_api(data=model_to_dicts(schema=UserSchema, data=user.items), count=count)
 

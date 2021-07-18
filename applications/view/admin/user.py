@@ -116,7 +116,7 @@ def edit(id):
 def update():
     req_json = request.json
     a = xss_escape(req_json.get("roleIds"))
-    _id = xss_escape(req_json.get("userId"))
+    id = xss_escape(req_json.get("userId"))
     username = xss_escape(req_json.get('username'))
     real_name = xss_escape(req_json.get('realName'))
     dept_id = xss_escape(req_json.get('deptId'))

@@ -1,12 +1,8 @@
-from flask_uploads import UploadSet, IMAGES
-
-
-photos = UploadSet('photos', IMAGES)
-
 import os
 from flask import current_app
 from sqlalchemy import desc
 from applications.extensions import db
+from applications.extensions.init_upload import photos
 from applications.models import Photo
 from applications.schemas import PhotoSchema
 from applications.common.curd import model_to_dicts
@@ -22,7 +18,6 @@ def get_photo(page, limit):
 def upload_one(photo, mime):
     filename = photos.save(photo)
     file_url = photos.url(filename)
-
     upload_url = current_app.config.get("UPLOADED_PHOTOS_DEST")
     size = os.path.getsize(upload_url + '/' + filename)
     photo = Photo(name=filename, href=file_url, mime=mime, size=size)

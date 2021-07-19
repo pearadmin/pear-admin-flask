@@ -1,9 +1,7 @@
 import os
 from flask import Flask
-from flask_uploads import configure_uploads
 
 from applications.common.script import init_script
-from applications.common.utils.upload import photos
 from applications.configs import common
 from applications.extensions import init_plugs
 from applications.view import init_view
@@ -29,9 +27,6 @@ def create_app(config_name=None):
 
     # 注册命令
     init_script(app)
-
-    # 文件上传
-    configure_uploads(app, photos)
 
     logo()
 

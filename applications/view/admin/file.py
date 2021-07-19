@@ -41,6 +41,7 @@ def upload_api():
     if 'file' in request.files:
         photo = request.files['file']
         mime = request.files['file'].content_type
+
         file_url = upload_curd.upload_one(photo=photo, mime=mime)
         res = {
             "msg": "上传成功",

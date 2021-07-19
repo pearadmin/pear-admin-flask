@@ -125,9 +125,9 @@ def save_role_power():
 
 
 # 角色编辑
-@admin_role.get('/edit/<int:_id>')
+@admin_role.get('/edit/<int:id>')
 @authorize("admin:role:edit", log=True)
-def edit(_id):
+def edit(id):
     r = get_one_by_id(model=Role, id=id)
     return render_template('admin/role/edit.html', role=r)
 

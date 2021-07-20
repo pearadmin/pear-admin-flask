@@ -1,27 +1,20 @@
-from flask import Blueprint, render_template, jsonify, make_response
+from flask import jsonify
 from flask_login import login_required
-
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, marshal
 
 from applications.extensions import db
 from applications.models import Role, Power
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
-from flask_restful import reqparse, marshal
-
 from applications.common.serialization import power_fields
 
-from applications.view.roles._utils import remove_role, batch_remove_role
+from . import role_bp
+from ._utils import remove_role, batch_remove_role
 
-role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
+# TODO 分离视图操作
+from flask import render_template, make_response
+
 role_api = Api(role_bp)
-
-
-# 角色而管理
-@role_bp.get('/')
-@authorize("admin:role:main", log=True)
-def main():
-    return render_template('admin/role/main.html')
 
 
 # 表格数据
@@ -85,13 +78,6 @@ class AddRole(Resource):
         db.session.add(role)
         db.session.commit()
         return success_api(msg="成功")
-
-
-# 角色授权操作
-@role_bp.get('/power/<int:_id>')
-@authorize("admin:role:power", log=True)
-def power(_id):
-    return render_template('admin/role/power.html', id=_id)
 
 
 @role_api.resource('/role_power/<int:role_id>')

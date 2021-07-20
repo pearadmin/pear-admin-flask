@@ -2,9 +2,9 @@ from applications.extensions import db
 from applications.models import Power, Role, User
 
 
-def remove_role(_id):
+def remove_role(role_id):
     """ 删除角色 """
-    role = Role.query.filter_by(id=_id).first()
+    role = Role.query.filter_by(id=role_id).first()
     # 删除该角色的权限
     power_id_list = []
     for p in role.power:
@@ -19,12 +19,12 @@ def remove_role(_id):
     users = User.query.filter(User.id.in_(user_id_list)).all()
     for u in users:
         role.user.remove(u)
-    r = Role.query.filter_by(id=_id).delete()
+    r = Role.query.filter_by(id=role_id).delete()
     db.session.commit()
     return r
 
 
-def batch_remove_role(ids):
+def batch_remove_role(role_ids):
     """ 批量删除 """
-    for _id in ids:
-        remove_role(_id)
+    for role_id in role_ids:
+        remove_role(role_id)

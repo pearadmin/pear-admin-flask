@@ -23,10 +23,14 @@
 <body>
 <!-- header -->
 <div class="ew-header">
-    <img class="layui-logo" src="{{ url_for('static', filename='/index/images/un28.svg') }}"
-         style="height:50px;padding: 10px;"/>
+    <img class="layui-logo"
+         src="{{ url_for('static', filename='/index/images/un28.svg') }}"
+         style="height:50px;padding: 10px;"
+    />
     <div class="ew-nav-group">
-        <div class="nav-toggle"><i class="layui-icon layui-icon-more-vertical"></i></div>
+        <div class="nav-toggle">
+            <i class="layui-icon layui-icon-more-vertical"></i>
+        </div>
         <ul class="layui-nav" lay-filter="ew-header-nav">
             <li class="layui-nav-item">
                 <a lay-href="/">首页</a>

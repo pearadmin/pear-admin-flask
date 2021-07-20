@@ -7,16 +7,16 @@ from applications.common.utils.http import table_api
 from applications.common.utils.rights import authorize
 from applications.models import AdminLog
 
-admin_log = Blueprint('logs', __name__, url_prefix='/logs')
+logs_bp = Blueprint('logs', __name__, url_prefix='/logs')
 
 
-@admin_log.get('/')
+@logs_bp.get('/')
 @authorize("admin:log:main")
 def index():
     return render_template('admin/admin_log/main.html')
 
 
-@admin_log.get('/login_log')
+@logs_bp.get('/login_log')
 @authorize("admin:log:main")
 def login_log():
     page = request.args.get('page', type=int)
@@ -30,7 +30,7 @@ def login_log():
     return table_api(data=data, count=log_paginate.total)
 
 
-@admin_log.get('/access_log')
+@logs_bp.get('/access_log')
 @authorize("admin:log:main")
 def operate_log():
     page = request.args.get('page', type=int)

@@ -10,6 +10,29 @@
         <table id="dataTable" lay-filter="dataTable"></table>
     </div>
 </div>
+</body>
+
+{#添加文件内容#}
+<div id="add_view" class="layui-row layui-col-space15 " style="margin: 10px;display: none">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-tab-content">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>新增图片</legend>
+                </fieldset>
+                <form class="layui-form edit-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            新增图片
+                        </label>
+                        <button type="button" class="layui-btn layui-btn-normal" id="logo-img">选择文件</button>
+                        <button type="button" class="layui-btn" id="logo-upload-button">开始上传</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/html" id="toolbar">
     {% if authorize("admin:file:add") %}
@@ -28,19 +51,23 @@
 
 <script type="text/html" id="user-bar">
     {% if authorize("admin:file:delete") %}
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-                class="layui-icon layui-icon-delete"></i></button>
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+            <i class="layui-icon layui-icon-delete"></i>
+        </button>
     {% endif %}
 </script>
 <script type="text/html" id="file-uploadTime">
     {{ '  {{layui.util.toDateString(d.create_time,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
 </script>
+
 {% include 'admin/common/footer.html' %}
 <script>
-  layui.use(['table', 'form', 'jquery'], function () {
+  layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
+    let upload = layui.upload
+
     let cols = [
       [
         {
@@ -145,12 +172,12 @@
 
     window.add = function () {
       layer.open({
-        type: 2,
+        type: 1,
         maxmin: true,
         title: '新增图片',
         shade: 0.1,
         area: screen(),
-        content: 'upload'
+        content: $('#add_view')
       })
     }
 
@@ -266,5 +293,26 @@
       }
     }
 
+    /*上次文件部分*/
+    // 选完文件后不自动上传
+    upload.render({
+      elem: '#logo-img'
+      , url: "{{ url_for('file.upload') }}"
+      , auto: false
+      , exts: 'jpg|png|gif|bmp|jpeg'
+      , size: 1000
+      , bindAction: '#logo-upload-button'
+      , done: function (res) {
+        if (res.success) {
+          layer.msg(res.msg, { icon: 1, time: 500 }, function () {
+            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+            window.parent.location.reload()
+          })
+        } else {
+          layer.msg(res.msg, { icon: 2 })
+        }
+      }
+    })
   })
 </script>
+</html>

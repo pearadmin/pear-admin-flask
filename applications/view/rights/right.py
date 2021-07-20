@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, make_response
+from flask import request, jsonify
 from flask_restful import Resource, reqparse
 
 from . import rights_bp, rights_api
@@ -7,6 +7,9 @@ from ...common.utils.http import success_api, fail_api
 from ...common.utils.rights import authorize
 from ...extensions import db
 from ...models import Power, Role
+
+# TODO 分离视图操作
+from flask import render_template, make_response
 
 parser_power = reqparse.RequestParser(bundle_errors=True)
 parser_power.add_argument('icon', type=str)
@@ -17,12 +20,6 @@ parser_power.add_argument('powerName', type=str, dest='power_name')
 parser_power.add_argument('powerType', type=str, dest='power_type')
 parser_power.add_argument('powerUrl', type=str, dest='power_url')
 parser_power.add_argument('sort', type=int, dest='sort')
-
-
-@rights_bp.get('/')
-@authorize("admin:power:main", log=True)
-def index():
-    return render_template('admin/rights/main.html')
 
 
 @rights_bp.get('/data')

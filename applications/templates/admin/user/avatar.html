@@ -65,7 +65,7 @@
         formData.append('fileToken', timeStamp)
         $.ajax({
           method: 'post',
-          url: '/admin/file/upload', //用于文件上传的服务器端请求地址
+          url: '/file/upload', //用于文件上传的服务器端请求地址
           data: formData,
           processData: false,
           contentType: false,

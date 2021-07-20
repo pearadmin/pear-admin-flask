@@ -1,22 +1,15 @@
 # 个人中心
-from flask import render_template, request, make_response, jsonify
+from flask import request, jsonify
 from flask_login import login_required, current_user
 from flask_restful import Resource, reqparse
-from sqlalchemy import desc
 
 from applications.common.utils.http import fail_api, success_api
 from applications.extensions import db
-from applications.models import User, AdminLog
+from applications.models import User
 from applications.view.users import users_bp, user_api
 
-
-@users_bp.get('/center')
-@login_required
-def center():
-    user_info = current_user
-    user_logs = AdminLog.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
-        desc(AdminLog.create_time)).limit(10)
-    return render_template('admin/user/profile.html', user_info=user_info, user_logs=user_logs)
+# TODO 分离视图操作
+from flask import render_template, make_response
 
 
 @user_api.resource('/avatar')
@@ -39,7 +32,6 @@ class Avatar(Resource):
 @users_bp.put('/updateInfo')
 @login_required
 def update_info():
-
     parser = reqparse.RequestParser()
     parser.add_argument('realname', type=str, dest='real_name')
     parser.add_argument('remark', type=str)

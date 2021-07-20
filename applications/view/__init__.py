@@ -1,13 +1,21 @@
-from applications.view.system import register_system_views
-from applications.view.index import register_index_views
-from applications.view.passport import register_passport_views
-from applications.view.rights import register_rights_view
-from applications.view.department import register_dept_views
+from flask import Flask
+
+from .department import dept_bp
+from .file import file_bp
+from .index import index_bp
+from .logs_view import logs_bp
+from .passport import passport_bp
+from .rights import rights_bp
+from .roles import role_bp
+from .users import users_bp
 
 
-def init_view(app):
-    register_system_views(app)
-    register_index_views(app)
-    register_rights_view(app)
-    register_passport_views(app)
-    register_dept_views(app)
+def init_view(app: Flask):
+    app.register_blueprint(dept_bp)
+    app.register_blueprint(file_bp)
+    app.register_blueprint(index_bp)
+    app.register_blueprint(logs_bp)
+    app.register_blueprint(passport_bp)
+    app.register_blueprint(rights_bp)
+    app.register_blueprint(role_bp)
+    app.register_blueprint(users_bp)

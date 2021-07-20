@@ -11,10 +11,6 @@ dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
 dept_api = Api(dept_bp)
 
 
-def register_dept_views(app):
-    app.register_blueprint(dept_bp)
-
-
 @dept_bp.get('/')
 @authorize("admin:dept:main", log=True)
 def main():

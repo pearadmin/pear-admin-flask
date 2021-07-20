@@ -61,7 +61,7 @@
           btn.stop(function () {
             if (result.success) {
               popup.success(result.msg, function () {
-                location.href = "{{ url_for('admin.index') }}"
+                location.href = "{{ url_for('index.admin_index') }}"
               })
             } else {
               popup.failure(result.msg, function () {

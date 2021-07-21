@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>用户管理</title>
-    {% include 'admin/common/header.html' %}
+    {% include 'common/header.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/user.css') }}"/>
 </head>
 <body class="pear-container">
@@ -101,7 +101,7 @@
     {{ '  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
 </script>
 
-{% include 'admin/common/footer.html' %}
+{% include 'common/footer.html' %}
 
 <script>
   layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {

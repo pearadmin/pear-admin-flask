@@ -1,56 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>角色编辑</title>
-    {% include 'admin/common/header.html' %}</head>
+    <title>角色新增</title>
+    {% include 'common/header.html' %}</head>
 <body>
 <form class="layui-form" action="">
     <div class="mainBox">
         <div class="main-container">
             <div class="main-container">
-                <div class="layui-form-item layui-hide">
-                    <label class="layui-form-label">编号</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ role.id }}" name="roleId" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
-                    </div>
-                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{ role.name }}" name="roleName" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        <input type="text" name="roleName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">标识</label>
                     <div class="layui-input-block">
-                        <input type="text" value="{{ role.code }}" readonly name="roleCode" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        <input type="text" name="roleCode" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %}value="0"
-                               title="开启">
-                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %} value="1"
-                               title="关闭">
+                        <input type="radio" name="enable" value="0" title="开启">
+                        <input type="radio" name="enable" value="1" title="关闭" checked>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
-                        <input type="text" name="sort" value="{{ role.sort }}" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                        <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入标题"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">描述</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="details"
-                                  class="layui-textarea">{{ role.details }}</textarea>
+                        <textarea placeholder="请输入描述" name="details" class="layui-textarea"></textarea>
                     </div>
                 </div>
             </div>
@@ -58,8 +47,7 @@
     </div>
     <div class="bottom">
         <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
-                    lay-filter="role-update">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="role-save">
                 <i class="layui-icon layui-icon-ok"></i>
                 提交
             </button>
@@ -70,19 +58,19 @@
         </div>
     </div>
 </form>
-{% include 'admin/common/footer.html' %}
+{% include 'common/footer.html' %}
 <script>
   layui.use(['form', 'jquery'], function () {
     let form = layui.form
     let $ = layui.jquery
 
-    form.on('submit(role-update)', function (data) {
+    form.on('submit(role-save)', function (data) {
       $.ajax({
-        url: '/admin/role/edit/' + data.field.roleId,
+        url: '/admin/role/add',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
-        type: 'put',
+        type: 'post',
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
@@ -96,10 +84,7 @@
       })
       return false
     })
-    })
   })
-</script>
-<script>
 </script>
 </body>
 </html>

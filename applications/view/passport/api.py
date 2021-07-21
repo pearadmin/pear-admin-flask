@@ -23,7 +23,7 @@ class Login(Resource):
         if current_user.is_authenticated:
             return redirect(url_for('admin.index'))
         # TODO 分离视图操作 最终实现接口登录与视图登录两套逻辑
-        return make_response(render_template('admin/login.html'))
+        return make_response(render_template('index/login.html'))
 
     def post(self):
 

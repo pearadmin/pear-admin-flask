@@ -17,7 +17,7 @@ file_bp = Blueprint('file', __name__, url_prefix='/file')
 @file_bp.get('/')
 @authorize("admin:file:main", log=True)
 def index():
-    return render_template('admin/file/photo.html')
+    return render_template('file/photo.html')
 
 
 #  图片数据

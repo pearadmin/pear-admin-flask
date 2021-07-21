@@ -17,7 +17,7 @@ class Avatar(Resource):
     """修改头像"""
 
     def get(self):
-        return make_response(render_template('admin/user/avatar.html'))
+        return make_response(render_template('users/avatar.html'))
 
     def put(self):
         url = request.json.get("avatar").get("src")
@@ -53,7 +53,7 @@ class EditPassword(Resource):
 
     @login_required
     def get(self):
-        return make_response(render_template('admin/user/edit_password.html'))
+        return make_response(render_template('users/edit_password.html'))
 
     @login_required
     def put(self):

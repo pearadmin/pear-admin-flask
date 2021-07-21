@@ -14,11 +14,11 @@ def index():
 @index_bp.get('/admin')
 @login_required
 def admin_index():
-    return render_template('admin/index.html', user=current_user)
+    return render_template('index/admin_index.html', user=current_user)
 
 
 # 控制台页面
 @index_bp.get('/admin/welcome')
 @login_required
 def welcome():
-    return render_template('admin/console/welcome.html')
+    return render_template('index/welcome.html')

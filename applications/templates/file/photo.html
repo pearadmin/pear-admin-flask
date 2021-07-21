@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>图片上传</title>
-    {% include 'admin/common/header.html' %}
+    {% include 'common/header.html' %}
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -60,7 +60,7 @@
     {{ '  {{layui.util.toDateString(d.create_time,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
 </script>
 
-{% include 'admin/common/footer.html' %}
+{% include 'common/footer.html' %}
 <script>
   layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
     let table = layui.table

@@ -79,7 +79,7 @@ class AddRight(Resource):
     @authorize("admin:power:add", log=True)
     def get(self):
         """获取增加视图"""
-        return make_response(render_template('admin/rights/add.html'))
+        return make_response(render_template('rights/add.html'))
 
     @authorize("admin:power:add", log=True)
     def post(self):
@@ -115,7 +115,7 @@ class RightsURD(Resource):
             icon = icon[1]
         else:
             icon = None
-        return make_response(render_template('admin/rights/edit.html', power=power, icon=icon))
+        return make_response(render_template('rights/edit.html', power=power, icon=icon))
 
     @authorize("admin:power:remove", log=True)
     def delete(self, power_id):

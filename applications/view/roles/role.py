@@ -55,7 +55,7 @@ def table():
 class AddRole(Resource):
     @authorize("admin:role:add", log=True)
     def get(self):
-        return make_response(render_template('admin/role/add.html'))
+        return make_response(render_template('roles/add.html'))
 
     @authorize("admin:role:add", log=True)
     def post(self):
@@ -147,7 +147,7 @@ class EditRole(Resource):
     @authorize("admin:role:edit", log=True)
     def get(self, role_id):
         role = Role.query.filter_by(id=role_id).first()
-        return make_response(render_template('admin/role/edit.html', role=role))
+        return make_response(render_template('roles/edit.html', role=role))
 
     # 更新角色
     @authorize("admin:role:edit", log=True)

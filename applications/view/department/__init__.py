@@ -14,7 +14,7 @@ dept_api = Api(dept_bp)
 @dept_bp.get('/')
 @authorize("admin:dept:main", log=True)
 def main():
-    return render_template('admin/department/main.html')
+    return render_template('department/main.html')
 
 
 @dept_bp.get('/data')
@@ -32,7 +32,7 @@ def data():
 class AddDepartment(Resource):
     @authorize("admin:dept:add", log=True)
     def get(self):
-        return make_response(render_template('admin/department/add.html'))
+        return make_response(render_template('department/add.html'))
 
     @authorize("admin:dept:add", log=True)
     def post(self):
@@ -98,7 +98,7 @@ class DeptURD(Resource):
     @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
         dept = Dept.query.filter_by(id=dept_id).first()
-        return make_response(render_template('admin/department/edit.html', dept=dept))
+        return make_response(render_template('department/edit.html', dept=dept))
 
     @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):

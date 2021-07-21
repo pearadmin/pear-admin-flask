@@ -18,7 +18,7 @@ class Users(Resource):
     @authorize("admin:user:add", log=True)
     def get(self):
         roles = Role.query.all()
-        return make_response(render_template('admin/user/add.html', roles=roles))
+        return make_response(render_template('users/add.html', roles=roles))
 
     @authorize("admin:user:add", log=True)
     def post(self):
@@ -66,9 +66,9 @@ class CURDUser(Resource):
         for r in user.role:
             checked_roles.append(r.id)
         return make_response(
-            render_template('admin/user/edit_users.html', user=user, roles=roles, checked_roles=checked_roles))
+            render_template('users/edit_users.html', user=user, roles=roles, checked_roles=checked_roles))
 
-    @authorize("admin:user:remove", log=True)
+    @authorize("admin:users:remove", log=True)
     def delete(self, user_id):
         # 删除用户
         res = _utils.delete_by_id(user_id)
@@ -76,7 +76,7 @@ class CURDUser(Resource):
             return fail_api(msg="删除失败")
         return success_api(msg="删除成功")
 
-    @authorize("admin:user:edit", log=True)
+    @authorize("admin:users:edit", log=True)
     def put(self, user_id):
 
         parser = reqparse.RequestParser()

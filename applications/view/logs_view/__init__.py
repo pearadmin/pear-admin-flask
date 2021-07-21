@@ -13,7 +13,7 @@ logs_bp = Blueprint('logs', __name__, url_prefix='/logs')
 @logs_bp.get('/')
 @authorize("admin:log:main")
 def index():
-    return render_template('admin/admin_log/main.html')
+    return render_template('logs_temp/main.html')
 
 
 @logs_bp.get('/login_log')

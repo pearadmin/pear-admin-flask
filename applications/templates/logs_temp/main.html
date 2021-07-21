@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>日志</title>
-    {% include 'admin/common/header.html' %}
+    {% include 'common/header.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/console2.css') }}"/>
 </head>
 <body class="pear-container">
@@ -38,7 +38,7 @@
     <span style="color: red">失败</span>
     {{# } }}'|safe }}
 </script>
-{% include 'admin/common/footer.html' %}
+{% include 'common/footer.html' %}
 <script>
   layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
     let table = layui.table

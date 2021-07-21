@@ -11,14 +11,14 @@ role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
 @role_bp.get('/')
 @authorize("admin:role:main", log=True)
 def main():
-    return render_template('admin/role/main.html')
+    return render_template('roles/main.html')
 
 
 # 角色授权操作
 @role_bp.get('/power/<int:_id>')
 @authorize("admin:role:power", log=True)
 def power(_id):
-    return render_template('admin/role/power.html', id=_id)
+    return render_template('roles/power.html', id=_id)
 
 
 from . import role

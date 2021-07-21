@@ -10,7 +10,7 @@ rights_api = Api(rights_bp)
 @rights_bp.get('/')
 @authorize("admin:power:main", log=True)
 def index():
-    return render_template('admin/rights/main.html')
+    return render_template('rights/main.html')
 
 
 from . import routes

@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>角色管理</title>
-    {% include 'admin/common/header.html' %}</head>
+    {% include 'common/header.html' %}</head>
 <body class="pear-container">
 <div class="layui-card">
     <div class="layui-card-body">
@@ -72,7 +72,7 @@
     <input type="checkbox" name="enable" value="{{ "{{d.id}}" }}" lay-skin="switch" lay-text="启用|禁用"
            lay-filter="role-enable" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
-{% include 'admin/common/footer.html' %}
+{% include 'common/footer.html' %}
 <script>
   layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
     let table = layui.table

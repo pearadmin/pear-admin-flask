@@ -13,7 +13,7 @@
                 <div class="layui-input-inline">
                     <input type="text" name="powerName" placeholder="" class="layui-input">
                 </div>
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="power-query">
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="power_query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
                 </button>
@@ -27,7 +27,7 @@
 </div>
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="power-table" lay-filter="power-table"></table>
+        <table id="power_table" lay-filter="power_table"></table>
     </div>
 </div>
 
@@ -73,9 +73,10 @@
 
 </script>
 
-<script type="text/html" id="power-enable">
-    <input type="checkbox" name="enable" value="{{ "{{d.powerId}}" }}" lay-skin="switch" lay-text="启用|禁用"
-           lay-filter="power-enable"  {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
+<script type="text/html" id="power_enable">
+    <input type="checkbox" name="enable"
+           value="{{ "{{d.powerId}}" }}" lay-skin="switch" lay-text="启用|禁用"
+           lay-filter="power_enable"  {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
 
 <script type="text/html" id="icon">
@@ -83,6 +84,86 @@
 </script>
 
 </body>
+
+<form id="add_view" class="layui-form" action="" style="display: none">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父级</label>
+                    <div class="layui-input-block">
+                        <ul id="select_parent_dept" name="parentId" class="dtree" data-id="-1"></ul>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="powerName" lay-verify="title" autocomplete="off" placeholder="权限名称"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="powerCodeItem">
+                    <label class="layui-form-label">标识</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="powerCode" name="powerCode" autocomplete="off" placeholder="权限标识"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="powerType" name="powerType" value="0" title="目录">
+                        <input type="radio" lay-filter="powerType" name="powerType" value="1" title="菜单" checked>
+                        <input type="radio" lay-filter="powerType" name="powerType" value="2" title="按钮">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="powerUrlItem">
+                    <label class="layui-form-label">路径</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="powerUrl" name="powerUrl" autocomplete="off" placeholder="菜单路径"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="openTypeItem">
+                    <label class="layui-form-label">打开</label>
+                    <div class="layui-input-block">
+                        <select name="openType" id="openType">
+                            <option value=""></option>
+                            <option value="_iframe">框架</option>
+                            <option value="_blank">签页</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="add_icon" name="icon" lay-filter="icon" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="排序"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="power-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+
 {% include 'common/footer.html' %}
 <script>
   layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
@@ -104,7 +185,7 @@
         method: 'post',
         treeDefaultClose: true,
         toolbar: '#power-toolbar',
-        elem: '#power-table',
+        elem: '#power_table',
         url: '{{ url_for('rights.data') }}',
         page: false,
         cols: [
@@ -125,9 +206,9 @@
 
     render()
 
-    form.on('submit(power-query)', function (data) {
+    form.on('submit(power_query)', function (data) {
       var keyword = data.field.powerName
-      var $tds = $('#power-table').next('.treeTable').find('.layui-table-body tbody tr td')
+      var $tds = $('#power_table').next('.treeTable').find('.layui-table-body tbody tr td')
       if (!keyword) {
         $tds.css('background-color', 'transparent')
         layer.msg('请输入关键字', { icon: 5 })
@@ -148,12 +229,12 @@
       if (searchCount === 0) {
         layer.msg('没有匹配结果', { icon: 5 })
       } else {
-        treetable.expandAll('#power-table')
+        treetable.expandAll('#power_table')
       }
       return false
     })
 
-    table.on('tool(power-table)', function (obj) {
+    table.on('tool(power_table)', function (obj) {
       if (obj.event === 'remove') {
         window.remove(obj)
       } else if (obj.event === 'edit') {
@@ -161,7 +242,7 @@
       }
     })
 
-    table.on('toolbar(power-table)', function (obj) {
+    table.on('toolbar(power_table)', function (obj) {
       if (obj.event === 'add') {
         window.add()
       } else if (obj.event === 'refresh') {
@@ -198,11 +279,11 @@
 
     window.add = function () {
       layer.open({
-        type: 2,
+        type: 1,
         title: '新增',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'power'
+        content: $('#add_view')
       })
     }
 
@@ -248,7 +329,7 @@
         return false
       }
       var ids = []
-      var hasCheck = table.checkStatus('power-table')
+      var hasCheck = table.checkStatus('power_table')
       var hasCheckData = hasCheck.data
       if (hasCheckData.length > 0) {
         $.each(hasCheckData, function (index, element) {
@@ -280,6 +361,86 @@
         })
       })
     }
+  })
+</script>
+{#添加权限数据页面#}
+<script>
+  layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+    let iconPicker = layui.iconPicker
+    let dtree = layui.dtree
+
+    dtree.renderSelect({
+      elem: '#select_parent_dept',
+      url: '{{ url_for('rights.select_parent') }}',
+      method: 'get',
+      selectInputName: { nodeId: 'parentId', context: 'powerName' },
+      skin: 'layui',
+      dataFormat: 'list',
+      response: { treeId: 'powerId', parentId: 'parentId', title: 'powerName' },  //修改response中返回数据的定义
+      selectInitVal: '0'
+    })
+
+    form.on('radio(powerType)', function () {
+      if (this.value == '0') {
+        $('#powerUrlItem').hide()
+        $('#powerCodeItem').hide()
+        $('#openTypeItem').hide()
+        $('#powerUrl').val('')
+        $('#powerCode').val('')
+        $('#openType').val('')
+      } else if (this.value == '1') {
+        $('#powerUrlItem').show()
+        $('#powerCodeItem').show()
+        $('#openTypeItem').show()
+      } else if (this.value == '2') {
+        $('#powerUrlItem').hide()
+        $('#openTypeItem').hide()
+        $('#powerCodeItem').show()
+        $('#powerUrl').val('')
+        $('#openType').val('')
+      }
+    })
+
+    form.on('submit(power-save)', function (data) {
+      data.field.icon = 'layui-icon ' + data.field.icon
+      $.ajax({
+        url: '/rights/power',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              layer.close(layer.index)  // 关闭当前页
+              location.reload()
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
+
+    iconPicker.render({
+      // 选择器，推荐使用input
+      elem: '#add_icon',
+      // 数据类型：fontClass/unicode，推荐使用fontClass
+      type: 'fontClass',
+      // 是否开启搜索：true/false
+      search: true,
+      // 是否开启分页
+      page: true,
+      // 每页显示数量，默认12
+      limit: 12,
+      // 点击回调
+      click: function (data) {
+        console.log(data)
+      }
+    })
   })
 </script>
 </html>

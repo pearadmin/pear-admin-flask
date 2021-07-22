@@ -34,7 +34,58 @@
     </div>
 </div>
 </body>
-
+<form id="add_view" class="layui-form" action="" style="display: none">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="roleName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标识</label>
+                <div class="layui-input-block">
+                    <input type="text" name="roleCode" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="enable" value="0" title="开启">
+                    <input type="radio" name="enable" value="1" title="关闭" checked>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入描述" name="details" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="role-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
 <script type="text/html" id="role-toolbar">
     {% if authorize("admin:role:add") %}
         <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
@@ -161,11 +212,11 @@
 
     window.add = function () {
       layer.open({
-        type: 2,
+        type: 1,
         title: '新增',
         shade: 0.1,
         area: ['500px', '500px'],
-        content: MODULE_PATH + 'add'
+        content: $('#add_view')
       })
     }
 
@@ -258,6 +309,35 @@
     window.refresh = function () {
       table.reload('role-table')
     }
+  })
+</script>
+{#添加数据逻辑#}
+<script>
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+
+    form.on('submit(role-save)', function (data) {
+      $.ajax({
+        url: '/admin/role/add',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              // # TODO 关闭不了页面
+              layer.close(layer.index)  // 关闭当前页
+              layui.table.reload('role-table')
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
   })
 </script>
 </html>

@@ -76,10 +76,10 @@ def batch_remove_view():
 
 @rights_api.resource('/power')
 class AddRight(Resource):
-    @authorize("admin:power:add", log=True)
-    def get(self):
-        """获取增加视图"""
-        return make_response(render_template('rights/add.html'))
+    # @authorize("admin:power:add", log=True)
+    # def get(self):
+    #     """获取增加视图"""
+    #     return make_response(render_template('rights/add.html'))
 
     @authorize("admin:power:add", log=True)
     def post(self):

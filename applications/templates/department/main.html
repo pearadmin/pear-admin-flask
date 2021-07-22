@@ -17,7 +17,7 @@
                     <input type="text" name="deptName" placeholder="" class="layui-input">
                 </div>
                 {#查询按钮--需要触发layui事件#}
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="dept-query">
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="dept_search_query">
                     <i class="layui-icon layui-icon-search"></i>
                     查询
                 </button>
@@ -34,20 +34,20 @@
 <div class="layui-card">
     <div class="layui-card-body">
         {#表格字段渲染#}
-        <table id="dept-table" lay-filter="dept-table"></table>
+        <table id="dept_table" lay-filter="dept_table"></table>
     </div>
 </div>
 
 {#表格工具栏，需要在表格中绑定，且需要自定义事件#}
-<script type="text/html" id="dept-toolbar">
+<script type="text/html" id="dept_toolbar">
     {% if authorize("admin:dept:edit") %}
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add_toggle">
             <i class="layui-icon layui-icon-add-1"></i>
             新增
         </button>
     {% endif %}
     {% if authorize("admin:dept:remove") %}
-        <button class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <button class="pear-btn pear-btn-md" lay-event="batch_remove">
             <i class="layui-icon layui-icon-delete"></i>
             删除
         </button>
@@ -56,18 +56,22 @@
 
 {#操作字段，需要在表格中使用#}
 <script type="text/html" id="dept-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="table_line_edit">
         <i class="layui-icon layui-icon-edit"></i>
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="table_line_remove">
         <i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
 
 {#表格内的切换按钮#}
 <script type="text/html" id="dept-status">
-    <input type="checkbox" name="status" value="{{ "{{ d.deptId }}" }}" lay-skin="switch" lay-text="启用|禁用"
-           lay-filter="dept-enable"
+    <input type="checkbox"
+           name="status"
+           value="{{ "{{ d.deptId }}" }}"
+           lay-skin="switch"
+           lay-text="启用|禁用"
+           lay-filter="dept_enable"
             {{ "{{# if(d.status==1){ }} checked {{# } }}" }}>
 </script>
 
@@ -75,6 +79,170 @@
 
 {% include 'common/footer.html' %}
 
+{#添加数据表单#}
+<form id="add_view" class="layui-form" action="" style="margin: 10px;display: none">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级部门</label>
+                    <div class="layui-input-block">
+                        {#渲染树形选择器#}
+                        <ul id="selectParent" name="parentId" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="deptName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="leader" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系方式</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="开启">
+                        <input type="radio" name="status" value="0" title="关闭" checked>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">详细地址</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入描述" name="address" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="dept-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+{#编辑表单数据#}
+<form id="edit_view" class="layui-form" action="" style="margin: 10px;display: none">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="" name="deptId" lay-verify="title"
+                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="" name="deptName" lay-verify="title"
+                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="" name="leader" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="" name="email" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系方式</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="" name="phone" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+
+                        <input type="radio" class="form_status" name="status" value="0" title="关闭">
+                        <input type="radio" class="form_status" name="status" value="1" title="开启">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text"
+                               name="sort"
+                               value=""
+                               lay-verify="title"
+                               autocomplete="off"
+                               placeholder="请输入标题"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入详细地址"
+                                  name="address"
+                                  class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                    lay-filter="dept-update">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
 <script>
   layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
     let table = layui.table
@@ -97,8 +265,8 @@
         skin: 'line',
         method: 'post', /**/
         treeDefaultClose: false,
-        toolbar: '#dept-toolbar', /*表格的工具栏*/
-        elem: '#dept-table', /*表格挂载的对象*/
+        toolbar: '#dept_toolbar', /*表格的工具栏*/
+        elem: '#dept_table', /*表格挂载的对象*/
         url: '/dept/data', /*数据来源接口*/
         page: false,
         cols: [
@@ -118,10 +286,10 @@
     }
 
     /*查询表单按钮被点击的事件*/
-    form.on('submit(dept-query)', function (data) {
+    form.on('submit(dept_search_query)', function (data) {
       let keyword = $.trim(data.field.deptName)
       /*获取所有的公司节点*/
-      let $tds = $('#dept-table').next('.treeTable').find('.layui-table-body tbody tr td')
+      let $tds = $('#dept_table').next('.treeTable').find('.layui-table-body tbody tr td')
       if (!keyword) {
         $tds.css('background-color', 'transparent')
         layer.msg('请输入关键字', { icon: 5 })
@@ -143,7 +311,7 @@
       if (searchCount === 0) {
         layer.msg('没有匹配结果', { icon: 5 })
       } else {
-        treetable.expandAll('#dept-table')
+        treetable.expandAll('#dept_table')
       }
       return false
     })
@@ -151,25 +319,25 @@
     render()
 
     /*表格的操作栏*/
-    table.on('tool(dept-table)', function (obj) {
-      if (obj.event === 'remove') {
+    table.on('tool(dept_table)', function (obj) {
+      if (obj.event === 'table_line_remove') {
         /*移出事件*/
-        window.remove(obj)
-      } else if (obj.event === 'edit') {
+        window.table_line_remove(obj)
+      } else if (obj.event === 'table_line_edit') {
         /*编辑事件*/
-        window.edit(obj)
+        window.table_line_edit(obj)
       }
     })
 
     /*表格的工具栏*/
-    table.on('toolbar(dept-table)', function (obj) {
-      console.log(obj)
-      if (obj.event === 'add') {
-        window.add()
+    table.on('toolbar(dept_table)', function (obj) {
+      {#console.log(obj)#}
+      if (obj.event === 'add_toggle') {
+        window.add_toggle()
       } else if (obj.event === 'refresh') {
         window.refresh()
-      } else if (obj.event === 'batchRemove') {
-        {#window.batchRemove(obj)#}
+      } else if (obj.event === 'batch_remove') {
+        {#window.batch_remove(obj)#}
         layer.msg('禁止批量删除')
         return false
         {#console.log(table.checkStatus(obj.config.id).data)#}
@@ -177,7 +345,7 @@
     })
 
     /*切换选择状态*/
-    form.on('switch(dept-enable)', function (obj) {
+    form.on('switch(dept_enable)', function (obj) {
       let operate
       if (obj.elem.checked) {
         operate = 1
@@ -202,27 +370,51 @@
       })
     })
 
-    window.add = function () {
+    window.add_toggle = function () {
       layer.open({
-        type: 2,
+        type: 1,
         title: '新增',
         shade: 0.1,
         area: ['450px', '500px'], /*新增窗口的大小*/
-        content: MODULE_PATH + 'add' /*新增窗口从那里来*/
+        content: $('#add_view') /*新增窗口从那里来*/
       })
     }
 
-    window.edit = function (obj) {
-      layer.open({
-        type: 2,
-        title: '修改',
-        shade: 0.1,
-        area: ['450px', '500px'],
-        content: MODULE_PATH + 'edit/' + obj.data['deptId']  /*编辑修改窗口从那里来*/
+    window.table_line_edit = function (obj) {
+
+      $.ajax({
+        url: MODULE_PATH + 'edit/' + obj.data['deptId'],
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'get',
+        success: function (result) {
+          if (result.success) {
+            $('input[name="deptId"]').val(result.dept.id)
+            $('input[name="deptName"]').val(result.dept.dept_name)
+            $('input[name="leader"]').val(result.dept.leader)
+            $('input[name="email"]').val(result.dept.email)
+            $('input[name="phone"]').val(result.dept.phone)
+            $('.form_status').eq(result.dept.status).attr('checked', true)
+            $('.form_status').eq(result.dept.status).next().click()
+            $('input[name="sort"]').val(result.dept.sort)
+            $('textarea[name="address"]').html(result.dept.address)
+
+            layer.open({
+              type: 1,
+              title: '修改',
+              shade: 0.1,
+              area: ['450px', '500px'],
+              content: $('#edit_view')  /*编辑修改窗口从那里来*/
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
       })
+
     }
 
-    window.remove = function (obj) {
+    window.table_line_remove = function (obj) {
       layer.confirm('确定要删除该部门', { icon: 3, title: '提示' }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -243,6 +435,77 @@
         })
       })
     }
+  })
+</script>
+{#添加数据#}
+<script>
+  layui.use(['form', 'jquery', 'dtree'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+    let dtree = layui.dtree
+
+    /*渲染下拉选择组件*/
+    dtree.renderSelect({
+      elem: '#selectParent',
+      url: '/dept/tree',
+      method: 'get',
+      selectInputName: { nodeId: 'parentId', context: 'parentName' },
+      skin: 'layui',
+      dataFormat: 'list',
+      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
+      selectInitVal: '1'
+    })
+
+    /*表单组件，提交按钮之后触发的事件*/
+    form.on('submit(dept-save)', function (data) {
+      $.ajax({
+        url: '/dept/add',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              layer.close(layer.index)
+              location.reload()
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
+  })
+</script>
+{#修改数据#}
+<script>
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form
+    let $ = layui.jquery
+
+    // 当点击更新之后，获取数据
+    form.on('submit(dept-update)', function (data) {
+      $.ajax({
+        url: '/dept/edit/' + data.field.deptId,
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              layer.close(layer.index)
+              location.reload()
+            })
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
   })
 </script>
 </html>

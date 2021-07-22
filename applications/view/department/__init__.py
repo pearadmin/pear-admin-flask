@@ -30,9 +30,9 @@ def data():
 
 @dept_api.resource('/add')
 class AddDepartment(Resource):
-    @authorize("admin:dept:add", log=True)
-    def get(self):
-        return make_response(render_template('department/add.html'))
+    # @authorize("admin:dept:add", log=True)
+    # def get(self):
+    #     return make_response(render_template('department/add.html'))
 
     @authorize("admin:dept:add", log=True)
     def post(self):
@@ -98,7 +98,18 @@ class DeptURD(Resource):
     @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
         dept = Dept.query.filter_by(id=dept_id).first()
-        return make_response(render_template('department/edit.html', dept=dept))
+        dept_data = {
+            'id': dept.id,
+            'dept_name': dept.dept_name,
+            'leader': dept.leader,
+            'email': dept.email,
+            'phone': dept.phone,
+            'status': dept.status,
+            'sort': dept.sort,
+            'address': dept.address,
+        }
+        # return make_response(render_template('department/edit.html', dept=dept))
+        return jsonify(success=True, msg='ok', dept=dept_data)
 
     @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):

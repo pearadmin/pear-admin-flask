@@ -39,11 +39,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" lay-filter="powerType" {% if power.type == "0" %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType" {% if power.type == 0 %} checked{% endif %}
                                name="powerType" value="0" title="目录">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == "1" %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType"  {% if power.type == 1 %} checked{% endif %}
                                name="powerType" value="1" title="菜单">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == "2" %} checked{% endif %}
+                        <input type="radio" lay-filter="powerType"  {% if power.type == 2 %} checked{% endif %}
                                name="powerType" value="2" title="按钮">
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
-                        <input type="text" id="icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
+                        <input type="text" id="edit_icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
                                class="layui-input">
                     </div>
                 </div>
@@ -116,6 +116,7 @@
 
     form.on('radio(powerType)', function (data) {
       if (this.value == '0') {
+        {#目录#}
         $('#powerUrlItem').hide()
         $('#powerCodeItem').hide()
         $('#openTypeItem').hide()
@@ -123,10 +124,12 @@
         $('#powerCode').val('')
         $('#openType').val('')
       } else if (this.value == '1') {
+        {#菜单#}
         $('#powerUrlItem').show()
         $('#powerCodeItem').show()
         $('#openTypeItem').show()
       } else if (this.value == '2') {
+        {#按钮#}
         $('#powerUrlItem').hide()
         $('#openTypeItem').hide()
         $('#powerCodeItem').show()
@@ -139,7 +142,7 @@
       data.field.icon = 'layui-icon ' + data.field.icon
       console.log(data.field)
       $.ajax({
-        url: '/rights/power/' + data.field.powerId ,
+        url: '/rights/power/' + data.field.powerId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -159,7 +162,7 @@
     })
 
     iconPicker.render({
-      elem: '#icon',
+      elem: '#edit_icon',
       type: 'fontClass',
       search: true,
       page: true,

@@ -53,9 +53,9 @@ def table():
 
 @role_api.resource('/add')
 class AddRole(Resource):
-    @authorize("admin:role:add", log=True)
-    def get(self):
-        return make_response(render_template('roles/add.html'))
+    # @authorize("admin:role:add", log=True)
+    # def get(self):
+    #     return make_response(render_template('roles/add.html'))
 
     @authorize("admin:role:add", log=True)
     def post(self):

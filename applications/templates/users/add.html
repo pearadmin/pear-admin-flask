@@ -8,40 +8,38 @@
 <form class="layui-form">
     <div class="mainBox">
         <div class="main-container">
-            <div class="main-container">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">账号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                               class="layui-input">
-                    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">姓名</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="realName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                               class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">密码</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="password" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                               class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="password" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
                 </div>
+            </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block">
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-block">
 
-                        {% for role in roles %}
-                            <input
-                                    value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
-                                    name="roleIds" lay-skin="primary">
-                        {% endfor %}
+                    {% for role in roles %}
+                        <input
+                                value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
+                                name="roleIds" lay-skin="primary">
+                    {% endfor %}
 
-                    </div>
                 </div>
             </div>
         </div>

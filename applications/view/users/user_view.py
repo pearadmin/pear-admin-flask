@@ -68,7 +68,7 @@ class CURDUser(Resource):
         return make_response(
             render_template('users/edit_users.html', user=user, roles=roles, checked_roles=checked_roles))
 
-    @authorize("admin:users:remove", log=True)
+    @authorize("admin:user:remove", log=True)
     def delete(self, user_id):
         # 删除用户
         res = _utils.delete_by_id(user_id)
@@ -76,7 +76,7 @@ class CURDUser(Resource):
             return fail_api(msg="删除失败")
         return success_api(msg="删除成功")
 
-    @authorize("admin:users:edit", log=True)
+    @authorize("admin:user:edit", log=True)
     def put(self, user_id):
 
         parser = reqparse.RequestParser()
@@ -157,7 +157,7 @@ def data():
                                                     per_page=res.limit,
                                                     error_out=False)
 
-    dept_name = lambda dept_id: Dept.query.filter_by(id=dept_id).first().dept_name
+    dept_name = lambda dept_id: Dept.query.filter_by(id=dept_id).first().dept_name if dept_id else ""
     user_data = [{
         'id': item.id,
         'username': item.username,

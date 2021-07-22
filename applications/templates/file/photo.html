@@ -171,7 +171,7 @@
     }
 
     window.add = function () {
-      layer.open({
+        layer.open({
         type: 1,
         maxmin: true,
         title: '新增图片',
@@ -305,8 +305,8 @@
       , done: function (res) {
         if (res.success) {
           layer.msg(res.msg, { icon: 1, time: 500 }, function () {
-            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-            window.parent.location.reload()
+            layer.close(layer.index)//关闭最新的layer
+            location.reload()//当前页面刷新
           })
         } else {
           layer.msg(res.msg, { icon: 2 })

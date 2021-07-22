@@ -244,12 +244,13 @@
     </div>
 </form>
 <script>
-  layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
+  layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
     let treetable = layui.treetable
     let popup = layui.popup
+    let dtree = layui.dtree
 
     {#定义模块访问路径#}
     let MODULE_PATH = '/dept/'
@@ -435,35 +436,15 @@
         })
       })
     }
-  })
-</script>
-{#添加数据#}
-<script>
-  layui.use(['form', 'jquery', 'dtree'], function () {
-    let form = layui.form
-    let $ = layui.jquery
-    let dtree = layui.dtree
 
-    /*渲染下拉选择组件*/
-    dtree.renderSelect({
-      elem: '#selectParent',
-      url: '/dept/tree',
-      method: 'get',
-      selectInputName: { nodeId: 'parentId', context: 'parentName' },
-      skin: 'layui',
-      dataFormat: 'list',
-      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
-      selectInitVal: '1'
-    })
-
-    /*表单组件，提交按钮之后触发的事件*/
-    form.on('submit(dept-save)', function (data) {
+    // 修改数据 当点击更新之后，获取数据
+    form.on('submit(dept-update)', function (data) {
       $.ajax({
-        url: '/dept/add',
+        url: '/dept/edit/' + data.field.deptId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
-        type: 'post',
+        type: 'put',
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
@@ -477,22 +458,27 @@
       })
       return false
     })
-  })
-</script>
-{#修改数据#}
-<script>
-  layui.use(['form', 'jquery'], function () {
-    let form = layui.form
-    let $ = layui.jquery
 
-    // 当点击更新之后，获取数据
-    form.on('submit(dept-update)', function (data) {
+    /*添加数据 渲染下拉选择组件*/
+    dtree.renderSelect({
+      elem: '#selectParent',
+      url: '/dept/tree',
+      method: 'get',
+      selectInputName: { nodeId: 'parentId', context: 'parentName' },
+      skin: 'layui',
+      dataFormat: 'list',
+      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
+      selectInitVal: '1'
+    })
+
+    /*添加数据 表单组件，提交按钮之后触发的事件*/
+    form.on('submit(dept-save)', function (data) {
       $.ajax({
-        url: '/dept/edit/' + data.field.deptId,
+        url: '/dept/add',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
-        type: 'put',
+        type: 'post',
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {

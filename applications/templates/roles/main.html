@@ -309,14 +309,8 @@
     window.refresh = function () {
       table.reload('role-table')
     }
-  })
-</script>
-{#添加数据逻辑#}
-<script>
-  layui.use(['form', 'jquery'], function () {
-    let form = layui.form
-    let $ = layui.jquery
 
+    {#添加数据逻辑#}
     form.on('submit(role-save)', function (data) {
       $.ajax({
         url: '/admin/role/add',
@@ -327,7 +321,7 @@
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              // # TODO 关闭不了页面
+              // TODO 关闭不了页面  flask-restful 拦截的错误信息没有提示
               layer.close(layer.index)  // 关闭当前页
               layui.table.reload('role-table')
             })

@@ -166,12 +166,14 @@
 
 {% include 'common/footer.html' %}
 <script>
-  layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
+  layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree', 'iconPicker'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
     let treetable = layui.treetable
     let popup = layui.popup
+    let iconPicker = layui.iconPicker
+    let dtree = layui.dtree
 
     let MODULE_PATH = '/rights/'
 
@@ -361,16 +363,8 @@
         })
       })
     }
-  })
-</script>
-{#添加权限数据页面#}
-<script>
-  layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
-    let form = layui.form
-    let $ = layui.jquery
-    let iconPicker = layui.iconPicker
-    let dtree = layui.dtree
 
+    {#添加权限数据页面#}
     dtree.renderSelect({
       elem: '#select_parent_dept',
       url: '{{ url_for('rights.select_parent') }}',

@@ -38,7 +38,7 @@ class Login(Resource):
         if user is None:
             return fail_api(msg="不存在的用户")
 
-        if user.enable is 0:
+        if user.enable == 0:
             return fail_api(msg="用户被暂停使用")
 
         if user.validate_password(req.password):

@@ -7,6 +7,7 @@ from applications.common.utils.upload import photos
 from applications.configs import common
 from applications.extensions import init_plugs
 from applications.view import init_view
+from applications.api import init_api
 from applications.configs import config
 
 
@@ -25,7 +26,7 @@ def create_app(config_name=None):
 
     # 注册路由
     init_view(app)
-
+    init_api(app)
     # 文件上传
     configure_uploads(app, photos)
 

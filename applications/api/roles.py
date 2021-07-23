@@ -2,53 +2,79 @@ from flask import jsonify
 from flask_login import login_required
 from flask_restful import Resource, Api, reqparse, marshal
 
-from applications.extensions import db
-from applications.models import Role, Power
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.common.serialization import power_fields
 
-from . import role_bp
-from ._utils import remove_role, batch_remove_role
-
-# TODO 分离视图操作
-from flask import render_template, make_response
-
-role_api = Api(role_bp)
+from applications.extensions import db
+from applications.models import Power, Role, User
+from . import api_bp
 
 
-# 表格数据
-@role_bp.get('/data')
-@authorize("admin:role:main", log=True)
-def table():
-    parser = reqparse.RequestParser(bundle_errors=True)
-    parser.add_argument('page', type=int, default=1)
-    parser.add_argument('limit', type=int, default=10)
-    parser.add_argument('roleName', type=str, dest='role_name', default="")
-    parser.add_argument('roleCode', type=str, dest='role_code', default="")
+def remove_role(role_id):
+    """ 删除角色 """
+    role = Role.query.filter_by(id=role_id).first()
+    # 删除该角色的权限
+    power_id_list = []
+    for p in role.power:
+        power_id_list.append(p.id)
 
-    res = parser.parse_args()
+    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    for p in powers:
+        role.power.remove(p)
+    user_id_list = []
+    for u in role.user:
+        user_id_list.append(u.id)
+    users = User.query.filter(User.id.in_(user_id_list)).all()
+    for u in users:
+        role.user.remove(u)
+    r = Role.query.filter_by(id=role_id).delete()
+    db.session.commit()
+    return r
 
-    filters = []
-    if res.role_name:
-        filters.append(Role.name.like('%' + res.role_name + '%'))
-    if res.role_code:
-        filters.append(Role.code.like('%' + res.role_code + '%'))
 
-    paginate = Role.query.filter(*filters).paginate(page=res.page, per_page=res.limit, error_out=False)
+def batch_remove_role(role_ids):
+    """ 批量删除 """
+    for role_id in role_ids:
+        remove_role(role_id)
 
-    return table_api(data=[
-        {
-            'id': item.id,
-            'roleName': item.name,
-            'roleCode': item.code,
-            'enable': item.enable,
-            'remark': item.remark,
-            'details': item.details,
-            'sort': item.sort,
-            'create_at': item.create_time,
-        } for item in paginate.items
-    ], count=paginate.total)
+
+role_api = Api(api_bp, prefix='/roles')
+
+
+@role_api.resource('/data')
+class RoleData(Resource):
+    # 表格数据
+    @authorize("admin:role:main", log=True)
+    def get(self):
+        parser = reqparse.RequestParser(bundle_errors=True)
+        parser.add_argument('page', type=int, default=1)
+        parser.add_argument('limit', type=int, default=10)
+        parser.add_argument('roleName', type=str, dest='role_name', default="")
+        parser.add_argument('roleCode', type=str, dest='role_code', default="")
+
+        res = parser.parse_args()
+
+        filters = []
+        if res.role_name:
+            filters.append(Role.name.like('%' + res.role_name + '%'))
+        if res.role_code:
+            filters.append(Role.code.like('%' + res.role_code + '%'))
+
+        paginate = Role.query.filter(*filters).paginate(page=res.page, per_page=res.limit, error_out=False)
+
+        return table_api(data=[
+            {
+                'id': item.id,
+                'roleName': item.name,
+                'roleCode': item.code,
+                'enable': item.enable,
+                'remark': item.remark,
+                'details': item.details,
+                'sort': item.sort,
+                'create_at': item.create_time,
+            } for item in paginate.items
+        ], count=paginate.total, code=0)
 
 
 @role_api.resource('/add')
@@ -143,11 +169,11 @@ class RolePower(Resource):
 @role_api.resource('/edit/<int:role_id>')
 class EditRole(Resource):
 
-    # 角色编辑
-    @authorize("admin:role:edit", log=True)
-    def get(self, role_id):
-        role = Role.query.filter_by(id=role_id).first()
-        return make_response(render_template('roles/edit.html', role=role))
+    # # 角色编辑
+    # @authorize("admin:role:edit", log=True)
+    # def get(self, role_id):
+    #     role = Role.query.filter_by(id=role_id).first()
+    #     return make_response(render_template('roles/edit.html', role=role))
 
     # 更新角色
     @authorize("admin:role:edit", log=True)
@@ -177,33 +203,37 @@ class EditRole(Resource):
         return success_api(msg="更新角色成功")
 
 
-# 启用用户
-@role_bp.put('/enable')
-@authorize("admin:role:edit", log=True)
-def enable():
-    parser = reqparse.RequestParser()
-    parser.add_argument('roleId', dest='role_id', required=True, type=int)
-    parser.add_argument('operate', required=True, type=int)
+@role_api.resource('/enable')
+class RoleEnable(Resource):
+    """启用用户"""
 
-    res = parser.parse_args()
-    ret = Role.query.filter_by(id=res.role_id).update({"enable": res.operate})
-    db.session.commit()
+    @authorize("admin:role:edit", log=True)
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('roleId', dest='role_id', required=True, type=int)
+        parser.add_argument('operate', required=True, type=int)
 
-    message = "启动成功" if res.operate else "禁用成功"
-    if not ret:
-        return fail_api(msg="出错啦")
-    return success_api(msg=message)
+        res = parser.parse_args()
+        ret = Role.query.filter_by(id=res.role_id).update({"enable": res.operate})
+        db.session.commit()
+
+        message = "启动成功" if res.operate else "禁用成功"
+        if not ret:
+            return fail_api(msg="出错啦")
+        return success_api(msg=message)
 
 
-# 批量删除
-@role_bp.delete('/batchRemove')
-@authorize("admin:role:remove", log=True)
-@login_required
-def batch_remove():
-    parser = reqparse.RequestParser()
-    parser.add_argument('ids[]', action='append', dest='ids')
+@role_api.resource('/batch_remove')
+class RoleBatchRemove(Resource):
+    """批量删除"""
 
-    res = parser.parse_args()
+    @authorize("admin:role:remove", log=True)
+    @login_required
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('ids[]', action='append', dest='ids')
 
-    batch_remove_role(res.ids)
-    return success_api(msg="批量删除成功")
+        res = parser.parse_args()
+
+        batch_remove_role(res.ids)
+        return success_api(msg="批量删除成功")

@@ -1,38 +1,18 @@
-from flask import Blueprint, render_template, jsonify, make_response
-from flask_restful import marshal, Api, Resource, reqparse
-
-from applications.common.serialization import dept_fields
+from flask import jsonify
+from flask_restful import Api, Resource
+from applications.api import api_bp
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import Dept, User
+from flask_restful import marshal, reqparse
+from applications.common.serialization import dept_fields
 
-dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
-dept_api = Api(dept_bp)
-
-
-@dept_bp.get('/')
-@authorize("admin:dept:main", log=True)
-def main():
-    return render_template('department/main.html')
-
-
-@dept_bp.get('/data')
-@authorize("admin:dept:main", log=True)
-def data():
-    dept_data = Dept.query.order_by(Dept.sort).all()
-
-    res = {
-        "data": marshal(dept_data, dept_fields)
-    }
-    return jsonify(res)
+dept_api = Api(api_bp, prefix='/dept')
 
 
 @dept_api.resource('/add')
 class AddDepartment(Resource):
-    # @authorize("admin:dept:add", log=True)
-    # def get(self):
-    #     return make_response(render_template('department/add.html'))
 
     @authorize("admin:dept:add", log=True)
     def post(self):
@@ -62,35 +42,6 @@ class AddDepartment(Resource):
         db.session.commit()
 
         return success_api(msg="成功")
-
-
-@dept_bp.get('/tree')
-@authorize("admin:dept:main", log=True)
-def tree():
-    dept_data = Dept.query.order_by(Dept.sort).all()
-    res = {
-        "status": {"code": 200, "message": "默认"},
-        "data": marshal(dept_data, dept_fields)
-
-    }
-    return jsonify(res)
-
-
-# 启用
-@dept_bp.put('/enable')
-@authorize("admin:dept:edit", log=True)
-def enable():
-    parser = reqparse.RequestParser()
-    parser.add_argument('deptId', type=int, dest='dept_id', required=True)
-    parser.add_argument('operate', type=int, choices=[0, 1], required=True)
-
-    res = parser.parse_args()
-    d = Dept.query.filter_by(id=res.dept_id).update({"status": res.operate})
-    if d:
-        db.session.commit()
-        message = '启用成功' if res.operate else '禁用成功'
-        return success_api(msg=message)
-    return fail_api(msg="出错啦")
 
 
 @dept_api.resource('/edit/<int:dept_id>')
@@ -146,3 +97,45 @@ class DeptURD(Resource):
         if ret:
             return success_api(msg="删除成功")
         return fail_api(msg="删除失败")
+
+
+@dept_api.resource('/data')
+class DeptData(Resource):
+
+    @authorize("admin:dept:main", log=True)
+    def get(self):
+        dept_data = Dept.query.order_by(Dept.sort).all()
+        res = {
+            "data": marshal(dept_data, dept_fields)
+        }
+        return jsonify(res)
+
+
+@dept_api.resource('/tree')
+class DeptTree(Resource):
+
+    @authorize("admin:dept:main", log=True)
+    def get(self):
+        dept_data = Dept.query.order_by(Dept.sort).all()
+        res = {
+            "status": {"code": 200, "message": "默认"},
+            "data": marshal(dept_data, dept_fields)
+        }
+        return jsonify(res)
+
+
+@dept_api.resource('/enable')
+class DeptEnable(Resource):
+    @authorize("admin:dept:edit", log=True)
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('deptId', type=int, dest='dept_id', required=True)
+        parser.add_argument('operate', type=int, choices=[0, 1], required=True)
+
+        res = parser.parse_args()
+        d = Dept.query.filter_by(id=res.dept_id).update({"status": res.operate})
+        if d:
+            db.session.commit()
+            message = '启用成功' if res.operate else '禁用成功'
+            return success_api(msg=message)
+        return fail_api(msg="出错啦")

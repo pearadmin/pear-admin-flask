@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 from applications.common.utils.rights import authorize
 
-from applications.view.roles._utils import remove_role, batch_remove_role
+from applications.models import Role
 
 role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
 
@@ -21,4 +21,9 @@ def power(_id):
     return render_template('roles/power.html', id=_id)
 
 
-from . import role
+# 角色编辑
+@authorize("admin:role:edit", log=True)
+@role_bp.get('/edit/<int:role_id>')
+def role_editor(role_id):
+    role = Role.query.filter_by(id=role_id).first()
+    return render_template('roles/edit.html', role=role)

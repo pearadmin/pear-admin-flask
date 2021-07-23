@@ -71,14 +71,16 @@
     </div>
 </form>
 {% include 'common/footer.html' %}
+</body>
 <script>
   layui.use(['form', 'jquery'], function () {
     let form = layui.form
     let $ = layui.jquery
+    let MODULE_PATH = '/api/v1/roles/'
 
     form.on('submit(role-update)', function (data) {
       $.ajax({
-        url: '/admin/role/edit/' + data.field.roleId,
+        url: MODULE_PATH + 'edit/' + data.field.roleId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -96,10 +98,6 @@
       })
       return false
     })
-    })
   })
 </script>
-<script>
-</script>
-</body>
 </html>

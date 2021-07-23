@@ -131,7 +131,7 @@
     let $ = layui.jquery
     let popup = layui.popup
 
-    let MODULE_PATH = '/admin/role/'
+    let MODULE_PATH = '/api/v1/roles/'
 
     let cols = [
       [
@@ -194,7 +194,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: '/admin/role/enable',
+        url: MODULE_PATH + 'enable',
         data: JSON.stringify({ roleId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
@@ -226,7 +226,8 @@
         title: '授权',
         shade: 0.1,
         area: ['320px', '400px'],
-        content: MODULE_PATH + 'power/' + obj.data['id']
+        {#content: MODULE_PATH + 'power/' + obj.data['id']#}
+        content: '/admin/role/power/' + obj.data['id']
       })
     }
 
@@ -236,7 +237,8 @@
         title: '修改',
         shade: 0.1,
         area: ['500px', '500px'],
-        content: MODULE_PATH + 'edit/' + obj.data['id']
+        {#content: MODULE_PATH + 'edit/' + obj.data['id']#}
+        content: '/admin/role/edit/' + obj.data['id']
       })
     }
 
@@ -288,7 +290,7 @@
         let loading = layer.load()
         $.ajax({
 
-          url: MODULE_PATH + 'batchRemove',
+          url: MODULE_PATH + 'batch_remove',
           data: { ids: ids },
           dataType: 'json',
           type: 'delete',
@@ -313,7 +315,7 @@
     {#添加数据逻辑#}
     form.on('submit(role-save)', function (data) {
       $.ajax({
-        url: '/admin/role/add',
+        url: MODULE_PATH + 'add',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

@@ -31,11 +31,12 @@
     let dtree = layui.dtree
     let form = layui.form
     let $ = layui.jquery
+    let MODULE_PATH = '/api/v1/roles/'
 
     dtree.render({
       elem: '#role-power',
       method: 'get',
-      url: '/admin/role/role_power/' + {{id}},
+      url: MODULE_PATH + 'role_power/' + {{id}},
       dataFormat: 'list',
       checkbar: true,
       skin: 'layui',
@@ -56,7 +57,7 @@
       data.field.powerIds = ids
 
       $.ajax({
-        url: '/admin/role/role_power/' + data.field.roleId,
+        url: MODULE_PATH + 'role_power/' + data.field.roleId,
         data: data.field,
         dataType: 'json',
         type: 'put',

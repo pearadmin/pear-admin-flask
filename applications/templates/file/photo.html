@@ -7,7 +7,7 @@
 <body class="pear-container">
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="dataTable" lay-filter="dataTable"></table>
+        <table id="photo_table" lay-filter="photo_table"></table>
     </div>
 </div>
 </body>
@@ -67,6 +67,7 @@
     let form = layui.form
     let $ = layui.jquery
     let upload = layui.upload
+    let MODULE_PATH = '/api/v1/file/'
 
     let cols = [
       [
@@ -92,10 +93,8 @@
           title: '图片',
           unresize: true,
           align: 'center',
-          templet: function (d) {
-            return '<img class="photo" style="max-width: 100%;\n' +
-              '  height: 100%;\n' +
-              '  cursor: pointer;" lay-event="photo" src=" ' + d.href + '"></i>'
+          templet: (d) => {
+            return `<img class="photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
           }
 
         },
@@ -129,8 +128,8 @@
     ]
 
     table.render({
-      elem: '#dataTable',
-      url: 'table',
+      elem: '#photo_table',
+      url: MODULE_PATH + 'table',
       page: true,
       cols: cols,
       skin: 'line',
@@ -141,7 +140,7 @@
       }, 'filter', 'print', 'exports']
     })
 
-    table.on('tool(dataTable)', function (obj) {
+    table.on('tool(photo_table)', function (obj) {
       if (obj.event === 'remove') {
         window.remove(obj)
       } else if (obj.event === 'photo') {
@@ -149,7 +148,7 @@
       }
     })
 
-    table.on('toolbar(dataTable)', function (obj) {
+    table.on('toolbar(photo_table)', function (obj) {
       if (obj.event === 'add') {
         window.add()
       } else if (obj.event === 'refresh') {
@@ -171,7 +170,7 @@
     }
 
     window.add = function () {
-        layer.open({
+      layer.open({
         type: 1,
         maxmin: true,
         title: '新增图片',
@@ -189,7 +188,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: 'upload',
+          url: MODULE_PATH + 'upload',
           data: { id: obj.data['id'] },
           dataType: 'json',
           type: 'delete',
@@ -223,7 +222,7 @@
         return false
       }
       var ids = []
-      var hasCheck = table.checkStatus('dataTable')
+      var hasCheck = table.checkStatus('photo_table')
       var hasCheckData = hasCheck.data
       if (hasCheckData.length > 0) {
         $.each(hasCheckData, function (index, element) {
@@ -237,7 +236,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: "{{ url_for('file.batch_remove') }}",
+          url: MODULE_PATH + "batch_remove",
           data: { ids: ids },
           dataType: 'json',
           type: 'POST',
@@ -248,7 +247,7 @@
                 icon: 1,
                 time: 1000
               }, function () {
-                table.reload('dataTable')
+                table.reload('photo_table')
               })
             } else {
               layer.msg(res.msg, {
@@ -262,7 +261,7 @@
     }
 
     window.refresh = function () {
-      table.reload('dataTable')
+      table.reload('photo_table')
     }
     // 查看大图
     window.photo = function (obj) {
@@ -288,7 +287,7 @@
           area: ['auto'],
           skin: 'layui-layer-nobg', //没有背景色
           shadeClose: true,
-          content: '<img src=\'' + obj.data['href'] + '\' width=\'' + auto_img.width + 'px\' height=\'' + auto_img.height + 'px\'>'
+          content: `<img src="${obj.data['href']}" width="${auto_img.width}px" height="${auto_img.height}px">`
         })
       }
     }
@@ -297,7 +296,7 @@
     // 选完文件后不自动上传
     upload.render({
       elem: '#logo-img'
-      , url: "{{ url_for('file.upload') }}"
+      , url: MODULE_PATH + "upload"
       , auto: false
       , exts: 'jpg|png|gif|bmp|jpeg'
       , size: 1000

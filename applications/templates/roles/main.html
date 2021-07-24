@@ -210,8 +210,9 @@
       })
     })
 
-    window.add = function () {
-      layer.open({
+      let add_index;
+      window.add = function () {
+      add_index = layer.open({
         type: 1,
         title: '新增',
         shade: 0.1,
@@ -324,7 +325,7 @@
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
               // TODO 关闭不了页面  flask-restful 拦截的错误信息没有提示
-              layer.close(layer.index)  // 关闭当前页
+              layer.close(add_index)  // 关闭当前页
               layui.table.reload('role-table')
             })
           } else {

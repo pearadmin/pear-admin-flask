@@ -84,12 +84,13 @@
     let $ = layui.jquery
     let layer = layui.layer
     let popup = layui.popup
+    let MODULE_PATH = '/api/v1/rights/'
 
     // 框架初始化时会读取 根目录下 pear.configs.yml 文件作为初始化配置
     // 你可以通过 admin.setConfigPath 方法修改配置文件位置
     // 你可以通过 admin.setConfigType 方法修改配置文件类型
     admin.setConfigType('json')
-    admin.setConfigPath("{{ url_for('rights.configs') }}")
+    admin.setConfigPath(MODULE_PATH + 'configs')
 
     admin.render()
 

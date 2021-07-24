@@ -102,10 +102,11 @@
     let $ = layui.jquery
     let iconPicker = layui.iconPicker
     let dtree = layui.dtree
+    let MODULE_PATH = '/api/v1/rights/'
 
     dtree.renderSelect({
       elem: '#selectParent',
-      url: '{{ url_for('rights.select_parent')}}',
+      url: MODULE_PATH + 'select_parent',
       method: 'get',
       selectInputName: { nodeId: 'parentId', context: 'powerName' },
       skin: 'layui',
@@ -142,7 +143,7 @@
       data.field.icon = 'layui-icon ' + data.field.icon
       console.log(data.field)
       $.ajax({
-        url: '/rights/power/' + data.field.powerId,
+        url: MODULE_PATH + 'power/' + data.field.powerId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

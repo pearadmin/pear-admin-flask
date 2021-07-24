@@ -62,6 +62,8 @@
   layui.use(['form', 'jquery'], function () {
     let form = layui.form
     let $ = layui.jquery
+    let MODULE_PATH = '/api/v1/users/'
+
     form.on('submit(user-save)', function (data) {
       let roleIds = ''
       $('input[type=checkbox]:checked').each(function () {
@@ -71,7 +73,7 @@
       data.field.roleIds = roleIds
 
       $.ajax({
-        url: '/users/add',
+        url: MODULE_PATH + 'add',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

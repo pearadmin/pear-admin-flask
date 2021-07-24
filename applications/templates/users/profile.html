@@ -171,19 +171,66 @@
     </div>
 </div>
 {% include 'common/footer.html' %}
+</body>
+
+<form id="edit_password_view" class="layui-form" action="" style="display: none">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">旧密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="oldPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="newPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="confirmPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                    lay-filter="edit-password">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
 <script>
-  layui.use(['element', 'jquery', 'layer', 'form'], function () {
+  layui.use(['element', 'jquery', 'layer', 'form', 'popup'], function () {
     let $ = layui.jquery
     let layer = layui.layer
     let form = layui.form
+    let popup = layui.popup
+
+    let MODULE_PATH = '/api/v1/users/'
     // 修改密码页面
     $('.edit-password').click(function () {
       layer.open({
-        type: 2,
+        type: 1,
         title: '修改密码',
         shade: 0.1,
         area: ['550px', '280px'],
-        content: '/users/editPassword'
+        content: $('#edit_password_view')
       })
       return false
     })
@@ -206,7 +253,7 @@
     // 表单提交更改个人信息数据
     form.on('submit(user-update)', function (data) {
       $.ajax({
-        url: '/users/updateInfo',
+        url: MODULE_PATH + 'updateInfo',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -221,7 +268,27 @@
       })
       return false
     })
+
+    // 修改密码提交
+    form.on('submit(edit-password)', function (data) {
+      $.ajax({
+        url: MODULE_PATH + 'editPassword',
+        data: JSON.stringify(data.field),
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            popup.success(result.msg, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name))
+            })
+          } else {
+            popup.failure(result.msg)
+          }
+        }
+      })
+      return false
+    })
   })
 </script>
-</body>
 </html>

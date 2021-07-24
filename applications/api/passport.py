@@ -1,15 +1,16 @@
 from flask import session, redirect, url_for, request
 from flask_login import current_user, login_user
 from flask_restful import Resource, reqparse, Api
+
+from applications.api import api_bp
 from applications.common.admin_log import login_log
+from applications.common.gen_captcha import add_auth_session
 from applications.common.utils.http import fail_api, success_api
 from applications.models import User
-from . import passport_bp
-from ._utils import add_auth_session
 
 from flask import render_template, make_response
 
-passport_api = Api(passport_bp)
+passport_api = Api(api_bp, prefix='/passport')
 
 
 @passport_api.resource('/login')

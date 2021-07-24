@@ -175,7 +175,7 @@
     let iconPicker = layui.iconPicker
     let dtree = layui.dtree
 
-    let MODULE_PATH = '/rights/'
+    let MODULE_PATH = '/api/v1/rights/'
 
     window.render = function () {
       treetable.render({
@@ -188,7 +188,7 @@
         treeDefaultClose: true,
         toolbar: '#power-toolbar',
         elem: '#power_table',
-        url: '{{ url_for('rights.data') }}',
+        url: MODULE_PATH + 'data',
         page: false,
         cols: [
           [
@@ -295,7 +295,7 @@
         title: '修改',
         shade: 0.1,
         area: ['450px', '500px'],
-        content: MODULE_PATH + 'power/' + obj.data['powerId']
+        content: '/rights/power/' + obj.data['powerId']
       })
     }
     window.remove = function (obj) {
@@ -367,7 +367,7 @@
     {#添加权限数据页面#}
     dtree.renderSelect({
       elem: '#select_parent_dept',
-      url: '{{ url_for('rights.select_parent') }}',
+      url: MODULE_PATH + 'select_parent',
       method: 'get',
       selectInputName: { nodeId: 'parentId', context: 'powerName' },
       skin: 'layui',
@@ -400,7 +400,7 @@
     form.on('submit(power-save)', function (data) {
       data.field.icon = 'layui-icon ' + data.field.icon
       $.ajax({
-        url: '/rights/power',
+        url: MODULE_PATH + 'power',
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

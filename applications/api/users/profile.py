@@ -6,18 +6,13 @@ from flask_restful import Resource, reqparse
 from applications.common.utils.http import fail_api, success_api
 from applications.extensions import db
 from applications.models import User
-from applications.view.users import users_bp, user_api
 
-# TODO 分离视图操作
-from flask import render_template, make_response
+from . import users_api
 
 
-@user_api.resource('/avatar')
+@users_api.resource('/avatar')
 class Avatar(Resource):
     """修改头像"""
-
-    def get(self):
-        return make_response(render_template('users/avatar.html'))
 
     def put(self):
         url = request.json.get("avatar").get("src")
@@ -28,32 +23,29 @@ class Avatar(Resource):
         return success_api(msg="修改成功")
 
 
-# 修改当前用户信息
-@users_bp.put('/updateInfo')
-@login_required
-def update_info():
-    parser = reqparse.RequestParser()
-    parser.add_argument('realname', type=str, dest='real_name')
-    parser.add_argument('remark', type=str)
-    parser.add_argument('details', type=str)
-
-    res = parser.parse_args()
-
-    ret = User.query.filter_by(
-        id=current_user.id).update({"realname": res.real_name,
-                                    "remark": res.details})
-    if not ret:
-        return fail_api(msg="出错啦")
-    return success_api(msg="更新成功")
-
-
-@user_api.resource('/editPassword')
-class EditPassword(Resource):
-    """前用户密码"""
+@users_api.resource('/updateInfo')
+class ProfileInfo(Resource):
 
     @login_required
-    def get(self):
-        return make_response(render_template('users/edit_password.html'))
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('realname', type=str, dest='real_name')
+        parser.add_argument('remark', type=str)
+        parser.add_argument('details', type=str)
+
+        res = parser.parse_args()
+
+        ret = User.query.filter_by(
+            id=current_user.id).update({"realname": res.real_name,
+                                        "remark": res.details})
+        if not ret:
+            return fail_api(msg="出错啦")
+        return success_api(msg="更新成功")
+
+
+@users_api.resource('/editPassword')
+class EditPassword(Resource):
+    """前用户密码"""
 
     @login_required
     def put(self):

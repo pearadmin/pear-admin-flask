@@ -74,10 +74,11 @@
     let form = layui.form
     let $ = layui.jquery
     let dtree = layui.dtree
+    let MODULE_PATH = '/api/v1/users/'
 
     dtree.renderSelect({
       elem: '#selectParent',
-      url: '/dept/tree',
+      url: '/api/v1/dept/tree',
       method: 'get',
       selectInputName: { nodeId: 'deptId', context: 'deptName' },
       skin: 'layui',
@@ -93,7 +94,7 @@
       roleIds = roleIds.substr(0, roleIds.length - 1)
       data.field.roleIds = roleIds
       $.ajax({
-        url: '/users/' + data.field.userId,
+        url: MODULE_PATH + data.field.userId,
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -101,7 +102,7 @@
         success: function (result) {
           if (result.success) {
             layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+              parent.layer.close(parent.layer.getFrameIndex(window.name)) //关闭当前页
               parent.layui.table.reload('user-table')
             })
           } else {

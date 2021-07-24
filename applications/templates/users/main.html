@@ -111,7 +111,7 @@
     let dtree = layui.dtree
     let popup = layui.popup
     let common = layui.common
-    let MODULE_PATH = '/users/'
+    let MODULE_PATH = '/api/v1/users/'
 
     // 表格数据
     let cols = [
@@ -146,7 +146,7 @@
     dtree.render({
       elem: '#dept-tree',
       method: 'get',
-      url: '/dept/tree',
+      url: '/api/v1/dept/tree',
       dataFormat: 'list',
       line: true,
       skin: 'laySimple',
@@ -239,7 +239,7 @@
         title: '新增',
         shade: 0.1,
         area: ['550px', '550px'],
-        content: MODULE_PATH + 'add'
+        content: '/users/' + 'add'
       })
     }
 
@@ -249,7 +249,7 @@
         title: '修改',
         shade: 0.1,
         area: ['550px', '500px'],
-        content: MODULE_PATH + obj.data['id']
+        content: '/users/' + obj.data['id']
       })
     }
 

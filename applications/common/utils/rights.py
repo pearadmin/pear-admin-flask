@@ -23,3 +23,5 @@ def authorize(power: str, log: bool = False):
         return wrapper
 
     return decorator
+
+

@@ -27,7 +27,7 @@ def login_log():
         page=page, per_page=limit, error_out=False)
     data = marshal(log_paginate.items, log_fields)
 
-    return table_api(data=data, count=log_paginate.total)
+    return table_api(data=data, count=log_paginate.total, code=0)
 
 
 @logs_bp.get('/access_log')

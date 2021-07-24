@@ -26,7 +26,7 @@
     </div>
     <div class="layui-form-item">
         <input placeholder="验证码 : " name="captcha" hover class="code layui-input layui-input-inline"/>
-        <img src="{{ url_for('passport.get_captcha') }}" class="codeImage" id="captchaImage"/>
+        <img src="/passport/getCaptcha" class="codeImage" id="captchaImage"/>
     </div>
     <div class="layui-form-item">
         <input type="checkbox" name="remember-me" title="记住密码" lay-skin="primary">
@@ -45,13 +45,14 @@
     let layer = layui.layer
     let button = layui.button
     let popup = layui.popup
-    let captchaPath = "{{ url_for('passport.get_captcha') }}"
+    let captchaPath = "/passport/getCaptcha"
 
     form.on('submit(login)', function (data) {
       // data 是表单的数据
       let loader = layer.load()  // 加载按钮
       let btn = button.load({ elem: '.login' })
       $.ajax({
+        url: '/api/v1/passport/login',
         data: data.field,
         type: 'post',
         dataType: 'json',
@@ -61,7 +62,7 @@
           btn.stop(function () {
             if (result.success) {
               popup.success(result.msg, function () {
-                location.href = "{{ url_for('index.admin_index') }}"
+                location.href = "/admin"
               })
             } else {
               popup.failure(result.msg, function () {

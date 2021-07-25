@@ -35,26 +35,20 @@
 </div>
 
 <script type="text/html" id="toolbar">
-    {% if authorize("admin:file:add") %}
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-            <i class="layui-icon layui-icon-add-1"></i>
-            新增
-        </button>
-    {% endif %}
-    {% if authorize("admin:file:delete") %}
-        <button class="pear-btn pear-btn-sm" lay-event="batchRemove">
-            <i class="layui-icon layui-icon-delete"></i>
-            删除
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-sm" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+    </button>
 </script>
 
 <script type="text/html" id="user-bar">
-    {% if authorize("admin:file:delete") %}
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
-            <i class="layui-icon layui-icon-delete"></i>
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+        <i class="layui-icon layui-icon-delete"></i>
+    </button>
 </script>
 <script type="text/html" id="file-uploadTime">
     {{ '  {{layui.util.toDateString(d.create_time,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
@@ -67,8 +61,12 @@
     let form = layui.form
     let $ = layui.jquery
     let upload = layui.upload
-    
-    let MODULE_PATH = '/api/v1/file/'
+
+    let MODULE_PATH = '/api/v1/file'
+    let FILE_API = {
+      'PHOTOS': () => `${MODULE_PATH}/photos`,
+      'PHOTO': (photo_id) => `${MODULE_PATH}/photo/${photo_id}`,
+    }
 
     let cols = [
       [
@@ -130,7 +128,7 @@
 
     table.render({
       elem: '#photo_table',
-      url: MODULE_PATH + 'table',
+      url: FILE_API.PHOTOS(),
       page: true,
       cols: cols,
       skin: 'line',
@@ -189,7 +187,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'upload',
+          url: FILE_API.PHOTO(obj.data['id']),
           data: { id: obj.data['id'] },
           dataType: 'json',
           type: 'delete',
@@ -237,7 +235,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + "batch_remove",
+          url: FILE_API.PHOTOS(),
           data: { ids: ids },
           dataType: 'json',
           type: 'POST',
@@ -297,7 +295,7 @@
     // 选完文件后不自动上传
     upload.render({
       elem: '#logo-img'
-      , url: MODULE_PATH + "upload"
+      , url: FILE_API.PHOTOS()
       , auto: false
       , exts: 'jpg|png|gif|bmp|jpeg'
       , size: 1000

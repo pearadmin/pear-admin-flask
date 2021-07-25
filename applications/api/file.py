@@ -15,8 +15,18 @@ from applications.models import Photo
 file_api = Api(api_bp, prefix='/file')
 
 
-@file_api.resource('/upload')
-class Upload(Resource):
+@file_api.resource('/photos')
+class FilePhotos(Resource):
+
+    @authorize("admin:file:main", log=True)
+    def get(self):
+        page = request.args.get('page', type=int)
+        limit = request.args.get('limit', type=int)
+        photo_paginate = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit,
+                                                                                error_out=False)
+        data = marshal(photo_paginate.items, photo_fields)
+        return table_api(data=data, count=photo_paginate.total, code=0)
+
     @authorize("admin:file:add", log=True)
     def post(self):
         if 'file' in request.files:
@@ -36,34 +46,8 @@ class Upload(Resource):
 
     @authorize("admin:file:delete", log=True)
     def delete(self):
-        _id = request.form.get('id')
-        res = delete_photo_by_id(_id)
-        if res:
-            return success_api(msg="删除成功")
-        else:
-            return fail_api(msg="删除失败")
-
-
-@file_api.resource('/table')
-class FileTable(Resource):
-    """图片数据"""
-
-    @authorize("admin:file:main", log=True)
-    def get(self):
-        page = request.args.get('page', type=int)
-        limit = request.args.get('limit', type=int)
-        photo_paginate = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit,
-                                                                                error_out=False)
-        data = marshal(photo_paginate.items, photo_fields)
-        return table_api(data=data, count=photo_paginate.total, code=0)
-
-
-@file_api.resource('/batch_remove')
-class FileBatchRemove(Resource):
-    """图片批量删除"""
-
-    @authorize("admin:file:delete", log=True)
-    def post(self):
+        """图片批量删除"""
+        # TODO bugs 图片删除失败
         ids = request.form.getlist('ids[]')
         photo_name = Photo.query.filter(Photo.id.in_(ids)).all()
         upload_url = current_app.config.get("UPLOADED_PHOTOS_DEST")
@@ -72,6 +56,19 @@ class FileBatchRemove(Resource):
         photo = Photo.query.filter(Photo.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         if photo:
+            return success_api(msg="删除成功")
+        else:
+            return fail_api(msg="删除失败")
+
+
+@file_api.resource('/photo/<int:photo_id>')
+class FileTable(Resource):
+    """图片数据"""
+
+    @authorize("admin:file:delete", log=True)
+    def delete(self, photo_id):
+        res = delete_photo_by_id(photo_id)
+        if res:
             return success_api(msg="删除成功")
         else:
             return fail_api(msg="删除失败")

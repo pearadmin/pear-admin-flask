@@ -253,7 +253,12 @@
     let dtree = layui.dtree
 
     {#定义模块访问路径#}
-    let MODULE_PATH = '/api/v1/dept/'
+    let MODULE_PATH = '/api/v1/dept'
+    let DEPARTMENT_API = {
+      'DEPARTMENTS': () => `${MODULE_PATH}/departments`,
+      'DEPARTMENT': (dept_id) => `${MODULE_PATH}/department/${dept_id}`,
+      'DEPARTMENT_STATUS': (dept_id) => `${MODULE_PATH}/department/${dept_id}/status`
+    }
 
     {#定义表格渲染函数#}
     window.render = function () {
@@ -268,7 +273,7 @@
         treeDefaultClose: false,
         toolbar: '#dept_toolbar', /*表格的工具栏*/
         elem: '#dept_table', /*表格挂载的对象*/
-        url: MODULE_PATH + '/data', /*数据来源接口*/
+        url: DEPARTMENT_API.DEPARTMENTS(), /*数据来源接口*/
         page: false,
         cols: [
           [
@@ -355,7 +360,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: MODULE_PATH + 'enable',
+        url: DEPARTMENT_API.DEPARTMENT_STATUS(this.value),
         data: JSON.stringify({ deptId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
@@ -384,7 +389,7 @@
     window.table_line_edit = function (obj) {
 
       $.ajax({
-        url: MODULE_PATH + 'edit/' + obj.data['deptId'],
+        url: DEPARTMENT_API.DEPARTMENT(obj.data['deptId']),
         dataType: 'json',
         contentType: 'application/json',
         type: 'get',
@@ -420,7 +425,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'edit/' + obj.data['deptId'],
+          url: DEPARTMENT_API.DEPARTMENT(obj.data['deptId']),
           dataType: 'json',
           type: 'delete',
           success: function (result) {
@@ -440,7 +445,7 @@
     // 修改数据 当点击更新之后，获取数据
     form.on('submit(dept-update)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'edit/' + data.field.deptId,
+        url: DEPARTMENT_API.DEPARTMENT(data.field.deptId),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -462,7 +467,7 @@
     /*添加数据 渲染下拉选择组件*/
     dtree.renderSelect({
       elem: '#selectParent',
-      url: MODULE_PATH + 'tree',
+      url: DEPARTMENT_API.DEPARTMENTS(),
       method: 'get',
       selectInputName: { nodeId: 'parentId', context: 'parentName' },
       skin: 'layui',
@@ -474,7 +479,7 @@
     /*添加数据 表单组件，提交按钮之后触发的事件*/
     form.on('submit(dept-save)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'add',
+        url: DEPARTMENT_API.DEPARTMENTS(),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

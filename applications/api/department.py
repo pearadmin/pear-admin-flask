@@ -11,8 +11,18 @@ from applications.common.serialization import dept_fields
 dept_api = Api(api_bp, prefix='/dept')
 
 
-@dept_api.resource('/add')
+@dept_api.resource('/departments')
 class AddDepartment(Resource):
+
+    @authorize("admin:dept:main", log=True)
+    def get(self):
+        dept_data = Dept.query.order_by(Dept.sort).all()
+        # TODO dtree 需要返回状态信息
+        res = {
+            "status": {"code": 200, "message": "默认"},
+            "data": marshal(dept_data, dept_fields)
+        }
+        return jsonify(res)
 
     @authorize("admin:dept:add", log=True)
     def post(self):
@@ -44,7 +54,7 @@ class AddDepartment(Resource):
         return success_api(msg="成功")
 
 
-@dept_api.resource('/edit/<int:dept_id>')
+@dept_api.resource('/department/<int:dept_id>')
 class DeptURD(Resource):
     @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
@@ -99,43 +109,14 @@ class DeptURD(Resource):
         return fail_api(msg="删除失败")
 
 
-@dept_api.resource('/data')
-class DeptData(Resource):
-
-    @authorize("admin:dept:main", log=True)
-    def get(self):
-        dept_data = Dept.query.order_by(Dept.sort).all()
-        res = {
-            "data": marshal(dept_data, dept_fields)
-        }
-        return jsonify(res)
-
-
-@dept_api.resource('/tree')
-class DeptTree(Resource):
-
-    @authorize("admin:dept:main", log=True)
-    def get(self):
-        dept_data = Dept.query.order_by(Dept.sort).all()
-        res = {
-            "status": {"code": 200, "message": "默认"},
-            "data": marshal(dept_data, dept_fields)
-        }
-        return jsonify(res)
-
-
-@dept_api.resource('/enable')
+@dept_api.resource('/department/<int:dept_id>/status')
 class DeptEnable(Resource):
     @authorize("admin:dept:edit", log=True)
-    def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('deptId', type=int, dest='dept_id', required=True)
-        parser.add_argument('operate', type=int, choices=[0, 1], required=True)
-
-        res = parser.parse_args()
-        d = Dept.query.filter_by(id=res.dept_id).update({"status": res.operate})
+    def put(self, dept_id):
+        d = Dept.query.get(dept_id)
         if d:
+            d.status = not d.status
             db.session.commit()
-            message = '启用成功' if res.operate else '禁用成功'
+            message = '修改成功'
             return success_api(msg=message)
         return fail_api(msg="出错啦")

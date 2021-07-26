@@ -11,7 +11,7 @@ def index():
 
 
 # 首页
-@index_bp.get('/admin')
+@index_bp.get('/admin/')
 @login_required
 def admin_index():
     return render_template('index/admin_index.html', user=current_user)

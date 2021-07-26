@@ -120,20 +120,6 @@ def make_menu_tree():
     return menu_dict.get(0)
 
 
-# 选择父节点
-def select_power_dict():
-    power = Power.query.all()
-    res = marshal(power, power_fields)
-    res.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
-    return res
-
-
-def get_power_dict():
-    power = Power.query.all()
-    res = marshal(power, power_fields)
-    return res
-
-
 # 删除权限（目前没有判断父节点自动删除子节点）
 def remove_power(power_id):
     power = Power.query.filter_by(id=power_id).first()
@@ -168,24 +154,18 @@ parser_power.add_argument('powerUrl', type=str, dest='power_url')
 parser_power.add_argument('sort', type=int, dest='sort')
 
 
-@rights_api.resource('/data')
-class RightsData(Resource):
-    @authorize("admin:power:main", log=True)
-    def get(self):
-        power_data = get_power_dict()
-
-        res = {
-            "data": power_data
-        }
-        return jsonify(res)
-
-
-@rights_api.resource('/select_parent')
-class RightsSelectParent(Resource):
+@rights_api.resource('/rights')
+class RightRights(Resource):
     @authorize("admin:power:main", log=True)
     def get(self):
         """获取选择父节点"""
-        power_data = select_power_dict()
+
+        # power = Power.query.all()
+        # res = marshal(power, power_fields)
+
+        power = Power.query.all()
+        power_data = marshal(power, power_fields)
+        power_data.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
         res = {
             "status": {"code": 200, "message": "默认"},
             "data": power_data
@@ -193,28 +173,6 @@ class RightsSelectParent(Resource):
         }
         return jsonify(res)
 
-
-@rights_api.resource('/enable')
-class RightsEnable(Resource):
-    @authorize("admin:power:edit", log=True)
-    def put(self):
-        parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument('powerId', dest='power_id', type=int, required=True)
-        parser.add_argument('operate', type=int, required=True, choices=[0, 1])
-
-        res = parser.parse_args()
-
-        power = Power.query.filter_by(id=res.power_id).update({"enable": res.operate})
-        if power:
-            db.session.commit()
-            message = "启用成功" if res.operate else '禁用成功'
-            return success_api(msg=message)
-        else:
-            return fail_api(msg="出错啦")
-
-
-@rights_api.resource('/batch_remove')
-class RightsBatchRemove(Resource):
     @authorize("admin:power:remove", log=True)
     def delete(self):
         ids = request.form.getlist('ids[]')
@@ -222,15 +180,11 @@ class RightsBatchRemove(Resource):
         return success_api(msg="批量删除成功")
 
 
-@rights_api.resource('/power')
-class AddRight(Resource):
-    # @authorize("admin:power:add", log=True)
-    # def get(self):
-    #     """获取增加视图"""
-    #     return make_response(render_template('rights/add.html'))
+@rights_api.resource('/power/<int:power_id>')
+class RightsPower(Resource):
 
     @authorize("admin:power:add", log=True)
-    def post(self):
+    def post(self, power_id):
         res = parser_power.parse_args()
         power = Power(
             icon=res.icon,
@@ -251,19 +205,6 @@ class AddRight(Resource):
             return fail_api(msg='数据提交失败')
 
         return success_api(msg="成功")
-
-
-@rights_api.resource('/power/<int:power_id>')
-class RightsURD(Resource):
-    # @authorize("admin:power:edit", log=True)
-    # def get(self, power_id):
-    #     power = Power.query.filter_by(id=power_id).first()
-    #     icon = str(power.icon).split()
-    #     if len(icon) == 2:
-    #         icon = icon[1]
-    #     else:
-    #         icon = None
-    #     return make_response(render_template('rights/edit.html', power=power, icon=icon))
 
     @authorize("admin:power:remove", log=True)
     def delete(self, power_id):
@@ -304,6 +245,21 @@ class RightsURD(Resource):
         if not power:
             return fail_api(msg="更新权限失败")
         return success_api(msg="更新权限成功")
+
+
+@rights_api.resource('power/<int:right_id>/status')
+class PowerStatus(Resource):
+    @authorize("admin:power:edit", log=True)
+    def put(self, right_id):
+
+        power = Power.query.get(id=right_id)
+        if power:
+            power.enable = not power.enable
+            db.session.commit()
+            message = "修改成功"
+            return success_api(msg=message)
+        else:
+            return fail_api(msg="出错啦")
 
 
 @rights_api.resource('/configs')

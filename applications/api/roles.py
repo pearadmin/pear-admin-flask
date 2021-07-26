@@ -42,8 +42,8 @@ def batch_remove_role(role_ids):
 role_api = Api(api_bp, prefix='/roles')
 
 
-@role_api.resource('/data')
-class RoleData(Resource):
+@role_api.resource('/roles')
+class RoleRoles(Resource):
     # 表格数据
     @authorize("admin:role:main", log=True)
     def get(self):
@@ -76,15 +76,23 @@ class RoleData(Resource):
             } for item in paginate.items
         ], count=paginate.total, code=0)
 
+    @authorize("admin:role:remove", log=True)
+    @login_required
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('ids[]', action='append', dest='ids')
 
-@role_api.resource('/add')
-class AddRole(Resource):
-    # @authorize("admin:role:add", log=True)
-    # def get(self):
-    #     return make_response(render_template('roles/add.html'))
+        res = parser.parse_args()
+
+        batch_remove_role(res.ids)
+        return success_api(msg="批量删除成功")
+
+
+@role_api.resource('/role/<int:role_id>')
+class RoleRole(Resource):
 
     @authorize("admin:role:add", log=True)
-    def post(self):
+    def post(self, role_id):
         parser = reqparse.RequestParser()
         parser.add_argument('details', type=str)
         parser.add_argument('enable', type=int)
@@ -104,6 +112,49 @@ class AddRole(Resource):
         db.session.add(role)
         db.session.commit()
         return success_api(msg="成功")
+
+    # 更新角色
+    @authorize("admin:role:edit", log=True)
+    def put(self, role_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument('roleId', dest='role_id', type=int)
+        parser.add_argument('roleCode', dest='role_code', type=str)
+        parser.add_argument('roleName', dest='role_name', type=str)
+        parser.add_argument('sort', type=int)
+        parser.add_argument('enable', type=int)
+        parser.add_argument('details', type=str)
+
+        res = parser.parse_args()
+
+        data = {
+            "code": res.role_code,
+            "name": res.role_name,
+            "sort": res.sort,
+            "enable": res.enable,
+            "details": res.details
+        }
+
+        role = Role.query.filter_by(id=role_id).update(data)
+        db.session.commit()
+        if not role:
+            return fail_api(msg="更新角色失败")
+        return success_api(msg="更新角色成功")
+
+
+@role_api.resource('/role/<int:role_id>/status')
+class RoleEnable(Resource):
+    """启用用户"""
+
+    @authorize("admin:role:edit", log=True)
+    def put(self, role_id):
+        ret = Role.query.get(role_id)
+        ret.enable = not ret.enable
+        db.session.commit()
+
+        message = "修改成功"
+        if not ret:
+            return fail_api(msg="出错啦")
+        return success_api(msg=message)
 
 
 @role_api.resource('/role_power/<int:role_id>')
@@ -164,76 +215,3 @@ class RolePower(Resource):
         if not res:
             return fail_api(msg="角色删除失败")
         return success_api(msg="角色删除成功")
-
-
-@role_api.resource('/edit/<int:role_id>')
-class EditRole(Resource):
-
-    # # 角色编辑
-    # @authorize("admin:role:edit", log=True)
-    # def get(self, role_id):
-    #     role = Role.query.filter_by(id=role_id).first()
-    #     return make_response(render_template('roles/edit.html', role=role))
-
-    # 更新角色
-    @authorize("admin:role:edit", log=True)
-    def put(self, role_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('roleId', dest='role_id', type=int)
-        parser.add_argument('roleCode', dest='role_code', type=str)
-        parser.add_argument('roleName', dest='role_name', type=str)
-        parser.add_argument('sort', type=int)
-        parser.add_argument('enable', type=int)
-        parser.add_argument('details', type=str)
-
-        res = parser.parse_args()
-
-        data = {
-            "code": res.role_code,
-            "name": res.role_name,
-            "sort": res.sort,
-            "enable": res.enable,
-            "details": res.details
-        }
-
-        role = Role.query.filter_by(id=role_id).update(data)
-        db.session.commit()
-        if not role:
-            return fail_api(msg="更新角色失败")
-        return success_api(msg="更新角色成功")
-
-
-@role_api.resource('/enable')
-class RoleEnable(Resource):
-    """启用用户"""
-
-    @authorize("admin:role:edit", log=True)
-    def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('roleId', dest='role_id', required=True, type=int)
-        parser.add_argument('operate', required=True, type=int)
-
-        res = parser.parse_args()
-        ret = Role.query.filter_by(id=res.role_id).update({"enable": res.operate})
-        db.session.commit()
-
-        message = "启动成功" if res.operate else "禁用成功"
-        if not ret:
-            return fail_api(msg="出错啦")
-        return success_api(msg=message)
-
-
-@role_api.resource('/batch_remove')
-class RoleBatchRemove(Resource):
-    """批量删除"""
-
-    @authorize("admin:role:remove", log=True)
-    @login_required
-    def delete(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('ids[]', action='append', dest='ids')
-
-        res = parser.parse_args()
-
-        batch_remove_role(res.ids)
-        return success_api(msg="批量删除成功")

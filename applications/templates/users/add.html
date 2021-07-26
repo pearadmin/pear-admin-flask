@@ -62,7 +62,16 @@
   layui.use(['form', 'jquery'], function () {
     let form = layui.form
     let $ = layui.jquery
-    let MODULE_PATH = '/api/v1/users/'
+    let MODULE_PATH = '/api/v1/users'
+    let USER_API = {
+      'USERS': () => `${MODULE_PATH}/users`,
+      'USER': (user_id) => `${MODULE_PATH}/user/${user_id}`,
+      'USER_ROLE': (user_id) => `${MODULE_PATH}/user/${user_id}/role`,
+      'USER_STATUS': (user_id) => `${MODULE_PATH}/user/${user_id}/status`,
+      'USER_AVATAR': (user_id) => `${MODULE_PATH}/user/${user_id}/avatar`,
+      'USER_INFO': (user_id) => `${MODULE_PATH}/user/${user_id}/info`,
+      'USER_PASSWORD': (user_id) => `${MODULE_PATH}/user/${user_id}/password`,
+    }
 
     form.on('submit(user-save)', function (data) {
       let roleIds = ''
@@ -73,7 +82,7 @@
       data.field.roleIds = roleIds
 
       $.ajax({
-        url: MODULE_PATH + 'add',
+        url: USER_API.USERS(),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

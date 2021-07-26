@@ -74,11 +74,20 @@
     let form = layui.form
     let $ = layui.jquery
     let dtree = layui.dtree
-    let MODULE_PATH = '/api/v1/users/'
+    let MODULE_PATH = '/api/v1/users'
+    let USER_API = {
+      'USERS': () => `${MODULE_PATH}/users`,
+      'USER': (user_id) => `${MODULE_PATH}/user/${user_id}`,
+      'USER_ROLE': (user_id) => `${MODULE_PATH}/user/${user_id}/role`,
+      'USER_STATUS': (user_id) => `${MODULE_PATH}/user/${user_id}/status`,
+      'USER_AVATAR': (user_id) => `${MODULE_PATH}/user/${user_id}/avatar`,
+      'USER_INFO': (user_id) => `${MODULE_PATH}/user/${user_id}/info`,
+      'USER_PASSWORD': (user_id) => `${MODULE_PATH}/user/${user_id}/password`,
+    }
 
     dtree.renderSelect({
       elem: '#selectParent',
-      url: '/api/v1/dept/tree',
+      url: '/api/v1/dept/departments',
       method: 'get',
       selectInputName: { nodeId: 'deptId', context: 'deptName' },
       skin: 'layui',
@@ -94,7 +103,7 @@
       roleIds = roleIds.substr(0, roleIds.length - 1)
       data.field.roleIds = roleIds
       $.ajax({
-        url: MODULE_PATH + data.field.userId,
+        url: USER_API.USER_ROLE(data.field.userId),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

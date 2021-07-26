@@ -56,6 +56,15 @@
                     <div class="layui-tab-content">
                         <div class="layui-tab-item layui-show">
                             <form class="layui-form">
+                                <div class="layui-form-item" style="display: none">
+                                    <label class="layui-form-label">用户id</label>
+                                    <div class="layui-input-block">
+                                        <input value="{{ user_info.id }}" type="text" readonly name="user_id"
+                                               id="user_id"
+                                               lay-verify="title"
+                                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                                    </div>
+                                </div>
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">账号</label>
                                     <div class="layui-input-block">
@@ -177,6 +186,15 @@
     <div class="mainBox">
         <div class="main-container">
             <div class="main-container">
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label">用户id</label>
+                    <div class="layui-input-block">
+                        <input value="{{ user_info.id }}" type="text" readonly name="user_id"
+                               id="user_id"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">旧密码</label>
                     <div class="layui-input-block">
@@ -222,7 +240,17 @@
     let form = layui.form
     let popup = layui.popup
 
-    let MODULE_PATH = '/api/v1/users/'
+    let MODULE_PATH = '/api/v1/users'
+    let USER_API = {
+      'USERS': () => `${MODULE_PATH}/users`,
+      'USER': (user_id) => `${MODULE_PATH}/user/${user_id}`,
+      'USER_ROLE': (user_id) => `${MODULE_PATH}/user/${user_id}/role`,
+      'USER_STATUS': (user_id) => `${MODULE_PATH}/user/${user_id}/status`,
+      'USER_AVATAR': (user_id) => `${MODULE_PATH}/user/${user_id}/avatar`,
+      'USER_INFO': (user_id) => `${MODULE_PATH}/user/${user_id}/info`,
+      'USER_PASSWORD': (user_id) => `${MODULE_PATH}/user/${user_id}/password`,
+    }
+
     // 修改密码页面
     $('.edit-password').click(function () {
       layer.open({
@@ -253,7 +281,7 @@
     // 表单提交更改个人信息数据
     form.on('submit(user-update)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'updateInfo',
+        url: USER_API.USER_INFO(data.field.user_id),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -272,7 +300,7 @@
     // 修改密码提交
     form.on('submit(edit-password)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'editPassword',
+        url: USER_API.USER_PASSWORD(data.field.user_id),
         data: JSON.stringify(data.field),
         contentType: 'application/json',
         dataType: 'json',
@@ -280,6 +308,7 @@
         success: function (result) {
           if (result.success) {
             popup.success(result.msg, function () {
+              // TODO 关闭修改密码成之后的窗口
               parent.layer.close(parent.layer.getFrameIndex(window.name))
             })
           } else {

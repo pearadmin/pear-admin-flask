@@ -31,6 +31,7 @@
             <input class="layui-upload-file" id="uploadPicture" type="file" value="选择图片">
         </div>
         <div class="layui-form-mid layui-word-aux">建议:图片的尺寸宽高比为1:1,大小在5m以内。</div>
+        <input type="text" hidden value="{{ current_user.id }}" id="user_id">
     </div>
 </div>
 </body>
@@ -41,6 +42,17 @@
     let layer = layui.layer
     let cropper = layui.cropper
     let popup = layui.popup
+
+    let MODULE_PATH = '/api/v1/users'
+    let USER_API = {
+      'USERS': () => `${MODULE_PATH}/users`,
+      'USER': (user_id) => `${MODULE_PATH}/user/${user_id}`,
+      'USER_ROLE': (user_id) => `${MODULE_PATH}/user/${user_id}/role`,
+      'USER_STATUS': (user_id) => `${MODULE_PATH}/user/${user_id}/status`,
+      'USER_AVATAR': (user_id) => `${MODULE_PATH}/user/${user_id}/avatar`,
+      'USER_INFO': (user_id) => `${MODULE_PATH}/user/${user_id}/info`,
+      'USER_PASSWORD': (user_id) => `${MODULE_PATH}/user/${user_id}/password`,
+    }
 
     let options = {
       aspectRatio: 1 / 1, // 裁剪框比例
@@ -65,7 +77,7 @@
         formData.append('fileToken', timeStamp)
         $.ajax({
           method: 'post',
-          url: '/file/upload', //用于文件上传的服务器端请求地址
+          url: '/api/v1/file/photos', //用于文件上传的服务器端请求地址
           data: formData,
           processData: false,
           contentType: false,
@@ -74,7 +86,7 @@
               // 修改 avatar 字段
               $.ajax({
                 method: 'put',
-                url: '/users/avatar',
+                url: USER_API.USER_AVATAR($('#user_id').val()),
                 data: JSON.stringify({ avatar: result.data }),
                 dataType: 'json',
                 contentType: 'application/json',

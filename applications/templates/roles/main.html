@@ -87,36 +87,26 @@
     </div>
 </form>
 <script type="text/html" id="role-toolbar">
-    {% if authorize("admin:role:add") %}
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-            <i class="layui-icon layui-icon-add-1"></i>
-            新增
-        </button>
-    {% endif %}
-    {% if authorize("admin:role:remove") %}
-        <button class="pear-btn pear-btn-md" lay-event="batchRemove">
-            <i class="layui-icon layui-icon-delete"></i>
-            删除
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+    </button>
 </script>
 
 <script type="text/html" id="role-bar">
-    {% if authorize("admin:role:edit") %}
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
-                class="layui-icon layui-icon-edit"></i>
-        </button>
-    {% endif %}
-    {% if authorize("admin:role:power") %}
-        <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i
-                class="layui-icon layui-icon-vercode"></i>
-        </button>
-    {% endif %}
-    {% if authorize("admin:role:remove") %}
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-                class="layui-icon layui-icon-delete"></i>
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
+            class="layui-icon layui-icon-edit"></i>
+    </button>
+    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i
+            class="layui-icon layui-icon-vercode"></i>
+    </button>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+            class="layui-icon layui-icon-delete"></i>
+    </button>
 </script>
 
 <script type="text/html" id="role-enable">
@@ -131,13 +121,17 @@
     let $ = layui.jquery
     let popup = layui.popup
 
-    let MODULE_PATH = '/api/v1/roles/'
+    let MODULE_PATH = '/api/v1/roles'
+    let ROLE_API = {
+      'ROLES': () => `${MODULE_PATH}/roles`,
+      'ROLE': (role_id) => `${MODULE_PATH}/role/${role_id}`,
+      'ROLE_STATUS': (role_id) => `${MODULE_PATH}/role/${role_id}/status`,
+      'ROLE_POWER': (role_id) => `${MODULE_PATH}/role_power/${role_id}`
+    }
 
     let cols = [
       [
-        {% if authorize("admin:role:remove") %}
-          { type: 'checkbox' },
-        {% endif %}
+        { type: 'checkbox' },
         { title: '角色名', field: 'roleName', align: 'center', width: 100 },
         { title: 'Key值', field: 'roleCode', align: 'center' },
         { title: '描述', field: 'details', align: 'center' },
@@ -149,7 +143,7 @@
 
     table.render({
       elem: '#role-table',
-      url: MODULE_PATH + 'data',
+      url: ROLE_API.ROLES(),
       page: true,
       cols: cols,
       skin: 'line',
@@ -194,7 +188,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: MODULE_PATH + 'enable',
+        url: ROLE_API.ROLE_STATUS(this.value),
         data: JSON.stringify({ roleId: this.value, operate: operate }),
         dataType: 'json',
         contentType: 'application/json',
@@ -210,8 +204,8 @@
       })
     })
 
-      let add_index;
-      window.add = function () {
+    let add_index
+    window.add = function () {
       add_index = layer.open({
         type: 1,
         title: '新增',
@@ -248,7 +242,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + 'role_power/' + obj.data['id'],
+          url: ROLE_API.ROLE_POWER(obj.data['id']),
           dataType: 'json',
           type: 'delete',
           success: function (result) {
@@ -291,7 +285,7 @@
         let loading = layer.load()
         $.ajax({
 
-          url: MODULE_PATH + 'batch_remove',
+          url: ROLE_API.ROLES(),
           data: { ids: ids },
           dataType: 'json',
           type: 'delete',
@@ -316,7 +310,7 @@
     {#添加数据逻辑#}
     form.on('submit(role-save)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'add',
+        url: ROLE_API.ROLE(0),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

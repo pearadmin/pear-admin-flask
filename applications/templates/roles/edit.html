@@ -32,9 +32,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %}value="0"
+                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %}value="1"
                                title="开启">
-                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %} value="1"
+                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %} value="0"
                                title="关闭">
                     </div>
                 </div>
@@ -76,11 +76,18 @@
   layui.use(['form', 'jquery'], function () {
     let form = layui.form
     let $ = layui.jquery
-    let MODULE_PATH = '/api/v1/roles/'
+
+    let MODULE_PATH = '/api/v1/roles'
+    let ROLE_API = {
+      'ROLES': () => `${MODULE_PATH}/roles`,
+      'ROLE': (role_id) => `${MODULE_PATH}/role/${role_id}`,
+      'ROLE_STATUS': (role_id) => `${MODULE_PATH}/role/${role_id}/status`,
+      'ROLE_POWER': (role_id) => `${MODULE_PATH}/role_power/${role_id}`
+    }
 
     form.on('submit(role-update)', function (data) {
       $.ajax({
-        url: MODULE_PATH + 'edit/' + data.field.roleId,
+        url: ROLE_API.ROLE(data.field.roleId),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',

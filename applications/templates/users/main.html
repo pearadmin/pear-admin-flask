@@ -53,18 +53,14 @@
 </body>
 {# 表格操作 #}
 <script type="text/html" id="user-toolbar">
-    {% if authorize("admin:user:add") %}
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
-            <i class="pear-icon pear-icon-add"></i>
-            新增
-        </button>
-    {% endif %}
-    {% if authorize("admin:user:remove") %}
-        <button class="pear-btn pear-btn-md" lay-event="batchRemove">
-            <i class="pear-icon pear-icon-ashbin"></i>
-            删除
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="pear-icon pear-icon-add"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <i class="pear-icon pear-icon-ashbin"></i>
+        删除
+    </button>
     <button class="pear-btn pear-btn-md" lay-event="collasped">
         <i class="pear-icon pear-icon-modular"></i>
         高级
@@ -73,15 +69,11 @@
 
 {# 用户修改操作 #}
 <script type="text/html" id="user-bar">
-    {% if authorize("admin:user:edit") %}
-        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i>
-        </button>
-    {% endif %}
-    {% if authorize("admin:user:remove") %}
-        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-                class="pear-icon pear-icon-ashbin"></i>
-        </button>
-    {% endif %}
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i>
+    </button>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+            class="pear-icon pear-icon-ashbin"></i>
+    </button>
 </script>
 
 {# 启动与禁用 #}
@@ -111,14 +103,22 @@
     let dtree = layui.dtree
     let popup = layui.popup
     let common = layui.common
-    let MODULE_PATH = '/api/v1/users/'
+
+    let MODULE_PATH = '/api/v1/users'
+    let USER_API = {
+      'USERS': () => `${MODULE_PATH}/users`,
+      'USER': (user_id) => `${MODULE_PATH}/user/${user_id}`,
+      'USER_ROLE': (user_id) => `${MODULE_PATH}/user/${user_id}/role`,
+      'USER_STATUS': (user_id) => `${MODULE_PATH}/user/${user_id}/status`,
+      'USER_AVATAR': (user_id) => `${MODULE_PATH}/user/${user_id}/avatar`,
+      'USER_INFO': (user_id) => `${MODULE_PATH}/user/${user_id}/info`,
+      'USER_PASSWORD': (user_id) => `${MODULE_PATH}/user/${user_id}/password`,
+    }
 
     // 表格数据
     let cols = [
       [
-        {% if authorize("admin:user:remove") %}
-          { type: 'checkbox' },
-        {% endif %}
+        { type: 'checkbox' },
         { title: '姓名', field: 'realname', align: 'center', width: 110 },
         { title: '账号', field: 'username', align: 'center' },
         { title: '部门', field: 'dept', align: 'center' },
@@ -132,7 +132,7 @@
     // 渲染表格数据
     table.render({
       elem: '#user-table',
-      url: MODULE_PATH + 'data',
+      url: USER_API.USERS(),
       page: true,
       cols: cols,
       skin: 'line',
@@ -146,7 +146,7 @@
     dtree.render({
       elem: '#dept-tree',
       method: 'get',
-      url: '/api/v1/dept/tree',
+      url: '/api/v1/dept/departments',
       dataFormat: 'list',
       line: true,
       skin: 'laySimple',
@@ -217,7 +217,7 @@
       }
       let loading = layer.load()
       $.ajax({
-        url: MODULE_PATH + 'enable',
+        url: USER_API.USER_STATUS(this.value),
         data: JSON.stringify({ operate: operate, userId: this.value }),
         dataType: 'json',
         contentType: 'application/json',
@@ -258,7 +258,7 @@
         layer.close(index)
         let loading = layer.load()
         $.ajax({
-          url: MODULE_PATH + obj.data['id'],
+          url: USER_API.USER(obj.data['id']),
           dataType: 'json',
           type: 'delete',
           success: function (result) {
@@ -301,7 +301,7 @@
         let loading = layer.load()
         $.ajax({
 
-          url: MODULE_PATH + 'batchRemove',
+          url: USER_API.USERS(),
           data: { ids: ids },
           dataType: 'json',
           type: 'delete',

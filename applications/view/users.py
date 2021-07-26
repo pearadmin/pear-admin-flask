@@ -23,13 +23,6 @@ def users_center():
     return render_template('users/profile.html', user_info=current_user, user_logs=user_logs)
 
 
-@index_bp.get('/users/add')
-@authorize("admin:user:add", log=True)
-def users_get_user():
-    roles = Role.query.all()
-    return render_template('users/add.html', roles=roles)
-
-
 @index_bp.get('/users/<user_id>')
 @authorize("admin:user:edit", log=True)
 def users_user_id_view(user_id):

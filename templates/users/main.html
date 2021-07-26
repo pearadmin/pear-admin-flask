@@ -95,8 +95,55 @@
 
 {% include 'common/footer.html' %}
 
+<form class="layui-form" style="display: none" id="add_user_view" lay-filter="add_form">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realName" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="password" autocomplete="off" placeholder="请输入标题"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-block" id="add_role_ids">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                    lay-filter="add-user-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="pear-btn pear-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+
 <script type="module">
-  import { USER_API } from '/static/api/http.js'
+  import { USER_API, ROLE } from '/static/api/http.js'
 
   layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
     let table = layui.table
@@ -224,13 +271,59 @@
       })
     })
 
+    form.on('submit(add-user-save)', function (data) {
+      let roleIds = ''
+      $('input[type=checkbox]:checked').each(function () {
+        roleIds += $(this).val() + ','
+      })
+      roleIds = roleIds.substr(0, roleIds.length - 1)
+      data.field.roleIds = roleIds
+
+      $.ajax({
+        url: USER_API.USERS(),
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              // TODO 无法关闭当前页
+              layer.close(layer.index) //关闭当前页
+              layui.table.reload('user-table')
+              // 重置表单
+              form.val('add_form', {
+                'username': '' // "name": "value"
+                , 'realName': ''
+                , 'password': ''
+              })
+            })
+            form.render()
+          } else {
+            layer.msg(result.msg, { icon: 2, time: 1000 })
+          }
+        }
+      })
+      return false
+    })
+
     window.add = function () {
+      ROLE.get_roles().then(function (result) {
+        let role = $('#add_role_ids')
+        $('#add_role_ids input').remove()
+        $('#add_role_ids div').remove()
+        result['data'].forEach(function (item) {
+          role.append(`<input value="${item.id}" title="${item.roleName}" type="checkbox" name="roleIds" lay-skin="primary">`)
+        })
+        form.render('checkbox')
+      })
+
       layer.open({
-        type: 2,
+        type: 1,
         title: '新增',
         shade: 0.1,
         area: ['550px', '550px'],
-        content: '/users/' + 'add'
+        content: $('#add_user_view')
       })
     }
 

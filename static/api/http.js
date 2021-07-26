@@ -40,6 +40,16 @@ class Role {
       'ROLE_POWER': (role_id) => `${this.ROLE_PATH}/role_power/${role_id}`
     }
   }
+
+  async get_roles () {
+    return fetch(this.ROLE_API.ROLES())
+      .then(function (response) {
+        return response.json()
+      })
+      .then(function (myJson) {
+        return myJson
+      })
+  }
 }
 
 class Users {

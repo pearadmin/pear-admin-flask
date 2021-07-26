@@ -55,18 +55,14 @@
 </script>
 
 {% include 'common/footer.html' %}
-<script>
+<script type="module">
+  import { FILE_API } from '/static/api/http.js'
+
   layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
     let upload = layui.upload
-
-    let MODULE_PATH = '/api/v1/file'
-    let FILE_API = {
-      'PHOTOS': () => `${MODULE_PATH}/photos`,
-      'PHOTO': (photo_id) => `${MODULE_PATH}/photo/${photo_id}`,
-    }
 
     let cols = [
       [

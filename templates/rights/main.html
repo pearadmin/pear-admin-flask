@@ -165,7 +165,9 @@
 </form>
 
 {% include 'common/footer.html' %}
-<script>
+<script type="module">
+  import { RIGHTS_API } from '/static/api/http.js'
+
   layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree', 'iconPicker'], function () {
     let table = layui.table
     let form = layui.form
@@ -174,13 +176,6 @@
     let popup = layui.popup
     let iconPicker = layui.iconPicker
     let dtree = layui.dtree
-
-    let MODULE_PATH = '/api/v1/rights'
-    let RIGHTS_API = {
-      'RIGHTS': () => `${MODULE_PATH}/rights`,
-      'POWER': (power_id) => `${MODULE_PATH}/power/${power_id}`,
-      'POWER_STATUS': (power_id) => `${MODULE_PATH}/power/${power_id}/status`
-    }
 
     window.render = function () {
       treetable.render({

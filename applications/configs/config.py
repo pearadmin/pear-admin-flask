@@ -35,7 +35,7 @@ class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = False
 
-    UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(os.path.abspath(__name__)), 'applications', 'static', 'upload')
+    UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(os.path.abspath(__name__)), 'static', 'upload')
 
 
 class ProductionConfig(BaseConfig):

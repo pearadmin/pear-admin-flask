@@ -114,20 +114,14 @@
            lay-filter="role-enable" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
 {% include 'common/footer.html' %}
-<script>
+<script type="module">
+  import { ROLE_API } from '/static/api/http.js'
+
   layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
     let popup = layui.popup
-
-    let MODULE_PATH = '/api/v1/roles'
-    let ROLE_API = {
-      'ROLES': () => `${MODULE_PATH}/roles`,
-      'ROLE': (role_id) => `${MODULE_PATH}/role/${role_id}`,
-      'ROLE_STATUS': (role_id) => `${MODULE_PATH}/role/${role_id}/status`,
-      'ROLE_POWER': (role_id) => `${MODULE_PATH}/role_power/${role_id}`
-    }
 
     let cols = [
       [
@@ -221,7 +215,6 @@
         title: '授权',
         shade: 0.1,
         area: ['320px', '400px'],
-        {#content: MODULE_PATH + 'power/' + obj.data['id']#}
         content: '/admin/role/power/' + obj.data['id']
       })
     }
@@ -232,7 +225,6 @@
         title: '修改',
         shade: 0.1,
         area: ['500px', '500px'],
-        {#content: MODULE_PATH + 'edit/' + obj.data['id']#}
         content: '/admin/role/edit/' + obj.data['id']
       })
     }

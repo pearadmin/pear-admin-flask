@@ -26,17 +26,19 @@
     </div>
 </form>
 {% include 'common/footer.html' %}
-<script>
+<script type="module">
+
+  import { ROLE_API } from '/static/api/http.js'
+
   layui.use(['dtree', 'form', 'jquery'], function () {
     let dtree = layui.dtree
     let form = layui.form
     let $ = layui.jquery
-    let MODULE_PATH = '/api/v1/roles/'
 
     dtree.render({
       elem: '#role-power',
       method: 'get',
-      url: MODULE_PATH + 'role_power/' + {{id}},
+      url: ROLE_API.ROLE_POWER({{id}}),
       dataFormat: 'list',
       checkbar: true,
       skin: 'layui',
@@ -57,7 +59,7 @@
       data.field.powerIds = ids
 
       $.ajax({
-        url: MODULE_PATH + 'role_power/' + data.field.roleId,
+        url: ROLE_API.ROLE_POWER(data.field.roleId),
         data: data.field,
         dataType: 'json',
         type: 'put',

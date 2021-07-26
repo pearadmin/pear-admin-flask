@@ -12,7 +12,7 @@ from applications.configs import config
 
 
 def create_app(config_name=None):
-    app = Flask(__name__)
+    app = Flask('pear-admin-flask')
 
     if not config_name:
         # 尝试从本地环境中读取

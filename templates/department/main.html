@@ -243,7 +243,10 @@
         </div>
     </div>
 </form>
-<script>
+<script type="module">
+
+  import { DEPARTMENT_API } from '/static/api/http.js'
+
   layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree'], function () {
     let table = layui.table
     let form = layui.form
@@ -251,14 +254,6 @@
     let treetable = layui.treetable
     let popup = layui.popup
     let dtree = layui.dtree
-
-    {#定义模块访问路径#}
-    let MODULE_PATH = '/api/v1/dept'
-    let DEPARTMENT_API = {
-      'DEPARTMENTS': () => `${MODULE_PATH}/departments`,
-      'DEPARTMENT': (dept_id) => `${MODULE_PATH}/department/${dept_id}`,
-      'DEPARTMENT_STATUS': (dept_id) => `${MODULE_PATH}/department/${dept_id}/status`
-    }
 
     {#定义表格渲染函数#}
     window.render = function () {

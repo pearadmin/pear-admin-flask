@@ -110,6 +110,7 @@ def make_menu_tree():
         if _dict['id'] in menu_dict:
             # 当前节点添加子节点
             _dict['children'] = copy.deepcopy(menu_dict[_dict['id']])
+            _dict['children'].sort(key=lambda item: item['sort'])
             # 删除子节点
             del menu_dict[_dict['id']]
 
@@ -159,9 +160,6 @@ class RightRights(Resource):
     @authorize("admin:power:main", log=True)
     def get(self):
         """获取选择父节点"""
-
-        # power = Power.query.all()
-        # res = marshal(power, power_fields)
 
         power = Power.query.all()
         power_data = marshal(power, power_fields)
@@ -247,12 +245,12 @@ class RightsPower(Resource):
         return success_api(msg="更新权限成功")
 
 
-@rights_api.resource('power/<int:right_id>/status')
+@rights_api.resource('/power/<int:right_id>/status')
 class PowerStatus(Resource):
     @authorize("admin:power:edit", log=True)
     def put(self, right_id):
 
-        power = Power.query.get(id=right_id)
+        power = Power.query.get(right_id)
         if power:
             power.enable = not power.enable
             db.session.commit()

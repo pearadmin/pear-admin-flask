@@ -118,7 +118,8 @@ def make_menu_tree():
             menu_dict[_dict['parent_id']] = [_dict]
         else:
             menu_dict[_dict['parent_id']].append(_dict)
-    return menu_dict.get(0)
+
+    return sorted(menu_dict.get(0), key=lambda item: item['sort'])
 
 
 # 删除权限（目前没有判断父节点自动删除子节点）

@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <title>登录</title>
     <!-- 样 式 文 件 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='/admin/component/pear/css/pear.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/login.css') }}"/>
+    <link rel="stylesheet" href="/static/admin/component/pear/css/pear.css"/>
+    <link rel="stylesheet" href="/static/admin/admin/css/other/login.css"/>
 </head>
 <!-- 代 码 结 构 -->
-<body background="{{ url_for('static', filename='/admin/admin/images/background.svg') }}"
+<body background="/static/admin/admin/images/background.svg"
       style="background-size: cover;">
 <form class="layui-form" action="javascript:void(0);">
     <div class="layui-form-item">
-        <img class="logo" src="{{ url_for('static', filename='/admin/admin/images/logo.png') }}"/>
+        <img class="logo" src="/static/admin/admin/images/logo.png"/>
         <div class="title">Pear Admin</div>
         <div class="desc">
             明 湖 区 最 具 影 响 力 的 设 计 规 范 之 一
@@ -45,7 +45,7 @@
     let layer = layui.layer
     let button = layui.button
     let popup = layui.popup
-    let captchaPath = "/passport/getCaptcha"
+    let captchaPath = '/passport/getCaptcha'
 
     form.on('submit(login)', function (data) {
       // data 是表单的数据
@@ -62,7 +62,7 @@
           btn.stop(function () {
             if (result.success) {
               popup.success(result.msg, function () {
-                location.href = "/admin"
+                location.href = '/admin'
               })
             } else {
               popup.failure(result.msg, function () {

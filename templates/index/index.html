@@ -7,9 +7,9 @@
     <meta name="keyword" content="pear-admin-flask">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='/index/layui/css/layui.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/index/css/main.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/index/css/load.css') }}"/>
+    <link rel="stylesheet" href="/static/index/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/static/index/css/main.css"/>
+    <link rel="stylesheet" href="/static/index/css/load.css"/>
     <style>
         .layui-nav .layui-this:after {
             display: none;
@@ -24,7 +24,7 @@
 <!-- header -->
 <div class="ew-header">
     <img class="layui-logo"
-         src="{{ url_for('static', filename='/index/images/un28.svg') }}"
+         src="/static/index/images/un28.svg"
          style="height:50px;padding: 10px;"
     />
     <div class="ew-nav-group">
@@ -47,9 +47,9 @@
         <div class="layui-row layui-col-space25" style="margin-top: 10px;">
             <div class="layui-col-md6  layui-col-xs12">
                 <img style="margin-top: 0px;margin-bottom: 40px;width: 80%;"
-                     src="{{ url_for('static', filename='/index/images/pear.png') }}"></h1>
+                     src="/static/index/images/pear.png"></h1>
                 <img style="width: 25%;position: absolute;left: 38%;margin-top: 5px;"
-                     src="{{ url_for('static', filename='/index/images/admin.png') }}"></h1>
+                     src="/static/index/images/admin.png"></h1>
                 <p style="font-size: 13.8px;font-weight: 500;margin-top: 10px;">💐 致 力 于 让 " Web " 开 发 变 得 简 单 优 雅 </p>
                 <div class="ew-banner-btngroup" style="margin-top: 50px;margin-bottom: 50px;">
                     <ul class="layui-nav" style="background-color: white;" lay-filter="ew-header-nav">
@@ -79,7 +79,7 @@
             <div class="layui-col-md6 layui-col-xs12">
                 <div class="ew-banner-right">
                     <img class="show" style="width: 92%;" style="margin-top: 0px!important;"
-                         src="{{ url_for('static', filename='/index/images/un26.svg') }}">
+                         src="/static/index/images/un26.svg">
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
             <div class="layui-col-md6">
                 <h2 style="font-size: 17px;" class="footer-item-title">技术交流</h2>
                 <p class="img-group" style="height: 105px;font-size: 15.5px;">
-                    <img src="{{ url_for('static', filename='/index/images/code2.png') }}"
+                    <img src="/static/index/images/code2.png"
                          style="border-radius: 2px;height: 100px;width: 100px;">
                     扫码免费加入前后端分离技术交流QQ群，与各位大佬一起交流技术、讨论问题。
                 </p>
@@ -150,8 +150,8 @@
 </div>
 
 <!-- js部分 -->
-<script src="{{ url_for('static', filename='/admin/component/layui/layui.js') }}"></script>
-<script src="{{ url_for('static', filename='/admin/component/pear/pear.js') }}"></script>
+<script src="/static/admin/component/layui/layui.js"></script>
+<script src="/static/admin/component/pear/pear.js"></script>
 
 <script>
   layui.use(['layer', 'form', 'jquery'], function () {

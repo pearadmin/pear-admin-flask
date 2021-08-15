@@ -31,7 +31,7 @@ class TestingConfig(BaseConfig):
 
 class DevelopmentConfig(BaseConfig):
     """ 开发配置 """
-    SQLALCHEMY_DATABASE_URI = r'sqlite:///../sql_pear_admin.db'
+    SQLALCHEMY_DATABASE_URI = r'sqlite:///sql_pear_admin.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = False
 

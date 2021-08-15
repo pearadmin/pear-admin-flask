@@ -1,6 +1,7 @@
-from flask import render_template
+from flask import render_template, request
 
 from applications.common.utils.rights import authorize
+from applications.models import Dept
 from applications.view import index_bp
 
 
@@ -8,3 +9,17 @@ from applications.view import index_bp
 @authorize("admin:dept:main", log=True)
 def dept_index():
     return render_template('department/main.html')
+
+
+@index_bp.get('/dept/add')
+@authorize("admin:dept:add", log=True)
+def add():
+    return render_template('department/add.html')
+
+
+@index_bp.get('/dept/edit')
+@authorize("admin:dept:edit", log=True)
+def edit():
+    dept_id = request.args.get("deptId", type=int)
+    dept = Dept.query.get(dept_id)
+    return render_template('department/edit.html', dept=dept)

@@ -12,7 +12,7 @@ dept_api = Api(api_bp, prefix='/dept')
 
 
 @dept_api.resource('/departments')
-class AddDepartment(Resource):
+class Department(Resource):
 
     @authorize("admin:dept:main", log=True)
     def get(self):

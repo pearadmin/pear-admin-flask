@@ -40,6 +40,7 @@ def login_post():
     if not username or not password or not code:
         return fail_api(msg="用户名或密码没有输入")
     s_code = session.get("code", None)
+    session["code"] = None
 
     if not all([code, s_code]):
         return fail_api(msg="参数错误")

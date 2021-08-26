@@ -8,36 +8,59 @@
     <div class="mainBox">
         <div class="main-container">
             <div class="main-container">
-              <div class="layui-form-item">
-                    <label class="layui-form-label">协议类型</label>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">ID标识</label>
                     <div class="layui-input-block">
-                       <select name="type" lay-verify="required" lay-search>
-        <option value="http">http</option>
-        <option value="https">https</option>
-      </select>
+                        <input type="text" name="id" lay-verify="title" autocomplete="off" placeholder="请输入任务id"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                        <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入名称"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-    <label class="layui-form-label">查询间隔时间</label>
-    <div class="layui-input-block">
-      <select name="frequency" lay-verify="required" lay-search>
-        {% for task in task_frequency_render %}
-            <option value="{{ task.key }}">{{ task.value}}</option>
-          {% endfor %}
+                    <label class="layui-form-label">任务类型</label>
+                    <div class="layui-input-block">
+                        <select name="type" lay-filter="type" lay-verify="required" lay-search>
+                            <option value="date">date 一次性指定固定时间，只执行一次</option>
+                            <option value="interval">interval 间隔调度，隔多长时间执行一次</option>
+                            <option value="cron">cron 指定相对时间执行</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">函数</label>
+                    <div class="layui-input-block">
+                        <select name="functions" lay-verify="required" lay-search>
+                            {% for task in task_list %}
+                                <option value="{{ task }}">{{ task }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="datetimeItem">
+                    <label class="layui-form-label">固定时间</label>
+                    <div class="layui-input-block">
+                        <input name="datetime" type="text" class="layui-input" id="datetime">
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: none" id="timeItem">
+                    <label class="layui-form-label">时间</label>
+                    <div class="layui-input-block">
+                        <input name="time"  type="text" class="layui-input" id="time">
+                    </div>
+                </div>
 
 
-      </select>
-    </div>
-  </div>
+                </select>
             </div>
         </div>
+    </div>
+    </div>
     </div>
     <div class="bottom">
         <div class="button-container">
@@ -54,31 +77,64 @@
 </form>
 {% include 'admin/common/footer.html' %}
 <script>
-  layui.use(['form', 'jquery'], function () {
-    let form = layui.form
-    let $ = layui.jquery
+    layui.use(['form', 'jquery'], function () {
 
-    form.on('submit(role-save)', function (data) {
-      $.ajax({
-        url: '/task/save',
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'post',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-              parent.layui.table.reload('role-table')
+        let form = layui.form
+        let $ = layui.jquery
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#datetime'
+            , type: 'datetime'
+        });
+         laydate.render({
+            elem: '#time'
+            , type: 'time'
+        });
+
+
+        form.on('select(type)', function (data) {
+            if (data.value === 'date') {
+                $('#timeItem').hide()
+                $('#datetimeItem').show()
+            } else if (data.value === 'interval') {
+                console.log('interval')
+                 $('#datetimeItem').hide()
+                $('#timeItem').show()
+                 $('#timeItem').val('')
+
+            } else if (data.value === 'cron') {
+                console.log('cron')
+                 $('#datetimeItem').hide()
+                $('#timeItem').show()
+                $('#timeItem').val('')
+
+            }
+
+        })
+
+
+        form.on('submit(role-save)', function (data) {
+            $.ajax({
+                url: '/admin/task/save',
+                data: JSON.stringify(data.field),
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'post',
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                            parent.layui.table.reload('role-table')
+                        })
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000})
+                    }
+                }
             })
-          } else {
-            layer.msg(result.msg, { icon: 2, time: 1000 })
-          }
-        }
-      })
-      return false
+            return false
+        })
     })
-  })
 </script>
 </body>
 </html>

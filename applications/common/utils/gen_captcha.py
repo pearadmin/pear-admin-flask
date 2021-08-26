@@ -4,7 +4,7 @@ from PIL import Image
 from random import choices
 
 
-def gen_captcha(content='0123456789'):
+def gen_captcha(content='2345689abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ'):
     """ 生成验证码 """
     image = ImageCaptcha()
     # 获取字符串

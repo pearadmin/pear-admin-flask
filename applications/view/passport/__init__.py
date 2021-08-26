@@ -35,7 +35,7 @@ def login_post():
     req = request.form
     username = req.get('username')
     password = req.get('password')
-    code = req.get('captcha')
+    code = req.get('captcha').__str__().lower()
 
     if not username or not password or not code:
         return fail_api(msg="用户名或密码没有输入")

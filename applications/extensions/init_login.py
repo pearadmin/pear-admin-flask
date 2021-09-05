@@ -10,6 +10,6 @@ def init_login_manager(app):
 
     @login_manager.user_loader
     def load_user(user_id):
-        from applications.models import User
-        user = User.query.get(int(user_id))
+        from applications.models import CompanyUser
+        user = CompanyUser.query.get(int(user_id))
         return user

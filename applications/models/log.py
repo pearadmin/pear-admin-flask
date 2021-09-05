@@ -1,8 +1,8 @@
-from datetime import datetime
 from applications.extensions import db
+from .base import BaseModel
 
 
-class AdminLog(db.Model):
+class AdminLog(db.Model, BaseModel):
     __tablename__ = 'admin_admin_log'
     id = db.Column(db.Integer, primary_key=True)
     method = db.Column(db.String(10))
@@ -12,4 +12,4 @@ class AdminLog(db.Model):
     ip = db.Column(db.String(255))
     success = db.Column(db.Integer)
     user_agent = db.Column(db.Text)
-    create_time = db.Column(db.DateTime, default=datetime.now)
+

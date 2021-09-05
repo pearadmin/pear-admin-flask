@@ -6,7 +6,7 @@ from applications.api import api_bp
 from applications.common.admin_log import login_log
 from applications.common.gen_captcha import add_auth_session
 from applications.common.utils.http import fail_api, success_api
-from applications.models import User
+from applications.models import CompanyUser
 
 from flask import render_template, make_response
 
@@ -34,7 +34,7 @@ class Login(Resource):
 
         if req.captcha != s_code:
             return fail_api(msg="验证码错误")
-        user = User.query.filter_by(username=req.username).first()
+        user = CompanyUser.query.filter_by(username=req.username).first()
 
         if user is None:
             return fail_api(msg="不存在的用户")

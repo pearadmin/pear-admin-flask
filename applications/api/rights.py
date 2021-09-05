@@ -10,7 +10,7 @@ from applications.common.serialization import power2_fields, power_fields
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
-from applications.models import Power, Role
+from applications.models import RightsPower, RightsRole
 
 
 def get_render_config():
@@ -124,15 +124,15 @@ def make_menu_tree():
 
 # 删除权限（目前没有判断父节点自动删除子节点）
 def remove_power(power_id):
-    power = Power.query.filter_by(id=power_id).first()
+    power = RightsPower.query.filter_by(id=power_id).first()
     role_id_list = []
     roles = power.role
     for role in roles:
         role_id_list.append(role.id)
-    roles = Role.query.filter(Role.id.in_(role_id_list)).all()
+    roles = RightsRole.query.filter(RightsRole.id.in_(role_id_list)).all()
     for p in roles:
         power.role.remove(p)
-    r = Power.query.filter_by(id=power_id).delete()
+    r = RightsPower.query.filter_by(id=power_id).delete()
     db.session.commit()
     return r
 
@@ -162,7 +162,7 @@ class RightRights(Resource):
     def get(self):
         """获取选择父节点"""
 
-        power = Power.query.all()
+        power = RightsPower.query.all()
         power_data = marshal(power, power_fields)
         power_data.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
         res = {
@@ -180,12 +180,12 @@ class RightRights(Resource):
 
 
 @rights_api.resource('/power/<int:power_id>')
-class RightsPower(Resource):
+class RightsPowerView(Resource):
 
     @authorize("admin:power:add", log=True)
     def post(self, power_id):
         res = parser_power.parse_args()
-        power = Power(
+        power = RightsPower(
             icon=res.icon,
             open_type=res.open_type,
             parent_id=res.parent_id,
@@ -208,15 +208,15 @@ class RightsPower(Resource):
     @authorize("admin:power:remove", log=True)
     def delete(self, power_id):
         # 删除权限（目前没有判断父节点自动删除子节点）
-        power = Power.query.filter_by(id=power_id).first()
+        power = RightsPower.query.filter_by(id=power_id).first()
         role_id_list = []
         roles = power.role
         for role in roles:
             role_id_list.append(role.id)
-        roles = Role.query.filter(Role.id.in_(role_id_list)).all()
+        roles = RightsRole.query.filter(RightsRole.id.in_(role_id_list)).all()
         for p in roles:
             power.role.remove(p)
-        r = Power.query.filter_by(id=power_id).delete()
+        r = RightsPower.query.filter_by(id=power_id).delete()
         db.session.commit()
 
         if r:
@@ -238,7 +238,7 @@ class RightsPower(Resource):
             "url": res.power_url,
             "sort": res.sort
         }
-        power = Power.query.filter_by(id=power_id).update(data)
+        power = RightsPower.query.filter_by(id=power_id).update(data)
         db.session.commit()
 
         if not power:
@@ -251,7 +251,7 @@ class PowerStatus(Resource):
     @authorize("admin:power:edit", log=True)
     def put(self, right_id):
 
-        power = Power.query.get(right_id)
+        power = RightsPower.query.get(right_id)
         if power:
             power.enable = not power.enable
             db.session.commit()

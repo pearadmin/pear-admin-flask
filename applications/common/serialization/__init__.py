@@ -9,7 +9,7 @@ power_fields = {
     'parentId': fields.String(attribute="parent_id"),
     'icon': fields.String,
     'sort': fields.Integer,
-    'create_time': fields.DateTime,
+    'create_at': fields.DateTime,
     'update_time': fields.DateTime,
     'enable': fields.Integer,
 }
@@ -24,7 +24,7 @@ power2_fields = {
     'parent_id': fields.Integer,
     'icon': fields.String,
     'sort': fields.Integer,
-    'create_time': fields.DateTime,
+    'create_at': fields.DateTime,
     'update_time': fields.DateTime,
     'enable': fields.Integer,
 }
@@ -50,7 +50,7 @@ log_fields = {
     'ip': fields.String,
     'user_agent': fields.String,
     'success': fields.Boolean,
-    'create_time': fields.DateTime,
+    'create_at': fields.DateTime,
 }
 
 dept_fields = {
@@ -72,5 +72,5 @@ photo_fields = {
     'mime': fields.String,
     'size': fields.String,
     'ext': fields.String,
-    'create_time': fields.DateTime,
+    'create_at': fields.DateTime,
 }

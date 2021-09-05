@@ -10,7 +10,7 @@ from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.upload import upload_one, delete_photo_by_id
 from applications.extensions import db
-from applications.models import Photo
+from applications.models import FilePhoto
 
 file_api = Api(api_bp, prefix='/file')
 
@@ -22,8 +22,8 @@ class FilePhotos(Resource):
     def get(self):
         page = request.args.get('page', type=int)
         limit = request.args.get('limit', type=int)
-        photo_paginate = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit,
-                                                                                error_out=False)
+        photo_paginate = FilePhoto.query.order_by(desc(FilePhoto.create_at)).paginate(page=page, per_page=limit,
+                                                                                      error_out=False)
         data = marshal(photo_paginate.items, photo_fields)
         return table_api(data=data, count=photo_paginate.total, code=0)
 
@@ -49,11 +49,11 @@ class FilePhotos(Resource):
         """图片批量删除"""
         # TODO bugs 图片删除失败
         ids = request.form.getlist('ids[]')
-        photo_name = Photo.query.filter(Photo.id.in_(ids)).all()
+        photo_name = FilePhoto.query.filter(FilePhoto.id.in_(ids)).all()
         upload_url = current_app.config.get("UPLOADED_PHOTOS_DEST")
         for p in photo_name:
             os.remove(upload_url + '/' + p.name)
-        photo = Photo.query.filter(Photo.id.in_(ids)).delete(synchronize_session=False)
+        photo = FilePhoto.query.filter(FilePhoto.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         if photo:
             return success_api(msg="删除成功")

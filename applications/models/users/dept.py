@@ -1,8 +1,8 @@
-import datetime
 from applications.extensions import db
+from ..base import BaseModel
 
 
-class Dept(db.Model):
+class CompanyDepartment(db.Model, BaseModel):
     __tablename__ = 'cp_dept'
     id = db.Column(db.Integer, primary_key=True, comment="部门ID")
     parent_id = db.Column(db.Integer, comment="父级编号")
@@ -14,5 +14,3 @@ class Dept(db.Model):
     status = db.Column(db.Integer, comment='状态(1开启,0关闭)')
     remark = db.Column(db.Text, comment="备注")
     address = db.Column(db.String(255), comment="详细地址")
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')

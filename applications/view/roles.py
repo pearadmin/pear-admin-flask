@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 from applications.common.utils.rights import authorize
 
-from applications.models import Role
+from applications.models import RightsRole
 
 role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
 
@@ -25,5 +25,5 @@ def power(_id):
 @authorize("admin:role:edit", log=True)
 @role_bp.get('/edit/<int:role_id>')
 def role_editor(role_id):
-    role = Role.query.filter_by(id=role_id).first()
+    role = RightsRole.query.filter_by(id=role_id).first()
     return render_template('roles/edit.html', role=role)

@@ -7,7 +7,7 @@
 <body class="pear-container">
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="photo_table" lay-filter="photo_table"></table>
+        <table id="tables" lay-filter="tables"></table>
     </div>
 </div>
 </body>
@@ -33,6 +33,22 @@
         </div>
     </div>
 </div>
+
+<script type="text/html" id="toolbar">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-sm" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+    </button>
+</script>
+
+<script type="text/html" id="tools">
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+            class="layui-icon layui-icon-delete"></i></button>
+</script>
 
 {% include 'common/footer.html' %}
 <script type="module">
@@ -86,19 +102,15 @@
           align: 'center'
         },
         {
-          field: 'create_time',
+          field: 'create_at',
           title: '创建时间',
-          templet: (d) => `${layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm:ss')}`,
+          templet: (d) => `${layui.util.toDateString(d.create_at, 'yyyy-MM-dd HH:mm:ss')}`,
           unresize: true,
           align: 'center'
         },
         {
           title: '操作',
-          toolbar: (d) => {
-            return `<button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
-                        <i class="layui-icon layui-icon-delete"></i>
-                    </button>`
-          },
+          toolbar: '#tools',
           align: 'center',
           unresize: true,
           width: 200
@@ -107,28 +119,19 @@
     ]
 
     table.render({
-      elem: '#photo_table',
+      elem: '#tables',
       url: FILE_API.PHOTOS(),
       page: true,
       cols: cols,
       skin: 'line',
-      toolbar: (d) => {
-        return `<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
-                <i class="layui-icon layui-icon-add-1"></i>
-                    新增
-                </button>
-                <button class="pear-btn pear-btn-sm" lay-event="batchRemove">
-                    <i class="layui-icon layui-icon-delete"></i>
-                    删除
-                </button>`
-      },
+      toolbar: '#toolbar',
       defaultToolbar: [{
         layEvent: 'refresh',
         icon: 'layui-icon-refresh',
       }, 'filter', 'print', 'exports']
     })
 
-    table.on('tool(photo_table)', function (obj) {
+    table.on('tool(tables)', function (obj) {
       if (obj.event === 'remove') {
         window.remove(obj)
       } else if (obj.event === 'photo') {
@@ -136,7 +139,7 @@
       }
     })
 
-    table.on('toolbar(photo_table)', function (obj) {
+    table.on('toolbar(tables)', function (obj) {
       if (obj.event === 'add') {
         window.add()
       } else if (obj.event === 'refresh') {
@@ -147,7 +150,7 @@
     })
 
     //弹出窗设置 自己设置弹出百分比
-    function screen () {
+    function screen (width, height) {
       if (typeof width !== 'number' || width === 0) {
         width = $(window).width() * 0.8
       }
@@ -210,7 +213,7 @@
         return false
       }
       var ids = []
-      var hasCheck = table.checkStatus('photo_table')
+      var hasCheck = table.checkStatus('tables')
       var hasCheckData = hasCheck.data
       if (hasCheckData.length > 0) {
         $.each(hasCheckData, function (index, element) {
@@ -235,7 +238,7 @@
                 icon: 1,
                 time: 1000
               }, function () {
-                table.reload('photo_table')
+                table.reload('tables')
               })
             } else {
               layer.msg(res.msg, {
@@ -249,7 +252,7 @@
     }
 
     window.refresh = function () {
-      table.reload('photo_table')
+      table.reload('tables')
     }
     // 查看大图
     window.photo = function (obj) {

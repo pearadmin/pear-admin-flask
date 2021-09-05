@@ -26,23 +26,23 @@ def register_script(app: Flask):
         """数据库初始化"""
 
         # 创建化部门数据
-        from applications.models import Dept
+        from applications.models import CompanyDepartment
         from applications.configs.init_data import cp_dept_data_list
-        add_data(cp_dept_data_list, Dept)
+        add_data(cp_dept_data_list, CompanyDepartment)
 
         # 图片数据
-        from applications.models import Photo
+        from applications.models import FilePhoto
         from applications.configs.init_data import file_photo_data_list
 
-        add_data(file_photo_data_list, Photo)
+        add_data(file_photo_data_list, FilePhoto)
 
         # 初始化权限表数据
-        from applications.models import Power
+        from applications.models import RightsPower
         from applications.configs.init_data import rt_power_data_list
 
-        add_data(rt_power_data_list, Power)
+        add_data(rt_power_data_list, RightsPower)
         # 初始化角色表
-        from applications.models import Role
+        from applications.models import RightsRole
         from applications.configs.init_data import rt_role_data_list
 
         # 角色权限关系表
@@ -52,13 +52,13 @@ def register_script(app: Flask):
             db.session.execute('insert into rt_role_power VALUES (%s, %s, %s);' % tuple(data))
         db.session.commit()
 
-        add_data(rt_role_data_list, Role)
+        add_data(rt_role_data_list, RightsRole)
 
         # 管理员用户
-        from applications.models import User
+        from applications.models import CompanyUser
         from applications.configs.init_data import cp_user_data_list
 
-        add_data(cp_user_data_list, User)
+        add_data(cp_user_data_list, CompanyUser)
 
         # 用户角色表
         from applications.extensions import db

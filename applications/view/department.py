@@ -1,7 +1,7 @@
 from flask import render_template, request
 
 from applications.common.utils.rights import authorize
-from applications.models import Dept
+from applications.models import CompanyDepartment
 from applications.view import index_bp
 
 
@@ -21,5 +21,5 @@ def add():
 @authorize("admin:dept:edit", log=True)
 def edit():
     dept_id = request.args.get("deptId", type=int)
-    dept = Dept.query.get(dept_id)
+    dept = CompanyDepartment.query.get(dept_id)
     return render_template('department/edit.html', dept=dept)

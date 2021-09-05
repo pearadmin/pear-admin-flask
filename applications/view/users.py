@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import desc
 
 from applications.common.utils.rights import authorize
-from applications.models import AdminLog, Role, User
+from applications.models import AdminLog, RightsRole, CompanyUser
 
 from . import index_bp
 
@@ -19,7 +19,7 @@ def users_main():
 @login_required
 def users_center():
     user_logs = AdminLog.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
-        desc(AdminLog.create_time)).limit(10)
+        desc(AdminLog.create_at)).limit(10)
     return render_template('users/profile.html', user_info=current_user, user_logs=user_logs)
 
 
@@ -27,8 +27,8 @@ def users_center():
 @authorize("admin:user:edit", log=True)
 def users_user_id_view(user_id):
     #  获取编辑用户信息
-    user = User.query.filter_by(id=user_id).first()
-    roles = Role.query.all()
+    user = CompanyUser.query.filter_by(id=user_id).first()
+    roles = RightsRole.query.all()
     checked_roles = []
     for r in user.role:
         checked_roles.append(r.id)

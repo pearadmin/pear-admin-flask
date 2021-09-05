@@ -7,28 +7,28 @@ from applications.common.utils.rights import authorize
 from applications.common.serialization import power_fields
 
 from applications.extensions import db
-from applications.models import Power, Role, User
+from applications.models import RightsPower, RightsRole, CompanyUser
 from . import api_bp
 
 
 def remove_role(role_id):
     """ 删除角色 """
-    role = Role.query.filter_by(id=role_id).first()
+    role = RightsRole.query.filter_by(id=role_id).first()
     # 删除该角色的权限
     power_id_list = []
     for p in role.power:
         power_id_list.append(p.id)
 
-    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+    powers = RightsPower.query.filter(RightsPower.id.in_(power_id_list)).all()
     for p in powers:
         role.power.remove(p)
     user_id_list = []
     for u in role.user:
         user_id_list.append(u.id)
-    users = User.query.filter(User.id.in_(user_id_list)).all()
+    users = CompanyUser.query.filter(CompanyUser.id.in_(user_id_list)).all()
     for u in users:
         role.user.remove(u)
-    r = Role.query.filter_by(id=role_id).delete()
+    r = RightsRole.query.filter_by(id=role_id).delete()
     db.session.commit()
     return r
 
@@ -57,11 +57,11 @@ class RoleRoles(Resource):
 
         filters = []
         if res.role_name:
-            filters.append(Role.name.like('%' + res.role_name + '%'))
+            filters.append(RightsRole.name.like('%' + res.role_name + '%'))
         if res.role_code:
-            filters.append(Role.code.like('%' + res.role_code + '%'))
+            filters.append(RightsRole.code.like('%' + res.role_code + '%'))
 
-        paginate = Role.query.filter(*filters).paginate(page=res.page, per_page=res.limit, error_out=False)
+        paginate = RightsRole.query.filter(*filters).paginate(page=res.page, per_page=res.limit, error_out=False)
 
         return table_api(data=[
             {
@@ -72,7 +72,7 @@ class RoleRoles(Resource):
                 'remark': item.remark,
                 'details': item.details,
                 'sort': item.sort,
-                'create_at': item.create_time,
+                'create_at': item.create_at,
             } for item in paginate.items
         ], count=paginate.total, code=0)
 
@@ -102,7 +102,7 @@ class RoleRole(Resource):
 
         res = parser.parse_args()
 
-        role = Role(
+        role = RightsRole(
             details=res.details,
             enable=res.enable,
             code=res.role_code,
@@ -134,7 +134,7 @@ class RoleRole(Resource):
             "details": res.details
         }
 
-        role = Role.query.filter_by(id=role_id).update(data)
+        role = RightsRole.query.filter_by(id=role_id).update(data)
         db.session.commit()
         if not role:
             return fail_api(msg="更新角色失败")
@@ -147,7 +147,7 @@ class RoleEnable(Resource):
 
     @authorize("admin:role:edit", log=True)
     def put(self, role_id):
-        ret = Role.query.get(role_id)
+        ret = RightsRole.query.get(role_id)
         ret.enable = not ret.enable
         db.session.commit()
 
@@ -163,10 +163,10 @@ class RolePower(Resource):
     @authorize("admin:role:main", log=True)
     def get(self, role_id):
         # 获取角色权限
-        role = Role.query.filter_by(id=role_id).first()
+        role = RightsRole.query.filter_by(id=role_id).first()
         # 获取权限列表的 id
         check_powers_list = [rp.id for rp in role.power]
-        powers = Power.query.all()  # 获取所有的权限
+        powers = RightsPower.query.all()  # 获取所有的权限
         # power_schema = PowerSchema2(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
         # 将所有的权限生产可序列化对象 json
         # powers = power_schema.dump(powers)  # 生成可序列化对象
@@ -193,14 +193,14 @@ class RolePower(Resource):
         power_list = res.power_ids.split(',')
 
         """ 更新角色权限 """
-        role = Role.query.filter_by(id=role_id).first()
+        role = RightsRole.query.filter_by(id=role_id).first()
         power_id_list = []
         for p in role.power:
             power_id_list.append(p.id)
-        powers = Power.query.filter(Power.id.in_(power_id_list)).all()
+        powers = RightsPower.query.filter(RightsPower.id.in_(power_id_list)).all()
         for p in powers:
             role.power.remove(p)
-        powers = Power.query.filter(Power.id.in_(power_list)).all()
+        powers = RightsPower.query.filter(RightsPower.id.in_(power_list)).all()
         for p in powers:
             role.power.append(p)
         db.session.commit()

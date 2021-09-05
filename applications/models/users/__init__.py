@@ -1,2 +1,2 @@
-from .dept import Dept
-from .users import User
+from .dept import CompanyDepartment
+from .users import CompanyUser

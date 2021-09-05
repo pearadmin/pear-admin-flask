@@ -1,7 +1,4 @@
-from applications.models.users import Dept, User
+from applications.models.file import FilePhoto
 from applications.models.log import AdminLog
-from applications.models.file.photo import Photo
-from applications.models.rights.power import Power
-from applications.models.rights.role import Role
-from applications.models.rights.role_power import role_power
-from applications.models.rights.user_role import user_role
+from applications.models.rights import RightsPower, RightsRole, role_power, user_role
+from applications.models.users import CompanyDepartment, CompanyUser

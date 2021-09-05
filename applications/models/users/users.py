@@ -1,10 +1,11 @@
-import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from applications.extensions import db
+from ..base import BaseModel
 
 
-class User(db.Model, UserMixin):
+class CompanyUser(db.Model, UserMixin, BaseModel):
     __tablename__ = 'cp_user'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
     username = db.Column(db.String(20), comment='用户名')
@@ -15,14 +16,11 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), comment='哈希密码')
     enable = db.Column(db.Integer, default=0, comment='启用')
     dept_id = db.Column(db.Integer, comment='部门id')
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now, comment='创建时间')
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, comment='创建时间')
 
-    role = db.relationship('Role', secondary="rt_user_role", backref=db.backref('user'), lazy='dynamic')
+    role = db.relationship('RightsRole', secondary="rt_user_role", backref=db.backref('user'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
-

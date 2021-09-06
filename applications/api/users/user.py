@@ -1,15 +1,13 @@
 from flask import request
-
-from flask_restful import Resource, reqparse
 from flask_login import current_user
+from flask_restful import Resource, reqparse
 from sqlalchemy import desc
 
-from applications.extensions import db
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
-from applications.models import CompanyUser, RightsRole, CompanyDepartment
+from applications.extensions import db
 from applications.models import AdminLog
-from . import users_api
+from applications.models import CompanyUser, RightsRole, CompanyDepartment
 
 
 def get_current_user_logs():
@@ -59,7 +57,6 @@ def update_user_role(_id, roles_list):
     db.session.commit()
 
 
-@users_api.resource('/users')
 class UserUsers(Resource):
     """用户列表数据操作"""
 
@@ -140,7 +137,6 @@ class UserUsers(Resource):
         return success_api(msg="批量删除成功")
 
 
-@users_api.resource('/user/<int:user_id>')
 class UserUser(Resource):
     """修改用户数据"""
 
@@ -185,7 +181,6 @@ class UserUser(Resource):
         return success_api(msg="删除成功")
 
 
-@users_api.resource('/user/<int:user_id>/role')
 class UserRole(Resource):
     @authorize("admin:user:edit", log=True)
     def put(self, user_id):
@@ -201,8 +196,8 @@ class UserRole(Resource):
 
         # 更新用户数据
         CompanyUser.query.filter_by(id=user_id).update({'username': res.username,
-                                                 'realname': res.real_name,
-                                                 'dept_id': res.dept_id})
+                                                        'realname': res.real_name,
+                                                        'dept_id': res.dept_id})
         db.session.commit()
 
         update_user_role(user_id, role_ids)

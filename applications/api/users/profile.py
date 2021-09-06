@@ -1,16 +1,13 @@
 # 个人中心
 from flask import request, jsonify
-from flask_login import login_required, current_user
+from flask_login import login_required
 from flask_restful import Resource, reqparse
 
 from applications.common.utils.http import fail_api, success_api
 from applications.extensions import db
 from applications.models import CompanyUser
 
-from . import users_api
 
-
-@users_api.resource('/user/<int:user_id>/status')
 class UserStatus(Resource):
     def put(self, user_id):
         # 启用或者禁用用户 enable disable
@@ -35,7 +32,6 @@ class UserStatus(Resource):
         return message
 
 
-@users_api.resource('/user/<int:user_id>/avatar')
 class UserAvatar(Resource):
     """修改头像"""
 
@@ -49,7 +45,6 @@ class UserAvatar(Resource):
         return success_api(msg="修改成功")
 
 
-@users_api.resource('/user/<int:user_id>/info')
 class UserInfo(Resource):
 
     @login_required
@@ -72,7 +67,6 @@ class UserInfo(Resource):
         return success_api(msg="更新成功")
 
 
-@users_api.resource('/user/<int:user_id>/password')
 class UserPassword(Resource):
     """前用户密码"""
 

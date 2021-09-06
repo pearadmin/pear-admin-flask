@@ -3,9 +3,8 @@ from collections import OrderedDict
 
 from flask import request, jsonify, current_app
 from flask_login import current_user, login_required
-from flask_restful import Resource, reqparse, Api, marshal
+from flask_restful import Resource, reqparse, marshal
 
-from applications.api import api_bp
 from applications.common.serialization import power2_fields, power_fields
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
@@ -143,8 +142,6 @@ def batch_remove_power(ids):
         remove_power(_id)
 
 
-rights_api = Api(api_bp, prefix='/rights')
-
 parser_power = reqparse.RequestParser(bundle_errors=True)
 parser_power.add_argument('icon', type=str)
 parser_power.add_argument('openType', type=str, dest='open_type')
@@ -156,7 +153,6 @@ parser_power.add_argument('powerUrl', type=str, dest='power_url')
 parser_power.add_argument('sort', type=int, dest='sort')
 
 
-@rights_api.resource('/rights')
 class RightRights(Resource):
     @authorize("admin:power:main", log=True)
     def get(self):
@@ -179,8 +175,7 @@ class RightRights(Resource):
         return success_api(msg="批量删除成功")
 
 
-@rights_api.resource('/power/<int:power_id>')
-class RightsPowerView(Resource):
+class RightPower(Resource):
 
     @authorize("admin:power:add", log=True)
     def post(self, power_id):
@@ -246,8 +241,7 @@ class RightsPowerView(Resource):
         return success_api(msg="更新权限成功")
 
 
-@rights_api.resource('/power/<int:right_id>/status')
-class PowerStatus(Resource):
+class RightPowerEnable(Resource):
     @authorize("admin:power:edit", log=True)
     def put(self, right_id):
 
@@ -261,14 +255,12 @@ class PowerStatus(Resource):
             return fail_api(msg="出错啦")
 
 
-@rights_api.resource('/configs')
 class AdminConfigs(Resource):
     @login_required
     def get(self):
         return get_render_config()
 
 
-@rights_api.resource('/menu')
 class AdminMenu(Resource):
     @login_required
     def get(self):

@@ -1,14 +1,12 @@
 from flask import jsonify
 from flask_login import login_required
-from flask_restful import Resource, Api, reqparse, marshal
+from flask_restful import Resource, reqparse, marshal
 
+from applications.common.serialization import power_fields
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
-from applications.common.serialization import power_fields
-
 from applications.extensions import db
 from applications.models import RightsPower, RightsRole, CompanyUser
-from . import api_bp
 
 
 def remove_role(role_id):
@@ -39,10 +37,6 @@ def batch_remove_role(role_ids):
         remove_role(role_id)
 
 
-role_api = Api(api_bp, prefix='/roles')
-
-
-@role_api.resource('/roles')
 class RoleRoles(Resource):
     # 表格数据
     @authorize("admin:role:main", log=True)
@@ -88,7 +82,6 @@ class RoleRoles(Resource):
         return success_api(msg="批量删除成功")
 
 
-@role_api.resource('/role/<int:role_id>')
 class RoleRole(Resource):
 
     @authorize("admin:role:add", log=True)
@@ -141,7 +134,6 @@ class RoleRole(Resource):
         return success_api(msg="更新角色成功")
 
 
-@role_api.resource('/role/<int:role_id>/status')
 class RoleEnable(Resource):
     """启用用户"""
 
@@ -157,7 +149,6 @@ class RoleEnable(Resource):
         return success_api(msg=message)
 
 
-@role_api.resource('/role_power/<int:role_id>')
 class RolePower(Resource):
 
     @authorize("admin:role:main", log=True)

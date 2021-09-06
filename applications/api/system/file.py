@@ -1,10 +1,9 @@
 import os
 
 from flask import request, jsonify, current_app
-from flask_restful import Api, Resource, marshal
+from flask_restful import Resource, marshal
 from sqlalchemy import desc
 
-from applications.api import api_bp
 from applications.common.serialization import photo_fields
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
@@ -12,10 +11,7 @@ from applications.common.utils.upload import upload_one, delete_photo_by_id
 from applications.extensions import db
 from applications.models import FilePhoto
 
-file_api = Api(api_bp, prefix='/file')
 
-
-@file_api.resource('/photos')
 class FilePhotos(Resource):
 
     @authorize("admin:file:main", log=True)
@@ -61,7 +57,6 @@ class FilePhotos(Resource):
             return fail_api(msg="删除失败")
 
 
-@file_api.resource('/photo/<int:photo_id>')
 class FileTable(Resource):
     """图片数据"""
 

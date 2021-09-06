@@ -1,18 +1,15 @@
 from flask import jsonify
-from flask_restful import Api, Resource
-from applications.api import api_bp
+from flask_restful import Resource
+from flask_restful import marshal, reqparse
+
+from applications.common.serialization import dept_fields
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import CompanyDepartment, CompanyUser
-from flask_restful import marshal, reqparse
-from applications.common.serialization import dept_fields
-
-dept_api = Api(api_bp, prefix='/dept')
 
 
-@dept_api.resource('/departments')
-class Department(Resource):
+class Departments(Resource):
 
     @authorize("admin:dept:main", log=True)
     def get(self):
@@ -54,8 +51,7 @@ class Department(Resource):
         return success_api(msg="成功")
 
 
-@dept_api.resource('/department/<int:dept_id>')
-class DeptURD(Resource):
+class Department(Resource):
     @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
         dept = CompanyDepartment.query.filter_by(id=dept_id).first()
@@ -109,7 +105,6 @@ class DeptURD(Resource):
         return fail_api(msg="删除失败")
 
 
-@dept_api.resource('/department/<int:dept_id>/status')
 class DeptEnable(Resource):
     @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):

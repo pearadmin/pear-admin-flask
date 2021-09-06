@@ -1,19 +1,14 @@
+from flask import render_template, make_response
 from flask import session, redirect, url_for, request
 from flask_login import current_user, login_user
-from flask_restful import Resource, reqparse, Api
+from flask_restful import Resource, reqparse
 
-from applications.api import api_bp
 from applications.common.admin_log import login_log
 from applications.common.gen_captcha import add_auth_session
 from applications.common.utils.http import fail_api, success_api
 from applications.models import CompanyUser
 
-from flask import render_template, make_response
 
-passport_api = Api(api_bp, prefix='/passport')
-
-
-@passport_api.resource('/login')
 class Login(Resource):
     login_req = reqparse.RequestParser(bundle_errors=True)
     login_req.add_argument('username', type=str, help='请输入用户名', required=True)

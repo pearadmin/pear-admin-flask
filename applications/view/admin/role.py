@@ -183,20 +183,10 @@ def dis_enable():
 @authorize("admin:role:remove", log=True)
 def remove(id):
     role = Role.query.filter_by(id=id).first()
-    # 删除该角色的权限
-    power_id_list = []
-    for p in role.power:
-        power_id_list.append(p.id)
-
-    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
-    for p in powers:
-        role.power.remove(p)
-    user_id_list = []
-    for u in role.user:
-        user_id_list.append(u.id)
-    users = User.query.filter(User.id.in_(user_id_list)).all()
-    for u in users:
-        role.user.remove(u)
+    # 删除该角色的权限和用户
+    role.power = []
+    role.user = []
+    
     r = Role.query.filter_by(id=id).delete()
     db.session.commit()
     if not r:
@@ -212,20 +202,10 @@ def batch_remove():
     ids = request.form.getlist('ids[]')
     for id in ids:
         role = Role.query.filter_by(id=id).first()
-        # 删除该角色的权限
-        power_id_list = []
-        for p in role.power:
-            power_id_list.append(p.id)
-
-        powers = Power.query.filter(Power.id.in_(power_id_list)).all()
-        for p in powers:
-            role.power.remove(p)
-        user_id_list = []
-        for u in role.user:
-            user_id_list.append(u.id)
-        users = User.query.filter(User.id.in_(user_id_list)).all()
-        for u in users:
-            role.user.remove(u)
+        # 删除该角色的权限和用户
+        role.power = []
+        role.user = []
+        
         r = Role.query.filter_by(id=id).delete()
         db.session.commit()
     return success_api(msg="批量删除成功")

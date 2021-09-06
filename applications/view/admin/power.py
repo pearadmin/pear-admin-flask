@@ -143,13 +143,8 @@ def dis_enable():
 @authorize("admin:power:remove", log=True)
 def remove(id):
     power = Power.query.filter_by(id=id).first()
-    role_id_list = []
-    roles = power.role
-    for role in roles:
-        role_id_list.append(role.id)
-    roles = Role.query.filter(Role.id.in_(role_id_list)).all()
-    for p in roles:
-        power.role.remove(p)
+    power.role = []
+    
     r = Power.query.filter_by(id=id).delete()
     db.session.commit()
     if r:
@@ -165,13 +160,8 @@ def batch_remove():
     ids = request.form.getlist('ids[]')
     for id in ids:
         power = Power.query.filter_by(id=id).first()
-        role_id_list = []
-        roles = power.role
-        for role in roles:
-            role_id_list.append(role.id)
-        roles = Role.query.filter(Role.id.in_(role_id_list)).all()
-        for p in roles:
-            power.role.remove(p)
+        power.role = []
+
         r = Power.query.filter_by(id=id).delete()
         db.session.commit()
     return success_api(msg="批量删除成功")

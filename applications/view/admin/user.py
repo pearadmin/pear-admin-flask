@@ -85,12 +85,8 @@ def save():
 @authorize("admin:user:remove", log=True)
 def delete(id):
     user = User.query.filter_by(id=id).first()
-    roles_id = []
-    for role in user.role:
-        roles_id.append(role.id)
-    roles = Role.query.filter(Role.id.in_(roles_id)).all()
-    for r in roles:
-        user.role.remove(r)
+    user.role = []
+    
     res = User.query.filter_by(id=id).delete()
     db.session.commit()
     if not res:
@@ -237,12 +233,8 @@ def batch_remove():
     ids = request.form.getlist('ids[]')
     for id in ids:
         user = User.query.filter_by(id=id).first()
-        roles_id = []
-        for role in user.role:
-            roles_id.append(role.id)
-        roles = Role.query.filter(Role.id.in_(roles_id)).all()
-        for r in roles:
-            user.role.remove(r)
+        user.role = []
+        
         res = User.query.filter_by(id=id).delete()
         db.session.commit()
     return success_api(msg="批量删除成功")

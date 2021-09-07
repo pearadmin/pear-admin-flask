@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>用户管理</title>
-    {% include 'common/header.html' %}
+    {% include 'admin/common/header.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/user.css') }}"/>
 </head>
 <body class="pear-container">
@@ -93,54 +93,7 @@
     {{ '  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
 </script>
 
-{% include 'common/footer.html' %}
-
-<form class="layui-form" style="display: none" id="add_user_view" lay-filter="add_form">
-    <div class="mainBox">
-        <div class="main-container">
-            <div class="layui-form-item">
-                <label class="layui-form-label">账号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">姓名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="realName" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input type="text" name="password" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">角色</label>
-                <div class="layui-input-block" id="add_role_ids">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
-                    lay-filter="add-user-save">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
-        </div>
-    </div>
-</form>
+{% include 'admin/common/footer.html' %}
 
 <script type="module">
   import { USER_API, ROLE } from '/static/api/http.js'
@@ -163,8 +116,8 @@
         { title: '启用', field: 'enable', align: 'center', templet: '#user-enable', width: 120 },
         { title: '注册时间', field: 'create_at', templet: '#user-createTime', align: 'center' },
         { title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center' },
-        { title: '操作', toolbar: '#user-bar', align: 'center', width: 130 }
-      ]
+        { title: '操作', toolbar: '#user-bar', align: 'center', width: 130 },
+      ],
     ]
 
     // 渲染表格数据
@@ -177,7 +130,7 @@
       height: 'full-148',
       toolbar: '#user-toolbar', /*工具栏*/
       text: { none: '暂无人员信息' },
-      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'] /*默认工具栏*/
+      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'], /*默认工具栏*/
     })
 
     // 公司部门树状图菜单
@@ -267,63 +220,17 @@
           } else {
             popup.failure(result.msg)
           }
-        }
+        },
       })
-    })
-
-    form.on('submit(add-user-save)', function (data) {
-      let roleIds = ''
-      $('input[type=checkbox]:checked').each(function () {
-        roleIds += $(this).val() + ','
-      })
-      roleIds = roleIds.substr(0, roleIds.length - 1)
-      data.field.roleIds = roleIds
-
-      $.ajax({
-        url: USER_API.USERS(),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'post',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              // TODO 无法关闭当前页
-              layer.close(layer.index) //关闭当前页
-              layui.table.reload('user-table')
-              // 重置表单
-              form.val('add_form', {
-                'username': '' // "name": "value"
-                , 'realName': ''
-                , 'password': ''
-              })
-            })
-            form.render()
-          } else {
-            layer.msg(result.msg, { icon: 2, time: 1000 })
-          }
-        }
-      })
-      return false
     })
 
     window.add = function () {
-      ROLE.get_roles().then(function (result) {
-        let role = $('#add_role_ids')
-        $('#add_role_ids input').remove()
-        $('#add_role_ids div').remove()
-        result['data'].forEach(function (item) {
-          role.append(`<input value="${item.id}" title="${item.roleName}" type="checkbox" name="roleIds" lay-skin="primary">`)
-        })
-        form.render('checkbox')
-      })
-
       layer.open({
-        type: 1,
+        type: 2,
         title: '新增',
         shade: 0.1,
         area: ['550px', '550px'],
-        content: $('#add_user_view')
+        content: '/users/add',
       })
     }
 
@@ -333,7 +240,7 @@
         title: '修改',
         shade: 0.1,
         area: ['550px', '500px'],
-        content: '/users/' + obj.data['id']
+        content: '/users/' + obj.data['id'],
       })
     }
 
@@ -354,7 +261,7 @@
             } else {
               popup.failure(result.msg)
             }
-          }
+          },
         })
       })
     }
@@ -364,7 +271,7 @@
       if (data.length === 0) {
         layer.msg('未选中数据', {
           icon: 3,
-          time: 1000
+          time: 1000,
         })
         return false
       }
@@ -379,7 +286,7 @@
       {#console.log(ids);#}
       layer.confirm('确定要删除选中角色', {
         icon: 3,
-        title: '提示'
+        title: '提示',
       }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -398,7 +305,7 @@
             } else {
               popup.failure(result.msg)
             }
-          }
+          },
         })
       })
     }

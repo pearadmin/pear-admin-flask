@@ -4,7 +4,6 @@ from sqlalchemy import desc
 
 from applications.common.utils.rights import authorize
 from applications.models import AdminLog, RightsRole, CompanyUser
-
 from . import index_bp
 
 
@@ -12,7 +11,7 @@ from . import index_bp
 @index_bp.get('/users/')
 @authorize("admin:user:main", log=True)
 def users_main():
-    return render_template('users/main.html')
+    return render_template('admin/users/users.html')
 
 
 @index_bp.get('/users/center')
@@ -20,7 +19,7 @@ def users_main():
 def users_center():
     user_logs = AdminLog.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
         desc(AdminLog.create_at)).limit(10)
-    return render_template('users/profile.html', user_info=current_user, user_logs=user_logs)
+    return render_template('admin/users/profile.html', user_info=current_user, user_logs=user_logs)
 
 
 @index_bp.get('/users/<user_id>')
@@ -32,9 +31,15 @@ def users_user_id_view(user_id):
     checked_roles = []
     for r in user.role:
         checked_roles.append(r.id)
-    return render_template('users/edit_users.html', user=user, roles=roles, checked_roles=checked_roles)
+    return render_template('admin/users/users_edit.html', user=user, roles=roles, checked_roles=checked_roles)
 
 
 @index_bp.get('/users/avatar')
 def users_avatar_view():
-    return render_template('users/avatar.html')
+    return render_template('admin/users/profile_avatar.html')
+
+
+@index_bp.get('/users/add')
+def users_add_view():
+    roles = RightsRole.query.all()
+    return render_template('admin/users/users_add.html', roles=roles)

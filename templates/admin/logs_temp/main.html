@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>日志</title>
-    {% include 'common/header.html' %}
+    {% include 'admin/common/header.html' %}
     <link rel="stylesheet" href="/static/admin/admin/css/other/console2.css"/>
 </head>
 <body class="pear-container">
@@ -38,7 +38,7 @@
     <span style="color: red">失败</span>
     {{# } }}'|safe }}
 </script>
-{% include 'common/footer.html' %}
+{% include 'admin/common/footer.html' %}
 <script>
   layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
     let table = layui.table
@@ -56,8 +56,8 @@
         { title: '访问时间', field: 'create_at', templet: '#log-createTime', align: 'center' },
         { title: '操作人ID', field: 'uid', align: 'center' },
         { title: '描述', field: 'desc', align: 'center' },
-        { title: '访问状态', templet: '#log-status', align: 'center' }
-      ]
+        { title: '访问状态', templet: '#log-status', align: 'center' },
+      ],
     ]
 
     table.render({
@@ -66,7 +66,7 @@
       page: true,
       cols: cols,
       skin: 'line',
-      toolbar: false
+      toolbar: false,
     })
 
     table.render({
@@ -75,7 +75,7 @@
       page: true,
       cols: cols,
       skin: 'line',
-      toolbar: false
+      toolbar: false,
     })
 
     form.on('submit(dict-type-query)', function (data) {
@@ -105,7 +105,7 @@
         success: function (layero) {
           let iframeWin = window[layero.find('iframe')[0]['name']]
           iframeWin.show(obj.data)
-        }
+        },
       })
     }
   })

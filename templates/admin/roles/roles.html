@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>角色管理</title>
-    {% include 'common/header.html' %}</head>
+    {% include 'admin/common/header.html' %}</head>
 <body class="pear-container">
 <div class="layui-card">
     <div class="layui-card-body">
@@ -34,6 +34,7 @@
     </div>
 </div>
 </body>
+
 <form id="add_view" class="layui-form" action="" style="display: none">
     <div class="mainBox">
         <div class="main-container">
@@ -86,6 +87,7 @@
         </div>
     </div>
 </form>
+
 <script type="text/html" id="role-toolbar">
     <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
         <i class="layui-icon layui-icon-add-1"></i>
@@ -113,7 +115,7 @@
     <input type="checkbox" name="enable" value="{{ "{{d.id}}" }}" lay-skin="switch" lay-text="启用|禁用"
            lay-filter="role-enable" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
-{% include 'common/footer.html' %}
+{% include 'admin/common/footer.html' %}
 <script type="module">
   import { ROLE_API } from '/static/api/http.js'
 
@@ -131,8 +133,8 @@
         { title: '描述', field: 'details', align: 'center' },
         { title: '是否可用', field: 'enable', align: 'center', templet: '#role-enable' },
         { title: '排序', field: 'sort', align: 'center' },
-        { title: '操作', toolbar: '#role-bar', align: 'center', width: 195 }
-      ]
+        { title: '操作', toolbar: '#role-bar', align: 'center', width: 195 },
+      ],
     ]
 
     table.render({
@@ -142,10 +144,11 @@
       cols: cols,
       skin: 'line',
       toolbar: '#role-toolbar',
-      defaultToolbar: [{
-        layEvent: 'refresh',
-        icon: 'layui-icon-refresh',
-      }, 'filter', 'print', 'exports']
+      defaultToolbar: [
+        {
+          layEvent: 'refresh',
+          icon: 'layui-icon-refresh',
+        }, 'filter', 'print', 'exports'],
     })
 
     table.on('tool(role-table)', function (obj) {
@@ -194,18 +197,17 @@
           } else {
             layer.msg(result.msg, { icon: 2, time: 1000 })
           }
-        }
+        },
       })
     })
 
-    let add_index
     window.add = function () {
-      add_index = layer.open({
-        type: 1,
+      layer.open({
+        type: 2,
         title: '新增',
         shade: 0.1,
         area: ['500px', '500px'],
-        content: $('#add_view')
+        content: '/admin/role/add',
       })
     }
 
@@ -215,7 +217,7 @@
         title: '授权',
         shade: 0.1,
         area: ['320px', '400px'],
-        content: '/admin/role/power/' + obj.data['id']
+        content: '/admin/role/power/' + obj.data['id'],
       })
     }
 
@@ -225,7 +227,7 @@
         title: '修改',
         shade: 0.1,
         area: ['500px', '500px'],
-        content: '/admin/role/edit/' + obj.data['id']
+        content: '/admin/role/edit/' + obj.data['id'],
       })
     }
 
@@ -246,7 +248,7 @@
             } else {
               layer.msg(result.msg, { icon: 2, time: 1000 })
             }
-          }
+          },
         })
       })
     }
@@ -256,7 +258,7 @@
       if (data.length === 0) {
         layer.msg('未选中数据', {
           icon: 3,
-          time: 1000
+          time: 1000,
         })
         return false
       }
@@ -271,7 +273,7 @@
       console.log(ids)
       layer.confirm('确定要删除选中角色', {
         icon: 3,
-        title: '提示'
+        title: '提示',
       }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -290,7 +292,7 @@
             } else {
               popup.failure(result.msg)
             }
-          }
+          },
         })
       })
     }
@@ -299,28 +301,6 @@
       table.reload('role-table')
     }
 
-    {#添加数据逻辑#}
-    form.on('submit(role-save)', function (data) {
-      $.ajax({
-        url: ROLE_API.ROLE(0),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'post',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
-              // TODO 关闭不了页面  flask-restful 拦截的错误信息没有提示
-              layer.close(add_index)  // 关闭当前页
-              layui.table.reload('role-table')
-            })
-          } else {
-            layer.msg(result.msg, { icon: 2, time: 1000 })
-          }
-        }
-      })
-      return false
-    })
   })
 </script>
 </html>

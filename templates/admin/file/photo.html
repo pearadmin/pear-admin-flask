@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>图片上传</title>
-    {% include 'common/header.html' %}
+    {% include 'admin/common/header.html' %}
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -11,28 +11,6 @@
     </div>
 </div>
 </body>
-
-{#添加文件内容#}
-<div id="add_view" class="layui-row layui-col-space15 " style="margin: 10px;display: none">
-    <div class="layui-col-md12">
-        <div class="layui-card">
-            <div class="layui-tab-content">
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>新增图片</legend>
-                </fieldset>
-                <form class="layui-form edit-form">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            新增图片
-                        </label>
-                        <button type="button" class="layui-btn layui-btn-normal" id="logo-img">选择文件</button>
-                        <button type="button" class="layui-btn" id="logo-upload-button">开始上传</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script type="text/html" id="toolbar">
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
@@ -50,7 +28,7 @@
             class="layui-icon layui-icon-delete"></i></button>
 </script>
 
-{% include 'common/footer.html' %}
+{% include 'admin/common/footer.html' %}
 <script type="module">
   import { FILE_API } from '/static/api/http.js'
 
@@ -63,7 +41,7 @@
     let cols = [
       [
         {
-          type: 'checkbox'
+          type: 'checkbox',
         },
         {
           field: 'id',
@@ -71,13 +49,13 @@
           sort: true,
           align: 'center',
           unresize: true,
-          width: 80
+          width: 80,
         },
         {
           field: 'name',
           title: '文件名称',
           unresize: true,
-          align: 'center'
+          align: 'center',
         },
         {
           field: 'href',
@@ -86,36 +64,36 @@
           align: 'center',
           templet: (d) => {
             return `<img class="photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
-          }
+          },
 
         },
         {
           field: 'mime',
           title: 'mime类型',
           unresize: true,
-          align: 'center'
+          align: 'center',
         },
         {
           field: 'size',
           title: '文件大小',
           unresize: true,
-          align: 'center'
+          align: 'center',
         },
         {
           field: 'create_at',
           title: '创建时间',
           templet: (d) => `${layui.util.toDateString(d.create_at, 'yyyy-MM-dd HH:mm:ss')}`,
           unresize: true,
-          align: 'center'
+          align: 'center',
         },
         {
           title: '操作',
           toolbar: '#tools',
           align: 'center',
           unresize: true,
-          width: 200
-        }
-      ]
+          width: 200,
+        },
+      ],
     ]
 
     table.render({
@@ -125,10 +103,11 @@
       cols: cols,
       skin: 'line',
       toolbar: '#toolbar',
-      defaultToolbar: [{
-        layEvent: 'refresh',
-        icon: 'layui-icon-refresh',
-      }, 'filter', 'print', 'exports']
+      defaultToolbar: [
+        {
+          layEvent: 'refresh',
+          icon: 'layui-icon-refresh',
+        }, 'filter', 'print', 'exports'],
     })
 
     table.on('tool(tables)', function (obj) {
@@ -162,19 +141,19 @@
 
     window.add = function () {
       layer.open({
-        type: 1,
+        type: 2,
         maxmin: true,
         title: '新增图片',
         shade: 0.1,
         area: screen(),
-        content: $('#add_view')
+        content: 'file/photo/add',
       })
     }
 
     window.remove = function (obj) {
       layer.confirm('确定要删除该图片', {
         icon: 3,
-        title: '提示'
+        title: '提示',
       }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -188,17 +167,17 @@
             if (res.success) {
               layer.msg(res.msg, {
                 icon: 1,
-                time: 1000
+                time: 1000,
               }, function () {
                 obj.del()
               })
             } else {
               layer.msg(res.msg, {
                 icon: 2,
-                time: 1000
+                time: 1000,
               })
             }
-          }
+          },
         })
       })
     }
@@ -208,7 +187,7 @@
       if (data.length === 0) {
         layer.msg('未选中数据', {
           icon: 3,
-          time: 1000
+          time: 1000,
         })
         return false
       }
@@ -222,7 +201,7 @@
       }
       layer.confirm('确定要删除这些图片', {
         icon: 3,
-        title: '提示'
+        title: '提示',
       }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -236,17 +215,17 @@
             if (res.success) {
               layer.msg(res.msg, {
                 icon: 1,
-                time: 1000
+                time: 1000,
               }, function () {
                 table.reload('tables')
               })
             } else {
               layer.msg(res.msg, {
                 icon: 2,
-                time: 1000
+                time: 1000,
               })
             }
-          }
+          },
         })
       })
     }
@@ -278,31 +257,11 @@
           area: ['auto'],
           skin: 'layui-layer-nobg', //没有背景色
           shadeClose: true,
-          content: `<img src="${obj.data['href']}" width="${auto_img.width}px" height="${auto_img.height}px">`
+          content: `<img src="${obj.data['href']}" width="${auto_img.width}px" height="${auto_img.height}px">`,
         })
       }
     }
 
-    /*上次文件部分*/
-    // 选完文件后不自动上传
-    upload.render({
-      elem: '#logo-img'
-      , url: FILE_API.PHOTOS()
-      , auto: false
-      , exts: 'jpg|png|gif|bmp|jpeg'
-      , size: 1000
-      , bindAction: '#logo-upload-button'
-      , done: function (res) {
-        if (res.success) {
-          layer.msg(res.msg, { icon: 1, time: 500 }, function () {
-            layer.close(layer.index)//关闭最新的layer
-            location.reload()//当前页面刷新
-          })
-        } else {
-          layer.msg(res.msg, { icon: 2 })
-        }
-      }
-    })
   })
 </script>
 </html>

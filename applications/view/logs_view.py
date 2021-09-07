@@ -13,7 +13,7 @@ logs_bp = Blueprint('logs', __name__, url_prefix='/logs')
 @logs_bp.get('/')
 @authorize("admin:log:main")
 def index():
-    return render_template('logs_temp/main.html')
+    return render_template('admin/logs_temp/main.html')
 
 
 @logs_bp.get('/login_log')
@@ -40,4 +40,4 @@ def operate_log():
         desc(AdminLog.create_at)).paginate(
         page=page, per_page=limit, error_out=False)
     data = marshal(log_paginate.items, log_fields)
-    return table_api(data=data, count=log_paginate.total)
+    return table_api(data=data, count=log_paginate.total, code=0)

@@ -11,14 +11,14 @@ role_bp = Blueprint('role', __name__, url_prefix='/admin/role')
 @role_bp.get('/')
 @authorize("admin:role:main", log=True)
 def main():
-    return render_template('roles/main.html')
+    return render_template('admin/roles/roles.html')
 
 
 # 角色授权操作
 @role_bp.get('/power/<int:_id>')
 @authorize("admin:role:power", log=True)
 def power(_id):
-    return render_template('roles/power.html', id=_id)
+    return render_template('admin/roles/roles_power.html', id=_id)
 
 
 # 角色编辑
@@ -26,4 +26,10 @@ def power(_id):
 @role_bp.get('/edit/<int:role_id>')
 def role_editor(role_id):
     role = RightsRole.query.filter_by(id=role_id).first()
-    return render_template('roles/edit.html', role=role)
+    return render_template('admin/roles/roles_edit.html', role=role)
+
+
+@authorize("admin:role:edit", log=True)
+@role_bp.get('/add')
+def role_add():
+    return render_template('admin/roles/roles_add.html')

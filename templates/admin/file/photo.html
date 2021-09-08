@@ -24,8 +24,8 @@
         删除
     </button>
 </script>
-<script type="text/html" id="tools">
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tools-remove">
+<script type="text/html" id="tool">
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove">
         <i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
@@ -64,7 +64,7 @@
           unresize: true,
           align: 'center',
           templet: (d) => {
-            return `<img class="tools-photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
+            return `<img class="tool-photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
           },
 
         },
@@ -89,7 +89,7 @@
         },
         {
           title: '操作',
-          toolbar: '#tools',
+          toolbar: '#tool',
           align: 'center',
           unresize: true,
           width: 200,

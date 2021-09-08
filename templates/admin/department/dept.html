@@ -54,11 +54,11 @@
     {% endif %}
 </script>
 {#操作字段，需要在表格中使用#}
-<script type="text/html" id="tools">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tools_edit">
+<script type="text/html" id="tool">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool_edit">
         <i class="layui-icon layui-icon-edit"></i>
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tools_remove">
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool_remove">
         <i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
@@ -114,7 +114,7 @@
             { field: 'address', title: '详细地址' },
             { field: 'status', title: '状态', templet: '#dept-status' },
             { field: 'sort', title: '排序', width: 100 },
-            { title: '操作', templet: '#tools', width: 120, align: 'center' }
+            { title: '操作', templet: '#tool', width: 120, align: 'center' }
           ]
         ]/*表格渲染的数据*/
       })
@@ -155,12 +155,12 @@
 
     /*表格的操作栏*/
     table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tools_remove') {
+      if (obj.event === 'tool_remove') {
         /*移出事件*/
-        window.tools_remove(obj)
-      } else if (obj.event === 'tools_edit') {
+        window.tool_remove(obj)
+      } else if (obj.event === 'tool_edit') {
         /*编辑事件*/
-        window.tools_edit(obj)
+        window.tool_edit(obj)
       }
     })
 
@@ -215,7 +215,7 @@
       })
     }
 
-    window.tools_edit = function (obj) {
+    window.tool_edit = function (obj) {
 
       layer.open({
         type: 2,
@@ -227,7 +227,7 @@
 
     }
 
-    window.tools_remove = function (obj) {
+    window.tool_remove = function (obj) {
       layer.confirm('确定要删除该部门', { icon: 3, title: '提示' }, function (index) {
         layer.close(index)
         let loading = layer.load()

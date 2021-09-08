@@ -309,7 +309,7 @@
             layer.close(loading)
             if (result.success) {
               popup.success(result.msg, function () {
-                table.reload('role-table')
+                table.reload('user-table')
               })
             } else {
               popup.failure(result.msg)

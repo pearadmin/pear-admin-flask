@@ -8,13 +8,13 @@ from applications.view import index_bp
 @index_bp.get('/dept')
 @authorize("admin:dept:main", log=True)
 def dept_index():
-    return render_template('admin/department/main.html')
+    return render_template('admin/department/dept.html')
 
 
 @index_bp.get('/dept/add')
 @authorize("admin:dept:add", log=True)
 def add():
-    return render_template('admin/department/add.html')
+    return render_template('admin/department/dept_add.html')
 
 
 @index_bp.get('/dept/edit')
@@ -22,4 +22,4 @@ def add():
 def edit():
     dept_id = request.args.get("deptId", type=int)
     dept = CompanyDepartment.query.get(dept_id)
-    return render_template('admin/department/edit.html', dept=dept)
+    return render_template('admin/department/dept_edit.html', dept=dept)

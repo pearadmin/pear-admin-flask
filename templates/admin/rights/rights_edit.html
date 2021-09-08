@@ -8,76 +8,74 @@
 <form class="layui-form" action="">
     <div class="mainBox">
         <div class="main-container">
-            <div class="main-container">
-                <div class="layui-form-item layui-hide">
-                    <label class="layui-form-label">编号</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ power.id }}" name="powerId" lay-verify="title"
-                               autocomplete="off" class="layui-input">
-                    </div>
+            <div class="layui-form-item layui-hide">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                    <input type="text" value="{{ power.id }}" name="powerId"
+                           autocomplete="off" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">父级</label>
-                    <div class="layui-input-block">
-                        <ul id="selectParent" name="parentId" class="dtree" data-id="-1"></ul>
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父级</label>
+                <div class="layui-input-block">
+                    <ul id="selectParent" name="parentId" class="dtree" data-id="-1"></ul>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ power.name }}" name="powerName" lay-verify="title"
-                               autocomplete="off" placeholder="权限名称" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" value="{{ power.name }}" name="powerName"
+                           autocomplete="off" placeholder="权限名称" class="layui-input">
                 </div>
-                <div class="layui-form-item" id="powerCodeItem">
-                    <label class="layui-form-label">标识</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="powerCode" value="{{ power.code }}" name="powerCode"
-                               autocomplete="off" placeholder="权限标识" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item" id="powerCodeItem">
+                <label class="layui-form-label">标识</label>
+                <div class="layui-input-block">
+                    <input type="text" id="powerCode" value="{{ power.code }}" name="powerCode"
+                           autocomplete="off" placeholder="权限标识" class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
-                        <input type="radio" lay-filter="powerType" {% if power.type == 0 %} checked{% endif %}
-                               name="powerType" value="0" title="目录">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == 1 %} checked{% endif %}
-                               name="powerType" value="1" title="菜单">
-                        <input type="radio" lay-filter="powerType"  {% if power.type == 2 %} checked{% endif %}
-                               name="powerType" value="2" title="按钮">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" lay-filter="powerType" {% if power.type == 0 %} checked{% endif %}
+                           name="powerType" value="0" title="目录">
+                    <input type="radio" lay-filter="powerType"  {% if power.type == 1 %} checked{% endif %}
+                           name="powerType" value="1" title="菜单">
+                    <input type="radio" lay-filter="powerType"  {% if power.type == 2 %} checked{% endif %}
+                           name="powerType" value="2" title="按钮">
                 </div>
-                <div class="layui-form-item" id="powerUrlItem">
-                    <label class="layui-form-label">路径</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="powerUrl" value="{{ power.url }}" name="powerUrl"
-                               autocomplete="off" placeholder="菜单路径" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item" id="powerUrlItem">
+                <label class="layui-form-label">路径</label>
+                <div class="layui-input-block">
+                    <input type="text" id="powerUrl" value="{{ power.url }}" name="powerUrl"
+                           autocomplete="off" placeholder="菜单路径" class="layui-input">
                 </div>
-                <div class="layui-form-item" id="openTypeItem">
-                    <label class="layui-form-label">打开</label>
-                    <div class="layui-input-block">
-                        <select name="openType" id="openType">
-                            <option value=""></option>
-                            <option value="_iframe" {% if power.open_type == "_iframe" %} selected{% endif %}>框架
-                            </option>
-                            <option value="_blank" {% if power.open_type == "_blank" %} selected{% endif %}>签页</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="layui-form-item" id="openTypeItem">
+                <label class="layui-form-label">打开</label>
+                <div class="layui-input-block">
+                    <select name="openType" id="openType">
+                        <option value=""></option>
+                        <option value="_iframe" {% if power.open_type == "_iframe" %} selected{% endif %}>框架
+                        </option>
+                        <option value="_blank" {% if power.open_type == "_blank" %} selected{% endif %}>签页</option>
+                    </select>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">图标</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="edit_icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
-                               class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图标</label>
+                <div class="layui-input-block">
+                    <input type="text" id="edit_icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
+                           class="layui-input">
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ power.sort }}" name="sort" lay-verify="title" autocomplete="off"
-                               placeholder="排序" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="text" value="{{ power.sort }}" name="sort" lay-verify="title" autocomplete="off"
+                           placeholder="排序" class="layui-input">
                 </div>
             </div>
         </div>
@@ -95,7 +93,10 @@
         </div>
     </div>
 </form>
+
+
 {% include 'admin/common/footer.html' %}
+
 <script type="module">
 
   import { RIGHTS_API } from '/static/api/http.js'
@@ -200,8 +201,6 @@
 
     window.init("{{ power.type }}")
   })
-</script>
-<script>
 </script>
 </body>
 </html>

@@ -30,13 +30,13 @@
         </form>
     </div>
 </div>
-
 <div class="layui-card">
     <div class="layui-card-body">
         {#表格字段渲染#}
         <table id="tables" lay-filter="tables"></table>
     </div>
 </div>
+
 
 {#表格工具栏，需要在表格中绑定，且需要自定义事件#}
 <script type="text/html" id="toolbaes">
@@ -53,7 +53,6 @@
         </button>
     {% endif %}
 </script>
-
 {#操作字段，需要在表格中使用#}
 <script type="text/html" id="tools">
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tools_edit">
@@ -63,7 +62,6 @@
         <i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
-
 {#表格内的切换按钮#}
 <script type="text/html" id="dept-status">
     <input type="checkbox"
@@ -75,7 +73,6 @@
             {{ "{{# if(d.status==1){ }} checked {{# } }}" }}>
 </script>
 
-</body>
 
 {% include 'admin/common/footer.html' %}
 
@@ -214,7 +211,7 @@
         title: '新增',
         shade: 0.1,
         area: ['450px', '500px'], /*新增窗口的大小*/
-        content: MODULE_PATH + 'add' /*新增窗口从那里来*/
+        content: '/dept/add' /*新增窗口从那里来*/
       })
     }
 
@@ -254,4 +251,5 @@
 
   })
 </script>
+</body>
 </html>

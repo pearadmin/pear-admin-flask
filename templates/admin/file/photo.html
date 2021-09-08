@@ -10,25 +10,26 @@
         <table id="tables" lay-filter="tables"></table>
     </div>
 </div>
-</body>
+
+
+{% include 'admin/common/footer.html' %}
 
 <script type="text/html" id="toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="add">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="toolbar-add">
         <i class="layui-icon layui-icon-add-1"></i>
         新增
     </button>
-    <button class="pear-btn pear-btn-sm" lay-event="batchRemove">
+    <button class="pear-btn pear-btn-sm" lay-event="toolbar-remove">
         <i class="layui-icon layui-icon-delete"></i>
         删除
     </button>
 </script>
-
 <script type="text/html" id="tools">
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
-            class="layui-icon layui-icon-delete"></i></button>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tools-remove">
+        <i class="layui-icon layui-icon-delete"></i>
+    </button>
 </script>
 
-{% include 'admin/common/footer.html' %}
 <script type="module">
   import { FILE_API } from '/static/api/http.js'
 
@@ -63,7 +64,7 @@
           unresize: true,
           align: 'center',
           templet: (d) => {
-            return `<img class="photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
+            return `<img class="tools-photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
           },
 
         },
@@ -111,7 +112,7 @@
     })
 
     table.on('tool(tables)', function (obj) {
-      if (obj.event === 'remove') {
+      if (obj.event === 'tool-remove') {
         window.remove(obj)
       } else if (obj.event === 'photo') {
         window.photo(obj)
@@ -119,11 +120,11 @@
     })
 
     table.on('toolbar(tables)', function (obj) {
-      if (obj.event === 'add') {
+      if (obj.event === 'toolbar-add') {
         window.add()
       } else if (obj.event === 'refresh') {
         window.refresh()
-      } else if (obj.event === 'batchRemove') {
+      } else if (obj.event === 'toolbar-remove') {
         window.batchRemove(obj)
       }
     })
@@ -264,4 +265,5 @@
 
   })
 </script>
+</body>
 </html>

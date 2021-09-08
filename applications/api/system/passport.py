@@ -3,7 +3,7 @@ from flask import session, redirect, url_for, request
 from flask_login import current_user, login_user
 from flask_restful import Resource, reqparse
 
-from applications.common.admin_log import login_log
+from applications.common.admin_log import login_log, admin_log
 from applications.common.gen_captcha import add_auth_session
 from applications.common.utils.http import fail_api, success_api
 from applications.models import CompanyUser

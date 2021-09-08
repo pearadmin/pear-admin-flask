@@ -19,6 +19,7 @@ class Departments(Resource):
             "status": {"code": 200, "message": "默认"},
             "data": marshal(dept_data, dept_fields)
         }
+        print(dept_data)
         return jsonify(res)
 
     @authorize("admin:dept:add", log=True)

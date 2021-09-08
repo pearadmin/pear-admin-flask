@@ -27,6 +27,7 @@
 </div>
 </body>
 
+{% include 'admin/common/footer.html' %}
 
 <script type="text/html" id="log-createTime">
     {{ '  {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
@@ -38,7 +39,7 @@
     <span style="color: red">失败</span>
     {{# } }}'|safe }}
 </script>
-{% include 'admin/common/footer.html' %}
+
 <script>
   layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
     let table = layui.table
@@ -77,37 +78,6 @@
       skin: 'line',
       toolbar: false,
     })
-
-    form.on('submit(dict-type-query)', function (data) {
-      table.reload('dict-type-table', { where: data.field })
-      return false
-    })
-
-    table.on('tool(log-operate-table)', function (obj) {
-      if (obj.event === 'details') {
-        window.info(obj)
-      }
-    })
-
-    table.on('tool(log-login-table)', function (obj) {
-      if (obj.event === 'details') {
-        window.info(obj)
-      }
-    })
-
-    window.info = function (obj) {
-      layer.open({
-        type: 2,
-        title: '详细信息',
-        shade: 0,
-        area: ['400px', '400px'],
-        content: MODULE_PATH + 'info',
-        success: function (layero) {
-          let iframeWin = window[layero.find('iframe')[0]['name']]
-          iframeWin.show(obj.data)
-        },
-      })
-    }
   })
 </script>
 </html>

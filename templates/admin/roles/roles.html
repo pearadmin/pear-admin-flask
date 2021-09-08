@@ -30,92 +30,39 @@
 </div>
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="role-table" lay-filter="role-table"></table>
+        <table id="tables" lay-filter="tables"></table>
     </div>
 </div>
-</body>
 
-<form id="add_view" class="layui-form" action="" style="display: none">
-    <div class="mainBox">
-        <div class="main-container">
-            <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="roleName" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">标识</label>
-                <div class="layui-input-block">
-                    <input type="text" name="roleCode" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">状态</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="enable" value="0" title="开启">
-                    <input type="radio" name="enable" value="1" title="关闭" checked>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">排序</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入标题"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">描述</label>
-                <div class="layui-input-block">
-                    <textarea placeholder="请输入描述" name="details" class="layui-textarea"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="role-save">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
-        </div>
-    </div>
-</form>
+{% include 'admin/common/footer.html' %}
 
-<script type="text/html" id="role-toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+
+<script type="text/html" id="toolbar">
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
         <i class="layui-icon layui-icon-add-1"></i>
         新增
     </button>
-    <button class="pear-btn pear-btn-md" lay-event="batchRemove">
+    <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
         <i class="layui-icon layui-icon-delete"></i>
         删除
     </button>
 </script>
-
-<script type="text/html" id="role-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
+<script type="text/html" id="tool">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit"><i
             class="layui-icon layui-icon-edit"></i>
     </button>
-    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i
+    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="tool-power"><i
             class="layui-icon layui-icon-vercode"></i>
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove"><i
             class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
-
-<script type="text/html" id="role-enable">
+<script type="text/html" id="tool-switch">
     <input type="checkbox" name="enable" value="{{ "{{d.id}}" }}" lay-skin="switch" lay-text="启用|禁用"
-           lay-filter="role-enable" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
+           lay-filter="tool-switch" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
 </script>
-{% include 'admin/common/footer.html' %}
+
 <script type="module">
   import { ROLE_API } from '/static/api/http.js'
 
@@ -131,19 +78,19 @@
         { title: '角色名', field: 'roleName', align: 'center', width: 100 },
         { title: 'Key值', field: 'roleCode', align: 'center' },
         { title: '描述', field: 'details', align: 'center' },
-        { title: '是否可用', field: 'enable', align: 'center', templet: '#role-enable' },
+        { title: '是否可用', field: 'enable', align: 'center', templet: '#tool-switch' },
         { title: '排序', field: 'sort', align: 'center' },
-        { title: '操作', toolbar: '#role-bar', align: 'center', width: 195 },
+        { title: '操作', toolbar: '#tool', align: 'center', width: 195 },
       ],
     ]
 
     table.render({
-      elem: '#role-table',
+      elem: '#tables',
       url: ROLE_API.ROLES(),
       page: true,
       cols: cols,
       skin: 'line',
-      toolbar: '#role-toolbar',
+      toolbar: '#toolbar',
       defaultToolbar: [
         {
           layEvent: 'refresh',
@@ -151,32 +98,32 @@
         }, 'filter', 'print', 'exports'],
     })
 
-    table.on('tool(role-table)', function (obj) {
-      if (obj.event === 'remove') {
-        window.remove(obj)
-      } else if (obj.event === 'edit') {
-        window.edit(obj)
-      } else if (obj.event === 'power') {
-        window.power(obj)
+    table.on('tool(tables)', function (obj) {
+      if (obj.event === 'tool-remove') {
+        window.tool_remove(obj)
+      } else if (obj.event === 'tool-edit') {
+        window.tool_edit(obj)
+      } else if (obj.event === 'tool-power') {
+        window.tool_power(obj)
       }
     })
 
-    table.on('toolbar(role-table)', function (obj) {
-      if (obj.event === 'add') {
-        window.add()
+    table.on('toolbar(tables)', function (obj) {
+      if (obj.event === 'toolbar-add') {
+        window.toolbar_add()
       } else if (obj.event === 'refresh') {
         window.refresh()
-      } else if (obj.event === 'batchRemove') {
-        window.batchRemove(obj)
+      } else if (obj.event === 'toolbar-remove') {
+        window.toolbar_remove(obj)
       }
     })
 
     form.on('submit(role-query)', function (data) {
-      table.reload('role-table', { where: data.field })
+      table.reload('tables', { where: data.field })
       return false
     })
 
-    form.on('switch(role-enable)', function (obj) {
+    form.on('switch(tool-switch)', function (obj) {
       let operate
       if (obj.elem.checked) {
         operate = 1
@@ -201,7 +148,7 @@
       })
     })
 
-    window.add = function () {
+    window.toolbar_add = function () {
       layer.open({
         type: 2,
         title: '新增',
@@ -211,7 +158,7 @@
       })
     }
 
-    window.power = function (obj) {
+    window.tool_power = function (obj) {
       layer.open({
         type: 2,
         title: '授权',
@@ -221,7 +168,7 @@
       })
     }
 
-    window.edit = function (obj) {
+    window.tool_edit = function (obj) {
       layer.open({
         type: 2,
         title: '修改',
@@ -231,7 +178,7 @@
       })
     }
 
-    window.remove = function (obj) {
+    window.tool_remove = function (obj) {
       layer.confirm('确定要删除该角色', { icon: 3, title: '提示' }, function (index) {
         layer.close(index)
         let loading = layer.load()
@@ -253,7 +200,7 @@
       })
     }
 
-    window.batchRemove = function (obj) {
+    window.toolbar_remove = function (obj) {
       let data = table.checkStatus(obj.config.id).data
       if (data.length === 0) {
         layer.msg('未选中数据', {
@@ -263,7 +210,7 @@
         return false
       }
       var ids = []
-      var hasCheck = table.checkStatus('role-table')
+      var hasCheck = table.checkStatus('tables')
       var hasCheckData = hasCheck.data
       if (hasCheckData.length > 0) {
         $.each(hasCheckData, function (index, element) {
@@ -287,7 +234,7 @@
             layer.close(loading)
             if (result.success) {
               popup.success(result.msg, function () {
-                table.reload('role-table')
+                table.reload('tables')
               })
             } else {
               popup.failure(result.msg)
@@ -298,9 +245,10 @@
     }
 
     window.refresh = function () {
-      table.reload('role-table')
+      table.reload('tables')
     }
 
   })
 </script>
+</body>
 </html>

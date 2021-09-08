@@ -25,7 +25,10 @@
         </div>
     </div>
 </form>
+
+
 {% include 'admin/common/footer.html' %}
+
 <script type="module">
 
   import { ROLE_API } from '/static/api/http.js'
@@ -38,7 +41,7 @@
     dtree.render({
       elem: '#role-power',
       method: 'get',
-      url: ROLE_API.ROLE_POWER({{id}}),
+      url: ROLE_API.ROLE_POWER({{role_id}}),
       dataFormat: 'list',
       checkbar: true,
       skin: 'layui',
@@ -55,7 +58,7 @@
         ids += id + ','
       }
       ids = ids.substr(0, ids.length - 1)
-      data.field.roleId = {{id}};
+      data.field.roleId = {{role_id}};
       data.field.powerIds = ids
 
       $.ajax({

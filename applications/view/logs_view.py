@@ -22,7 +22,7 @@ def login_log():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
     log_paginate = AdminLog.query.filter_by(
-        url='/passport/login').order_by(
+        url='/api/v1/passport/login').order_by(
         desc(AdminLog.create_at)).paginate(
         page=page, per_page=limit, error_out=False)
     data = marshal(log_paginate.items, log_fields)
@@ -36,7 +36,7 @@ def operate_log():
     page = request.args.get('page', type=int)
     limit = request.args.get('limit', type=int)
     log_paginate = AdminLog.query.filter(
-        AdminLog.url != '/passport/login').order_by(
+        AdminLog.url != '/api/v1/passport/login').order_by(
         desc(AdminLog.create_at)).paginate(
         page=page, per_page=limit, error_out=False)
     data = marshal(log_paginate.items, log_fields)

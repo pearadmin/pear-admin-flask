@@ -179,8 +179,6 @@
         </div>
     </div>
 </div>
-{% include 'admin/common/footer.html' %}
-</body>
 
 <form id="edit_password_view" class="layui-form" action="" style="display: none">
     <div class="mainBox">
@@ -233,6 +231,10 @@
         </div>
     </div>
 </form>
+
+
+{% include 'admin/common/footer.html' %}
+
 <script type="module">
   import { USER_API } from '/static/api/http.js'
 
@@ -311,4 +313,5 @@
     })
   })
 </script>
+</body>
 </html>

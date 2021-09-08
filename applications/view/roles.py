@@ -15,10 +15,10 @@ def main():
 
 
 # 角色授权操作
-@role_bp.get('/power/<int:_id>')
+@role_bp.get('/power/<int:role_id>')
 @authorize("admin:role:power", log=True)
-def power(_id):
-    return render_template('admin/roles/roles_power.html', id=_id)
+def power(role_id):
+    return render_template('admin/roles/roles_power.html', role_id=role_id)
 
 
 # 角色编辑

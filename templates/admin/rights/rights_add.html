@@ -83,9 +83,12 @@
         </div>
     </div>
 </form>
+
+
 {% include 'admin/common/footer.html' %}
+
 <script type="module">
-  import { RIGHTS_API } from 'static/api/http.js'
+  import { RIGHTS_API } from '/static/api/http.js'
 
   layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
     let form = layui.form
@@ -93,16 +96,15 @@
     let iconPicker = layui.iconPicker
     let dtree = layui.dtree
 
-    {#添加权限数据页面#}
     dtree.renderSelect({
-      elem: '#select_parent_dept',
+      elem: '#selectParent',
       url: RIGHTS_API.RIGHTS(),
       method: 'get',
       selectInputName: { nodeId: 'parentId', context: 'powerName' },
       skin: 'layui',
       dataFormat: 'list',
       response: { treeId: 'powerId', parentId: 'parentId', title: 'powerName' },  //修改response中返回数据的定义
-      selectInitVal: '0',
+      selectInitVal: '0'
     })
 
     form.on('radio(powerType)', function () {
@@ -129,7 +131,7 @@
     form.on('submit(power-save)', function (data) {
       data.field.icon = 'layui-icon ' + data.field.icon
       $.ajax({
-        url: '/admin/power/save',
+        url: RIGHTS_API.POWER(0),
         data: JSON.stringify(data.field),
         dataType: 'json',
         contentType: 'application/json',
@@ -143,7 +145,7 @@
           } else {
             layer.msg(result.msg, { icon: 2, time: 1000 })
           }
-        },
+        }
       })
       return false
     })
@@ -162,10 +164,9 @@
       // 点击回调
       click: function (data) {
         console.log(data)
-      },
+      }
     })
   })
 </script>
-
 </body>
 </html>

@@ -12,21 +12,21 @@
                     <label class="layui-form-label">编号</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ role.id }}" name="roleId" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                               autocomplete="off" placeholder="请输入编号" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ role.name }}" name="roleName" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                               autocomplete="off" placeholder="请输入名称" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">标识</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ role.code }}" readonly name="roleCode" lay-verify="title"
-                               autocomplete="off" placeholder="请输入标题" class="layui-input">
+                               autocomplete="off" placeholder="请输入标识" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -42,14 +42,14 @@
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
                         <input type="text" name="sort" value="{{ role.sort }}" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                               placeholder="请输入排序序号（数字）"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">描述</label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" name="details"
+                        <textarea placeholder="请输入描述" name="details"
                                   class="layui-textarea">{{ role.details }}</textarea>
                     </div>
                 </div>
@@ -70,8 +70,10 @@
         </div>
     </div>
 </form>
+
+
 {% include 'admin/common/footer.html' %}
-</body>
+
 <script type="module">
 
   import { ROLE_API } from '/static/api/http.js'
@@ -102,4 +104,5 @@
     })
   })
 </script>
+</body>
 </html>

@@ -1,18 +1,20 @@
 from flask import render_template
 
-from applications.common.utils.rights import authorize
+from applications.common.utils.rights import authorize, permission_required, view_logging_required
 from applications.models import RightsPower
 from applications.view import index_bp
 
 
 @index_bp.get('/rights/')
-@authorize("admin:power:main", log=True)
+@view_logging_required
+@permission_required("admin:power:main")
 def rights_index():
     return render_template('admin/rights/rights.html')
 
 
 @index_bp.get('/rights/power/<int:power_id>')
-@authorize("admin:power:edit", log=True)
+@view_logging_required
+@permission_required("admin:power:edit")
 def rights_edit(power_id):
     power = RightsPower.query.filter_by(id=power_id).first()
     icon = str(power.icon).split()
@@ -24,6 +26,7 @@ def rights_edit(power_id):
 
 
 @index_bp.get('/rights/add')
-@authorize("admin:power:main", log=True)
+@view_logging_required
+@permission_required("admin:power:main")
 def rights_add():
     return render_template('admin/rights/rights_add.html')

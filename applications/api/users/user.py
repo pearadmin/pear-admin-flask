@@ -6,14 +6,14 @@ from sqlalchemy import desc
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
-from applications.models import AdminLog
+from applications.models import LoggingModel
 from applications.models import CompanyUser, RightsRole, CompanyDepartment
 
 
 def get_current_user_logs():
     """ 获取当前用户日志 """
-    log = AdminLog.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
-        desc(AdminLog.create_at)).limit(10)
+    log = LoggingModel.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
+        desc(LoggingModel.create_at)).limit(10)
     return log
 
 

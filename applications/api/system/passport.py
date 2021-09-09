@@ -3,9 +3,9 @@ from flask import session, redirect, url_for, request
 from flask_login import current_user, login_user
 from flask_restful import Resource, reqparse
 
-from applications.common.admin_log import login_log, admin_log
 from applications.common.gen_captcha import add_auth_session
 from applications.common.utils.http import fail_api, success_api
+from applications.common.utils.rights import record_logging
 from applications.models import CompanyUser
 
 
@@ -41,9 +41,10 @@ class Login(Resource):
             # 登录
             login_user(user)
             # 记录登录日志
-            login_log(request, uid=user.id, is_access=True)
+            record_logging()
+
             # 存入权限
             add_auth_session()
             return success_api(msg="登录成功")
-        login_log(request, uid=user.id, is_access=False)
+        record_logging()
         return fail_api(msg="用户名或密码错误")

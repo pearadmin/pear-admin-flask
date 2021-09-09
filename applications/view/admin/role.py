@@ -109,17 +109,10 @@ def save_role_power():
     power_list = power_ids.split(',')
     role_id = req_form.get("roleId")
     role = Role.query.filter_by(id=role_id).first()
-    power_id_list = []
-    for p in role.power:
-        power_id_list.append(p.id)
-        # print(p.id)
-    # print(power_id_list)
-    powers = Power.query.filter(Power.id.in_(power_id_list)).all()
-    for p in powers:
-        role.power.remove(p)
+    
     powers = Power.query.filter(Power.id.in_(power_list)).all()
-    for p in powers:
-        role.power.append(p)
+    role.power = powers
+    
     db.session.commit()
     return success_api(msg="授权成功")
 

@@ -131,7 +131,7 @@ def dict_data_add():
 
 
 # 增加字典数据
-@admin_dict.get('/dictData/save')
+@admin_dict.post('/dictData/save')
 @authorize("admin:dict:add", log=True)
 def dict_data_save():
     req_json = request.json

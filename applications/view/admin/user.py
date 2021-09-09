@@ -119,15 +119,10 @@ def update():
     role_ids = a.split(',')
     User.query.filter_by(id=id).update({'username': username, 'realname': real_name, 'dept_id': dept_id})
     u = User.query.filter_by(id=id).first()
-    roles_id = []
-    for role in u.role:
-        roles_id.append(role.id)
-    roles = Role.query.filter(Role.id.in_(roles_id)).all()
-    for r in roles:
-        u.role.remove(r)
+
     roles = Role.query.filter(Role.id.in_(role_ids)).all()
-    for r in roles:
-        u.role.append(r)
+    u.role = roles
+
     db.session.commit()
     return success_api(msg="更新成功")
 

@@ -300,12 +300,12 @@
         type: 'put',
         success: function (result) {
           if (result.success) {
-            popup.success(result.msg, function () {
+            popup.success(result.message, function () {
               // TODO 关闭修改密码成之后的窗口
               parent.layer.close(parent.layer.getFrameIndex(window.name))
             })
           } else {
-            popup.failure(result.msg)
+            popup.failure(result.message)
           }
         }
       })

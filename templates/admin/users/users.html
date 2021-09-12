@@ -94,7 +94,7 @@
 </script>
 
 <script type="module">
-  import { USER_API, ROLE } from '/static/api/http.js'
+  import { USER_API, ROLE, parserTableData as parseData } from '/static/api/http.js'
 
   layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
     let table = layui.table
@@ -105,7 +105,7 @@
     let common = layui.common
 
     // 表格数据
-    let cols = [
+    const get_columns = () => [
       [
         { type: 'checkbox' },
         { title: '姓名', field: 'realname', align: 'center', width: 110 },
@@ -120,10 +120,11 @@
 
     // 渲染表格数据
     table.render({
+      parseData,
       elem: '#tables',
       url: USER_API.USERS(),
       page: true,
-      cols: cols,
+      cols: get_columns(),
       skin: 'line',
       height: 'full-148',
       toolbar: '#toolbar', /*工具栏*/
@@ -214,9 +215,9 @@
         success: function (result) {
           layer.close(loading)
           if (result.success) {
-            popup.success(result.msg)
+            popup.success(result.message)
           } else {
-            popup.failure(result.msg)
+            popup.failure(result.message)
           }
         },
       })
@@ -264,11 +265,11 @@
           success: function (result) {
             layer.close(loading)
             if (result.success) {
-              popup.success(result.msg, function () {
+              popup.success(result.message, function () {
                 table.reload('role-table')
               })
             } else {
-              popup.failure(result.msg)
+              popup.failure(result.message)
             }
           },
         })
@@ -289,11 +290,11 @@
           success: function (result) {
             layer.close(loading)
             if (result.success) {
-              popup.success(result.msg, function () {
+              popup.success(result.message, function () {
                 obj.del()
               })
             } else {
-              popup.failure(result.msg)
+              popup.failure(result.message)
             }
           },
         })

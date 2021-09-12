@@ -21,7 +21,7 @@ def get_captcha():
 def logout():
     logout_user()
     session.pop('permissions')
-    return success_api(msg="注销成功")
+    return success_api(message="注销成功")
 
 
 @index_bp.get('/passport/login')

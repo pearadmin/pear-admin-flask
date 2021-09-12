@@ -166,13 +166,13 @@ class RightRights(Resource):
             "data": power_data
 
         }
-        return jsonify(res)
+        return res
 
     @authorize("admin:power:remove", log=True)
     def delete(self):
         ids = request.form.getlist('ids[]')
         batch_remove_power(ids)
-        return success_api(msg="批量删除成功")
+        return success_api(message="批量删除成功")
 
 
 class RightPower(Resource):
@@ -196,9 +196,9 @@ class RightPower(Resource):
             db.session.commit()
         except Exception as e:
             print(e)
-            return fail_api(msg='数据提交失败')
+            return fail_api(message='数据提交失败')
 
-        return success_api(msg="成功")
+        return success_api(message="成功")
 
     @authorize("admin:power:remove", log=True)
     def delete(self, power_id):
@@ -215,9 +215,9 @@ class RightPower(Resource):
         db.session.commit()
 
         if r:
-            return success_api(msg="删除成功")
+            return success_api(message="删除成功")
         else:
-            return fail_api(msg="删除失败")
+            return fail_api(message="删除失败")
 
     @authorize("admin:power:edit", log=True)
     def put(self, power_id):
@@ -237,8 +237,8 @@ class RightPower(Resource):
         db.session.commit()
 
         if not power:
-            return fail_api(msg="更新权限失败")
-        return success_api(msg="更新权限成功")
+            return fail_api(message="更新权限失败")
+        return success_api(message="更新权限成功")
 
 
 class RightPowerEnable(Resource):
@@ -250,9 +250,9 @@ class RightPowerEnable(Resource):
             power.enable = not power.enable
             db.session.commit()
             message = "修改成功"
-            return success_api(msg=message)
+            return success_api(message=message)
         else:
-            return fail_api(msg="出错啦")
+            return fail_api(message="出错啦")
 
 
 class AdminConfigs(Resource):

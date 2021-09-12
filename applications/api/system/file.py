@@ -21,7 +21,9 @@ class FilePhotos(Resource):
         photo_paginate = FilePhoto.query.order_by(desc(FilePhoto.create_at)).paginate(page=page, per_page=limit,
                                                                                       error_out=False)
         data = marshal(photo_paginate.items, photo_fields)
-        return table_api(data=data, count=photo_paginate.total, code=0)
+        return table_api(result={'items': data,
+                                 'total': photo_paginate.total, },
+                         code=0)
 
     @authorize("admin:file:add", log=True)
     def post(self):

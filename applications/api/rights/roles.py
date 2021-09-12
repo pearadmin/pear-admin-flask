@@ -57,18 +57,16 @@ class RoleRoles(Resource):
 
         paginate = RightsRole.query.filter(*filters).paginate(page=res.page, per_page=res.limit, error_out=False)
 
-        return table_api(data=[
-            {
-                'id': item.id,
-                'roleName': item.name,
-                'roleCode': item.code,
-                'enable': item.enable,
-                'remark': item.remark,
-                'details': item.details,
-                'sort': item.sort,
-                'create_at': item.create_at,
-            } for item in paginate.items
-        ], count=paginate.total, code=0)
+        return table_api(result={'items': [{'id': item.id,
+                                            'roleName': item.name,
+                                            'roleCode': item.code,
+                                            'enable': item.enable,
+                                            'remark': item.remark,
+                                            'details': item.details,
+                                            'sort': item.sort,
+                                            'create_at': str(item.create_at), } for item in paginate.items],
+                                 'total': paginate.total}
+                         , code=0)
 
     @authorize("admin:role:remove", log=True)
     @login_required
@@ -79,7 +77,7 @@ class RoleRoles(Resource):
         res = parser.parse_args()
 
         batch_remove_role(res.ids)
-        return success_api(msg="批量删除成功")
+        return success_api(message="批量删除成功")
 
 
 class RoleRole(Resource):
@@ -104,7 +102,7 @@ class RoleRole(Resource):
         )
         db.session.add(role)
         db.session.commit()
-        return success_api(msg="成功")
+        return success_api(message="成功")
 
     # 更新角色
     @authorize("admin:role:edit", log=True)
@@ -130,8 +128,8 @@ class RoleRole(Resource):
         role = RightsRole.query.filter_by(id=role_id).update(data)
         db.session.commit()
         if not role:
-            return fail_api(msg="更新角色失败")
-        return success_api(msg="更新角色成功")
+            return fail_api(message="更新角色失败")
+        return success_api(message="更新角色成功")
 
 
 class RoleEnable(Resource):
@@ -145,8 +143,8 @@ class RoleEnable(Resource):
 
         message = "修改成功"
         if not ret:
-            return fail_api(msg="出错啦")
-        return success_api(msg=message)
+            return fail_api(message="出错啦")
+        return success_api(message=message)
 
 
 class RolePower(Resource):
@@ -158,20 +156,16 @@ class RolePower(Resource):
         # 获取权限列表的 id
         check_powers_list = [rp.id for rp in role.power]
         powers = RightsPower.query.all()  # 获取所有的权限
-        # power_schema = PowerSchema2(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
-        # 将所有的权限生产可序列化对象 json
-        # powers = power_schema.dump(powers)  # 生成可序列化对象
         powers = marshal(powers, power_fields)
         for i in powers:
             if int(i.get("powerId")) in check_powers_list:
                 i["checkArr"] = "1"
             else:
                 i["checkArr"] = "0"
-        res = {
+        return {
             "data": powers,
             "status": {"code": 200, "message": "默认"}
         }
-        return jsonify(res)
 
     # 保存角色权限
     @authorize("admin:role:edit", log=True)
@@ -195,7 +189,7 @@ class RolePower(Resource):
         for p in powers:
             role.power.append(p)
         db.session.commit()
-        return success_api(msg="授权成功")
+        return success_api(message="授权成功")
 
     # 角色删除
     @authorize("admin:role:remove", log=True)
@@ -204,5 +198,5 @@ class RolePower(Resource):
         res = remove_role(role_id)
         print(res)
         if not res:
-            return fail_api(msg="角色删除失败")
-        return success_api(msg="角色删除成功")
+            return fail_api(message="角色删除失败")
+        return success_api(message="角色删除成功")

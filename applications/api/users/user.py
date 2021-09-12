@@ -90,12 +90,13 @@ class UserUsers(Resource):
             'username': item.username,
             'realname': item.realname,
             'enable': item.enable,
-            'create_at': item.create_at,
-            'update_at': item.update_at,
+            'create_at': str(item.create_at),
+            'update_at': str(item.update_at),
             'dept': dept_name(item.dept_id),
         } for item in paginate.items]
-
-        return table_api(data=user_data, count=paginate.total, code=0)
+        return table_api(result={'items': user_data,
+                                 'total': paginate.total}
+                         , code=0)
 
     @authorize("admin:user:add", log=True)
     def post(self):
@@ -111,7 +112,7 @@ class UserUsers(Resource):
         role_ids = res.role_ids.split(',')
 
         if is_user_exists(res.username):
-            return fail_api(msg="用户已经存在")
+            return fail_api(message="用户已经存在")
 
         user = CompanyUser()
         user.username = res.username
@@ -127,14 +128,14 @@ class UserUsers(Resource):
             user.role.append(r)
         db.session.commit()
 
-        return success_api(msg="增加成功", code=0)
+        return success_api(message="增加成功", code=0)
 
     @authorize("admin:user:remove", log=True)
     def delete(self):
         """批量删除"""
         ids = request.form.getlist('ids[]')
         batch_remove(ids)
-        return success_api(msg="批量删除成功")
+        return success_api(message="批量删除成功")
 
 
 class UserUser(Resource):
@@ -154,7 +155,7 @@ class UserUser(Resource):
         role_ids = res.role_ids.split(',')
 
         if is_user_exists(res.username):
-            return fail_api(msg="用户已经存在")
+            return fail_api(message="用户已经存在")
 
         user = CompanyUser()
         user.username = res.username
@@ -170,15 +171,15 @@ class UserUser(Resource):
             user.role.append(r)
         db.session.commit()
 
-        return success_api(msg="增加成功", code=0)
+        return success_api(message="增加成功", code=0)
 
     @authorize("admin:user:remove", log=True)
     def delete(self, user_id):
         # 删除用户
         res = delete_by_id(user_id)
         if not res:
-            return fail_api(msg="删除失败")
-        return success_api(msg="删除成功")
+            return fail_api(message="删除失败")
+        return success_api(message="删除成功")
 
 
 class UserRole(Resource):
@@ -202,4 +203,4 @@ class UserRole(Resource):
 
         update_user_role(user_id, role_ids)
 
-        return success_api(msg="更新成功")
+        return success_api(message="更新成功")

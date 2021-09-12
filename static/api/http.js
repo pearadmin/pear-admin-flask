@@ -14,7 +14,7 @@ class Department {
     this.DEPARTMENT_API = {
       'DEPARTMENTS': () => `${this.DEPARTMENT_PATH}/departments`,
       'DEPARTMENT': (dept_id) => `${this.DEPARTMENT_PATH}/department/${dept_id}`,
-      'DEPARTMENT_STATUS': (dept_id) => `${this.DEPARTMENT_PATH}/department/${dept_id}/status`
+      'DEPARTMENT_STATUS': (dept_id) => `${this.DEPARTMENT_PATH}/department/${dept_id}/status`,
     }
   }
 }
@@ -25,7 +25,7 @@ class Rights {
     this.RIGHTS_API = {
       'RIGHTS': () => `${this.DEPARTMENT_PATH}/rights`,
       'POWER': (power_id) => `${this.DEPARTMENT_PATH}/power/${power_id}`,
-      'POWER_STATUS': (power_id) => `${this.DEPARTMENT_PATH}/power/${power_id}/status`
+      'POWER_STATUS': (power_id) => `${this.DEPARTMENT_PATH}/power/${power_id}/status`,
     }
   }
 }
@@ -37,18 +37,16 @@ class Role {
       'ROLES': () => `${this.ROLE_PATH}/roles`,
       'ROLE': (role_id) => `${this.ROLE_PATH}/role/${role_id}`,
       'ROLE_STATUS': (role_id) => `${this.ROLE_PATH}/role/${role_id}/status`,
-      'ROLE_POWER': (role_id) => `${this.ROLE_PATH}/role_power/${role_id}`
+      'ROLE_POWER': (role_id) => `${this.ROLE_PATH}/role_power/${role_id}`,
     }
   }
 
   async get_roles () {
-    return fetch(this.ROLE_API.ROLES())
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (myJson) {
-        return myJson
-      })
+    return fetch(this.ROLE_API.ROLES()).then(function (response) {
+      return response.json()
+    }).then(function (myJson) {
+      return myJson
+    })
   }
 }
 
@@ -83,5 +81,16 @@ export {
   DEPARTMENT_API,
   RIGHTS, RIGHTS_API,
   ROLE, ROLE_API,
-  USER, USER_API
+  USER, USER_API,
+}
+
+/******************数据解析********************************/
+export function parserTableData (res) { //res 即为原始返回的数据
+  console.log('parserTableData', res)
+  return {
+    'code': res.code, //解析接口状态
+    'msg': res.message, //解析提示文本
+    'count': res.result.total, //解析数据长度
+    'data': res.result.items, //解析数据列表
+  }
 }

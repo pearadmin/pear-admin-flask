@@ -64,7 +64,7 @@
 </script>
 
 <script type="module">
-  import { ROLE_API } from '/static/api/http.js'
+  import { ROLE_API, parserTableData as parseData } from '/static/api/http.js'
 
   layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
     let table = layui.table
@@ -72,7 +72,7 @@
     let $ = layui.jquery
     let popup = layui.popup
 
-    let cols = [
+    const get_columns = () => [
       [
         { type: 'checkbox' },
         { title: '角色名', field: 'roleName', align: 'center', width: 100 },
@@ -85,10 +85,11 @@
     ]
 
     table.render({
+      parseData,
       elem: '#tables',
       url: ROLE_API.ROLES(),
       page: true,
-      cols: cols,
+      cols: get_columns(),
       skin: 'line',
       toolbar: '#toolbar',
       defaultToolbar: [
@@ -140,9 +141,9 @@
         success: function (result) {
           layer.close(loading)
           if (result.success) {
-            layer.msg(result.msg, { icon: 1, time: 1000 })
+            layer.msg(result.message, { icon: 1, time: 1000 })
           } else {
-            layer.msg(result.msg, { icon: 2, time: 1000 })
+            layer.msg(result.message, { icon: 2, time: 1000 })
           }
         },
       })
@@ -189,11 +190,11 @@
           success: function (result) {
             layer.close(loading)
             if (result.success) {
-              layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+              layer.msg(result.message, { icon: 1, time: 1000 }, function () {
                 obj.del()
               })
             } else {
-              layer.msg(result.msg, { icon: 2, time: 1000 })
+              layer.msg(result.message, { icon: 2, time: 1000 })
             }
           },
         })
@@ -233,11 +234,11 @@
           success: function (result) {
             layer.close(loading)
             if (result.success) {
-              popup.success(result.msg, function () {
+              popup.success(result.message, function () {
                 table.reload('tables')
               })
             } else {
-              popup.failure(result.msg)
+              popup.failure(result.message)
             }
           },
         })

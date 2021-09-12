@@ -68,11 +68,11 @@
         type: 'put',
         success: function (result) {
           if (result.success) {
-            layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+            layer.msg(result.message, { icon: 1, time: 1000 }, function () {
               parent.layer.close(parent.layer.getFrameIndex(window.name))
             })
           } else {
-            layer.msg(result.msg, { icon: 2, time: 1000 })
+            layer.msg(result.message, { icon: 2, time: 1000 })
           }
         }
       })

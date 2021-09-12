@@ -31,7 +31,7 @@
 </script>
 
 <script type="module">
-  import { FILE_API } from '/static/api/http.js'
+  import { FILE_API, parserTableData as parseData } from '/static/api/http.js'
 
   layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
     let table = layui.table
@@ -39,7 +39,7 @@
     let $ = layui.jquery
     let upload = layui.upload
 
-    let cols = [
+    const get_columns = () => [
       [
         {
           type: 'checkbox',
@@ -98,10 +98,11 @@
     ]
 
     table.render({
+      parseData,
       elem: '#tables',
       url: FILE_API.PHOTOS(),
       page: true,
-      cols: cols,
+      cols: get_columns(),
       skin: 'line',
       toolbar: '#toolbar',
       defaultToolbar: [

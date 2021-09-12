@@ -49,7 +49,7 @@ class Departments(Resource):
         db.session.add(dept)
         db.session.commit()
 
-        return success_api(msg="成功")
+        return success_api(message="成功")
 
 
 class Department(Resource):
@@ -67,7 +67,7 @@ class Department(Resource):
             'address': dept.address,
         }
         # return make_response(render_template('department/edit.html', dept=dept))
-        return jsonify(success=True, msg='ok', dept=dept_data)
+        return dict(success=True, message='ok', dept=dept_data)
 
     @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):
@@ -92,9 +92,9 @@ class Department(Resource):
         }
         res = CompanyDepartment.query.filter_by(id=dept_id).update(data)
         if not res:
-            return fail_api(msg="更新失败")
+            return fail_api(message="更新失败")
         db.session.commit()
-        return success_api(msg="更新成功")
+        return success_api(message="更新成功")
 
     @authorize("admin:dept:remove", log=True)
     def delete(self, dept_id):
@@ -102,8 +102,8 @@ class Department(Resource):
         CompanyUser.query.filter_by(dept_id=dept_id).update({"dept_id": None})
         db.session.commit()
         if ret:
-            return success_api(msg="删除成功")
-        return fail_api(msg="删除失败")
+            return success_api(message="删除成功")
+        return fail_api(message="删除失败")
 
 
 class DeptEnable(Resource):
@@ -114,5 +114,5 @@ class DeptEnable(Resource):
             d.status = not d.status
             db.session.commit()
             message = '修改成功'
-            return success_api(msg=message)
-        return fail_api(msg="出错啦")
+            return success_api(message=message)
+        return fail_api(message="出错啦")

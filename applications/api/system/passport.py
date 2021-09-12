@@ -18,7 +18,6 @@ class Login(Resource):
     def get(self):
         if current_user.is_authenticated:
             return redirect(url_for('admin.index'))
-        # TODO 分离视图操作 最终实现接口登录与视图登录两套逻辑
         return make_response(render_template('index/login.html'))
 
     def post(self):
@@ -28,14 +27,14 @@ class Login(Resource):
         s_code = session.get("code", None)
 
         if req.captcha != s_code:
-            return fail_api(msg="验证码错误")
+            return fail_api(message="验证码错误")
         user = CompanyUser.query.filter_by(username=req.username).first()
 
         if user is None:
-            return fail_api(msg="不存在的用户")
+            return fail_api(message="不存在的用户")
 
         if user.enable == 0:
-            return fail_api(msg="用户被暂停使用")
+            return fail_api(message="用户被暂停使用")
 
         if user.validate_password(req.password):
             # 登录
@@ -45,6 +44,6 @@ class Login(Resource):
 
             # 存入权限
             add_auth_session()
-            return success_api(msg="登录成功")
+            return success_api(message="登录成功")
         record_logging()
-        return fail_api(msg="用户名或密码错误")
+        return fail_api(message="用户名或密码错误")

@@ -104,7 +104,7 @@
         success: function (result) {
           layer.close(loading)
           if (result.success) {
-            popup.success(result.msg, function () {
+            popup.success(result.message, function () {
               location.href = '/admin'
             })
             return true

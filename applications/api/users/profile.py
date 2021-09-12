@@ -21,14 +21,14 @@ class UserStatus(Resource):
         if res.operate == 1:
             user = CompanyUser.query.get(user_id)
             user.enable = res.operate
-            message = success_api(msg="启动成功")
+            message = success_api(message="启动成功")
         else:
             user = CompanyUser.query.filter_by(id=res.user_id).update({"enable": res.operate})
-            message = success_api(msg="禁用成功")
+            message = success_api(message="禁用成功")
         if user:
             db.session.commit()
         else:
-            return fail_api(msg="出错啦")
+            return fail_api(message="出错啦")
         return message
 
 
@@ -41,8 +41,8 @@ class UserAvatar(Resource):
         ret.avatar = url
         db.session.commit()
         if not ret:
-            return fail_api(msg="出错啦")
-        return success_api(msg="修改成功")
+            return fail_api(message="出错啦")
+        return success_api(message="修改成功")
 
 
 class UserInfo(Resource):
@@ -63,8 +63,8 @@ class UserInfo(Resource):
         ret.remark = res.details
         db.session.commit()
         if not ret:
-            return fail_api(msg="出错啦")
-        return success_api(msg="更新成功")
+            return fail_api(message="出错啦")
+        return success_api(message="更新成功")
 
 
 class UserPassword(Resource):
@@ -80,15 +80,15 @@ class UserPassword(Resource):
         res = parser.parse_args()
 
         if res.newPassword != res.confirmPassword:
-            return fail_api(msg='确认密码不一致')
+            return fail_api(message='确认密码不一致')
 
         """ 修改当前用户密码 """
         user = CompanyUser.query.get(user_id)
         is_right = user.validate_password(res.oldPassword)
         if not is_right:
-            return jsonify(success=False, msg="旧密码错误")
+            return jsonify(success=False, message="旧密码错误")
         user.set_password(res.newPassword)
         db.session.add(user)
         db.session.commit()
 
-        return jsonify(success=True, msg="更改成功")
+        return jsonify(success=True, message="更改成功")

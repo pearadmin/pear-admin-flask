@@ -61,11 +61,11 @@
           layer.close(loader)  // 关闭加载按钮
           btn.stop(function () {
             if (result.success) {
-              popup.success(result.msg, function () {
+              popup.success(result.message, function () {
                 location.href = '/admin'
               })
             } else {
-              popup.failure(result.msg, function () {
+              popup.failure(result.success, function () {
                 document.getElementById('captchaImage').src = captchaPath + '?' + Math.random()
               })
             }

@@ -4,7 +4,6 @@ from flask import request, jsonify, current_app
 from flask_restful import Resource, marshal
 from sqlalchemy import desc
 
-from applications.common.serialization import photo_fields
 from applications.common.utils.http import fail_api, success_api, table_api
 from applications.common.utils.rights import authorize
 from applications.common.utils.upload import upload_one, delete_photo_by_id
@@ -12,15 +11,17 @@ from applications.extensions import db
 from applications.models import FilePhoto
 
 
-class FilePhotos(Resource):
+class FilePhotosResource(Resource):
 
     @authorize("admin:file:main", log=True)
     def get(self):
         page = request.args.get('page', type=int)
         limit = request.args.get('limit', type=int)
-        photo_paginate = FilePhoto.query.order_by(desc(FilePhoto.create_at)).paginate(page=page, per_page=limit,
-                                                                                      error_out=False)
-        data = marshal(photo_paginate.items, photo_fields)
+        photo_paginate = FilePhoto.query.order_by(desc(FilePhoto.create_at)
+                                                  ).paginate(page=page,
+                                                             per_page=limit,
+                                                             error_out=False)
+        data = marshal(photo_paginate.items, FilePhoto.fields())
         return table_api(result={'items': data,
                                  'total': photo_paginate.total, },
                          code=0)
@@ -33,7 +34,7 @@ class FilePhotos(Resource):
             file_url = upload_one(photo=photo, mime=mime)
 
             res = {
-                "msg": "上传成功",
+                "message": "上传成功",
                 "code": 0,
                 "success": True,
                 "data":
@@ -54,18 +55,18 @@ class FilePhotos(Resource):
         photo = FilePhoto.query.filter(FilePhoto.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         if photo:
-            return success_api(msg="删除成功")
+            return success_api(message="删除成功")
         else:
-            return fail_api(msg="删除失败")
+            return fail_api(message="删除失败")
 
 
-class FileTable(Resource):
+class FilePhotoResource(Resource):
     """图片数据"""
 
     @authorize("admin:file:delete", log=True)
     def delete(self, photo_id):
         res = delete_photo_by_id(photo_id)
         if res:
-            return success_api(msg="删除成功")
+            return success_api(message="删除成功")
         else:
-            return fail_api(msg="删除失败")
+            return fail_api(message="删除失败")

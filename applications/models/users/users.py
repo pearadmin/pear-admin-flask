@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_restful import fields
 
 from applications.extensions import db
 from ..base import BaseModel
@@ -12,7 +13,7 @@ class CompanyUser(db.Model, UserMixin, BaseModel):
     realname = db.Column(db.String(20), comment='真实名字')
     mobile = db.Column(db.String(11), comment='电话号码')
     avatar = db.Column(db.String(255), comment='头像', default="/static/admin/admin/images/avatar.jpg")
-    remark = db.Column(db.String(255), comment='备注')
+    comment = db.Column(db.String(255), comment='备注')
     password_hash = db.Column(db.String(128), comment='哈希密码')
     enable = db.Column(db.Integer, default=0, comment='启用')
     dept_id = db.Column(db.Integer, comment='部门id')
@@ -24,3 +25,21 @@ class CompanyUser(db.Model, UserMixin, BaseModel):
 
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    @staticmethod
+    def fields():
+        return {
+            'id': fields.Integer,
+            'username': fields.String,
+            'realname': fields.String,
+            'mobile': fields.String,
+            'avatar': fields.Url,
+            'comment': fields.String,
+            # 'password_hash': fields.String,
+            'enable': fields.Boolean,
+            # 'dept_id': fields.Integer,
+            'dept_id': fields.Integer,
+            'create_at': fields.DateTime,
+            'update_at': fields.DateTime,
+        }
+

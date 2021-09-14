@@ -8,7 +8,7 @@ from applications.extensions import db
 from applications.models import CompanyUser
 
 
-class UserStatus(Resource):
+class UserStatusResource(Resource):
     def put(self, user_id):
         # 启用或者禁用用户 enable disable
 
@@ -32,7 +32,7 @@ class UserStatus(Resource):
         return message
 
 
-class UserAvatar(Resource):
+class UserAvatarResource(Resource):
     """修改头像"""
 
     def put(self, user_id):
@@ -45,7 +45,7 @@ class UserAvatar(Resource):
         return success_api(message="修改成功")
 
 
-class UserInfo(Resource):
+class UserInfoResource(Resource):
 
     @login_required
     def put(self, user_id):
@@ -67,7 +67,7 @@ class UserInfo(Resource):
         return success_api(message="更新成功")
 
 
-class UserPassword(Resource):
+class UserPasswordResource(Resource):
     """前用户密码"""
 
     @login_required

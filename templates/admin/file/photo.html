@@ -167,14 +167,14 @@
           success: function (res) {
             layer.close(loading)
             if (res.success) {
-              layer.msg(res.msg, {
+              layer.msg(res.message, {
                 icon: 1,
                 time: 1000,
               }, function () {
                 obj.del()
               })
             } else {
-              layer.msg(res.msg, {
+              layer.msg(res.message, {
                 icon: 2,
                 time: 1000,
               })
@@ -215,14 +215,14 @@
           success: function (res) {
             layer.close(loading)
             if (res.success) {
-              layer.msg(res.msg, {
+              layer.msg(res.message, {
                 icon: 1,
                 time: 1000,
               }, function () {
                 table.reload('tables')
               })
             } else {
-              layer.msg(res.msg, {
+              layer.msg(res.message, {
                 icon: 2,
                 time: 1000,
               })

@@ -2,14 +2,13 @@ from flask import jsonify
 from flask_restful import Resource
 from flask_restful import marshal, reqparse
 
-from applications.common.serialization import dept_fields
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import CompanyDepartment, CompanyUser
 
 
-class Departments(Resource):
+class DepartmentsResource(Resource):
 
     @authorize("admin:dept:main", log=True)
     def get(self):
@@ -17,7 +16,7 @@ class Departments(Resource):
         # TODO dtree 需要返回状态信息
         res = {
             "status": {"code": 200, "message": "默认"},
-            "data": marshal(dept_data, dept_fields)
+            "data": marshal(dept_data, CompanyDepartment.fields())
         }
         print(dept_data)
         return jsonify(res)
@@ -52,7 +51,7 @@ class Departments(Resource):
         return success_api(message="成功")
 
 
-class Department(Resource):
+class DepartmentResource(Resource):
     @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
         dept = CompanyDepartment.query.filter_by(id=dept_id).first()
@@ -106,7 +105,7 @@ class Department(Resource):
         return fail_api(message="删除失败")
 
 
-class DeptEnable(Resource):
+class DeptEnableResource(Resource):
     @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):
         d = CompanyDepartment.query.get(dept_id)

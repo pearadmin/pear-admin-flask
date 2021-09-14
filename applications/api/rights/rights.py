@@ -5,7 +5,6 @@ from flask import request, jsonify, current_app
 from flask_login import current_user, login_required
 from flask_restful import Resource, reqparse, marshal
 
-from applications.common.serialization import power2_fields, power_fields
 from applications.common.utils.http import success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
@@ -101,7 +100,7 @@ def make_menu_tree():
             if p.type == 0 or p.type == 1:
                 powers.append(p)
 
-    power_dict = marshal(powers, power2_fields)  # 生成可序列化对象
+    power_dict = marshal(powers, RightsPower.fields2())  # 生成可序列化对象
     power_dict.sort(key=lambda x: x['id'], reverse=True)
 
     menu_dict = OrderedDict()
@@ -153,13 +152,13 @@ parser_power.add_argument('powerUrl', type=str, dest='power_url')
 parser_power.add_argument('sort', type=int, dest='sort')
 
 
-class RightRights(Resource):
+class RightRightsResource(Resource):
     @authorize("admin:power:main", log=True)
     def get(self):
         """获取选择父节点"""
 
         power = RightsPower.query.all()
-        power_data = marshal(power, power_fields)
+        power_data = marshal(power, RightsPower.fields())
         power_data.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
         res = {
             "status": {"code": 200, "message": "默认"},
@@ -175,7 +174,7 @@ class RightRights(Resource):
         return success_api(message="批量删除成功")
 
 
-class RightPower(Resource):
+class RightPowerResource(Resource):
 
     @authorize("admin:power:add", log=True)
     def post(self, power_id):
@@ -241,7 +240,7 @@ class RightPower(Resource):
         return success_api(message="更新权限成功")
 
 
-class RightPowerEnable(Resource):
+class RightPowerEnableResource(Resource):
     @authorize("admin:power:edit", log=True)
     def put(self, right_id):
 
@@ -255,13 +254,13 @@ class RightPowerEnable(Resource):
             return fail_api(message="出错啦")
 
 
-class AdminConfigs(Resource):
+class AdminConfigsResource(Resource):
     @login_required
     def get(self):
         return get_render_config()
 
 
-class AdminMenu(Resource):
+class AdminMenuResource(Resource):
     @login_required
     def get(self):
         menu_tree = make_menu_tree()

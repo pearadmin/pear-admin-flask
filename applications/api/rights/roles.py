@@ -1,8 +1,6 @@
-from flask import jsonify
 from flask_login import login_required
 from flask_restful import Resource, reqparse, marshal
 
-from applications.common.serialization import power_fields
 from applications.common.utils.http import table_api, success_api, fail_api
 from applications.common.utils.rights import authorize
 from applications.extensions import db
@@ -37,7 +35,7 @@ def batch_remove_role(role_ids):
         remove_role(role_id)
 
 
-class RoleRoles(Resource):
+class RoleRolesResource(Resource):
     # 表格数据
     @authorize("admin:role:main", log=True)
     def get(self):
@@ -61,7 +59,7 @@ class RoleRoles(Resource):
                                             'roleName': item.name,
                                             'roleCode': item.code,
                                             'enable': item.enable,
-                                            'remark': item.remark,
+                                            'comment': item.comment,
                                             'details': item.details,
                                             'sort': item.sort,
                                             'create_at': str(item.create_at), } for item in paginate.items],
@@ -80,7 +78,7 @@ class RoleRoles(Resource):
         return success_api(message="批量删除成功")
 
 
-class RoleRole(Resource):
+class RoleRoleResource(Resource):
 
     @authorize("admin:role:add", log=True)
     def post(self, role_id):
@@ -132,7 +130,7 @@ class RoleRole(Resource):
         return success_api(message="更新角色成功")
 
 
-class RoleEnable(Resource):
+class RoleEnableResource(Resource):
     """启用用户"""
 
     @authorize("admin:role:edit", log=True)
@@ -147,7 +145,7 @@ class RoleEnable(Resource):
         return success_api(message=message)
 
 
-class RolePower(Resource):
+class RolePowerResource(Resource):
 
     @authorize("admin:role:main", log=True)
     def get(self, role_id):
@@ -156,7 +154,7 @@ class RolePower(Resource):
         # 获取权限列表的 id
         check_powers_list = [rp.id for rp in role.power]
         powers = RightsPower.query.all()  # 获取所有的权限
-        powers = marshal(powers, power_fields)
+        powers = marshal(powers, RightsRole.fields())
         for i in powers:
             if int(i.get("powerId")) in check_powers_list:
                 i["checkArr"] = "1"

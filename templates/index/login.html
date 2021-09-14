@@ -65,7 +65,7 @@
                 location.href = '/admin'
               })
             } else {
-              popup.failure(result.success, function () {
+              popup.failure(result.message, function () {
                 document.getElementById('captchaImage').src = captchaPath + '?' + Math.random()
               })
             }

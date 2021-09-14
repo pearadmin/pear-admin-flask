@@ -9,7 +9,7 @@ from applications.common.utils.rights import record_logging
 from applications.models import CompanyUser
 
 
-class Login(Resource):
+class LoginResource(Resource):
     login_req = reqparse.RequestParser(bundle_errors=True)
     login_req.add_argument('username', type=str, help='请输入用户名', required=True)
     login_req.add_argument('password', type=str, help='请输入密码', required=True)

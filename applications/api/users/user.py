@@ -57,7 +57,7 @@ def update_user_role(_id, roles_list):
     db.session.commit()
 
 
-class UserUsers(Resource):
+class UserUsersResource(Resource):
     """用户列表数据操作"""
 
     @authorize("admin:user:main", log=True)
@@ -138,7 +138,7 @@ class UserUsers(Resource):
         return success_api(message="批量删除成功")
 
 
-class UserUser(Resource):
+class UserUserResource(Resource):
     """修改用户数据"""
 
     @authorize("admin:user:add", log=True)
@@ -182,7 +182,7 @@ class UserUser(Resource):
         return success_api(message="删除成功")
 
 
-class UserRole(Resource):
+class UserRoleResource(Resource):
     @authorize("admin:user:edit", log=True)
     def put(self, user_id):
         parser = reqparse.RequestParser()

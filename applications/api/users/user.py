@@ -4,10 +4,9 @@ from flask_restful import Resource, reqparse
 from sqlalchemy import desc
 
 from applications.common.utils.http import fail_api, success_api, table_api
-from applications.common.utils.rights import authorize
 from applications.extensions import db
-from applications.models import LoggingModel
 from applications.models import CompanyUser, RightsRole, CompanyDepartment
+from applications.models import LoggingModel
 
 
 def get_current_user_logs():
@@ -60,7 +59,6 @@ def update_user_role(_id, roles_list):
 class UserUsersResource(Resource):
     """用户列表数据操作"""
 
-    @authorize("admin:user:main", log=True)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('page', type=int, default=1)
@@ -98,7 +96,6 @@ class UserUsersResource(Resource):
                                  'total': paginate.total}
                          , code=0)
 
-    @authorize("admin:user:add", log=True)
     def post(self):
         """新建单个用户"""
         parser = reqparse.RequestParser()
@@ -130,7 +127,6 @@ class UserUsersResource(Resource):
 
         return success_api(message="增加成功", code=0)
 
-    @authorize("admin:user:remove", log=True)
     def delete(self):
         """批量删除"""
         ids = request.form.getlist('ids[]')
@@ -141,7 +137,6 @@ class UserUsersResource(Resource):
 class UserUserResource(Resource):
     """修改用户数据"""
 
-    @authorize("admin:user:add", log=True)
     def post(self, user_id):
         """新建单个用户"""
         parser = reqparse.RequestParser()
@@ -173,7 +168,6 @@ class UserUserResource(Resource):
 
         return success_api(message="增加成功", code=0)
 
-    @authorize("admin:user:remove", log=True)
     def delete(self, user_id):
         # 删除用户
         res = delete_by_id(user_id)
@@ -183,7 +177,6 @@ class UserUserResource(Resource):
 
 
 class UserRoleResource(Resource):
-    @authorize("admin:user:edit", log=True)
     def put(self, user_id):
         parser = reqparse.RequestParser()
         parser.add_argument('roleIds', type=str, dest='role_ids')

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from applications.common.utils.rights import authorize, permission_required, view_logging_required
+from applications.common.utils.rights import permission_required, view_logging_required
 
 from applications.models import RightsRole
 

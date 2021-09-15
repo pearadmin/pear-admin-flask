@@ -59,24 +59,3 @@ def permission_required(permission: str) -> t.Callable:
         return wrapper
 
     return decorator
-
-
-def authorize(power: str, log: bool = False):
-    def decorator(func):
-        @login_required
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if power not in session.get('permissions'):
-                if log:
-                    record_logging()
-                if request.method == 'GET':
-                    abort(403)
-                else:
-                    return jsonify(success=False, msg="权限不足!")
-            if log:
-                record_logging()
-            return func(*args, **kwargs)
-
-        return wrapper
-
-    return decorator

@@ -1,1 +1,24 @@
-[{"id": 1, "name": "管理员", "code": "admin", "remark": null, "details": "管理员", "sort": 1, "create_time": null, "update_time": null, "enable": 1}, {"id": 2, "name": "普通用户", "code": "common", "remark": null, "details": "只有查看，没有增删改权限", "sort": 2, "create_time": "2021-03-22 20:02:38", "update_time": "2021-04-01 22:29:56", "enable": 1}]
+[
+  {
+    "id": 1,
+    "name": "管理员",
+    "code": "admin",
+    "remark": null,
+    "details": "管理员",
+    "sort": 1,
+    "create_time": null,
+    "update_time": null,
+    "enable": 1
+  },
+  {
+    "id": 2,
+    "name": "普通用户",
+    "code": "common",
+    "remark": null,
+    "details": "只有查看，没有增删改权限",
+    "sort": 2,
+    "create_time": "2021-03-22 20:02:38",
+    "update_time": "2021-04-01 22:29:56",
+    "enable": 1
+  }
+]

@@ -1,8 +1,6 @@
-from flask_login import login_required
 from flask_restful import Resource, reqparse, marshal
 
 from applications.common.utils.http import table_api, success_api, fail_api
-from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import RightsPower, RightsRole, CompanyUser
 
@@ -37,7 +35,6 @@ def batch_remove_role(role_ids):
 
 class RoleRolesResource(Resource):
     # 表格数据
-    @authorize("admin:role:main", log=True)
     def get(self):
         parser = reqparse.RequestParser(bundle_errors=True)
         parser.add_argument('page', type=int, default=1)
@@ -66,8 +63,6 @@ class RoleRolesResource(Resource):
                                  'total': paginate.total}
                          , code=0)
 
-    @authorize("admin:role:remove", log=True)
-    @login_required
     def delete(self):
         parser = reqparse.RequestParser()
         parser.add_argument('ids[]', action='append', dest='ids')
@@ -80,7 +75,6 @@ class RoleRolesResource(Resource):
 
 class RoleRoleResource(Resource):
 
-    @authorize("admin:role:add", log=True)
     def post(self, role_id):
         parser = reqparse.RequestParser()
         parser.add_argument('details', type=str)
@@ -103,7 +97,6 @@ class RoleRoleResource(Resource):
         return success_api(message="成功")
 
     # 更新角色
-    @authorize("admin:role:edit", log=True)
     def put(self, role_id):
         parser = reqparse.RequestParser()
         parser.add_argument('roleId', dest='role_id', type=int)
@@ -133,7 +126,6 @@ class RoleRoleResource(Resource):
 class RoleEnableResource(Resource):
     """启用用户"""
 
-    @authorize("admin:role:edit", log=True)
     def put(self, role_id):
         ret = RightsRole.query.get(role_id)
         ret.enable = not ret.enable
@@ -147,7 +139,6 @@ class RoleEnableResource(Resource):
 
 class RolePowerResource(Resource):
 
-    @authorize("admin:role:main", log=True)
     def get(self, role_id):
         # 获取角色权限
         role = RightsRole.query.filter_by(id=role_id).first()
@@ -166,7 +157,6 @@ class RolePowerResource(Resource):
         }
 
     # 保存角色权限
-    @authorize("admin:role:edit", log=True)
     def put(self, role_id):
         parser = reqparse.RequestParser()
         parser.add_argument('powerIds', dest='power_ids')
@@ -190,7 +180,6 @@ class RolePowerResource(Resource):
         return success_api(message="授权成功")
 
     # 角色删除
-    @authorize("admin:role:remove", log=True)
     def delete(self, role_id):
         print(role_id)
         res = remove_role(role_id)

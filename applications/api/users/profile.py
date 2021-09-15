@@ -47,7 +47,6 @@ class UserAvatarResource(Resource):
 
 class UserInfoResource(Resource):
 
-    @login_required
     def put(self, user_id):
         parser = reqparse.RequestParser()
         parser.add_argument('realName', type=str, dest='real_name')
@@ -70,7 +69,6 @@ class UserInfoResource(Resource):
 class UserPasswordResource(Resource):
     """前用户密码"""
 
-    @login_required
     def put(self, user_id):
         parser = reqparse.RequestParser()
         parser.add_argument('oldPassword', type=str, required=True, help='旧密码不得为空')

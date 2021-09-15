@@ -3,7 +3,7 @@ from sqlalchemy import desc
 from flask_restful import marshal
 
 from applications.common.utils.http import table_api
-from applications.common.utils.rights import authorize, permission_required
+from applications.common.utils.rights import permission_required
 from applications.models import LoggingModel
 
 logs_bp = Blueprint('logs', __name__, url_prefix='/logs')

@@ -5,7 +5,6 @@ from flask_restful import Resource, marshal
 from sqlalchemy import desc
 
 from applications.common.utils.http import fail_api, success_api, table_api
-from applications.common.utils.rights import authorize
 from applications.common.utils.upload import upload_one, delete_photo_by_id
 from applications.extensions import db
 from applications.models import FilePhoto
@@ -13,7 +12,6 @@ from applications.models import FilePhoto
 
 class FilePhotosResource(Resource):
 
-    @authorize("admin:file:main", log=True)
     def get(self):
         page = request.args.get('page', type=int)
         limit = request.args.get('limit', type=int)
@@ -26,7 +24,6 @@ class FilePhotosResource(Resource):
                                  'total': photo_paginate.total, },
                          code=0)
 
-    @authorize("admin:file:add", log=True)
     def post(self):
         if 'file' in request.files:
             photo = request.files['file']
@@ -43,7 +40,6 @@ class FilePhotosResource(Resource):
             return jsonify(res)
         return fail_api()
 
-    @authorize("admin:file:delete", log=True)
     def delete(self):
         """图片批量删除"""
         # TODO bugs 图片删除失败
@@ -63,7 +59,6 @@ class FilePhotosResource(Resource):
 class FilePhotoResource(Resource):
     """图片数据"""
 
-    @authorize("admin:file:delete", log=True)
     def delete(self, photo_id):
         res = delete_photo_by_id(photo_id)
         if res:

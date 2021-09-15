@@ -2,7 +2,7 @@ from flask import render_template
 from flask_login import login_required, current_user
 from sqlalchemy import desc
 
-from applications.common.utils.rights import authorize, permission_required, view_logging_required
+from applications.common.utils.rights import permission_required, view_logging_required
 from applications.models import LoggingModel, RightsRole, CompanyUser
 from . import index_bp
 

@@ -3,14 +3,12 @@ from flask_restful import Resource
 from flask_restful import marshal, reqparse
 
 from applications.common.utils.http import success_api, fail_api
-from applications.common.utils.rights import authorize
 from applications.extensions import db
 from applications.models import CompanyDepartment, CompanyUser
 
 
 class DepartmentsResource(Resource):
 
-    @authorize("admin:dept:main", log=True)
     def get(self):
         dept_data = CompanyDepartment.query.order_by(CompanyDepartment.sort).all()
         # TODO dtree 需要返回状态信息
@@ -21,7 +19,6 @@ class DepartmentsResource(Resource):
         print(dept_data)
         return jsonify(res)
 
-    @authorize("admin:dept:add", log=True)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('address', type=str)
@@ -52,7 +49,6 @@ class DepartmentsResource(Resource):
 
 
 class DepartmentResource(Resource):
-    @authorize("admin:dept:edit", log=True)
     def get(self, dept_id):
         dept = CompanyDepartment.query.filter_by(id=dept_id).first()
         dept_data = {
@@ -65,10 +61,8 @@ class DepartmentResource(Resource):
             'sort': dept.sort,
             'address': dept.address,
         }
-        # return make_response(render_template('department/edit.html', dept=dept))
         return dict(success=True, message='ok', dept=dept_data)
 
-    @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):
         parser = reqparse.RequestParser()
         parser.add_argument('address', type=str)
@@ -95,7 +89,6 @@ class DepartmentResource(Resource):
         db.session.commit()
         return success_api(message="更新成功")
 
-    @authorize("admin:dept:remove", log=True)
     def delete(self, dept_id):
         ret = CompanyDepartment.query.filter_by(id=dept_id).delete()
         CompanyUser.query.filter_by(dept_id=dept_id).update({"dept_id": None})
@@ -106,7 +99,6 @@ class DepartmentResource(Resource):
 
 
 class DeptEnableResource(Resource):
-    @authorize("admin:dept:edit", log=True)
     def put(self, dept_id):
         d = CompanyDepartment.query.get(dept_id)
         if d:

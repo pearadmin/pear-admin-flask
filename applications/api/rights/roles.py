@@ -145,7 +145,7 @@ class RolePowerResource(Resource):
         # 获取权限列表的 id
         check_powers_list = [rp.id for rp in role.power]
         powers = RightsPower.query.all()  # 获取所有的权限
-        powers = marshal(powers, RightsRole.fields())
+        powers = marshal(powers, RightsPower.fields())
         for i in powers:
             if int(i.get("powerId")) in check_powers_list:
                 i["checkArr"] = "1"

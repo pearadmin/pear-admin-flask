@@ -1,7 +1,6 @@
 <div align="center">
 <br/>
 <br/>
-<img src="https://gitee.com/pear-admin/Pear-Admin-Layui/raw/master/admin/images/logo.png" width="90px" style="margin-top:30px;"/>
   <h1 align="center">
     Pear Admin Flask
   </h1>

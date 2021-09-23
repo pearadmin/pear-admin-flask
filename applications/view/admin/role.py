@@ -35,7 +35,7 @@ def table():
     # orm查询
     # 使用分页获取data需要.items
     role = Role.query.filter(mf.get_filter(Role)).layui_paginate()
-    count = Role.query.filter(mf.get_filter(Role)).count()
+    count = role.total
     # 返回api
     return table_api(data=model_to_dicts(schema=RoleSchema, data=role.items), count=count)
 

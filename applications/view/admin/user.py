@@ -42,7 +42,7 @@ def data():
     # orm查询
     # 使用分页获取data需要.items
     user = User.query.filter(mf.get_filter(model=User)).layui_paginate()
-    count = User.query.filter(mf.get_filter(model=User)).count()
+    count = user.total
     # 返回api
     return table_api(data=model_to_dicts(schema=UserSchema, data=user.items), count=count)
 

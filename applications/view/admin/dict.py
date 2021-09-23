@@ -31,7 +31,7 @@ def dict_type_data():
     # orm查询
     # 使用分页获取data需要.items
     dict_all = DictType.query.filter(mf.get_filter(DictType)).layui_paginate()
-    count = DictType.query.filter(mf.get_filter(DictType)).count()
+    count = dict_all.total
     data = curd.model_to_dicts(schema=DictTypeSchema, data=dict_all.items)
     return table_api(data=data, count=count)
 
@@ -117,7 +117,7 @@ def dict_type_delete(_id):
 def dict_code_data():
     type_code = xss_escape(request.args.get('typeCode', type=str))
     dict_data = DictData.query.filter_by(type_code=type_code).layui_paginate()
-    count = DictType.query.count()
+    count = dict_data.total
     data = curd.model_to_dicts(schema=DictDataSchema, data=dict_data.items)
     return table_api(data=data, count=count)
 

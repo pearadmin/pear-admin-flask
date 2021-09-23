@@ -32,9 +32,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %}value="0"
+                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %}value="0"
                                title="开启">
-                        <input type="radio" name="enable" {% if role.enable == 1 %}checked {% endif %} value="1"
+                        <input type="radio" name="enable" {% if role.enable == 0 %}checked {% endif %} value="1"
                                title="关闭">
                     </div>
                 </div>

@@ -23,7 +23,7 @@ def login_log():
     # orm查询
     # 使用分页获取data需要.items
     log = AdminLog.query.filter_by(url='/passport/login').order_by(desc(AdminLog.create_time)).layui_paginate()
-    count = AdminLog.query.filter_by(url='/passport/login').count()
+    count = log.total
     return table_api(data= model_to_dicts(schema=LogSchema, data=log.items), count=count)
 
 
@@ -36,5 +36,5 @@ def operate_log():
     log = AdminLog.query.filter(
         AdminLog.url != '/passport/login').order_by(
         desc(AdminLog.create_time)).layui_paginate()
-    count = AdminLog.query.filter(AdminLog.url != '/passport/login').count()
+    count = log.total
     return table_api(data=model_to_dicts(schema=LogSchema, data=log.items), count=count)

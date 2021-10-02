@@ -12,6 +12,7 @@
 		"parentId": "0",
 		"icon": "layui-icon-set-fill",
 		"sort": 1,
+		"enable": 1,
 		"checkArr": "0"
 	}, {
 		"powerId": "2",
@@ -23,6 +24,7 @@
 		"parentId": "1",
 		"icon": "layui-icon-username",
 		"sort": null,
+		"enable": 1,
 		"checkArr": "0"
 	}, {
 		"powerId": "3",
@@ -34,6 +36,7 @@
 		"parentId": "1",
 		"icon": "layui-icon-user",
 		"sort": null,
+		"enable": 1,
 		"checkArr": "0"
 	}, {
 		"powerId": "4",

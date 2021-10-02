@@ -1,11 +1,3 @@
-/**
- *@Name dtree 树形组件
- *@Author 智慧的小西瓜
- *@DOCS http://www.wisdomelon.com/DTreeHelper/
- *@License https://www.layui.com/
- *@LASTTIME 2020/03/31
- *@VERSION v2.5.8
- */
 layui.define(['jquery','layer','form'], function(exports) {
     var $ = layui.$,
         layer = layui.layer,

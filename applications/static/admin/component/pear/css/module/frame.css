@@ -33,15 +33,15 @@
 
 .pear-frame .pear-frame-content {
 	width: 100%;
-	height: calc(100% - 45px) !important;
+	height: calc(100% - 0px) !important;
 }
 
 .pear-frame-loading {
 	position: absolute;
 	display: none;
 	width: 100%;
-	height: calc(100% - 45px) !important;
-	top: 42px;
+	height: calc(100% - 0px) !important;
+	top: 0px;
 	z-index: 19;
 	background-color: #fff
 }

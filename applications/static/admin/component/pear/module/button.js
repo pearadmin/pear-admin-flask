@@ -21,7 +21,7 @@ layui.define(['jquery'], function(exports) {
 			time: opt.time ? opt.time : false,
 			done: opt.done ? opt.done : function(){}
 		}
-		var text = $(option.elem).text();
+		var text = $(option.elem).html();
 		
 		$(option.elem).html("<i class='layui-anim layui-anim-rotate layui-icon layui-anim-loop layui-icon-loading'/>");
 		

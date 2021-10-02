@@ -1,8 +1,8 @@
 [{
 		"id": 1,
 		"title": "工作空间",
-		"type": 0,
 		"icon": "layui-icon layui-icon-console",
+		"type": 0,
 		"href": "",
 		"children": [{
 			"id": 10,
@@ -24,7 +24,7 @@
 			"icon": "layui-icon layui-icon-console",
 			"type": 1,
 			"openType": "_iframe",
-			"href": "http://www.baidu.com"
+			"href": "http://www.bing.com"
 		}, {
 			"id": 15,
 			"title": "主题预览",
@@ -144,11 +144,18 @@
 				"href": "view/document/drawer.html"
 			}, {
 				"id": 2022,
-				"title": "消息通知",
+				"title": "消息通知 (过时)",
 				"icon": "layui-icon layui-icon-face-cry",
 				"type": 1,
 				"openType": "_iframe",
 				"href": "view/document/notice.html"
+			}, {
+				"id": 2025,
+				"title": "消息通知 (新增)",
+				"icon": "layui-icon layui-icon-face-cry",
+				"type": 1,
+				"openType": "_iframe",
+				"href": "view/document/toast.html"
 			}, {
 				"id": 2024,
 				"title": "加载组件",

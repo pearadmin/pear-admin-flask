@@ -9,7 +9,7 @@
 
 .top-panel-number {
 	line-height: 60px;
-	font-size: 30px;
+	font-size: 29px;
 	border-right: 1px solid #eceff9;
 }
 
@@ -69,9 +69,10 @@
 .custom-tab .layui-tab-title li {
 	margin-left: 10px;
 }
+
 .list .list-item {
-	height: 32px;
-	line-height: 32px;
+	height: 31.8px;
+	line-height: 31.8px;
 	color: gray;
 	padding: 5px;
 	padding-left: 15px;

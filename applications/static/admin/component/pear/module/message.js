@@ -22,17 +22,17 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			var notice = createHtml(option);
 			$(option.elem).html(notice);
 		}
-		setTimeout(function(){
+		setTimeout(function() {
 			element.init();
-			$(opt.elem+" li").click(function(e){
+			$(opt.elem + " li").click(function(e) {
 				$(this).siblings().removeClass('pear-this');
 				$(this).addClass('pear-this');
 			})
-		},300);
+		}, 300);
 		return new message(option);
 	}
-	
-	message.prototype.click = function(callback){
+
+	message.prototype.click = function(callback) {
 		$("*[notice-id]").click(function(event) {
 			event.preventDefault();
 			var id = $(this).attr("notice-id");
@@ -42,7 +42,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			callback(id, title, context, form);
 		})
 	}
-	
+
 	/** 同 步 请 求 获 取 数 据 */
 	function getData(url) {
 		$.ajaxSettings.async = false;
@@ -56,15 +56,14 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 
 	function createHtml(option) {
 
-        var notice = '<li class="layui-nav-item" lay-unselect="">' +
-			'<a href="#" class="notice layui-icon layui-icon-notice"><span class="layui-badge-dot"></span></a>' +
-			'<div class="layui-nav-child layui-tab pear-notice" style="margin-top: 0px;;left: -200px;">';
-
+		var count = 0;
 		var noticeTitle = '<ul class="layui-tab-title">';
 		var noticeContent = '<div class="layui-tab-content" style="height:' + option.height + ';overflow-x: hidden;">';
-
+		
+		
 		// 根据 data 便利数据
 		$.each(option.data, function(i, item) {
+			
 			if (i === 0) {
 				noticeTitle += '<li class="pear-this">' + item.title + '</li>';
 				noticeContent += '<div class="layui-tab-item layui-show">';
@@ -76,13 +75,17 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			$.each(item.children, function(i, note) {
 				noticeContent += '<div class="pear-notice-item" notice-form="' + note.form + '" notice-context="' + note.context +
 					'" notice-title="' + note.title + '" notice-id="' + note.id + '">' +
-					'<img src="' + note.avatar + '">' +
-					'<span>' + note.title + '</span>' +
-					'<span>' + note.time + '</span>' +
+					'<img src="' + note.avatar + '"/>' +
+					'<div style="display:inline-block;">' + note.title + '</div>'+
+					'<div class="pear-notice-end">' + note.time + '</div>' +
 					'</div>';
 			})
 			noticeContent += '</div>';
 		})
+
+		var notice = '<li class="layui-nav-item" lay-unselect="">' +
+			'<a href="#" class="notice layui-icon layui-icon-notice"><span class="layui-badge-dot"></div></a>' +
+			'<div class="layui-nav-child layui-tab pear-notice" style="margin-top: 0px;;left: -200px;">';
 
 		noticeTitle += '</ul>';
 		noticeContent += '</div>';

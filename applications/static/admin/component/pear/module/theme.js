@@ -7,8 +7,9 @@ layui.define(["jquery","layer"], function (exports) {
 
 	theme.changeTheme = function (target, autoHead) {
 		this.autoHead = autoHead;
-		const color = localStorage.getItem("theme-color-context");
-		this.colorSet(color);
+		const color = localStorage.getItem("theme-color-color");
+		const second = localStorage.getItem("theme-color-second");
+		this.colorSet(color, second);
 		if (target.frames.length == 0) return;
 		for (var i = 0; i < target.frames.length; i++) {
 			try {
@@ -21,7 +22,7 @@ layui.define(["jquery","layer"], function (exports) {
 		}
 	}
 
-	theme.colorSet = function(color) {
+	theme.colorSet = function(color, second) {
 		
 		let style = '';
 		style += '.light-theme .pear-nav-tree .layui-this a:hover,.light-theme .pear-nav-tree .layui-this,.light-theme .pear-nav-tree .layui-this a,.pear-nav-tree .layui-this a,.pear-nav-tree .layui-this{background-color: ' +color + '!important;}';
@@ -33,15 +34,12 @@ layui.define(["jquery","layer"], function (exports) {
 		style += '.layui-header .layui-nav-child .layui-this a{background-color:' + color +'!important;color:white!important;}';
 		style += '#preloader{background-color:' + color + '!important;}';
 		style += '.pearone-color .color-content li.layui-this:after, .pearone-color .color-content li:hover:after {border: ' +color + ' 3px solid!important;}';
-		style += '.layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this{background-color:' + color + '!important}';	
+		style += '.layui-nav .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this{background-color:' + color + ';color:white;}';	
 		style += '.pear-social-entrance {background-color:' + color + '!important}';
 		style += '.pear-admin .pe-collaspe {background-color:' + color + '!important}';
 		style += '.layui-fixbar li {background-color:' + color + '!important}';
-		if(this.autoHead){
-			style += '.pear-admin .layui-header{background-color:' + color + '!important;}.pear-admin .layui-header .layui-nav .layui-nav-item>a{color:white!important;}';
-		}
 		style += '.pear-btn-primary {background-color:' + color + '!important}';
-		style += '.layui-input:focus,.layui-textarea:focus {border-color: '+ color +'!important;}'
+		style += '.layui-input:focus,.layui-textarea:focus {border-color: '+ color +'!important;box-shadow: 0 0 0 3px '+ second +' !important;}'
 		style += '.layui-form-checked[lay-skin=primary] i {border-color: '+ color +'!important;background-color: ' + color + ';}'
 		style += '.layui-form-onswitch { border-color: ' + color + '; background-color: '+color+';}'
 		style += '.layui-form-radio>i:hover, .layui-form-radioed>i {color: ' + color + ';}'
@@ -70,10 +68,20 @@ layui.define(["jquery","layer"], function (exports) {
 		style += '.layui-form-checkbox[lay-skin=primary]:hover i{border-color:'+color+'!important}'
 		style += '.pear-tab-menu .item:hover{background-color:'+color+'!important}'
 		style += '.layui-form-danger:focus {border-color:#FF5722 !important}'
-		style += '.pear-admin .user a:hover{color:'+color+'!important}'
 		style += '.pear-admin .user .layui-this a:hover{color:white!important}'
 		style += '.pear-notice .layui-this{color:'+color+'!important}'
         style += '.layui-form-radio:hover *, .layui-form-radioed, .layui-form-radioed>i{color:' + color + ' !important}';
+		style += '.pear-btn:hover {color: '+color+';background-color: ' + second + ';}'
+		style += '.pear-btn-primary[plain] {color: '+ color +' !important;background: ' + second + ' !important;}'
+		style += '.pear-btn-primary[plain]:hover {background-color: ' + color + '!important}'
+		style += '.light-theme .pear-nav-tree .layui-this a:hover,.light-theme .pear-nav-tree .layui-this,.light-theme .pear-nav-tree .layui-this a {background-color:'+second+'!important;color:'+color+'!important;}'
+		style += '.light-theme .pear-nav-tree .layui-this{ border-right: 3px solid '+color+'!important}'
+		style += '.loader:after {background:'+color+'}'
+		if(this.autoHead === true || this.autoHead === "true"){
+			style += '.pear-admin.banner-layout .layui-header .layui-logo,.pear-admin .layui-header{border:none;background-color:' + color + '!important;}.pear-admin.banner-layout .layui-header .layui-logo .title,.pear-admin .layui-header .layui-nav .layui-nav-item>a{color:whitesmoke!important;}';
+			style += '.pear-admin.banner-layout .layui-header{ box-shadow: 2px 0 6px rgb(0 21 41 / 35%) }'
+			style += '.pear-admin .layui-header .layui-layout-control .layui-this *,.pear-admin.banner-layout .layui-header .layui-layout-control .layui-this *{ background-color: rgba(0,0,0,.1)!important;}'
+		}
 		var colorPane = $("#pear-admin-color");
 		if(colorPane.length>0){
 			colorPane.html(style);

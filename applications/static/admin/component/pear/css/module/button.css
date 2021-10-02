@@ -25,7 +25,6 @@
 	opacity: .8;
 	filter: alpha(opacity=80);
 	color: #409eff;
-	border-color: #c6e2ff;
 	background-color: #ECF5FF;
 }
 
@@ -51,8 +50,8 @@
 	border: #f6ad55;
 }
 .pear-btn-success {
-	background-color: #5FB878 !important;
-	border: #5FB878;
+	background-color: #36b368 !important;
+	border: #36b368;
 }
 
 .pear-btn[round] {
@@ -62,7 +61,6 @@
 .pear-btn-primary[plain] {
 	color: #409eff !important;
 	background: #ecf5ff 10% !important;
-	border-color: #b3d8ff !important;
 }
 
 .pear-btn-primary[plain]:hover {
@@ -71,20 +69,18 @@
 }
 
 .pear-btn-success[plain] {
-	color: #67c23a !important;
+	color: #36b368 !important;
 	background: #f0f9eb !important;
-	border-color: #c2e7b0 !important;
 }
 
 .pear-btn-success[plain]:hover {
 	color: white !important;
-	background-color: #67c23a !important
+	background-color: #36b368 !important
 }
 
 .pear-btn-warming[plain] {
 	color: #e6a23c !important;
 	background: #fdf6ec !important;
-	border-color: #f5dab1 !important;
 }
 
 .pear-btn-warming[plain]:hover {
@@ -95,7 +91,6 @@
 .pear-btn-danger[plain] {
 	color: #f56c6c !important;
 	background: #fef0f0 !important;
-	border-color: #fbc4c4 !important;
 }
 
 .pear-btn-danger[plain]:hover {

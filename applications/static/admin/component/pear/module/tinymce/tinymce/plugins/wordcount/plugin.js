@@ -177,6 +177,7 @@
       }
       return true;
     };
+	
 
     var EMPTY_STRING$1 = EMPTY_STRING;
     var WHITESPACE$1 = WHITESPACE;

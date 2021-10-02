@@ -3,24 +3,35 @@ layui.define(['layer', 'table'], function (exports) {
     var layer = layui.layer;
     var table = layui.table;
 
+    var instances = [];
+
     var treetable = {
-        // 渲染树形表格
+
         render: function (param) {
-            // 检查参数
+            param.method = param.method?param.method:"GET";
             if (!treetable.checkParam(param)) {
                 return;
             }
-            // 获取数据
             if (param.data) {
                 treetable.init(param, param.data);
             } else {
-                $.getJSON(param.url, param.where, function (res) {
-                    if(param.parseData){
-                        res = param.parseData(res);
-                        param.data = res.data;
-                    }
-                    treetable.init(param, res.data);
-                });
+                if(param.method === 'post' || param.method === 'POST') {
+                    $.post(param.url, param.where, function(res){
+                        if(param.parseData){
+                            res = param.parseData(res);
+                            param.data = res.data;
+                        }
+                        treetable.init(param, res.data);
+                    });
+                } else {
+                    $.get(param.url, param.where, function(res){
+                        if(param.parseData){
+                            res = param.parseData(res);
+                            param.data = res.data;
+                        }
+                        treetable.init(param, res.data);
+                    });
+                }
             }
         },
         // 渲染表格
@@ -28,7 +39,6 @@ layui.define(['layer', 'table'], function (exports) {
             var mData = [];
             var doneCallback = param.done;
             var tNodes = data;
-            // 补上id和pid字段
             for (var i = 0; i < tNodes.length; i++) {
                 var tt = tNodes[i];
                 if (!tt.id) {
@@ -47,7 +57,6 @@ layui.define(['layer', 'table'], function (exports) {
                 }
             }
 
-            // 对数据进行排序
             var sort = function (s_pid, data) {
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].pid == s_pid) {
@@ -62,7 +71,7 @@ layui.define(['layer', 'table'], function (exports) {
             };
             sort(param.treeSpid, tNodes);
 
-            // 重写参数
+            param.prevUrl = param.url;
             param.url = undefined;
             param.data = mData;
             param.page = {
@@ -93,10 +102,6 @@ layui.define(['layer', 'table'], function (exports) {
                 $(param.elem).next().addClass('treeTable');
                 $('.treeTable .layui-table-page').css('display', 'none');
                 $(param.elem).next().attr('treeLinkage', param.treeLinkage);
-                // 绑定事件换成对body绑定
-                /*$('.treeTable .treeTable-icon').click(function () {
-                    treetable.toggleRows($(this), param.treeLinkage);
-                });*/
                 if (param.treeDefaultClose) {
                     treetable.foldAll(param.elem);
                 }
@@ -107,8 +112,46 @@ layui.define(['layer', 'table'], function (exports) {
 
             // 渲染表格
             table.render(param);
+            var result = instances.some(item=>item.key===param.elem);
+            if(!result){
+                instances.push({key:param.elem,value:param});
+            }
         },
-        // 计算缩进的数量
+        reload: function(elem) {
+            instances.forEach(function(item){
+                if(item.key === elem) {
+                    $(elem).next().remove();
+                    item.value.data = undefined;
+                    item.value.url = item.value.prevUrl;
+                    treetable.render(item.value);
+                }
+            })
+        },
+		search: function(elem,keyword) {
+			var $tds = $(elem).next('.treeTable').find('.layui-table-body tbody tr td');
+			if (!keyword) {
+			    $tds.css('background-color', 'transparent');
+			    layer.msg("请输入关键字", {icon: 5});
+			    return;
+			}
+			var searchCount = 0;
+			$tds.each(function () {
+			    $(this).css('background-color', 'transparent');
+			    if ($(this).text().indexOf(keyword) >= 0) {
+			        $(this).css('background-color', 'rgba(250,230,160,0.5)');
+			        if (searchCount == 0) {
+			            $('body,html').stop(true);
+			            $('body,html').animate({scrollTop: $(this).offset().top - 150}, 500);
+			        }
+			        searchCount++;
+			    }
+			});
+			if (searchCount == 0) {
+			    layer.msg("没有匹配结果", {icon: 5});
+			} else {
+			    treetable.expandAll(elem);
+			}
+		},
         getEmptyNum: function (pid, data) {
             var num = 0;
             if (!pid) {
@@ -193,7 +236,7 @@ layui.define(['layer', 'table'], function (exports) {
             });
         }
     };
-	
+
     // 给图标列绑定事件
     $('body').on('click', '.treeTable .treeTable-icon', function () {
         var treeLinkage = $(this).parents('.treeTable').attr('treeLinkage');

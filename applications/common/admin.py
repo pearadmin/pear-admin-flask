@@ -91,25 +91,27 @@ def get_render_config():
     }, menu={
         # 菜单数据来源
         "data": "/rights/menu",
-        "collaspe": True,
+        "collaspe": False,
         # 是否同时只打开一个菜单目录
         "accordion": True,
         "method": "GET",
         # 是否开启多系统菜单模式
         "control": False,
+        # 顶部菜单宽度 PX
+        "controlWidth": 500,
         # 默认选中的菜单项
         "select": "0",
         # 是否开启异步菜单，false 时 data 属性设置为菜单数据，false 时为 json 文件或后端接口
         "async": True
     }, tab={
         # 是否开启多选项卡
-        "muiltTab": True,
+        "enable": True,
         # 切换选项卡时，是否刷新页面状态
         "keepState": True,
         # 是否开启 Tab 记忆
         "session": True,
         # 最大可打开的选项卡数量
-        "tabMax": 30,
+        "max": 30,
         "index": {
             # 标识 ID , 建议与菜单项中的 ID 一致
             "id": "10",

@@ -11,7 +11,7 @@ layui.define('jquery', function(exports){
   DEFAULT_SKIN ='layui-btn layui-btn-primary layui-btn-sm'
   ,tag = function(){
     this.config = {
-      likeHref:'../../modules/tag.css',
+      likeHref:'../css/module/tag.css',
       skin: DEFAULT_SKIN,
       tagText:'+ New Tag'
     };

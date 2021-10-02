@@ -18,8 +18,8 @@
 }
 
 .layui-table-cell {
-	height: 34px !important;
-	line-height: 34px !important;
+	height: 34px;
+	line-height: 34px;
 }
 
 .layui-table .layui-laypage .layui-laypage-curr .layui-laypage-em {
@@ -32,8 +32,8 @@
 }
 
 .layui-table tr {
-	height: 34px !important;
-	line-height: 34px !important;
+	height: 34px;
+	line-height: 34px;
 }
 
 .layui-table-cell {

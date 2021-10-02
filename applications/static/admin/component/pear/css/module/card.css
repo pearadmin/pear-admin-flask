@@ -69,10 +69,25 @@
 	margin-left: -10px;
 }
 
-.pear-card-component {
+.cloud-card-component {
 	padding: 20px;
 }
 
-.pear-card-component .layui-laypage .layui-laypage-curr .layui-laypage-em {
-	border-radius: 0px !important;
+.cloud-card-component .layui-table-click {
+	border-radius: 6px!important;
+}
+
+.ew-table-loading {
+    padding: 10px 0;
+    text-align: center;
+}
+.ew-table-loading > i {
+    color: #999;
+    font-size: 30px;
+}
+.ew-table-loading.ew-loading-float {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }

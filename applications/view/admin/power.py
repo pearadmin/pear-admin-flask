@@ -17,7 +17,7 @@ def index():
     return render_template('admin/power/main.html')
 
 
-@admin_power.get('/data')
+@admin_power.post('/data')
 @authorize("admin:power:main", log=True)
 def data():
     power = Power.query.all()

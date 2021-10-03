@@ -22,7 +22,7 @@ def main():
     return render_template('admin/dept/main.html')
 
 
-@dept_bp.get('/data')
+@dept_bp.post('/data')
 @authorize("admin:dept:main", log=True)
 def data():
     dept = Dept.query.order_by(Dept.sort).all()

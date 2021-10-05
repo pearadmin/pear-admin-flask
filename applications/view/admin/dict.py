@@ -72,7 +72,18 @@ def dict_type_edit():
 @authorize("admin:dict:edit", log=True)
 def dict_type_update():
     req_json = request.json
-    dict_curd.update_dict_type(req_json)
+    id = xss_escape(req_json.get("id"))
+    description = xss_escape(req_json.get("description"))
+    enable = xss_escape(req_json.get("enable"))
+    type_code = xss_escape(req_json.get("typeCode"))
+    type_name = xss_escape(req_json.get("typeName"))
+    DictType.query.filter_by(id=id).update({
+        "description": description,
+        "enable": enable,
+        "type_code": type_code,
+        "type_name": type_name
+    })
+    db.session.commit()
     return success_api(msg="更新成功")
 
 

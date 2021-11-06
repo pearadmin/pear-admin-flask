@@ -132,7 +132,7 @@ def update():
 @login_required
 def center():
     user_info = current_user
-    user_logs = AdminLog.query.filter_by(url='/admin/login').filter_by(uid=current_user.id).order_by(
+    user_logs = AdminLog.query.filter_by(url='/passport/login').filter_by(uid=current_user.id).order_by(
         desc(AdminLog.create_time)).limit(10)
     return render_template('admin/user/center.html', user_info=user_info, user_logs=user_logs)
 

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  flask:
+    build: .
+    ports:
+      - "8000:8000"
+    restart: always
+    links:
+      - mysql:dbserver
+  mysql:
+    image: "mysql:5.7"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    restart: always

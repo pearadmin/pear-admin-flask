@@ -92,7 +92,7 @@ def edit():
 @dept_bp.put('/enable')
 @authorize("admin:dept:edit", log=True)
 def enable():
-    _id = request.json.get('deptId')
+    id = request.json.get('deptId')
     if id:
         enable = 1
         d = Dept.query.filter_by(id=id).update({"status": enable})

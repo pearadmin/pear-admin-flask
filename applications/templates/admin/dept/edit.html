@@ -27,7 +27,7 @@
                     <label class="layui-form-label">负责人</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ dept.leader }}" name="leader" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                               placeholder="请输入负责人"
                                class="layui-input">
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                     <label class="layui-form-label">邮箱</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ dept.email }}" name="email" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                               placeholder="请输入邮箱"
                                class="layui-input">
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                     <label class="layui-form-label">联系方式</label>
                     <div class="layui-input-block">
                         <input type="text" value="{{ dept.phone }}" name="phone" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                               placeholder="请输入联系方式"
                                class="layui-input">
                     </div>
                 </div>
@@ -63,12 +63,12 @@
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-block">
                         <input type="text" name="sort" value="{{ dept.sort }}" lay-verify="title" autocomplete="off"
-                               placeholder="请输入标题"
+                               placeholder="请输入排序"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">描述</label>
+                    <label class="layui-form-label">地址</label>
                     <div class="layui-input-block">
                         <textarea placeholder="请输入详细地址" name="address"
                                   class="layui-textarea">{{ dept.address }}</textarea>

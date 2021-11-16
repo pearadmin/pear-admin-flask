@@ -5,6 +5,9 @@ FLASK_DEBUG=1
 FLASK_RUN_HOST = 127.0.0.1
 FLASK_RUN_PORT = 5000
 
+# pear admin flask配置
+SYSTEM_NAME = Pear Admin
+
 # MySql配置信息
 MYSQL_HOST=127.0.0.1
 # MYSQL_HOST=dbserver

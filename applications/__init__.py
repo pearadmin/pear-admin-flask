@@ -2,7 +2,6 @@ import os
 from flask import Flask
 
 from applications.common.script import init_script
-from applications.configs import common
 from applications.extensions import init_plugs
 from applications.view import init_view
 from applications.configs import config
@@ -16,7 +15,6 @@ def create_app(config_name=None):
         config_name = os.getenv('FLASK_CONFIG', 'development')
 
     # 引入数据库配置
-    app.config.from_object(common)
     app.config.from_object(config[config_name])
 
     # 注册各种插件
@@ -28,7 +26,8 @@ def create_app(config_name=None):
     # 注册命令
     init_script(app)
 
-    logo()
+    if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        logo()
 
     return app
 

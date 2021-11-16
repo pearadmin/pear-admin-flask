@@ -12,4 +12,5 @@ psutil==5.8.0
 Flask-Mail==0.9.1
 sqlparse==0.4.2
 captcha==0.3
+Pillow==8.2.0
 python-dotenv==0.19.1

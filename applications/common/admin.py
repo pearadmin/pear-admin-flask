@@ -60,18 +60,6 @@ def make_menu_tree():
 
     for p0 in power0_dict:
         for p1 in power1_dict:
-            for p2 in power1_dict:
-                if p1.get('id') == p2.get('parent_id') and int(p2.get('type'))<2:
-                    if p1.get("children") is None:
-                        p1['children'] = []
-                        p1['children'].append(p2)
-                    else:
-                        hassame = 0
-                        for tmp in p1['children']:
-                            if tmp.get('id') == p2.get('id'):
-                                hassame =1
-                        if hassame == 0:
-                            p1['children'].append(p2)
             if p0.get('id') == p1.get('parent_id'):
                 if p0.get("children") is None:
                     p0['children'] = []

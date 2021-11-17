@@ -2,7 +2,7 @@ from applications.extensions import ma
 from marshmallow import fields
 
 
-class DictTypeSchema(ma.Schema):
+class DictTypeOutSchema(ma.Schema):
     id = fields.Str(attribute="id")
     typeName = fields.Str(attribute="type_name")
     typeCode = fields.Str(attribute="type_code")
@@ -13,7 +13,7 @@ class DictTypeSchema(ma.Schema):
     enable = fields.Str()
 
 
-class DictDataSchema(ma.Schema):
+class DictDataOutSchema(ma.Schema):
     dataId = fields.Str(attribute="id")
     dataLabel = fields.Str(attribute="data_label")
     dataValue = fields.Str(attribute="data_value")

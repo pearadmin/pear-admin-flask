@@ -4,7 +4,7 @@ from applications.models import Dept
 
 
 # 用户models的序列化类
-class UserSchema(ma.Schema):
+class UserOutSchema(ma.Schema):
     id = fields.Integer()
     username = fields.Str()
     realname = fields.Str()

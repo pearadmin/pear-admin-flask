@@ -5,11 +5,8 @@ from datetime import datetime
 import time
 import psutil
 from flask import Blueprint, render_template, jsonify
-from flask_marshmallow import Marshmallow
-
 from applications.common.utils.rights import authorize
 
-ma = Marshmallow()
 admin_monitor_bp = Blueprint('adminMonitor', __name__, url_prefix='/admin/monitor')
 
 

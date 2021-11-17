@@ -2,7 +2,7 @@ from applications.extensions import ma
 from marshmallow import fields
 
 
-class RoleSchema(ma.Schema):
+class RoleOutSchema(ma.Schema):
     id = fields.Integer()
     roleName = fields.Str(attribute="name")
     roleCode = fields.Str(attribute="code")

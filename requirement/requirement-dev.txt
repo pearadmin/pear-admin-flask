@@ -14,3 +14,4 @@ sqlparse==0.4.2
 captcha==0.3
 Pillow==8.2.0
 python-dotenv==0.19.1
+webargs==8.0.1

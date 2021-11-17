@@ -2,7 +2,7 @@ from applications.extensions import ma
 from marshmallow import fields
 
 
-class PhotoSchema(ma.Schema):
+class PhotoOutSchema(ma.Schema):
     id = fields.Integer()
     name = fields.Str()
     href = fields.Str()

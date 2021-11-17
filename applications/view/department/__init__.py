@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from marshmallow import INCLUDE
+from webargs.flaskparser import use_args
 
 from applications.common import curd
 from applications.common.utils.http import success_api, fail_api
@@ -7,7 +8,8 @@ from applications.common.utils.rights import authorize
 from applications.common.utils import validate
 from applications.extensions import db
 from applications.models import Dept, User
-from applications.schemas import DeptSchema
+from applications.schemas import DeptOutSchema
+from applications.schemas.admin_dept import DeptInSchema
 
 dept_bp = Blueprint('dept', __name__, url_prefix='/dept')
 
@@ -26,7 +28,7 @@ def main():
 @authorize("admin:dept:main", log=True)
 def data():
     dept = Dept.query.order_by(Dept.sort).all()
-    power_data = curd.model_to_dicts(schema=DeptSchema, data=dept)
+    power_data = curd.model_to_dicts(schema=DeptOutSchema, data=dept)
     res = {
         "data": power_data
     }
@@ -43,7 +45,7 @@ def add():
 @authorize("admin:dept:main", log=True)
 def tree():
     dept = Dept.query.order_by(Dept.sort).all()
-    power_data = curd.model_to_dicts(schema=DeptSchema, data=dept)
+    power_data = curd.model_to_dicts(schema=DeptOutSchema, data=dept)
     res = {
         "status": {"code": 200, "message": "默认"},
         "data": power_data
@@ -54,26 +56,17 @@ def tree():
 
 @dept_bp.post('/save')
 @authorize("admin:dept:add", log=True)
-def save():
-    req = request.json
-    validate.check_data(DeptSchema(unknown=INCLUDE), req)
-    address = validate.xss_escape(req.get("address"))
-    deptName = validate.xss_escape(req.get("deptName"))
-    email = validate.xss_escape(req.get("email"))
-    leader = validate.xss_escape(req.get("leader"))
-    parentId = validate.xss_escape(req.get("parentId"))
-    phone = validate.xss_escape(req.get("phone"))
-    sort = validate.xss_escape(req.get("sort"))
-    status = validate.xss_escape(req.get("status"))
+@use_args(DeptInSchema(), location="json", unknown=True)
+def save(args):
     dept = Dept(
-        parent_id=parentId,
-        dept_name=deptName,
-        sort=sort,
-        leader=leader,
-        phone=phone,
-        email=email,
-        status=status,
-        address=address
+        parent_id=args['parentId'],
+        dept_name=args['deptName'],
+        sort=args['sort'],
+        leader=args['leader'],
+        phone=args['phone'],
+        email=args['email'],
+        status=args['status'],
+        address=args['address']
     )
     r = db.session.add(dept)
     db.session.commit()

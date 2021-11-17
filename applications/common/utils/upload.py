@@ -4,14 +4,14 @@ from sqlalchemy import desc
 from applications.extensions import db
 from applications.extensions.init_upload import photos
 from applications.models import Photo
-from applications.schemas import PhotoSchema
+from applications.schemas import PhotoOutSchema
 from applications.common.curd import model_to_dicts
 
 
 def get_photo(page, limit):
     photo = Photo.query.order_by(desc(Photo.create_time)).paginate(page=page, per_page=limit, error_out=False)
     count = Photo.query.count()
-    data = model_to_dicts(schema=PhotoSchema, data=photo.items)
+    data = model_to_dicts(schema=PhotoOutSchema, data=photo.items)
     return data, count
 
 

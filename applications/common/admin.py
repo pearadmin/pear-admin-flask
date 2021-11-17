@@ -5,7 +5,7 @@ from flask import session, make_response, current_app
 from flask_login import current_user
 
 from applications.common.utils.gen_captcha import gen_captcha
-from applications.schemas import PowerSchema
+from applications.schemas import PowerOutSchema
 
 
 # 授权路由存入session
@@ -39,7 +39,7 @@ def make_menu_tree():
             if int(p.type) == 0 or int(p.type) == 1:
                 powers.append(p)
 
-    power_schema = PowerSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
+    power_schema = PowerOutSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
     power_dict = power_schema.dump(powers)  # 生成可序列化对象
     power_dict.sort(key=lambda x: x['id'], reverse=True)
 

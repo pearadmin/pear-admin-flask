@@ -3,7 +3,7 @@ from marshmallow import fields
 
 
 # 权限models序列化类
-class PowerSchema(ma.Schema):
+class PowerOutSchema(ma.Schema):
     id = fields.Integer()
     title = fields.Str(attribute="name")
     type = fields.Str()
@@ -18,7 +18,7 @@ class PowerSchema(ma.Schema):
     enable = fields.Integer()
 
 
-class PowerSchema2(ma.Schema):  # 序列化类
+class PowerOutSchema2(ma.Schema):  # 序列化类
     powerId = fields.Str(attribute="id")
     powerName = fields.Str(attribute="name")
     powerType = fields.Str(attribute="type")

@@ -7,7 +7,7 @@ from applications.common.utils.rights import authorize
 from applications.common.utils.validate import xss_escape
 from applications.extensions import db
 from applications.models import Role, Power, User
-from applications.schemas import RoleSchema, PowerSchema2
+from applications.schemas import RoleOutSchema, PowerOutSchema2
 
 admin_role = Blueprint('adminRole', __name__, url_prefix='/admin/role')
 
@@ -37,7 +37,7 @@ def table():
     role = Role.query.filter(mf.get_filter(Role)).layui_paginate()
     count = role.total
     # 返回api
-    return table_api(data=model_to_dicts(schema=RoleSchema, data=role.items), count=count)
+    return table_api(data=model_to_dicts(schema=RoleOutSchema, data=role.items), count=count)
 
 
 # 角色增加
@@ -86,7 +86,7 @@ def get_role_power(id):
     for cp in check_powers:
         check_powers_list.append(cp.id)
     powers = Power.query.all()
-    power_schema = PowerSchema2(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
+    power_schema = PowerOutSchema2(many=True)  # 用已继承ma.ModelSchema类的自定制类生成序列化类
     output = power_schema.dump(powers)  # 生成可序列化对象
     for i in output:
         if int(i.get("powerId")) in check_powers_list:

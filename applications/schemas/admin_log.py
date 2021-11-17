@@ -2,7 +2,7 @@ from applications.extensions import ma
 from marshmallow import fields
 
 
-class LogSchema(ma.Schema):
+class LogOutSchema(ma.Schema):
     id = fields.Integer()
     method = fields.Str()
     uid = fields.Str()

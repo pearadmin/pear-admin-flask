@@ -1,206 +1,206 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>权限编辑</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body>
-<form class="layui-form" action="">
-    <div class="mainBox">
-        <div class="main-container">
-            <div class="layui-form-item layui-hide">
-                <label class="layui-form-label">编号</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ power.id }}" name="powerId"
-                           autocomplete="off" class="layui-input">
+{% endblock %}
+
+{% block body %}
+    <form class="layui-form" action="">
+        <div class="mainBox">
+            <div class="main-container">
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ power.id }}" name="powerId"
+                               autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">父级</label>
-                <div class="layui-input-block">
-                    <ul id="selectParent" name="parentId" class="dtree" data-id="-1"></ul>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父级</label>
+                    <div class="layui-input-block">
+                        <ul id="selectParent" name="parentId" class="dtree" data-id="-1"></ul>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ power.name }}" name="powerName"
-                           autocomplete="off" placeholder="权限名称" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ power.name }}" name="powerName"
+                               autocomplete="off" placeholder="权限名称" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item" id="powerCodeItem">
-                <label class="layui-form-label">标识</label>
-                <div class="layui-input-block">
-                    <input type="text" id="powerCode" value="{{ power.code }}" name="powerCode"
-                           autocomplete="off" placeholder="权限标识" class="layui-input">
+                <div class="layui-form-item" id="powerCodeItem">
+                    <label class="layui-form-label">标识</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="powerCode" value="{{ power.code }}" name="powerCode"
+                               autocomplete="off" placeholder="权限标识" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">状态</label>
-                <div class="layui-input-block">
-                    <input type="radio" lay-filter="powerType" {% if power.type == 0 %} checked{% endif %}
-                           name="powerType" value="0" title="目录">
-                    <input type="radio" lay-filter="powerType"  {% if power.type == 1 %} checked{% endif %}
-                           name="powerType" value="1" title="菜单">
-                    <input type="radio" lay-filter="powerType"  {% if power.type == 2 %} checked{% endif %}
-                           name="powerType" value="2" title="按钮">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="powerType" {% if power.type == 0 %} checked{% endif %}
+                               name="powerType" value="0" title="目录">
+                        <input type="radio" lay-filter="powerType"  {% if power.type == 1 %} checked{% endif %}
+                               name="powerType" value="1" title="菜单">
+                        <input type="radio" lay-filter="powerType"  {% if power.type == 2 %} checked{% endif %}
+                               name="powerType" value="2" title="按钮">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item" id="powerUrlItem">
-                <label class="layui-form-label">路径</label>
-                <div class="layui-input-block">
-                    <input type="text" id="powerUrl" value="{{ power.url }}" name="powerUrl"
-                           autocomplete="off" placeholder="菜单路径" class="layui-input">
+                <div class="layui-form-item" id="powerUrlItem">
+                    <label class="layui-form-label">路径</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="powerUrl" value="{{ power.url }}" name="powerUrl"
+                               autocomplete="off" placeholder="菜单路径" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item" id="openTypeItem">
-                <label class="layui-form-label">打开</label>
-                <div class="layui-input-block">
-                    <select name="openType" id="openType">
-                        <option value=""></option>
-                        <option value="_iframe" {% if power.open_type == "_iframe" %} selected{% endif %}>框架
-                        </option>
-                        <option value="_blank" {% if power.open_type == "_blank" %} selected{% endif %}>签页</option>
-                    </select>
+                <div class="layui-form-item" id="openTypeItem">
+                    <label class="layui-form-label">打开</label>
+                    <div class="layui-input-block">
+                        <select name="openType" id="openType">
+                            <option value=""></option>
+                            <option value="_iframe" {% if power.open_type == "_iframe" %} selected{% endif %}>框架
+                            </option>
+                            <option value="_blank" {% if power.open_type == "_blank" %} selected{% endif %}>签页</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">图标</label>
-                <div class="layui-input-block">
-                    <input type="text" id="edit_icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="edit_icon" value="{{ power.icon }}" name="icon" lay-filter="icon"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">排序</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ power.sort }}" name="sort" lay-verify="title" autocomplete="off"
-                           placeholder="排序" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ power.sort }}" name="sort" lay-verify="title" autocomplete="off"
+                               placeholder="排序" class="layui-input">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="power-save">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                        lay-filter="power-save">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="pear-btn pear-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
+{% endblock %}
 
-{% include 'admin/common/footer.html' %}
+{% block models_script %}
+    <script type="module">
 
-<script type="module">
+      import { RIGHTS_API } from '/static/api/http.js'
 
-  import { RIGHTS_API } from '/static/api/http.js'
+      layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        let iconPicker = layui.iconPicker
+        let dtree = layui.dtree
 
-  layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
-    let form = layui.form
-    let $ = layui.jquery
-    let iconPicker = layui.iconPicker
-    let dtree = layui.dtree
+        dtree.renderSelect({
+          elem: '#selectParent',
+          url: RIGHTS_API.RIGHTS(),
+          method: 'get',
+          selectInputName: { nodeId: 'parentId', context: 'powerName' },
+          skin: 'layui',
+          dataFormat: 'list',
+          response: { treeId: 'powerId', parentId: 'parentId', title: 'powerName' },
+          selectInitVal: "{{ power.parent_id }}",
+        })
 
-    dtree.renderSelect({
-      elem: '#selectParent',
-      url: RIGHTS_API.RIGHTS(),
-      method: 'get',
-      selectInputName: { nodeId: 'parentId', context: 'powerName' },
-      skin: 'layui',
-      dataFormat: 'list',
-      response: { treeId: 'powerId', parentId: 'parentId', title: 'powerName' },
-      selectInitVal: "{{ power.parent_id }}"
-    })
+        form.on('radio(powerType)', function (data) {
+          if (this.value == '0') {
+            {#目录#}
+            $('#powerUrlItem').hide()
+            $('#powerCodeItem').hide()
+            $('#openTypeItem').hide()
+            $('#powerUrl').val('')
+            $('#powerCode').val('')
+            $('#openType').val('')
+          } else if (this.value == '1') {
+            {#菜单#}
+            $('#powerUrlItem').show()
+            $('#powerCodeItem').show()
+            $('#openTypeItem').show()
+          } else if (this.value == '2') {
+            {#按钮#}
+            $('#powerUrlItem').hide()
+            $('#openTypeItem').hide()
+            $('#powerCodeItem').show()
+            $('#powerUrl').val('')
+            $('#openType').val('')
+          }
+        })
 
-    form.on('radio(powerType)', function (data) {
-      if (this.value == '0') {
-        {#目录#}
-        $('#powerUrlItem').hide()
-        $('#powerCodeItem').hide()
-        $('#openTypeItem').hide()
-        $('#powerUrl').val('')
-        $('#powerCode').val('')
-        $('#openType').val('')
-      } else if (this.value == '1') {
-        {#菜单#}
-        $('#powerUrlItem').show()
-        $('#powerCodeItem').show()
-        $('#openTypeItem').show()
-      } else if (this.value == '2') {
-        {#按钮#}
-        $('#powerUrlItem').hide()
-        $('#openTypeItem').hide()
-        $('#powerCodeItem').show()
-        $('#powerUrl').val('')
-        $('#openType').val('')
-      }
-    })
+        form.on('submit(power-save)', function (data) {
+          data.field.icon = 'layui-icon ' + data.field.icon
+          console.log(data.field)
+          $.ajax({
+            url: RIGHTS_API.POWER(data.field.powerId),
+            data: JSON.stringify(data.field),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              if (result.success) {
+                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                  parent.render()
+                })
+              } else {
+                layer.msg(result.message, { icon: 2, time: 1000 })
+              }
+            },
+          })
+          return false
+        })
 
-    form.on('submit(power-save)', function (data) {
-      data.field.icon = 'layui-icon ' + data.field.icon
-      console.log(data.field)
-      $.ajax({
-        url: RIGHTS_API.POWER(data.field.powerId),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.message, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-              parent.render()
-            })
-          } else {
-            layer.msg(result.message, { icon: 2, time: 1000 })
+        iconPicker.render({
+          elem: '#edit_icon',
+          type: 'fontClass',
+          search: true,
+          page: true,
+          limit: 12,
+          click: function (data) {
+            console.log(data)
+          },
+        })
+
+        iconPicker.checkIcon('icon', "{{ icon }}")
+
+        window.init = function (type) {
+          if (type == '0') {
+            $('#powerUrlItem').hide()
+            $('#powerCodeItem').hide()
+            $('#openTypeItem').hide()
+            $('#powerUrl').val('')
+            $('#powerCode').val('')
+            $('#openType').val('')
+          } else if (type == '1') {
+            $('#powerUrlItem').show()
+            $('#powerCodeItem').show()
+            $('#openTypeItem').show()
+          } else if (type == '2') {
+            $('#powerUrlItem').hide()
+            $('#openTypeItem').hide()
+            $('#powerCodeItem').show()
+            $('#powerUrl').val('')
+            $('#openType').val('')
           }
         }
+
+        window.init("{{ power.type }}")
       })
-      return false
-    })
-
-    iconPicker.render({
-      elem: '#edit_icon',
-      type: 'fontClass',
-      search: true,
-      page: true,
-      limit: 12,
-      click: function (data) {
-        console.log(data)
-      }
-    })
-
-    iconPicker.checkIcon('icon', "{{ icon }}")
-
-    window.init = function (type) {
-      if (type == '0') {
-        $('#powerUrlItem').hide()
-        $('#powerCodeItem').hide()
-        $('#openTypeItem').hide()
-        $('#powerUrl').val('')
-        $('#powerCode').val('')
-        $('#openType').val('')
-      } else if (type == '1') {
-        $('#powerUrlItem').show()
-        $('#powerCodeItem').show()
-        $('#openTypeItem').show()
-      } else if (type == '2') {
-        $('#powerUrlItem').hide()
-        $('#openTypeItem').hide()
-        $('#powerCodeItem').show()
-        $('#powerUrl').val('')
-        $('#openType').val('')
-      }
-    }
-
-    window.init("{{ power.type }}")
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

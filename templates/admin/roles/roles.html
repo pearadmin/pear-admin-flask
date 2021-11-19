@@ -1,255 +1,254 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>角色管理</title>
-    {% include 'admin/common/header.html' %}</head>
-<body class="pear-container">
-<div class="layui-card">
-    <div class="layui-card-body">
-        <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">角色名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="roleName" placeholder="" class="layui-input">
+{% endblock %}
+
+{% block body %}
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="roleName" placeholder="" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">角色标识</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="roleCode" placeholder="" class="layui-input">
+                    </div>
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
                 </div>
-                <label class="layui-form-label">角色标识</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="roleCode" placeholder="" class="layui-input">
-                </div>
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="role-query">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
-                <button type="reset" class="pear-btn pear-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-<div class="layui-card">
-    <div class="layui-card-body">
-        <table id="tables" lay-filter="tables"></table>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="tables" lay-filter="tables"></table>
+        </div>
     </div>
-</div>
+{% endblock %}
 
-{% include 'admin/common/footer.html' %}
+{% block models_script %}
+    <script type="text/html" id="toolbar">
+        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
+            <i class="layui-icon layui-icon-add-1"></i>
+            新增
+        </button>
+        <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
+            <i class="layui-icon layui-icon-delete"></i>
+            删除
+        </button>
+    </script>
+    <script type="text/html" id="tool">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit"><i
+                class="layui-icon layui-icon-edit"></i>
+        </button>
+        <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="tool-power"><i
+                class="layui-icon layui-icon-vercode"></i>
+        </button>
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove"><i
+                class="layui-icon layui-icon-delete"></i>
+        </button>
+    </script>
+    <script type="text/html" id="tool-switch">
+        <input type="checkbox" name="enable" value="{{ "{{d.id}}" }}" lay-skin="switch" lay-text="启用|禁用"
+               lay-filter="tool-switch" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
+    </script>
 
+    <script type="module">
+      import { ROLE_API, parserTableData as parseData } from '/static/api/http.js'
 
-<script type="text/html" id="toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
-        <i class="layui-icon layui-icon-add-1"></i>
-        新增
-    </button>
-    <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
-        <i class="layui-icon layui-icon-delete"></i>
-        删除
-    </button>
-</script>
-<script type="text/html" id="tool">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit"><i
-            class="layui-icon layui-icon-edit"></i>
-    </button>
-    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="tool-power"><i
-            class="layui-icon layui-icon-vercode"></i>
-    </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove"><i
-            class="layui-icon layui-icon-delete"></i>
-    </button>
-</script>
-<script type="text/html" id="tool-switch">
-    <input type="checkbox" name="enable" value="{{ "{{d.id}}" }}" lay-skin="switch" lay-text="启用|禁用"
-           lay-filter="tool-switch" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
-</script>
+      layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let popup = layui.popup
 
-<script type="module">
-  import { ROLE_API, parserTableData as parseData } from '/static/api/http.js'
+        const get_columns = () => [
+          [
+            { type: 'checkbox' },
+            { title: '角色名', field: 'roleName', align: 'center', width: 100 },
+            { title: 'Key值', field: 'roleCode', align: 'center' },
+            { title: '描述', field: 'details', align: 'center' },
+            { title: '是否可用', field: 'enable', align: 'center', templet: '#tool-switch' },
+            { title: '排序', field: 'sort', align: 'center' },
+            { title: '操作', toolbar: '#tool', align: 'center', width: 195 },
+          ],
+        ]
 
-  layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
-    let table = layui.table
-    let form = layui.form
-    let $ = layui.jquery
-    let popup = layui.popup
-
-    const get_columns = () => [
-      [
-        { type: 'checkbox' },
-        { title: '角色名', field: 'roleName', align: 'center', width: 100 },
-        { title: 'Key值', field: 'roleCode', align: 'center' },
-        { title: '描述', field: 'details', align: 'center' },
-        { title: '是否可用', field: 'enable', align: 'center', templet: '#tool-switch' },
-        { title: '排序', field: 'sort', align: 'center' },
-        { title: '操作', toolbar: '#tool', align: 'center', width: 195 },
-      ],
-    ]
-
-    table.render({
-      parseData,
-      elem: '#tables',
-      url: ROLE_API.ROLES(),
-      page: true,
-      cols: get_columns(),
-      skin: 'line',
-      toolbar: '#toolbar',
-      defaultToolbar: [
-        {
-          layEvent: 'refresh',
-          icon: 'layui-icon-refresh',
-        }, 'filter', 'print', 'exports'],
-    })
-
-    table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tool-remove') {
-        window.tool_remove(obj)
-      } else if (obj.event === 'tool-edit') {
-        window.tool_edit(obj)
-      } else if (obj.event === 'tool-power') {
-        window.tool_power(obj)
-      }
-    })
-
-    table.on('toolbar(tables)', function (obj) {
-      if (obj.event === 'toolbar-add') {
-        window.toolbar_add()
-      } else if (obj.event === 'refresh') {
-        window.refresh()
-      } else if (obj.event === 'toolbar-remove') {
-        window.toolbar_remove(obj)
-      }
-    })
-
-    form.on('submit(role-query)', function (data) {
-      table.reload('tables', { where: data.field })
-      return false
-    })
-
-    form.on('switch(tool-switch)', function (obj) {
-      let operate
-      if (obj.elem.checked) {
-        operate = 1
-      } else {
-        operate = 0
-      }
-      let loading = layer.load()
-      $.ajax({
-        url: ROLE_API.ROLE_STATUS(this.value),
-        data: JSON.stringify({ roleId: this.value, operate: operate }),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          layer.close(loading)
-          if (result.success) {
-            layer.msg(result.message, { icon: 1, time: 1000 })
-          } else {
-            layer.msg(result.message, { icon: 2, time: 1000 })
-          }
-        },
-      })
-    })
-
-    window.toolbar_add = function () {
-      layer.open({
-        type: 2,
-        title: '新增',
-        shade: 0.1,
-        area: ['500px', '500px'],
-        content: '/admin/role/add',
-      })
-    }
-
-    window.tool_power = function (obj) {
-      layer.open({
-        type: 2,
-        title: '授权',
-        shade: 0.1,
-        area: ['320px', '400px'],
-        content: '/admin/role/power/' + obj.data['id'],
-      })
-    }
-
-    window.tool_edit = function (obj) {
-      layer.open({
-        type: 2,
-        title: '修改',
-        shade: 0.1,
-        area: ['500px', '500px'],
-        content: '/admin/role/edit/' + obj.data['id'],
-      })
-    }
-
-    window.tool_remove = function (obj) {
-      layer.confirm('确定要删除该角色', { icon: 3, title: '提示' }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-          url: ROLE_API.ROLE_POWER(obj.data['id']),
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              layer.msg(result.message, { icon: 1, time: 1000 }, function () {
-                obj.del()
-              })
-            } else {
-              layer.msg(result.message, { icon: 2, time: 1000 })
-            }
-          },
-        })
-      })
-    }
-
-    window.toolbar_remove = function (obj) {
-      let data = table.checkStatus(obj.config.id).data
-      if (data.length === 0) {
-        layer.msg('未选中数据', {
-          icon: 3,
-          time: 1000,
-        })
-        return false
-      }
-      var ids = []
-      var hasCheck = table.checkStatus('tables')
-      var hasCheckData = hasCheck.data
-      if (hasCheckData.length > 0) {
-        $.each(hasCheckData, function (index, element) {
-          ids.push(element.id)
-        })
-      }
-      console.log(ids)
-      layer.confirm('确定要删除选中角色', {
-        icon: 3,
-        title: '提示',
-      }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-
+        table.render({
+          parseData,
+          elem: '#tables',
           url: ROLE_API.ROLES(),
-          data: { ids: ids },
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.message, function () {
-                table.reload('tables')
-              })
-            } else {
-              popup.failure(result.message)
-            }
-          },
+          page: true,
+          cols: get_columns(),
+          skin: 'line',
+          toolbar: '#toolbar',
+          defaultToolbar: [
+            {
+              layEvent: 'refresh',
+              icon: 'layui-icon-refresh',
+            }, 'filter', 'print', 'exports'],
         })
+
+        table.on('tool(tables)', function (obj) {
+          if (obj.event === 'tool-remove') {
+            window.tool_remove(obj)
+          } else if (obj.event === 'tool-edit') {
+            window.tool_edit(obj)
+          } else if (obj.event === 'tool-power') {
+            window.tool_power(obj)
+          }
+        })
+
+        table.on('toolbar(tables)', function (obj) {
+          if (obj.event === 'toolbar-add') {
+            window.toolbar_add()
+          } else if (obj.event === 'refresh') {
+            window.refresh()
+          } else if (obj.event === 'toolbar-remove') {
+            window.toolbar_remove(obj)
+          }
+        })
+
+        form.on('submit(role-query)', function (data) {
+          table.reload('tables', { where: data.field })
+          return false
+        })
+
+        form.on('switch(tool-switch)', function (obj) {
+          let operate
+          if (obj.elem.checked) {
+            operate = 1
+          } else {
+            operate = 0
+          }
+          let loading = layer.load()
+          $.ajax({
+            url: ROLE_API.ROLE_STATUS(this.value),
+            data: JSON.stringify({ roleId: this.value, operate: operate }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                layer.msg(result.message, { icon: 1, time: 1000 })
+              } else {
+                layer.msg(result.message, { icon: 2, time: 1000 })
+              }
+            },
+          })
+        })
+
+        window.toolbar_add = function () {
+          layer.open({
+            type: 2,
+            title: '新增',
+            shade: 0.1,
+            area: ['500px', '500px'],
+            content: '/admin/role/add',
+          })
+        }
+
+        window.tool_power = function (obj) {
+          layer.open({
+            type: 2,
+            title: '授权',
+            shade: 0.1,
+            area: ['320px', '400px'],
+            content: '/admin/role/power/' + obj.data['id'],
+          })
+        }
+
+        window.tool_edit = function (obj) {
+          layer.open({
+            type: 2,
+            title: '修改',
+            shade: 0.1,
+            area: ['500px', '500px'],
+            content: '/admin/role/edit/' + obj.data['id'],
+          })
+        }
+
+        window.tool_remove = function (obj) {
+          layer.confirm('确定要删除该角色', { icon: 3, title: '提示' }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: ROLE_API.ROLE_POWER(obj.data['id']),
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                    obj.del()
+                  })
+                } else {
+                  layer.msg(result.message, { icon: 2, time: 1000 })
+                }
+              },
+            })
+          })
+        }
+
+        window.toolbar_remove = function (obj) {
+          let data = table.checkStatus(obj.config.id).data
+          if (data.length === 0) {
+            layer.msg('未选中数据', {
+              icon: 3,
+              time: 1000,
+            })
+            return false
+          }
+          var ids = []
+          var hasCheck = table.checkStatus('tables')
+          var hasCheckData = hasCheck.data
+          if (hasCheckData.length > 0) {
+            $.each(hasCheckData, function (index, element) {
+              ids.push(element.id)
+            })
+          }
+          console.log(ids)
+          layer.confirm('确定要删除选中角色', {
+            icon: 3,
+            title: '提示',
+          }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+
+              url: ROLE_API.ROLES(),
+              data: { ids: ids },
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.message, function () {
+                    table.reload('tables')
+                  })
+                } else {
+                  popup.failure(result.message)
+                }
+              },
+            })
+          })
+        }
+
+        window.refresh = function () {
+          table.reload('tables')
+        }
+
       })
-    }
-
-    window.refresh = function () {
-      table.reload('tables')
-    }
-
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

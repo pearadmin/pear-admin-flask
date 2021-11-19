@@ -1,286 +1,285 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>权限</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body class="pear-container">
-<div class="layui-card">
-    <div class="layui-card-body">
-        <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">权限名称</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="powerName" placeholder="" class="layui-input">
+{% endblock %}
+
+
+{% block body %}
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="powerName" placeholder="" class="layui-input">
+                    </div>
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="power_query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
                 </div>
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="power_query">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
-                <button type="reset" class="pear-btn pear-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-<div class="layui-card">
-    <div class="layui-card-body">
-        <table id="tables" lay-filter="tables"></table>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="tables" lay-filter="tables"></table>
+        </div>
     </div>
-</div>
+{% endblock %}
 
+{% block models_script %}
+    <script type="text/html" id="toolbar">
+        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
+            <i class="layui-icon layui-icon-add-1"></i>
+            新增
+        </button>
+        <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
+            <i class="layui-icon layui-icon-delete"></i>
+            删除
+        </button>
+    </script>
+    <script type="text/html" id="tool">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit"><i
+                class="layui-icon layui-icon-edit"></i>
+        </button>
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove"><i
+                class="layui-icon layui-icon-delete"></i>
+        </button>
+    </script>
 
-{% include 'admin/common/footer.html' %}
+    <script type="module">
+      import { RIGHTS_API, parserTableData as parseData } from '/static/api/http.js'
 
-<script type="text/html" id="toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
-        <i class="layui-icon layui-icon-add-1"></i>
-        新增
-    </button>
-    <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
-        <i class="layui-icon layui-icon-delete"></i>
-        删除
-    </button>
-</script>
-<script type="text/html" id="tool">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit"><i
-            class="layui-icon layui-icon-edit"></i>
-    </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove"><i
-            class="layui-icon layui-icon-delete"></i>
-    </button>
-</script>
+      layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree', 'iconPicker'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let treetable = layui.treetable
+        let popup = layui.popup
+        let iconPicker = layui.iconPicker
+        let dtree = layui.dtree
 
-<script type="module">
-  import { RIGHTS_API, parserTableData as parseData } from '/static/api/http.js'
+        const get_columns = () => [
+          [
+            { type: 'checkbox' },
+            { field: 'powerName', minWidth: 200, title: '权限名称' },
+            { field: 'icon', title: '图标', templet: (d) => `<i class="layui-icon ${d.icon}"></i>` },
+            {
+              field: 'powerType', title: '权限类型', templet: (d) => {
+                if (d.powerType === '0') {
+                  return `<span>目录</span>`
+                } else if (d.powerType === '1') {
+                  return `<span>菜单</span>`
+                } else if (d.powerType === '2') {
+                  return `<span>按钮</span>`
+                }
+              },
+            },
+            {
+              field: 'enable', title: '是否可用', templet: (d) => {
+                // TODO 修改禁用启动逻辑
+                return `<input type="checkbox" name="enable" value="${d.powerId}" lay-skin="switch" lay-text="启用|禁用" lay-filter="tool-switch"  ${d.enable ===
+                1 ? 'checked=checked' : ''}>`
+              },
+            },
+            { field: 'sort', title: '排序' },
+            { title: '操作', templet: '#tool', width: 150, align: 'center' },
+          ],
+        ]
 
-  layui.use(['table', 'form', 'jquery', 'treetable', 'popup', 'dtree', 'iconPicker'], function () {
-    let table = layui.table
-    let form = layui.form
-    let $ = layui.jquery
-    let treetable = layui.treetable
-    let popup = layui.popup
-    let iconPicker = layui.iconPicker
-    let dtree = layui.dtree
-
-    const get_columns = () => [
-      [
-        { type: 'checkbox' },
-        { field: 'powerName', minWidth: 200, title: '权限名称' },
-        { field: 'icon', title: '图标', templet: (d) => `<i class="layui-icon ${d.icon}"></i>` },
-        {
-          field: 'powerType', title: '权限类型', templet: (d) => {
-            if (d.powerType === '0') {
-              return `<span>目录</span>`
-            } else if (d.powerType === '1') {
-              return `<span>菜单</span>`
-            } else if (d.powerType === '2') {
-              return `<span>按钮</span>`
-            }
-          },
-        },
-        {
-          field: 'enable', title: '是否可用', templet: (d) => {
-            // TODO 修改禁用启动逻辑
-            return `<input type="checkbox" name="enable" value="${d.powerId}" lay-skin="switch" lay-text="启用|禁用" lay-filter="tool-switch"  ${d.enable ===
-            1 ? 'checked=checked' : ''}>`
-          },
-        },
-        { field: 'sort', title: '排序' },
-        { title: '操作', templet: '#tool', width: 150, align: 'center' },
-      ],
-    ]
-
-    treetable.render({
-      treeColIndex: 1,
-      treeSpid: 0,
-      treeIdName: 'powerId',
-      treePidName: 'parentId',
-      skin: 'line',
-      method: 'post',
-      treeDefaultClose: true,
-      toolbar: '#toolbar',
-      elem: '#tables',
-      url: RIGHTS_API.RIGHTS(),
-      page: false,
-      cols: get_columns(),
-    })
-
-    form.on('submit(power_query)', function (data) {
-      var keyword = data.field.powerName
-      var $tds = $('#tables').next('.treeTable').find('.layui-table-body tbody tr td')
-      if (!keyword) {
-        $tds.css('background-color', 'transparent')
-        layer.msg('请输入关键字', { icon: 5 })
-        return
-      }
-      var searchCount = 0
-      $tds.each(function () {
-        $(this).css('background-color', 'transparent')
-        if ($(this).text().indexOf(keyword) >= 0) {
-          $(this).css('background-color', 'rgba(250,230,160,0.5)')
-          if (searchCount === 0) {
-            $('body,html').stop(true)
-            $('body,html').animate({ scrollTop: $(this).offset().top - 150 }, 500)
-          }
-          searchCount++
-        }
-      })
-      if (searchCount === 0) {
-        layer.msg('没有匹配结果', { icon: 5 })
-      } else {
-        treetable.expandAll('#tables')
-      }
-      return false
-    })
-
-    table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tool-remove') {
-        window.tool_remove(obj)
-      } else if (obj.event === 'tool-edit') {
-        window.tool_edit(obj)
-      }
-    })
-
-    table.on('toolbar(tables)', function (obj) {
-      if (obj.event === 'toolbar-add') {
-        window.toolbar_add()
-      } else if (obj.event === 'refresh') {
-        window.refresh()
-      } else if (obj.event === 'toolbar-remove') {
-        window.toolbar_remove(obj)
-      }
-    })
-
-    form.on('switch(tool-switch)', function (obj) {
-      let operate
-      if (obj.elem.checked) {
-        operate = 1  /*启用*/
-      } else {
-        operate = 0  /*禁用*/
-      }
-      let loading = layer.load()
-      $.ajax({
-        url: RIGHTS_API.POWER_STATUS(this.value),
-        data: JSON.stringify({ powerId: this.value, operate: operate }),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          layer.close(loading)
-          if (result.success) {
-            popup.success(result.message)
-          } else {
-            popup.failure(result.message)
-          }
-        },
-      })
-    })
-
-    window.toolbar_add = function () {
-      layer.open({
-        type: 2,
-        title: '新增',
-        shade: 0.1,
-        area: ['450px', '500px'],
-        content: '/rights/add',
-      })
-    }
-
-    window.tool_edit = function (obj) {
-      layer.open({
-        type: 2,
-        title: '修改',
-        shade: 0.1,
-        area: ['450px', '500px'],
-        content: '/rights/power/' + obj.data['powerId'],
-      })
-    }
-    window.tool_remove = function (obj) {
-      layer.confirm('确定要删除该权限', { icon: 3, title: '提示' }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-          url: RIGHTS_API.POWER(obj.data['powerId']),
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.message, function () {
-                console.log(obj)
-                obj.del()
-              })
-            } else {
-              popup.failure(result.message)
-            }
-          },
-        })
-      })
-    }
-
-    window.toolbar_remove = function (obj) {
-      let data = table.checkStatus(obj.config.id).data
-      if (data.length === 0) {
-        layer.msg('未选中数据', {
-          icon: 3,
-          time: 1000,
-        })
-        return false
-      }
-      var ids = []
-      var hasCheck = table.checkStatus('tables')
-      var hasCheckData = hasCheck.data
-      if (hasCheckData.length > 0) {
-        $.each(hasCheckData, function (index, element) {
-          ids.push(element.id)
-        })
-      }
-      layer.confirm('确定要删除选中权限', {
-        icon: 3,
-        title: '提示',
-      }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
+        treetable.render({
+          treeColIndex: 1,
+          treeSpid: 0,
+          treeIdName: 'powerId',
+          treePidName: 'parentId',
+          skin: 'line',
+          method: 'post',
+          treeDefaultClose: true,
+          toolbar: '#toolbar',
+          elem: '#tables',
           url: RIGHTS_API.RIGHTS(),
-          data: { ids: ids },
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.msg, function () {
-                console.log(obj)
-                obj.del()
-              })
-            } else {
-              popup.failure(result.msg)
+          page: false,
+          cols: get_columns(),
+        })
+
+        form.on('submit(power_query)', function (data) {
+          var keyword = data.field.powerName
+          var $tds = $('#tables').next('.treeTable').find('.layui-table-body tbody tr td')
+          if (!keyword) {
+            $tds.css('background-color', 'transparent')
+            layer.msg('请输入关键字', { icon: 5 })
+            return
+          }
+          var searchCount = 0
+          $tds.each(function () {
+            $(this).css('background-color', 'transparent')
+            if ($(this).text().indexOf(keyword) >= 0) {
+              $(this).css('background-color', 'rgba(250,230,160,0.5)')
+              if (searchCount === 0) {
+                $('body,html').stop(true)
+                $('body,html').animate({ scrollTop: $(this).offset().top - 150 }, 500)
+              }
+              searchCount++
             }
+          })
+          if (searchCount === 0) {
+            layer.msg('没有匹配结果', { icon: 5 })
+          } else {
+            treetable.expandAll('#tables')
+          }
+          return false
+        })
+
+        table.on('tool(tables)', function (obj) {
+          if (obj.event === 'tool-remove') {
+            window.tool_remove(obj)
+          } else if (obj.event === 'tool-edit') {
+            window.tool_edit(obj)
+          }
+        })
+
+        table.on('toolbar(tables)', function (obj) {
+          if (obj.event === 'toolbar-add') {
+            window.toolbar_add()
+          } else if (obj.event === 'refresh') {
+            window.refresh()
+          } else if (obj.event === 'toolbar-remove') {
+            window.toolbar_remove(obj)
+          }
+        })
+
+        form.on('switch(tool-switch)', function (obj) {
+          let operate
+          if (obj.elem.checked) {
+            operate = 1  /*启用*/
+          } else {
+            operate = 0  /*禁用*/
+          }
+          let loading = layer.load()
+          $.ajax({
+            url: RIGHTS_API.POWER_STATUS(this.value),
+            data: JSON.stringify({ powerId: this.value, operate: operate }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.message)
+              } else {
+                popup.failure(result.message)
+              }
+            },
+          })
+        })
+
+        window.toolbar_add = function () {
+          layer.open({
+            type: 2,
+            title: '新增',
+            shade: 0.1,
+            area: ['450px', '500px'],
+            content: '/rights/add',
+          })
+        }
+
+        window.tool_edit = function (obj) {
+          layer.open({
+            type: 2,
+            title: '修改',
+            shade: 0.1,
+            area: ['450px', '500px'],
+            content: '/rights/power/' + obj.data['powerId'],
+          })
+        }
+        window.tool_remove = function (obj) {
+          layer.confirm('确定要删除该权限', { icon: 3, title: '提示' }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: RIGHTS_API.POWER(obj.data['powerId']),
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.message, function () {
+                    console.log(obj)
+                    obj.del()
+                  })
+                } else {
+                  popup.failure(result.message)
+                }
+              },
+            })
+          })
+        }
+
+        window.toolbar_remove = function (obj) {
+          let data = table.checkStatus(obj.config.id).data
+          if (data.length === 0) {
+            layer.msg('未选中数据', {
+              icon: 3,
+              time: 1000,
+            })
+            return false
+          }
+          var ids = []
+          var hasCheck = table.checkStatus('tables')
+          var hasCheckData = hasCheck.data
+          if (hasCheckData.length > 0) {
+            $.each(hasCheckData, function (index, element) {
+              ids.push(element.id)
+            })
+          }
+          layer.confirm('确定要删除选中权限', {
+            icon: 3,
+            title: '提示',
+          }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: RIGHTS_API.RIGHTS(),
+              data: { ids: ids },
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.msg, function () {
+                    console.log(obj)
+                    obj.del()
+                  })
+                } else {
+                  popup.failure(result.msg)
+                }
+              },
+            })
+          })
+        }
+
+        iconPicker.render({
+          // 选择器，推荐使用input
+          elem: '#add_icon',
+          // 数据类型：fontClass/unicode，推荐使用fontClass
+          type: 'fontClass',
+          // 是否开启搜索：true/false
+          search: true,
+          // 是否开启分页
+          page: true,
+          // 每页显示数量，默认12
+          limit: 12,
+          // 点击回调
+          click: function (data) {
+            console.log(data)
           },
         })
       })
-    }
-
-    iconPicker.render({
-      // 选择器，推荐使用input
-      elem: '#add_icon',
-      // 数据类型：fontClass/unicode，推荐使用fontClass
-      type: 'fontClass',
-      // 是否开启搜索：true/false
-      search: true,
-      // 是否开启分页
-      page: true,
-      // 每页显示数量，默认12
-      limit: 12,
-      // 点击回调
-      click: function (data) {
-        console.log(data)
-      },
-    })
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

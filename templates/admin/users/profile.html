@@ -188,36 +188,34 @@
     <form id="edit_password_view" class="layui-form" action="" style="display: none">
         <div class="mainBox">
             <div class="main-container">
-                <div class="main-container">
-                    <div class="layui-form-item" style="display: none">
-                        <label class="layui-form-label">用户id</label>
-                        <div class="layui-input-block">
-                            <input value="{{ user_info.id }}" type="text" readonly name="user_id"
-                                   id="user_id"
-                                   lay-verify="title"
-                                   autocomplete="off" placeholder="请输入标题" class="layui-input">
-                        </div>
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label">用户id</label>
+                    <div class="layui-input-block">
+                        <input value="{{ user_info.id }}" type="text" readonly name="user_id"
+                               id="user_id"
+                               lay-verify="title"
+                               autocomplete="off" placeholder="请输入标题" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">旧密码</label>
-                        <div class="layui-input-block">
-                            <input type="password" name="oldPassword" lay-verify="title" autocomplete="off"
-                                   placeholder="请输入标题" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">旧密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="oldPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">新密码</label>
-                        <div class="layui-input-block">
-                            <input type="password" name="newPassword" lay-verify="title" autocomplete="off"
-                                   placeholder="请输入标题" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="newPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">确认密码</label>
-                        <div class="layui-input-block">
-                            <input type="password" name="confirmPassword" lay-verify="title" autocomplete="off"
-                                   placeholder="请输入标题" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="confirmPassword" lay-verify="title" autocomplete="off"
+                               placeholder="请输入标题" class="layui-input">
                     </div>
                 </div>
             </div>

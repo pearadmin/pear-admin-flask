@@ -1,128 +1,129 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>部门管理</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body>
-<form class="layui-form" action="">
-    <div class="mainBox">
-        <div class="main-container">
-            <div class="layui-form-item">
-                <label class="layui-form-label">上级部门</label>
-                <div class="layui-input-block">
-                    <ul id="selectParent" name="parentId" class="dtree" data-id="0"></ul>
+{% endblock %}
+
+
+{% block body %}
+    <form class="layui-form" action="">
+        <div class="mainBox">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级部门</label>
+                    <div class="layui-input-block">
+                        <ul id="selectParent" name="parentId" class="dtree" data-id="0"></ul>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="deptName" lay-verify="title" autocomplete="off" placeholder="请输入部门名称"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="deptName" lay-verify="title" autocomplete="off" placeholder="请输入部门名称"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">负责人</label>
-                <div class="layui-input-block">
-                    <input type="text" name="leader" lay-verify="title" autocomplete="off" placeholder="请输入负责人名字"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="leader" lay-verify="title" autocomplete="off" placeholder="请输入负责人名字"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-block">
-                    <input type="text" name="email" lay-verify="title" autocomplete="off" placeholder="请输入邮箱地址"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" lay-verify="title" autocomplete="off" placeholder="请输入邮箱地址"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">联系方式</label>
-                <div class="layui-input-block">
-                    <input type="text" name="phone" lay-verify="title" autocomplete="off" placeholder="请输入联系方式（电话号码）"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系方式</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" lay-verify="title" autocomplete="off"
+                               placeholder="请输入联系方式（电话号码）"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">状态</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="status" value="1" title="开启">
-                    <input type="radio" name="status" value="0" title="关闭" checked>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="开启">
+                        <input type="radio" name="status" value="0" title="关闭" checked>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">排序</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入排序序号（数字）"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" lay-verify="title" autocomplete="off" placeholder="请输入排序序号（数字）"
+                               class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">详细地址</label>
-                <div class="layui-input-block">
-                    <textarea placeholder="请输入详细地址" name="address" class="layui-textarea"></textarea>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">详细地址</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入详细地址" name="address" class="layui-textarea"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="dept-save">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                        lay-filter="dept-save">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="pear-btn pear-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{% endblock %}
 
+{% block models_script %}
+    <script type="module">
+      import { DEPARTMENT_API } from '/static/api/http.js'
 
-{% include 'admin/common/footer.html' %}
+      layui.use(['form', 'jquery', 'dtree'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        let dtree = layui.dtree
 
-<script type="module">
-  import { DEPARTMENT_API } from '/static/api/http.js'
+        /*添加数据 渲染下拉选择组件*/
+        dtree.renderSelect({
+          elem: '#selectParent',
+          url: DEPARTMENT_API.DEPARTMENTS(),
+          method: 'get',
+          selectInputName: { nodeId: 'parentId', context: 'parentName' },
+          skin: 'layui',
+          dataFormat: 'list',
+          response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
+          selectInitVal: '1',
+        })
 
-  layui.use(['form', 'jquery', 'dtree'], function () {
-    let form = layui.form
-    let $ = layui.jquery
-    let dtree = layui.dtree
-
-    /*添加数据 渲染下拉选择组件*/
-    dtree.renderSelect({
-      elem: '#selectParent',
-      url: DEPARTMENT_API.DEPARTMENTS(),
-      method: 'get',
-      selectInputName: { nodeId: 'parentId', context: 'parentName' },
-      skin: 'layui',
-      dataFormat: 'list',
-      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
-      selectInitVal: '1'
-    })
-
-    /*添加数据 表单组件，提交按钮之后触发的事件*/
-    form.on('submit(dept-save)', function (data) {
-      $.ajax({
-        url: DEPARTMENT_API.DEPARTMENTS(),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'post',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.message, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))
-              parent.render()
-            })
-          } else {
-            layer.msg(result.message, { icon: 2, time: 1000 })
-          }
-        }
+        /*添加数据 表单组件，提交按钮之后触发的事件*/
+        form.on('submit(dept-save)', function (data) {
+          $.ajax({
+            url: DEPARTMENT_API.DEPARTMENTS(),
+            data: JSON.stringify(data.field),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'post',
+            success: function (result) {
+              if (result.success) {
+                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name))
+                  parent.render()
+                })
+              } else {
+                layer.msg(result.message, { icon: 2, time: 1000 })
+              }
+            },
+          })
+          return false
+        })
       })
-      return false
-    })
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

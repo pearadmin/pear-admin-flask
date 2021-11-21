@@ -1,66 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% include 'admin/common/header.html' %}
-    <style>
-        body {
-            margin: 10px;
-        }
-    </style>
-</head>
-<body>
-<div class="layui-row layui-col-space15">
-    <div class="layui-col-md12">
-        <div class="layui-card">
-            <div class="layui-tab-content">
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>新增图片</legend>
-                </fieldset>
-                <form class="layui-form edit-form">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            新增图片
-                        </label>
-                        <button type="button" class="layui-btn layui-btn-normal" id="select-img">选择文件</button>
-                        <button type="button" class="layui-btn" id="logo-upload-button">开始上传</button>
-                    </div>
-                </form>
+{% extends 'admin/base.html' %}
+
+{% block title %}
+    <title>新增图片</title>
+{% endblock %}
+
+{% block body %}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-tab-content">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>新增图片</legend>
+                    </fieldset>
+                    <form class="layui-form edit-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">
+                                新增图片
+                            </label>
+                            <button type="button" class="layui-btn layui-btn-normal" id="select-img">选择文件</button>
+                            <button type="button" class="layui-btn" id="logo-upload-button">开始上传</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{% endblock %}
 
 
-{% include 'admin/common/footer.html' %}
+{% block models_script %}
+    <script type="module">
+      import { FILE_API } from '/static/api/http.js'
 
-<script type="module">
-  import { FILE_API } from '/static/api/http.js'
-
-  layui.use(['jquery', 'element', 'form', 'upload'], function () {
-    var $ = layui.jquery
-    var element = layui.element
-    var form = layui.form
-    var upload = layui.upload
-    //选完文件后不自动上传
-    upload.render({
-      elem: '#select-img'
-      , url: FILE_API.PHOTOS()
-      , auto: false
-      , exts: 'jpg|png|gif|bmp|jpeg'
-      , size: 1000
-      , bindAction: '#logo-upload-button'
-      , done: function (res) {
-        if (res.success) {
-          layer.msg(res.message, { icon: 1, time: 500 }, function () {
-            parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-            window.parent.location.reload()
-          })
-        } else {
-          layer.msg(res.message, { icon: 2 })
-        }
-      },
-    })
-  })
-</script>
-</body>
-</html>
+      layui.use(['jquery', 'element', 'form', 'upload'], function () {
+        var $ = layui.jquery
+        var element = layui.element
+        var form = layui.form
+        var upload = layui.upload
+        //选完文件后不自动上传
+        upload.render({
+          elem: '#select-img'
+          , url: FILE_API.PHOTOS()
+          , auto: false
+          , exts: 'jpg|png|gif|bmp|jpeg'
+          , size: 1000
+          , bindAction: '#logo-upload-button'
+          , done: function (res) {
+            if (res.success) {
+              layer.msg(res.message, { icon: 1, time: 500 }, function () {
+                parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                window.parent.location.reload()
+              })
+            } else {
+              layer.msg(res.message, { icon: 2 })
+            }
+          },
+        })
+      })
+    </script>
+{% endblock %}

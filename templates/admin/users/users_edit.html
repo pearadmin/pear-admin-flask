@@ -1,122 +1,121 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'admin/base.html' %}
+{% block title %}
     <title>用户编辑</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body>
-<form class="layui-form" action="">
-    <div class="mainBox">
-        <div class="main-container">
+{% endblock %}
+
+
+{% block body %}
+    <form class="layui-form" action="">
+        <div class="mainBox">
             <div class="main-container">
-                <div class="layui-form-item layui-hide">
-                    <label class="layui-form-label">编号</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ user.id }}" name="userId" lay-verify="title"
-                               autocomplete="off" placeholder="请输入编号" class="layui-input">
+                <div class="main-container">
+                    <div class="layui-form-item layui-hide">
+                        <label class="layui-form-label">编号</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="{{ user.id }}" name="userId" lay-verify="title"
+                                   autocomplete="off" placeholder="请输入编号" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">账号</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ user.username }}" name="username" lay-verify="title"
-                               autocomplete="off" placeholder="请输入账号" class="layui-input">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="{{ user.username }}" name="username" lay-verify="title"
+                                   autocomplete="off" placeholder="请输入账号" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">姓名</label>
-                    <div class="layui-input-block">
-                        <input type="text" value="{{ user.realname }}" name="realName" lay-verify="title"
-                               autocomplete="off" placeholder="请输入姓名"
-                               class="layui-input">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="{{ user.realname }}" name="realName" lay-verify="title"
+                                   autocomplete="off" placeholder="请输入姓名"
+                                   class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">部门</label>
-                    <div class="layui-input-block">
-                        <ul id="selectParent" name="deptId" class="dtree" data-id="0"></ul>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">部门</label>
+                        <div class="layui-input-block">
+                            <ul id="selectParent" name="deptId" class="dtree" data-id="0"></ul>
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block">
-                        {% for role in roles %}
-                            <input {% if role.id in checked_roles %}
-                                checked
-                            {% endif %}
-                                value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
-                                name="roleIds" lay-skin="primary">
-                        {% endfor %}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色</label>
+                        <div class="layui-input-block">
+                            {% for role in roles %}
+                                <input {% if role.id in checked_roles %}
+                                    checked
+                                {% endif %}
+                                    value="{{ role.id }}" title="{{ role.name }}" type="checkbox"
+                                    name="roleIds" lay-skin="primary">
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit="" lay-filter="user-update">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                        lay-filter="user-update">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="pear-btn pear-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{% endblock %}
 
+{% block models_script %}
+    <script type="module">
+      import { USER_API } from '/static/api/http.js'
 
-{% include 'admin/common/footer.html' %}
+      layui.use(['form', 'jquery', 'dtree'], function () {
+        let form = layui.form
+        let $ = layui.jquery
+        let dtree = layui.dtree
 
-<script type="module">
-  import { USER_API } from '/static/api/http.js'
+        dtree.renderSelect({
+          elem: '#selectParent',
+          url: '/api/v1/dept/departments',
+          method: 'get',
+          selectInputName: { nodeId: 'deptId', context: 'deptName' },
+          skin: 'layui',
+          dataFormat: 'list',
+          response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
+          selectInitVal: "{{ user.dept_id }}",
+        })
 
-  layui.use(['form', 'jquery', 'dtree'], function () {
-    let form = layui.form
-    let $ = layui.jquery
-    let dtree = layui.dtree
-
-    dtree.renderSelect({
-      elem: '#selectParent',
-      url: '/api/v1/dept/departments',
-      method: 'get',
-      selectInputName: { nodeId: 'deptId', context: 'deptName' },
-      skin: 'layui',
-      dataFormat: 'list',
-      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
-      selectInitVal: "{{ user.dept_id }}"
-    })
-    form.on('submit(user-update)', function (data) {
-      let roleIds = ''
-      $('input[type=checkbox]:checked').each(function () {
-        roleIds += $(this).val() + ','
+        form.on('submit(user-update)', function (data) {
+          let roleIds = ''
+          $('input[type=checkbox]:checked').each(function () {
+            roleIds += $(this).val() + ','
+          })
+          roleIds = roleIds.substr(0, roleIds.length - 1)
+          data.field.roleIds = roleIds
+          $.ajax({
+            url: USER_API.USER_ROLE(data.field.userId),
+            data: JSON.stringify(data.field),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              if (result.success) {
+                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name)) //关闭当前页
+                  parent.layui.table.reload('tables')
+                })
+              } else {
+                layer.msg(result.message, { icon: 2, time: 1000 })
+              }
+            },
+          })
+          return false
+        })
       })
-      roleIds = roleIds.substr(0, roleIds.length - 1)
-      data.field.roleIds = roleIds
-      $.ajax({
-        url: USER_API.USER_ROLE(data.field.userId),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.message, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name)) //关闭当前页
-              parent.layui.table.reload('tables')
-            })
-          } else {
-            layer.msg(result.message, { icon: 2, time: 1000 })
-          }
-        }
-      })
-      return false
-    })
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

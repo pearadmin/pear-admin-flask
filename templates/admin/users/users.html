@@ -1,316 +1,315 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>用户管理</title>
-    {% include 'admin/common/header.html' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='/admin/admin/css/other/user.css') }}"/>
-</head>
-<body class="pear-container">
-{# 查询表单 #}
-<div class="layui-card">
-    <div class="layui-card-body">
-        <form class="layui-form" action="" lay-filter="user-query-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label">用户</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="realName" placeholder="" class="layui-input">
-                </div>
-                <label class="layui-form-label">账号</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="username" placeholder="" class="layui-input">
-                </div>
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
-                <button type="reset" class="pear-btn pear-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="user-left user-collasped">
+    <link rel="stylesheet" href="/static/admin/admin/css/other/user.css"/>
+{% endblock %}
+
+
+{% block body %}
+    {# 查询表单 #}
     <div class="layui-card">
         <div class="layui-card-body">
-            <div class="button button-primary user-group" user-group=""> 全 部 用 户</div>
-            <div class="button button-default user-group" user-group="-1"> 默 认 分 组</div>
-            <div style="overflow: auto">
-                <ul id="dept-tree" class="dept-tree" data-id="0"></ul>
+            <form class="layui-form" action="" lay-filter="user-query-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="realName" placeholder="" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" placeholder="" class="layui-input">
+                    </div>
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="user-left user-collasped">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="button button-primary user-group" user-group=""> 全 部 用 户</div>
+                <div class="button button-default user-group" user-group="-1"> 默 认 分 组</div>
+                <div style="overflow: auto">
+                    <ul id="dept-tree" class="dept-tree" data-id="0"></ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{# 用户表格 #}
-<div class="user-main user-collasped">
-    <div class="layui-card">
-        <div class="layui-card-body">
-            <table id="tables" lay-filter="tables"></table>
+    {# 用户表格 #}
+    <div class="user-main user-collasped">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <table id="tables" lay-filter="tables"></table>
+            </div>
         </div>
     </div>
-</div>
+{% endblock %}
 
+{% block models_script %}
+    {# 表格操作 #}
+    <script type="text/html" id="toolbar">
+        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
+            <i class="pear-icon pear-icon-add"></i>
+            新增
+        </button>
+        <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
+            <i class="pear-icon pear-icon-ashbin"></i>
+            删除
+        </button>
+        <button class="pear-btn pear-btn-md" lay-event="toolbar-collasped">
+            <i class="pear-icon pear-icon-modular"></i>
+            高级
+        </button>
+    </script>
+    {# 用户修改操作 #}
+    <script type="text/html" id="tool">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit">
+            <i class="pear-icon pear-icon-edit"></i>
+        </button>
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove">
+            <i class="pear-icon pear-icon-ashbin"></i>
+        </button>
+    </script>
+    {# 启动与禁用 #}
+    <script type="text/html" id="tool-switch">
+        <input type="checkbox" name="enable" value="{{ "{{ d.id }}" }}" lay-skin="switch" lay-text="启用|禁用"
+               lay-filter="tool-switch"
+                {{ "{{# if(d.enable==1){ }} checked {{# } }}" }} />
+    </script>
+    {# 用户注册时间 #}
+    <script type="text/html" id="user-createTime">
+        {{ '  {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
+    </script>
+    {# 用户更新时间 #}
+    <script type="text/html" id="user-updateTime">
+        {{ '  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
+    </script>
 
-{% include 'admin/common/footer.html' %}
+    <script type="module">
+      import { USER_API, ROLE, parserTableData as parseData } from '/static/api/http.js'
 
-{# 表格操作 #}
-<script type="text/html" id="toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
-        <i class="pear-icon pear-icon-add"></i>
-        新增
-    </button>
-    <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
-        <i class="pear-icon pear-icon-ashbin"></i>
-        删除
-    </button>
-    <button class="pear-btn pear-btn-md" lay-event="toolbar-collasped">
-        <i class="pear-icon pear-icon-modular"></i>
-        高级
-    </button>
-</script>
-{# 用户修改操作 #}
-<script type="text/html" id="tool">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool-edit">
-        <i class="pear-icon pear-icon-edit"></i>
-    </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove">
-        <i class="pear-icon pear-icon-ashbin"></i>
-    </button>
-</script>
-{# 启动与禁用 #}
-<script type="text/html" id="tool-switch">
-    <input type="checkbox" name="enable" value="{{ "{{ d.id }}" }}" lay-skin="switch" lay-text="启用|禁用"
-           lay-filter="tool-switch"
-            {{ "{{# if(d.enable==1){ }} checked {{# } }}" }} />
-</script>
-{# 用户注册时间 #}
-<script type="text/html" id="user-createTime">
-    {{ '  {{layui.util.toDateString(d.create_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
-</script>
-{# 用户更新时间 #}
-<script type="text/html" id="user-updateTime">
-    {{ '  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
-</script>
+      layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let dtree = layui.dtree
+        let popup = layui.popup
+        let common = layui.common
 
-<script type="module">
-  import { USER_API, ROLE, parserTableData as parseData } from '/static/api/http.js'
+        // 表格数据
+        const get_columns = () => [
+          [
+            { type: 'checkbox' },
+            { title: '姓名', field: 'realname', align: 'center', width: 110 },
+            { title: '账号', field: 'username', align: 'center' },
+            { title: '部门', field: 'dept', align: 'center' },
+            { title: '启用', field: 'enable', align: 'center', templet: '#tool-switch', width: 120 },
+            { title: '注册时间', field: 'create_at', templet: '#user-createTime', align: 'center' },
+            { title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center' },
+            { title: '操作', toolbar: '#tool', align: 'center', width: 130 },
+          ],
+        ]
 
-  layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
-    let table = layui.table
-    let form = layui.form
-    let $ = layui.jquery
-    let dtree = layui.dtree
-    let popup = layui.popup
-    let common = layui.common
-
-    // 表格数据
-    const get_columns = () => [
-      [
-        { type: 'checkbox' },
-        { title: '姓名', field: 'realname', align: 'center', width: 110 },
-        { title: '账号', field: 'username', align: 'center' },
-        { title: '部门', field: 'dept', align: 'center' },
-        { title: '启用', field: 'enable', align: 'center', templet: '#tool-switch', width: 120 },
-        { title: '注册时间', field: 'create_at', templet: '#user-createTime', align: 'center' },
-        { title: '更新时间', field: 'update_at', templet: '#user-updateTime', align: 'center' },
-        { title: '操作', toolbar: '#tool', align: 'center', width: 130 },
-      ],
-    ]
-
-    // 渲染表格数据
-    table.render({
-      parseData,
-      elem: '#tables',
-      url: USER_API.USERS(),
-      page: true,
-      cols: get_columns(),
-      skin: 'line',
-      height: 'full-148',
-      toolbar: '#toolbar', /*工具栏*/
-      text: { none: '暂无人员信息' },
-      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'], /*默认工具栏*/
-    })
-
-    // 公司部门树状图菜单
-    dtree.render({
-      elem: '#dept-tree',
-      method: 'get',
-      url: '/api/v1/dept/departments',
-      dataFormat: 'list',
-      line: true,
-      skin: 'laySimple',
-      icon: '-1',
-      response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
-    })
-
-    // 菜单栏渲染
-    dtree.on('node(\'dept-tree\')', function (obj) {
-      let field = form.val('user-query-form') /*用户账号查询*/
-      field.deptId = obj.param.nodeId
-      window.refresh(field)
-    })
-
-    //
-    $('.user-group').click(function () {
-      let group = $(this).attr('user-group')
-      let field = form.val('user-query-form')
-      if (group === '-1') {
-        field.deptId = group
-        $(this).removeClass('button-default')
-        $(this).prev().removeClass('button-primary')
-        $(this).prev().addClass('button-default')
-        $(this).addClass('button-primary')
-      } else {
-        field.deptId = group
-        $(this).removeClass('button-default')
-        $(this).next().removeClass('button-primary')
-        $(this).next().addClass('button-default')
-        $(this).addClass('button-primary')
-      }
-      window.refresh(field)
-    })
-
-    table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tool-remove') {
-        window.tool_remove(obj)
-      } else if (obj.event === 'tool-edit') {
-        window.tool_edit(obj)
-      }
-    })
-
-    table.on('toolbar(tables)', function (obj) {
-      if (obj.event === 'toolbar-add') {
-        window.toolbar_add()
-      } else if (obj.event === 'refresh') {
-        window.refresh()
-      } else if (obj.event === 'toolbar-remove') {
-        window.toolbar_remove(obj)
-      } else if (obj.event === 'toolbar-collasped') {
-        $('.user-left').toggleClass('user-collasped')
-        $('.user-main').toggleClass('user-collasped')
-        table.resize()
-      }
-    })
-
-    form.on('submit(user-query)', function (data) {
-      window.refresh(data.field)
-      return false
-    })
-
-    form.on('switch(tool-switch)', function (obj) {
-      let operate
-      if (obj.elem.checked) {
-        operate = 1
-      } else {
-        operate = 0
-      }
-      let loading = layer.load()
-      $.ajax({
-        url: USER_API.USER_STATUS(this.value),
-        data: JSON.stringify({ operate: operate, userId: this.value }),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          layer.close(loading)
-          if (result.success) {
-            popup.success(result.message)
-          } else {
-            popup.failure(result.message)
-          }
-        },
-      })
-    })
-
-    window.toolbar_add = function () {
-      layer.open({
-        type: 2,
-        title: '新增',
-        shade: 0.1,
-        area: ['550px', '550px'],
-        content: '/users/add',
-      })
-    }
-    window.toolbar_remove = function (obj) {
-      let data = table.checkStatus(obj.config.id).data
-      if (data.length === 0) {
-        layer.msg('未选中数据', {
-          icon: 3,
-          time: 1000,
-        })
-        return false
-      }
-      var ids = []
-      var hasCheck = table.checkStatus('tables')
-      var hasCheckData = hasCheck.data
-      if (hasCheckData.length > 0) {
-        $.each(hasCheckData, function (index, element) {
-          ids.push(element.id)
-        })
-      }
-      {#console.log(ids);#}
-      layer.confirm('确定要删除选中角色', {
-        icon: 3,
-        title: '提示',
-      }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-
+        // 渲染表格数据
+        table.render({
+          parseData,
+          elem: '#tables',
           url: USER_API.USERS(),
-          data: { ids: ids },
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.message, function () {
-                table.reload('role-table')
-              })
-            } else {
-              popup.failure(result.message)
-            }
-          },
+          page: true,
+          cols: get_columns(),
+          skin: 'line',
+          height: 'full-148',
+          toolbar: '#toolbar', /*工具栏*/
+          text: { none: '暂无人员信息' },
+          defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'], /*默认工具栏*/
         })
-      })
-    }
-    window.refresh = function (param) {
-      table.reload('tables', { where: param })
-    }
 
-    window.tool_remove = function (obj) {
-      layer.confirm('确定要删除该用户', { icon: 3, title: '提示' }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-          url: USER_API.USER(obj.data['id']),
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.message, function () {
-                obj.del()
-              })
-            } else {
-              popup.failure(result.message)
-            }
-          },
+        // 公司部门树状图菜单
+        dtree.render({
+          elem: '#dept-tree',
+          method: 'get',
+          url: '/api/v1/dept/departments',
+          dataFormat: 'list',
+          line: true,
+          skin: 'laySimple',
+          icon: '-1',
+          response: { treeId: 'deptId', parentId: 'parentId', title: 'deptName' },
         })
-      })
-    }
-    window.tool_edit = function (obj) {
-      layer.open({
-        type: 2,
-        title: '修改',
-        shade: 0.1,
-        area: ['550px', '500px'],
-        content: '/users/' + obj.data['id'],
-      })
-    }
 
-  })
-</script>
-</body>
-</html>
+        // 菜单栏渲染
+        dtree.on('node(\'dept-tree\')', function (obj) {
+          let field = form.val('user-query-form') /*用户账号查询*/
+          field.deptId = obj.param.nodeId
+          window.refresh(field)
+        })
+
+        //
+        $('.user-group').click(function () {
+          let group = $(this).attr('user-group')
+          let field = form.val('user-query-form')
+          if (group === '-1') {
+            field.deptId = group
+            $(this).removeClass('button-default')
+            $(this).prev().removeClass('button-primary')
+            $(this).prev().addClass('button-default')
+            $(this).addClass('button-primary')
+          } else {
+            field.deptId = group
+            $(this).removeClass('button-default')
+            $(this).next().removeClass('button-primary')
+            $(this).next().addClass('button-default')
+            $(this).addClass('button-primary')
+          }
+          window.refresh(field)
+        })
+
+        table.on('tool(tables)', function (obj) {
+          if (obj.event === 'tool-remove') {
+            window.tool_remove(obj)
+          } else if (obj.event === 'tool-edit') {
+            window.tool_edit(obj)
+          }
+        })
+
+        table.on('toolbar(tables)', function (obj) {
+          if (obj.event === 'toolbar-add') {
+            window.toolbar_add()
+          } else if (obj.event === 'refresh') {
+            window.refresh()
+          } else if (obj.event === 'toolbar-remove') {
+            window.toolbar_remove(obj)
+          } else if (obj.event === 'toolbar-collasped') {
+            $('.user-left').toggleClass('user-collasped')
+            $('.user-main').toggleClass('user-collasped')
+            table.resize()
+          }
+        })
+
+        form.on('submit(user-query)', function (data) {
+          window.refresh(data.field)
+          return false
+        })
+
+        form.on('switch(tool-switch)', function (obj) {
+          let operate
+          if (obj.elem.checked) {
+            operate = 1
+          } else {
+            operate = 0
+          }
+          let loading = layer.load()
+          $.ajax({
+            url: USER_API.USER_STATUS(this.value),
+            data: JSON.stringify({ operate: operate, userId: this.value }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.message)
+              } else {
+                popup.failure(result.message)
+              }
+            },
+          })
+        })
+
+        window.toolbar_add = function () {
+          layer.open({
+            type: 2,
+            title: '新增',
+            shade: 0.1,
+            area: ['550px', '550px'],
+            content: '/users/add',
+          })
+        }
+        window.toolbar_remove = function (obj) {
+          let data = table.checkStatus(obj.config.id).data
+          if (data.length === 0) {
+            layer.msg('未选中数据', {
+              icon: 3,
+              time: 1000,
+            })
+            return false
+          }
+          var ids = []
+          var hasCheck = table.checkStatus('tables')
+          var hasCheckData = hasCheck.data
+          if (hasCheckData.length > 0) {
+            $.each(hasCheckData, function (index, element) {
+              ids.push(element.id)
+            })
+          }
+          {#console.log(ids);#}
+          layer.confirm('确定要删除选中角色', {
+            icon: 3,
+            title: '提示',
+          }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+
+              url: USER_API.USERS(),
+              data: { ids: ids },
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.message, function () {
+                    table.reload('role-table')
+                  })
+                } else {
+                  popup.failure(result.message)
+                }
+              },
+            })
+          })
+        }
+        window.refresh = function (param) {
+          table.reload('tables', { where: param })
+        }
+
+        window.tool_remove = function (obj) {
+          layer.confirm('确定要删除该用户', { icon: 3, title: '提示' }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: USER_API.USER(obj.data['id']),
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.message, function () {
+                    obj.del()
+                  })
+                } else {
+                  popup.failure(result.message)
+                }
+              },
+            })
+          })
+        }
+        window.tool_edit = function (obj) {
+          layer.open({
+            type: 2,
+            title: '修改',
+            shade: 0.1,
+            area: ['550px', '500px'],
+            content: '/users/' + obj.data['id'],
+          })
+        }
+
+      })
+    </script>
+{% endblock %}

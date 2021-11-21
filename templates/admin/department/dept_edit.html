@@ -1,129 +1,129 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>部门修改</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body>
-<form class="layui-form" action="">
-    <div class="mainBox">
-        <div class="main-container">
-            <div class="layui-form-item layui-hide">
-                <label class="layui-form-label">编号</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ dept.id }}" name="deptId" lay-verify="required|number"
-                           autocomplete="off" placeholder="请输入部门编号" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ dept.dept_name }}" name="deptName" lay-verify="required"
-                           autocomplete="off" placeholder="请输入部门名称" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">负责人</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ dept.leader }}" name="leader" autocomplete="off"
-                           placeholder="请输入负责人名字"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ dept.email }}" name="email" autocomplete="off"
-                           placeholder="请输入邮箱地址"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">联系方式</label>
-                <div class="layui-input-block">
-                    <input type="text" value="{{ dept.phone }}" name="phone" autocomplete="off"
-                           placeholder="请输入联系方式（电话号码）"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">状态</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="status" {% if dept.status == 1 %}checked{% endif %}
-                           value="1"
-                           title="开启">
+{% extends 'admin/base.html' %}
 
-                    <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %}
-                           value="0"
-                           title="关闭">
+{% block title %}
+    <title>部门修改</title>
+{% endblock %}
+
+
+{% block body %}
+    <form class="layui-form" action="">
+        <div class="mainBox">
+            <div class="main-container">
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ dept.id }}" name="deptId" lay-verify="required|number"
+                               autocomplete="off" placeholder="请输入部门编号" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">排序</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sort" value="{{ dept.sort }}" lay-verify="required|number"
-                           autocomplete="off"
-                           placeholder="请输入排序序号（数字）"
-                           class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ dept.dept_name }}" name="deptName" lay-verify="required"
+                               autocomplete="off" placeholder="请输入部门名称" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">描述</label>
-                <div class="layui-input-block">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ dept.leader }}" name="leader" autocomplete="off"
+                               placeholder="请输入负责人名字"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ dept.email }}" name="email" autocomplete="off"
+                               placeholder="请输入邮箱地址"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系方式</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ dept.phone }}" name="phone" autocomplete="off"
+                               placeholder="请输入联系方式（电话号码）"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" {% if dept.status == 1 %}checked{% endif %}
+                               value="1"
+                               title="开启">
+
+                        <input type="radio" name="status" {% if dept.status == 0 %}checked{% endif %}
+                               value="0"
+                               title="关闭">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" value="{{ dept.sort }}" lay-verify="required|number"
+                               autocomplete="off"
+                               placeholder="请输入排序序号（数字）"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
                         <textarea placeholder="请输入详细地址" name="address"
                                   class="layui-textarea">{{ dept.address }}</textarea>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="bottom">
-        <div class="button-container">
-            <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
-                    lay-filter="dept-update">
-                <i class="layui-icon layui-icon-ok"></i>
-                提交
-            </button>
-            <button type="reset" class="pear-btn pear-btn-sm">
-                <i class="layui-icon layui-icon-refresh"></i>
-                重置
-            </button>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="pear-btn pear-btn-primary pear-btn-sm" lay-submit=""
+                        lay-filter="dept-update">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="pear-btn pear-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{% endblock %}
 
 
-{% include 'admin/common/footer.html' %}
+{% block models_script %}
+    <script type="module">
+      import { DEPARTMENT_API } from '/static/api/http.js'
 
-<script type="module">
-  import { DEPARTMENT_API } from '/static/api/http.js'
+      layui.use(['form', 'jquery'], function () {
+        let form = layui.form
+        let $ = layui.jquery
 
-  layui.use(['form', 'jquery'], function () {
-    let form = layui.form
-    let $ = layui.jquery
+        // 修改数据 当点击更新之后，获取数据
+        form.on('submit(dept-update)', function (data) {
+          $.ajax({
+            url: DEPARTMENT_API.DEPARTMENT(data.field.deptId),
+            data: JSON.stringify(data.field),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              if (result.success) {
+                layer.msg(result.message, { icon: 1, time: 1000 }, function () {
+                  parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
+                  parent.render()
+                })
+              } else {
+                layer.msg(result.message, { icon: 2, time: 1000 })
+              }
+            },
+          })
+          return false
+        })
 
-    // 修改数据 当点击更新之后，获取数据
-    form.on('submit(dept-update)', function (data) {
-      $.ajax({
-        url: DEPARTMENT_API.DEPARTMENT(data.field.deptId),
-        data: JSON.stringify(data.field),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          if (result.success) {
-            layer.msg(result.message, { icon: 1, time: 1000 }, function () {
-              parent.layer.close(parent.layer.getFrameIndex(window.name))//关闭当前页
-              parent.render()
-            })
-          } else {
-            layer.msg(result.message, { icon: 2, time: 1000 })
-          }
-        }
       })
-      return false
-    })
-
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

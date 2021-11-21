@@ -1,256 +1,252 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+{% block title %}
     <title>部门新增</title>
-    {% include 'admin/common/header.html' %}
-</head>
-{#pear 后台边框#}
-<body class="pear-container">
-{#搜索框布局#}
-<div class="layui-card">
-    <div class="layui-card-body">
-        <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">部门名称</label>
-                <div class="layui-input-inline">
-                    {#部门信息搜索字段#}
-                    <input type="text" name="deptName" placeholder="" class="layui-input">
+{% endblock %}
+
+
+{% block body %}
+    {#搜索框布局#}
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称</label>
+                    <div class="layui-input-inline">
+                        {#部门信息搜索字段#}
+                        <input type="text" name="deptName" placeholder="" class="layui-input">
+                    </div>
+                    {#查询按钮--需要触发layui事件#}
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="form_search">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    {#重置按钮#}
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
                 </div>
-                {#查询按钮--需要触发layui事件#}
-                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="form_search">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
-                {#重置按钮#}
-                <button type="reset" class="pear-btn pear-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-<div class="layui-card">
-    <div class="layui-card-body">
-        {#表格字段渲染#}
-        <table id="tables" lay-filter="tables"></table>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            {#表格字段渲染#}
+            <table id="tables" lay-filter="tables"></table>
+        </div>
     </div>
-</div>
+{% endblock %}
 
 
-{#表格工具栏，需要在表格中绑定，且需要自定义事件#}
-<script type="text/html" id="toolbar">
-    {% if authorize("admin:dept:edit") %}
-        <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
-            <i class="layui-icon layui-icon-add-1"></i>
-            新增
+{% block models_script %}
+    {#表格工具栏，需要在表格中绑定，且需要自定义事件#}
+    <script type="text/html" id="toolbar">
+        {% if authorize("admin:dept:edit") %}
+            <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="toolbar-add">
+                <i class="layui-icon layui-icon-add-1"></i>
+                新增
+            </button>
+        {% endif %}
+        {% if authorize("admin:dept:remove") %}
+            <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
+                <i class="layui-icon layui-icon-delete"></i>
+                删除
+            </button>
+        {% endif %}
+    </script>
+    {#操作字段，需要在表格中使用#}
+    <script type="text/html" id="tool">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool_edit">
+            <i class="layui-icon layui-icon-edit"></i>
         </button>
-    {% endif %}
-    {% if authorize("admin:dept:remove") %}
-        <button class="pear-btn pear-btn-md" lay-event="toolbar-remove">
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool_remove">
             <i class="layui-icon layui-icon-delete"></i>
-            删除
         </button>
-    {% endif %}
-</script>
-{#操作字段，需要在表格中使用#}
-<script type="text/html" id="tool">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="tool_edit">
-        <i class="layui-icon layui-icon-edit"></i>
-    </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool_remove">
-        <i class="layui-icon layui-icon-delete"></i>
-    </button>
-</script>
-{#表格内的切换按钮#}
-<script type="text/html" id="dept-status">
-    <input type="checkbox"
-           name="status"
-           value="{{ "{{ d.deptId }}" }}"
-           lay-skin="switch"
-           lay-text="启用|禁用"
-           lay-filter="dept_enable"
-            {{ "{{# if(d.status==1){ }} checked {{# } }}" }}>
-</script>
+    </script>
+    {#表格内的切换按钮#}
+    <script type="text/html" id="dept-status">
+        <input type="checkbox"
+               name="status"
+               value="{{ "{{ d.deptId }}" }}"
+               lay-skin="switch"
+               lay-text="启用|禁用"
+               lay-filter="dept_enable"
+                {{ "{{# if(d.status==1){ }} checked {{# } }}" }}>
+    </script>
 
+    <script type="module">
 
-{% include 'admin/common/footer.html' %}
+      import { DEPARTMENT_API } from '/static/api/http.js'
 
-<script type="module">
+      layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let treetable = layui.treetable
+        let popup = layui.popup
 
-  import { DEPARTMENT_API } from '/static/api/http.js'
+        let MODULE_PATH = '/dept/'
+        const get_columns = () => [
+          [
+            { type: 'checkbox' },
+            { field: 'deptName', minWidth: 200, title: '部门名称' },
+            { field: 'leader', title: '负责人' },
+            { field: 'phone', title: '联系方式' },
+            { field: 'email', title: '邮箱' },
+            { field: 'address', title: '详细地址' },
+            { field: 'status', title: '状态', templet: '#dept-status' },
+            { field: 'sort', title: '排序', width: 100 },
+            { title: '操作', templet: '#tool', width: 120, align: 'center' },
+          ],
+        ]
 
-  layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
-    let table = layui.table
-    let form = layui.form
-    let $ = layui.jquery
-    let treetable = layui.treetable
-    let popup = layui.popup
-
-    let MODULE_PATH = '/dept/'
-    const get_columns = () => [
-      [
-        { type: 'checkbox' },
-        { field: 'deptName', minWidth: 200, title: '部门名称' },
-        { field: 'leader', title: '负责人' },
-        { field: 'phone', title: '联系方式' },
-        { field: 'email', title: '邮箱' },
-        { field: 'address', title: '详细地址' },
-        { field: 'status', title: '状态', templet: '#dept-status' },
-        { field: 'sort', title: '排序', width: 100 },
-        { title: '操作', templet: '#tool', width: 120, align: 'center' },
-      ],
-    ]
-
-    {#定义表格渲染函数#}
-    window.render = function () {
-      /*树形表格渲染*/
-      treetable.render({
-        treeColIndex: 1,
-        treeSpid: 0,
-        treeIdName: 'deptId', /*表格的顶级字段*/
-        treePidName: 'parentId', /*父级id选项*/
-        skin: 'line',
-        method: 'post', /**/
-        treeDefaultClose: false,
-        toolbar: '#toolbar', /*表格的工具栏*/
-        elem: '#tables', /*表格挂载的对象*/
-        url: DEPARTMENT_API.DEPARTMENTS(), /*数据来源接口*/
-        page: false,
-        cols: get_columns(),/*表格渲染的数据*/
-      })
-    }
-
-    /*查询表单按钮被点击的事件*/
-    form.on('submit(form_search)', function (data) {
-      let keyword = $.trim(data.field.deptName)
-      /*获取所有的公司节点*/
-      let $tds = $('#tables').next('.treeTable').find('.layui-table-body tbody tr td')
-      if (!keyword) {
-        $tds.css('background-color', 'transparent')
-        layer.msg('请输入关键字', { icon: 5 })
-        return false
-      }
-      /*本地查询并且标注高亮*/
-      let searchCount = 0
-      $tds.each(function () {
-        $(this).css('background-color', 'transparent')
-        if ($(this).text().indexOf(keyword) >= 0) {
-          $(this).css('background-color', 'rgba(250,230,160,0.5)')
-          if (searchCount === 0) {
-            $('body,html').stop(true)
-            $('body,html').animate({ scrollTop: $(this).offset().top - 150 }, 500)
-          }
-          searchCount++
+        {#定义表格渲染函数#}
+        window.render = function () {
+          /*树形表格渲染*/
+          treetable.render({
+            treeColIndex: 1,
+            treeSpid: 0,
+            treeIdName: 'deptId', /*表格的顶级字段*/
+            treePidName: 'parentId', /*父级id选项*/
+            skin: 'line',
+            method: 'post', /**/
+            treeDefaultClose: false,
+            toolbar: '#toolbar', /*表格的工具栏*/
+            elem: '#tables', /*表格挂载的对象*/
+            url: DEPARTMENT_API.DEPARTMENTS(), /*数据来源接口*/
+            page: false,
+            cols: get_columns(),/*表格渲染的数据*/
+          })
         }
-      })
-      if (searchCount === 0) {
-        layer.msg('没有匹配结果', { icon: 5 })
-      } else {
-        treetable.expandAll('#tables')
-      }
-      return false
-    })
 
-    render()
-
-    /*表格的操作栏*/
-    table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tool_remove') {
-        /*移出事件*/
-        window.tool_remove(obj)
-      } else if (obj.event === 'tool_edit') {
-        /*编辑事件*/
-        window.tool_edit(obj)
-      }
-    })
-
-    /*表格的工具栏*/
-    table.on('toolbar(tables)', function (obj) {
-      {#console.log(obj)#}
-      if (obj.event === 'toolbar-add') {
-        window.toolbar_add()
-      } else if (obj.event === 'refresh') {
-        window.refresh()
-      } else if (obj.event === 'toolbar-remove') {
-        {#window.toolbar_remove(obj)#}
-        layer.msg('禁止批量删除')
-        return false
-        {#console.log(table.checkStatus(obj.config.id).data)#}
-      }
-    })
-
-    /*切换选择状态*/
-    form.on('switch(dept_enable)', function (obj) {
-      let operate
-      if (obj.elem.checked) {
-        operate = 1
-      } else {
-        operate = 0
-      }
-      let loading = layer.load()
-      $.ajax({
-        url: DEPARTMENT_API.DEPARTMENT_STATUS(this.value),
-        data: JSON.stringify({ deptId: this.value, operate: operate }),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'put',
-        success: function (result) {
-          layer.close(loading)
-          if (result.success) {
-            popup.success(result.message)
-          } else {
-            popup.failure(result.message)
+        /*查询表单按钮被点击的事件*/
+        form.on('submit(form_search)', function (data) {
+          let keyword = $.trim(data.field.deptName)
+          /*获取所有的公司节点*/
+          let $tds = $('#tables').next('.treeTable').find('.layui-table-body tbody tr td')
+          if (!keyword) {
+            $tds.css('background-color', 'transparent')
+            layer.msg('请输入关键字', { icon: 5 })
+            return false
           }
-        },
-      })
-    })
-
-    window.toolbar_add = function () {
-      layer.open({
-        type: 2,
-        title: '新增',
-        shade: 0.1,
-        area: ['450px', '500px'], /*新增窗口的大小*/
-        content: '/dept/add', /*新增窗口从那里来*/
-      })
-    }
-
-    window.tool_edit = function (obj) {
-
-      layer.open({
-        type: 2,
-        title: '修改',
-        shade: 0.1,
-        area: ['450px', '500px'],
-        content: MODULE_PATH + 'edit?deptId=' + obj.data['deptId'],  /*编辑修改窗口从那里来*/
-      })
-
-    }
-
-    window.tool_remove = function (obj) {
-      layer.confirm('确定要删除该部门', { icon: 3, title: '提示' }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-          url: DEPARTMENT_API.DEPARTMENT(obj.data['deptId']),
-          dataType: 'json',
-          type: 'delete',
-          success: function (result) {
-            layer.close(loading)
-            if (result.success) {
-              popup.success(result.message, function () {
-                obj.del()
-              })
-            } else {
-              popup.failure(result.message)
+          /*本地查询并且标注高亮*/
+          let searchCount = 0
+          $tds.each(function () {
+            $(this).css('background-color', 'transparent')
+            if ($(this).text().indexOf(keyword) >= 0) {
+              $(this).css('background-color', 'rgba(250,230,160,0.5)')
+              if (searchCount === 0) {
+                $('body,html').stop(true)
+                $('body,html').animate({ scrollTop: $(this).offset().top - 150 }, 500)
+              }
+              searchCount++
             }
-          },
+          })
+          if (searchCount === 0) {
+            layer.msg('没有匹配结果', { icon: 5 })
+          } else {
+            treetable.expandAll('#tables')
+          }
+          return false
         })
-      })
-    }
 
-  })
-</script>
-</body>
-</html>
+        render()
+
+        /*表格的操作栏*/
+        table.on('tool(tables)', function (obj) {
+          if (obj.event === 'tool_remove') {
+            /*移出事件*/
+            window.tool_remove(obj)
+          } else if (obj.event === 'tool_edit') {
+            /*编辑事件*/
+            window.tool_edit(obj)
+          }
+        })
+
+        /*表格的工具栏*/
+        table.on('toolbar(tables)', function (obj) {
+          {#console.log(obj)#}
+          if (obj.event === 'toolbar-add') {
+            window.toolbar_add()
+          } else if (obj.event === 'refresh') {
+            window.refresh()
+          } else if (obj.event === 'toolbar-remove') {
+            {#window.toolbar_remove(obj)#}
+            layer.msg('禁止批量删除')
+            return false
+            {#console.log(table.checkStatus(obj.config.id).data)#}
+          }
+        })
+
+        /*切换选择状态*/
+        form.on('switch(dept_enable)', function (obj) {
+          let operate
+          if (obj.elem.checked) {
+            operate = 1
+          } else {
+            operate = 0
+          }
+          let loading = layer.load()
+          $.ajax({
+            url: DEPARTMENT_API.DEPARTMENT_STATUS(this.value),
+            data: JSON.stringify({ deptId: this.value, operate: operate }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.message)
+              } else {
+                popup.failure(result.message)
+              }
+            },
+          })
+        })
+
+        window.toolbar_add = function () {
+          layer.open({
+            type: 2,
+            title: '新增',
+            shade: 0.1,
+            area: ['450px', '500px'], /*新增窗口的大小*/
+            content: '/dept/add', /*新增窗口从那里来*/
+          })
+        }
+
+        window.tool_edit = function (obj) {
+          layer.open({
+            type: 2,
+            title: '修改',
+            shade: 0.1,
+            area: ['450px', '500px'],
+            content: MODULE_PATH + 'edit?deptId=' + obj.data['deptId'],  /*编辑修改窗口从那里来*/
+          })
+
+        }
+
+        window.tool_remove = function (obj) {
+          layer.confirm('确定要删除该部门', { icon: 3, title: '提示' }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: DEPARTMENT_API.DEPARTMENT(obj.data['deptId']),
+              dataType: 'json',
+              type: 'delete',
+              success: function (result) {
+                layer.close(loading)
+                if (result.success) {
+                  popup.success(result.message, function () {
+                    obj.del()
+                  })
+                } else {
+                  popup.failure(result.message)
+                }
+              },
+            })
+          })
+        }
+
+      })
+    </script>
+{% endblock %}

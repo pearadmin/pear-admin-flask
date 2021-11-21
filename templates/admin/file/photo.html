@@ -1,270 +1,268 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'admin/base.html' %}
+
+{% block title %}
     <title>图片上传</title>
-    {% include 'admin/common/header.html' %}
-</head>
-<body class="pear-container">
-<div class="layui-card">
-    <div class="layui-card-body">
-        <table id="tables" lay-filter="tables"></table>
+{% endblock %}
+
+{% block body %}
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <table id="tables" lay-filter="tables"></table>
+        </div>
     </div>
-</div>
+{% endblock %}
 
+{% block models_script %}
+    <script type="text/html" id="toolbar">
+        <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="toolbar-add">
+            <i class="layui-icon layui-icon-add-1"></i>
+            新增
+        </button>
+        <button class="pear-btn pear-btn-sm" lay-event="toolbar-remove">
+            <i class="layui-icon layui-icon-delete"></i>
+            删除
+        </button>
+    </script>
+    <script type="text/html" id="tool">
+        <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove">
+            <i class="layui-icon layui-icon-delete"></i>
+        </button>
+    </script>
 
-{% include 'admin/common/footer.html' %}
+    <script type="module">
+      import { FILE_API, parserTableData as parseData } from '/static/api/http.js'
 
-<script type="text/html" id="toolbar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="toolbar-add">
-        <i class="layui-icon layui-icon-add-1"></i>
-        新增
-    </button>
-    <button class="pear-btn pear-btn-sm" lay-event="toolbar-remove">
-        <i class="layui-icon layui-icon-delete"></i>
-        删除
-    </button>
-</script>
-<script type="text/html" id="tool">
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="tool-remove">
-        <i class="layui-icon layui-icon-delete"></i>
-    </button>
-</script>
+      layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
+        let table = layui.table
+        let form = layui.form
+        let $ = layui.jquery
+        let upload = layui.upload
 
-<script type="module">
-  import { FILE_API, parserTableData as parseData } from '/static/api/http.js'
+        const get_columns = () => [
+          [
+            {
+              type: 'checkbox',
+            },
+            {
+              field: 'id',
+              title: 'ID',
+              sort: true,
+              align: 'center',
+              unresize: true,
+              width: 80,
+            },
+            {
+              field: 'name',
+              title: '文件名称',
+              unresize: true,
+              align: 'center',
+            },
+            {
+              field: 'href',
+              title: '图片',
+              unresize: true,
+              align: 'center',
+              templet: (d) => {
+                return `<img class="tool-photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
+              },
 
-  layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
-    let table = layui.table
-    let form = layui.form
-    let $ = layui.jquery
-    let upload = layui.upload
+            },
+            {
+              field: 'mime',
+              title: 'mime类型',
+              unresize: true,
+              align: 'center',
+            },
+            {
+              field: 'size',
+              title: '文件大小',
+              unresize: true,
+              align: 'center',
+            },
+            {
+              field: 'create_at',
+              title: '创建时间',
+              templet: (d) => `${layui.util.toDateString(d.create_at, 'yyyy-MM-dd HH:mm:ss')}`,
+              unresize: true,
+              align: 'center',
+            },
+            {
+              title: '操作',
+              toolbar: '#tool',
+              align: 'center',
+              unresize: true,
+              width: 200,
+            },
+          ],
+        ]
 
-    const get_columns = () => [
-      [
-        {
-          type: 'checkbox',
-        },
-        {
-          field: 'id',
-          title: 'ID',
-          sort: true,
-          align: 'center',
-          unresize: true,
-          width: 80,
-        },
-        {
-          field: 'name',
-          title: '文件名称',
-          unresize: true,
-          align: 'center',
-        },
-        {
-          field: 'href',
-          title: '图片',
-          unresize: true,
-          align: 'center',
-          templet: (d) => {
-            return `<img class="tool-photo" style="max-width: 100%;height: 100%;cursor: pointer;" lay-event="photo" src="${d.href}"></i>`
-          },
-
-        },
-        {
-          field: 'mime',
-          title: 'mime类型',
-          unresize: true,
-          align: 'center',
-        },
-        {
-          field: 'size',
-          title: '文件大小',
-          unresize: true,
-          align: 'center',
-        },
-        {
-          field: 'create_at',
-          title: '创建时间',
-          templet: (d) => `${layui.util.toDateString(d.create_at, 'yyyy-MM-dd HH:mm:ss')}`,
-          unresize: true,
-          align: 'center',
-        },
-        {
-          title: '操作',
-          toolbar: '#tool',
-          align: 'center',
-          unresize: true,
-          width: 200,
-        },
-      ],
-    ]
-
-    table.render({
-      parseData,
-      elem: '#tables',
-      url: FILE_API.PHOTOS(),
-      page: true,
-      cols: get_columns(),
-      skin: 'line',
-      toolbar: '#toolbar',
-      defaultToolbar: [
-        {
-          layEvent: 'refresh',
-          icon: 'layui-icon-refresh',
-        }, 'filter', 'print', 'exports'],
-    })
-
-    table.on('tool(tables)', function (obj) {
-      if (obj.event === 'tool-remove') {
-        window.remove(obj)
-      } else if (obj.event === 'photo') {
-        window.photo(obj)
-      }
-    })
-
-    table.on('toolbar(tables)', function (obj) {
-      if (obj.event === 'toolbar-add') {
-        window.add()
-      } else if (obj.event === 'refresh') {
-        window.refresh()
-      } else if (obj.event === 'toolbar-remove') {
-        window.batchRemove(obj)
-      }
-    })
-
-    //弹出窗设置 自己设置弹出百分比
-    function screen (width, height) {
-      if (typeof width !== 'number' || width === 0) {
-        width = $(window).width() * 0.8
-      }
-      if (typeof height !== 'number' || height === 0) {
-        height = $(window).height() - 20
-      }
-      return [width + 'px', height + 'px']
-    }
-
-    window.add = function () {
-      layer.open({
-        type: 2,
-        maxmin: true,
-        title: '新增图片',
-        shade: 0.1,
-        area: screen(),
-        content: 'file/photo/add',
-      })
-    }
-
-    window.remove = function (obj) {
-      layer.confirm('确定要删除该图片', {
-        icon: 3,
-        title: '提示',
-      }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
-          url: FILE_API.PHOTO(obj.data['id']),
-          data: { id: obj.data['id'] },
-          dataType: 'json',
-          type: 'delete',
-          success: function (res) {
-            layer.close(loading)
-            if (res.success) {
-              layer.msg(res.message, {
-                icon: 1,
-                time: 1000,
-              }, function () {
-                obj.del()
-              })
-            } else {
-              layer.msg(res.message, {
-                icon: 2,
-                time: 1000,
-              })
-            }
-          },
-        })
-      })
-    }
-
-    window.batchRemove = function (obj) {
-      let data = table.checkStatus(obj.config.id).data
-      if (data.length === 0) {
-        layer.msg('未选中数据', {
-          icon: 3,
-          time: 1000,
-        })
-        return false
-      }
-      var ids = []
-      var hasCheck = table.checkStatus('tables')
-      var hasCheckData = hasCheck.data
-      if (hasCheckData.length > 0) {
-        $.each(hasCheckData, function (index, element) {
-          ids.push(element.id)
-        })
-      }
-      layer.confirm('确定要删除这些图片', {
-        icon: 3,
-        title: '提示',
-      }, function (index) {
-        layer.close(index)
-        let loading = layer.load()
-        $.ajax({
+        table.render({
+          parseData,
+          elem: '#tables',
           url: FILE_API.PHOTOS(),
-          data: { ids: ids },
-          dataType: 'json',
-          type: 'POST',
-          success: function (res) {
-            layer.close(loading)
-            if (res.success) {
-              layer.msg(res.message, {
-                icon: 1,
-                time: 1000,
-              }, function () {
-                table.reload('tables')
-              })
-            } else {
-              layer.msg(res.message, {
-                icon: 2,
-                time: 1000,
-              })
-            }
-          },
+          page: true,
+          cols: get_columns(),
+          skin: 'line',
+          toolbar: '#toolbar',
+          defaultToolbar: [
+            {
+              layEvent: 'refresh',
+              icon: 'layui-icon-refresh',
+            }, 'filter', 'print', 'exports'],
         })
+
+        table.on('tool(tables)', function (obj) {
+          if (obj.event === 'tool-remove') {
+            window.remove(obj)
+          } else if (obj.event === 'photo') {
+            window.photo(obj)
+          }
+        })
+
+        table.on('toolbar(tables)', function (obj) {
+          if (obj.event === 'toolbar-add') {
+            window.add()
+          } else if (obj.event === 'refresh') {
+            window.refresh()
+          } else if (obj.event === 'toolbar-remove') {
+            window.batchRemove(obj)
+          }
+        })
+
+        //弹出窗设置 自己设置弹出百分比
+        function screen (width, height) {
+          if (typeof width !== 'number' || width === 0) {
+            width = $(window).width() * 0.8
+          }
+          if (typeof height !== 'number' || height === 0) {
+            height = $(window).height() - 20
+          }
+          return [width + 'px', height + 'px']
+        }
+
+        window.add = function () {
+          layer.open({
+            type: 2,
+            maxmin: true,
+            title: '新增图片',
+            shade: 0.1,
+            area: screen(),
+            content: 'file/photo/add',
+          })
+        }
+
+        window.remove = function (obj) {
+          layer.confirm('确定要删除该图片', {
+            icon: 3,
+            title: '提示',
+          }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: FILE_API.PHOTO(obj.data['id']),
+              data: { id: obj.data['id'] },
+              dataType: 'json',
+              type: 'delete',
+              success: function (res) {
+                layer.close(loading)
+                if (res.success) {
+                  layer.msg(res.message, {
+                    icon: 1,
+                    time: 1000,
+                  }, function () {
+                    obj.del()
+                  })
+                } else {
+                  layer.msg(res.message, {
+                    icon: 2,
+                    time: 1000,
+                  })
+                }
+              },
+            })
+          })
+        }
+
+        window.batchRemove = function (obj) {
+          let data = table.checkStatus(obj.config.id).data
+          if (data.length === 0) {
+            layer.msg('未选中数据', {
+              icon: 3,
+              time: 1000,
+            })
+            return false
+          }
+          var ids = []
+          var hasCheck = table.checkStatus('tables')
+          var hasCheckData = hasCheck.data
+          if (hasCheckData.length > 0) {
+            $.each(hasCheckData, function (index, element) {
+              ids.push(element.id)
+            })
+          }
+          layer.confirm('确定要删除这些图片', {
+            icon: 3,
+            title: '提示',
+          }, function (index) {
+            layer.close(index)
+            let loading = layer.load()
+            $.ajax({
+              url: FILE_API.PHOTOS(),
+              data: { ids: ids },
+              dataType: 'json',
+              type: 'POST',
+              success: function (res) {
+                layer.close(loading)
+                if (res.success) {
+                  layer.msg(res.message, {
+                    icon: 1,
+                    time: 1000,
+                  }, function () {
+                    table.reload('tables')
+                  })
+                } else {
+                  layer.msg(res.message, {
+                    icon: 2,
+                    time: 1000,
+                  })
+                }
+              },
+            })
+          })
+        }
+
+        window.refresh = function () {
+          table.reload('tables')
+        }
+        // 查看大图
+        window.photo = function (obj) {
+          if (!obj.data.href || obj.data.href === '') {
+            layer.msg('图片地址错误！')
+            return
+          }
+          var auto_img = {}
+          var img = new Image()
+          img.src = obj.data.href
+          img.onload = function () {
+            var max_height = $(window).height() - 100
+            var max_width = $(window).width()
+            var rate1 = max_height / img.height
+            var rate2 = max_width / img.width
+            var rate3 = 1
+            var rate = Math.min(rate1, rate2, rate3)
+            auto_img.height = img.height * rate
+            auto_img.width = img.width * rate
+            layer.open({
+              type: 1,
+              title: false,
+              area: ['auto'],
+              skin: 'layui-layer-nobg', //没有背景色
+              shadeClose: true,
+              content: `<img src="${obj.data['href']}" width="${auto_img.width}px" height="${auto_img.height}px">`,
+            })
+          }
+        }
+
       })
-    }
-
-    window.refresh = function () {
-      table.reload('tables')
-    }
-    // 查看大图
-    window.photo = function (obj) {
-      if (!obj.data.href || obj.data.href === '') {
-        layer.msg('图片地址错误！')
-        return
-      }
-      var auto_img = {}
-      var img = new Image()
-      img.src = obj.data.href
-      img.onload = function () {
-        var max_height = $(window).height() - 100
-        var max_width = $(window).width()
-        var rate1 = max_height / img.height
-        var rate2 = max_width / img.width
-        var rate3 = 1
-        var rate = Math.min(rate1, rate2, rate3)
-        auto_img.height = img.height * rate
-        auto_img.width = img.width * rate
-        layer.open({
-          type: 1,
-          title: false,
-          area: ['auto'],
-          skin: 'layui-layer-nobg', //没有背景色
-          shadeClose: true,
-          content: `<img src="${obj.data['href']}" width="${auto_img.width}px" height="${auto_img.height}px">`,
-        })
-      }
-    }
-
-  })
-</script>
-</body>
-</html>
+    </script>
+{% endblock %}

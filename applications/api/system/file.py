@@ -1,7 +1,7 @@
 import os
 
 from flask import request, jsonify, current_app
-from flask_restful import Resource, marshal
+from flask_restful import Resource
 from sqlalchemy import desc
 
 from applications.common.utils.http import fail_api, success_api, table_api
@@ -19,7 +19,18 @@ class FilePhotosResource(Resource):
                                                   ).paginate(page=page,
                                                              per_page=limit,
                                                              error_out=False)
-        data = marshal(photo_paginate.items, FilePhoto.fields())
+        # data = marshal(photo_paginate.items, FilePhoto.fields())
+        data = [
+            {
+                'id': item.id,
+                'name': item.name,
+                'href': item.href,
+                'mime': item.mime,
+                'size': item.size,
+                'ext': item.ext,
+                'create_at': item.create_at,
+            } for item in photo_paginate.items
+        ]
         return table_api(result={'items': data,
                                  'total': photo_paginate.total, },
                          code=0)

@@ -14,17 +14,3 @@ class LoggingModel(db.Model, BaseModel):
     ip = db.Column(db.String(255))
     success = db.Column(db.Boolean, default=True)
     user_agent = db.Column(db.Text)
-
-    @staticmethod
-    def fields():
-        return {
-            'id': fields.Integer,
-            'method': fields.String,
-            'uid': fields.String,
-            'url': fields.Url,
-            'desc': fields.String,
-            'ip': fields.String,
-            'success': fields.Boolean,
-            'user_agent': fields.String,
-            'create_at': fields.DateTime,
-        }

@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from flask import request, jsonify, current_app
 from flask_login import current_user
-from flask_restful import Resource, reqparse, marshal
+from flask_restful import Resource, reqparse
 
 from applications.common.utils.http import success_api, fail_api
 from applications.extensions import db
@@ -12,58 +12,61 @@ from applications.models import RightsPower, RightsRole
 
 def get_render_config():
     # 网站配置
-    config = dict(logo={
-        # 网站名称
-        "title": current_app.config.get("SYSTEM_NAME"),
-        # 网站图标
-        "image": "/static/admin/admin/images/logo.png"
-        # 菜单配置
-    }, menu={
-        # 菜单数据来源
-        "data": "/api/v1/rights/menu",
-        "collaspe": True,
-        # 是否同时只打开一个菜单目录
-        "accordion": True,
-        "method": "GET",
-        # 是否开启多系统菜单模式
-        "control": False,
-        # 默认选中的菜单项
-        "select": "0",
-        # 是否开启异步菜单，false 时 data 属性设置为菜单数据，false 时为 json 文件或后端接口
-        "async": True
-    }, tab={
-        # 是否开启多选项卡
-        "muiltTab": True,
-        # 切换选项卡时，是否刷新页面状态
-        "keepState": True,
-        # 是否开启 Tab 记忆
-        "session": True,
-        # 最大可打开的选项卡数量
-        "tabMax": 30,
-        "index": {
-            # 标识 ID , 建议与菜单项中的 ID 一致
-            "id": "10",
-            # 页面地址
-            "href": "/admin/welcome",
-            # 标题
-            "title": "首页"
-        }
-    }, theme={
-        # 默认主题色，对应 colors 配置中的 ID 标识
-        "defaultColor": "2",
-        # 默认的菜单主题 dark-theme 黑 / light-theme 白
-        "defaultMenu": "dark-theme",
-        # 是否允许用户切换主题，false 时关闭自定义主题面板
-        "allowCustom": True
-    }, colors=[{
-        "id": "1",
-        "color": "#2d8cf0"
-    },
-        {
+    config = {
+        'logo': {
+            # 网站名称
+            "title": current_app.config.get("SYSTEM_NAME"),
+            # 网站图标
+            "image": "/static/admin/admin/images/logo.png"
+            # 菜单配置
+        },
+        'menu': {
+            # 菜单数据来源
+            "data": "/api/v1/rights/menu",
+            "collaspe": True,
+            # 是否同时只打开一个菜单目录
+            "accordion": True,
+            "method": "GET",
+            # 是否开启多系统菜单模式
+            "control": False,
+            # 默认选中的菜单项
+            "select": "0",
+            # 是否开启异步菜单，false 时 data 属性设置为菜单数据，false 时为 json 文件或后端接口
+            "async": True
+        },
+        'tab': {
+            # 是否开启多选项卡
+            "muiltTab": True,
+            # 切换选项卡时，是否刷新页面状态
+            "keepState": True,
+            # 是否开启 Tab 记忆
+            "session": True,
+            # 最大可打开的选项卡数量
+            "tabMax": 30,
+            "index": {
+                # 标识 ID , 建议与菜单项中的 ID 一致
+                "id": "10",
+                # 页面地址
+                "href": "/admin/welcome",
+                # 标题
+                "title": "首页"
+            }
+        },
+        'theme': {
+            # 默认主题色，对应 colors 配置中的 ID 标识
+            "defaultColor": "2",
+            # 默认的菜单主题 dark-theme 黑 / light-theme 白
+            "defaultMenu": "dark-theme",
+            # 是否允许用户切换主题，false 时关闭自定义主题面板
+            "allowCustom": True
+        },
+        'colors': [{
+            "id": "1",
+            "color": "#2d8cf0"
+        }, {
             "id": "2",
             "color": "#5FB878"
-        },
-        {
+        }, {
             "id": "3",
             "color": "#1E9FFF"
         }, {
@@ -72,13 +75,16 @@ def get_render_config():
         }, {
             "id": "5",
             "color": "darkgray"
-        }
-    ], links=current_app.config.get("SYSTEM_PANEL_LINKS"), other={
-        # 主页动画时长
-        "keepLoad": 1200,
-        # 布局顶部主题
-        "autoHead": False
-    }, header=False)
+        }],
+        'links': current_app.config.get("SYSTEM_PANEL_LINKS"),
+        'other': {
+            # 主页动画时长
+            "keepLoad": 1200,
+            # 布局顶部主题
+            "autoHead": False
+        },
+        'header': False
+    }
     return config
 
 
@@ -99,7 +105,23 @@ def make_menu_tree():
             if p.type == 0 or p.type == 1:
                 powers.append(p)
 
-    power_dict = marshal(powers, RightsPower.fields2())  # 生成可序列化对象
+    # power_dict = marshal(powers, RightsPower.fields2())  # 生成可序列化对象
+    power_dict = [
+        {
+            'id': item.id,
+            'title': item.name,
+            'type': item.type,
+            'code': item.code,
+            'href': item.url,
+            'openType': item.open_type,
+            'parent_id': item.parent_id,
+            'icon': item.icon,
+            'sort': item.sort,
+            'enable': item.enable,
+            'update_at': item.update_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'create_at': item.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+        } for item in powers
+    ]
     power_dict.sort(key=lambda x: x['id'], reverse=True)
 
     menu_dict = OrderedDict()
@@ -156,12 +178,26 @@ class RightRightsResource(Resource):
         """获取选择父节点"""
 
         power = RightsPower.query.all()
-        power_data = marshal(power, RightsPower.fields())
+        # power_data = marshal(power, RightsPower.fields())
+        power_data = [
+            {
+                'powerId': item.id,
+                'powerName': item.name,
+                'powerType': item.type,
+                'powerUrl': item.url,
+                'openType': item.open_type,
+                'parentId': item.parent_id,
+                'icon': item.icon,
+                'sort': item.sort,
+                'create_at': item.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+                'update_at': item.update_at.strftime('%Y-%m-%d %H:%M:%S'),
+                'enable': item.enable,
+            } for item in power
+        ]
         power_data.append({"powerId": 0, "powerName": "顶级权限", "parentId": -1})
         res = {
             "status": {"code": 200, "message": "默认"},
             "data": power_data
-
         }
         return res
 

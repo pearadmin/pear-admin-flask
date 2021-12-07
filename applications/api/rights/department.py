@@ -1,6 +1,5 @@
 from flask import jsonify
-from flask_restful import Resource
-from flask_restful import marshal, reqparse
+from flask_restful import Resource, reqparse
 
 from applications.common.utils.http import success_api, fail_api
 from applications.extensions import db
@@ -14,9 +13,23 @@ class DepartmentsResource(Resource):
         # TODO dtree 需要返回状态信息
         res = {
             "status": {"code": 200, "message": "默认"},
-            "data": marshal(dept_data, CompanyDepartment.fields())
+            "data": [
+
+                {
+                    'deptId': item.id,
+                    'parentId': item.parent_id,
+                    'deptName': item.dept_name,
+                    'sort': item.sort,
+                    'leader': item.leader,
+                    'phone': item.phone,
+                    'email': item.email,
+                    'status': item.status,
+                    'comment': item.comment,
+                    'address': item.address,
+                    'create_at': item.create_at.strftime('%Y-%m-%d %H:%M:%S')
+                } for item in dept_data
+            ]
         }
-        print(dept_data)
         return jsonify(res)
 
     def post(self):

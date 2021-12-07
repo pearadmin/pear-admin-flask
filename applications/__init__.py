@@ -21,16 +21,22 @@ def create_app(config_name=None):
     # 引入数据库配置
     app.config.from_object(common)
     app.config.from_object(config[config_name])
+
     # 注册各种插件
     init_plugs(app)
 
     # 注册路由
     init_view(app)
+
+    # 注册接口（restful api）
     init_api(app)
+
     # 文件上传
     configure_uploads(app, photos)
 
-    logo()
+    if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        logo()
+
     return app
 
 

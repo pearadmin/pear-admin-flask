@@ -21,25 +21,9 @@ class CompanyUser(db.Model, UserMixin, BaseModel):
     role = db.relationship('RightsRole', secondary="rt_user_role", backref=db.backref('user'), lazy='dynamic')
 
     def set_password(self, password):
+        """设置密码，对密码进行加密存储"""
         self.password_hash = generate_password_hash(password)
 
     def validate_password(self, password):
+        """校验密码方法"""
         return check_password_hash(self.password_hash, password)
-
-    @staticmethod
-    def fields():
-        return {
-            'id': fields.Integer,
-            'username': fields.String,
-            'realname': fields.String,
-            'mobile': fields.String,
-            'avatar': fields.Url,
-            'comment': fields.String,
-            # 'password_hash': fields.String,
-            'enable': fields.Boolean,
-            # 'dept_id': fields.Integer,
-            'dept_id': fields.Integer,
-            'create_at': fields.DateTime,
-            'update_at': fields.DateTime,
-        }
-

@@ -15,17 +15,3 @@ class RightsRole(db.Model, BaseModel):
     sort = db.Column(db.Integer, comment='排序')
 
     power = db.relationship('RightsPower', secondary="rt_role_power", backref=db.backref('role'))
-
-    @staticmethod
-    def fields():
-        return {
-            'id': fields.Integer,
-            'roleName': fields.String(attribute="name"),
-            'roleCode': fields.String(attribute="code"),
-            'enable': fields.Boolean,
-            'comment': fields.String,
-            'details': fields.String,
-            'sort': fields.Integer,
-            'create_at': fields.DateTime,
-            'update_at': fields.DateTime,
-        }

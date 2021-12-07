@@ -24,6 +24,7 @@ class LoginResource(Resource):
         req = login_req.parse_args()
 
         s_code = session.get("code", None)
+        session["code"] = None
 
         if req.captcha != s_code:
             return fail_api(message="验证码错误")

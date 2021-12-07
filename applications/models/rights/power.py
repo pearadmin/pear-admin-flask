@@ -1,5 +1,3 @@
-from flask_restful import fields
-
 from applications.extensions import db
 from ..base import BaseModel
 
@@ -18,37 +16,3 @@ class RightsPower(db.Model, BaseModel):
     enable = db.Column(db.Boolean, comment='是否开启')
 
     parent = db.relationship("RightsPower", remote_side=[id])  # 自关联
-
-    @staticmethod
-    def fields():
-        return {
-            'powerId': fields.String(attribute="id"),
-            'powerName': fields.String(attribute="name"),
-            'powerType': fields.String(attribute="type"),
-            'powerUrl': fields.String(attribute="url"),
-            'openType': fields.String(attribute="open_type"),
-            'parentId': fields.String(attribute="parent_id"),
-            'icon': fields.String,
-            'sort': fields.Integer,
-            'create_at': fields.DateTime,
-            'update_at': fields.DateTime,
-            'enable': fields.Integer,
-        }
-
-    @staticmethod
-    def fields2():
-        return {
-            'id': fields.Integer,
-            'title': fields.String(attribute="name"),
-            'type': fields.String,
-            'code': fields.String,
-            'href': fields.String(attribute="url"),
-            'openType': fields.String(attribute="open_type"),
-            'parent_id': fields.Integer,
-            'icon': fields.String,
-            'sort': fields.Integer,
-            'enable': fields.Boolean,
-            'update_at': fields.DateTime,
-            'create_at': fields.DateTime,
-
-        }

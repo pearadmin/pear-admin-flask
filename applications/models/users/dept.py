@@ -18,6 +18,10 @@ class CompanyDepartment(db.Model, BaseModel):
 
     @staticmethod
     def fields():
+        """
+        定义模型的常用输出字段，新手请忽略。可以简化字段序列化操作，
+        详细操作请查看 flask-restful marshal 的用法
+        """
         return {
             'deptId': fields.Integer(attribute="id"),
             'parentId': fields.Integer(attribute="parent_id"),

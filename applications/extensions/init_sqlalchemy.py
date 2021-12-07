@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy, BaseQuery
 from flask_marshmallow import Marshmallow
@@ -47,6 +49,12 @@ fields.Boolean.default_error_messages = {
 
 
 class Query(BaseQuery):
+    def soft_delete(self):
+        return self.update({"delete_at": datetime.datetime.now()})
+
+    def logic_all(self):
+        return self.filter_by(delete_at=None).all()
+
     def layui_paginate(self):
         """
         layui表格分页

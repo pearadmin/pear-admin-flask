@@ -29,9 +29,7 @@
 
 
 {% block models_script %}
-    <script type="module">
-      import { FILE_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['jquery', 'element', 'form', 'upload'], function () {
         var $ = layui.jquery
         var element = layui.element
@@ -40,7 +38,7 @@
         //选完文件后不自动上传
         upload.render({
           elem: '#select-img'
-          , url: FILE_API.PHOTOS()
+          , url: '/api/v1/file/photos'
           , auto: false
           , exts: 'jpg|png|gif|bmp|jpeg'
           , size: 1000

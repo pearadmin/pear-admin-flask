@@ -238,9 +238,7 @@
 {% endblock %}
 
 {% block models_script %}
-    <script type="module">
-      import { USER_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['element', 'jquery', 'layer', 'form', 'popup'], function () {
         let $ = layui.jquery
         let layer = layui.layer
@@ -277,7 +275,7 @@
         // 表单提交更改个人信息数据
         form.on('submit(user-update)', function (data) {
           $.ajax({
-            url: USER_API.USER_INFO(data.field.user_id),
+            url: '/api/v1/users/user/' + data.field.user_id + '/info',
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',
@@ -296,7 +294,7 @@
         // 修改密码提交
         form.on('submit(edit-password)', function (data) {
           $.ajax({
-            url: USER_API.USER_PASSWORD(data.field.user_id),
+            url: '/api/v1/users/user/' + data.field.user_id + '/password',
             data: JSON.stringify(data.field),
             contentType: 'application/json',
             dataType: 'json',

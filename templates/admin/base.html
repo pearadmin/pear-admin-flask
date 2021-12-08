@@ -27,6 +27,19 @@
 {% block footer_script %}
     <script src="/static/admin/component/layui/layui.js"></script>
     <script src="/static/admin/component/pear/pear.js"></script>
+    <script>
+      /******************数据解析********************************/
+      function parserTableData (data) {
+        /* 将服务器返回的 json 数据解析为 layui 表格需要的格式  */
+        return {
+          'code': data.code, //解析接口状态
+          'msg': data.message, //解析提示文本
+          'count': data.result.total, //解析数据长度
+          'data': data.result.items, //解析数据列表
+        }
+      }
+    </script>
+
 {% endblock %}
 {# 当前页面自己编写的 JavaScript #}
 {% block models_script %}

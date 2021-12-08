@@ -93,9 +93,7 @@
         {{ '  {{layui.util.toDateString(d.update_at,  "yyyy-MM-dd HH:mm:ss")}' |safe }}}
     </script>
 
-    <script type="module">
-      import { USER_API, ROLE, parserTableData as parseData } from '/static/api/http.js'
-
+    <script>
       layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {
         let table = layui.table
         let form = layui.form
@@ -120,9 +118,9 @@
 
         // 渲染表格数据
         table.render({
-          parseData,
+          parseData: parserTableData,
           elem: '#tables',
-          url: USER_API.USERS(),
+          url: '/api/v1/users/users',
           page: true,
           cols: get_columns(),
           skin: 'line',
@@ -207,7 +205,7 @@
           }
           let loading = layer.load()
           $.ajax({
-            url: USER_API.USER_STATUS(this.value),
+            url: '/api/v1/users/user/' + this.value + '/status',
             data: JSON.stringify({ operate: operate, userId: this.value }),
             dataType: 'json',
             contentType: 'application/json',
@@ -258,7 +256,7 @@
             let loading = layer.load()
             $.ajax({
 
-              url: USER_API.USERS(),
+              url: '/api/v1/users/users',
               data: { ids: ids },
               dataType: 'json',
               type: 'delete',
@@ -284,7 +282,7 @@
             layer.close(index)
             let loading = layer.load()
             $.ajax({
-              url: USER_API.USER(obj.data['id']),
+              url: '/api/v1/users/user/' +  obj.data['id'],
               dataType: 'json',
               type: 'delete',
               success: function (result) {

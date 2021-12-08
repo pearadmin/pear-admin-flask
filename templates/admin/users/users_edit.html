@@ -71,9 +71,7 @@
 {% endblock %}
 
 {% block models_script %}
-    <script type="module">
-      import { USER_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['form', 'jquery', 'dtree'], function () {
         let form = layui.form
         let $ = layui.jquery
@@ -98,7 +96,7 @@
           roleIds = roleIds.substr(0, roleIds.length - 1)
           data.field.roleIds = roleIds
           $.ajax({
-            url: USER_API.USER_ROLE(data.field.userId),
+            url: '/api/v1/users/user/' + data.field.userId + '/role',
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',

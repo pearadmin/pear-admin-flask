@@ -98,10 +98,7 @@
 {% endblock %}
 
 {% block models_script %}
-    <script type="module">
-
-      import { RIGHTS_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['form', 'jquery', 'iconPicker', 'dtree'], function () {
         let form = layui.form
         let $ = layui.jquery
@@ -110,7 +107,7 @@
 
         dtree.renderSelect({
           elem: '#selectParent',
-          url: RIGHTS_API.RIGHTS(),
+          url: '/api/v1/rights/rights',
           method: 'get',
           selectInputName: { nodeId: 'parentId', context: 'powerName' },
           skin: 'layui',
@@ -147,7 +144,7 @@
           data.field.icon = 'layui-icon ' + data.field.icon
           console.log(data.field)
           $.ajax({
-            url: RIGHTS_API.POWER(data.field.powerId),
+            url: '/api/v1/rights/rights/power/' + data.field.powerId,
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',

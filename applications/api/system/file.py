@@ -27,8 +27,8 @@ class FilePhotosResource(Resource):
                 'href': item.href,
                 'mime': item.mime,
                 'size': item.size,
-                'ext': item.ext,
-                'create_at': item.create_at,
+                'ext': item.ext if hasattr(item, 'ext') else "",
+                'create_at': str(item.create_at),
             } for item in photo_paginate.items
         ]
         return table_api(result={'items': data,

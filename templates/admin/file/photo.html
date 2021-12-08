@@ -29,9 +29,7 @@
         </button>
     </script>
 
-    <script type="module">
-      import { FILE_API, parserTableData as parseData } from '/static/api/http.js'
-
+    <script>
       layui.use(['table', 'form', 'jquery', 'element', 'form', 'upload'], function () {
         let table = layui.table
         let form = layui.form
@@ -97,9 +95,9 @@
         ]
 
         table.render({
-          parseData,
+          parseData: parserTableData,  /* 服务器返回的数据格式与layui 不一致，需要进行转化*/
           elem: '#tables',
-          url: FILE_API.PHOTOS(),
+          url: '/api/v1/file/photos',
           page: true,
           cols: get_columns(),
           skin: 'line',
@@ -159,7 +157,7 @@
             layer.close(index)
             let loading = layer.load()
             $.ajax({
-              url: FILE_API.PHOTO(obj.data['id']),
+              url: '/api/v1/file/photo/' + obj.data['id'],
               data: { id: obj.data['id'] },
               dataType: 'json',
               type: 'delete',
@@ -207,7 +205,7 @@
             layer.close(index)
             let loading = layer.load()
             $.ajax({
-              url: FILE_API.PHOTOS(),
+              url: '/api/v1/file/photos',
               data: { ids: ids },
               dataType: 'json',
               type: 'POST',

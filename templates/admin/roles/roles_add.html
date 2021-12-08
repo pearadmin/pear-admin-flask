@@ -61,16 +61,14 @@
 
 
 {% block models_script %}
-    <script type="module">
-      import { ROLE_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['form', 'jquery'], function () {
         let form = layui.form
         let $ = layui.jquery
 
         form.on('submit(role-save)', function (data) {
           $.ajax({
-            url: ROLE_API.ROLE(0),
+            url: '/api/v1/roles/role/0',
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',

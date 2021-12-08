@@ -83,9 +83,7 @@
 {% endblock %}
 
 {% block models_script %}
-    <script type="module">
-      import { DEPARTMENT_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['form', 'jquery', 'dtree'], function () {
         let form = layui.form
         let $ = layui.jquery
@@ -94,7 +92,7 @@
         /*添加数据 渲染下拉选择组件*/
         dtree.renderSelect({
           elem: '#selectParent',
-          url: DEPARTMENT_API.DEPARTMENTS(),
+          url: '/api/v1/dept/departments',
           method: 'get',
           selectInputName: { nodeId: 'parentId', context: 'parentName' },
           skin: 'layui',
@@ -106,7 +104,7 @@
         /*添加数据 表单组件，提交按钮之后触发的事件*/
         form.on('submit(dept-save)', function (data) {
           $.ajax({
-            url: DEPARTMENT_API.DEPARTMENTS(),
+            url: '/api/v1/dept/departments',
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',

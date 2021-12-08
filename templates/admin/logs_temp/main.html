@@ -39,9 +39,7 @@
     {{# } }}'|safe }}
     </script>
 
-    <script type="module">
-      import { parserTableData as parseData } from '/static/api/http.js'
-
+    <script>
       layui.use(['table', 'form', 'jquery', 'element', 'util'], function () {
         let table = layui.table
         let form = layui.form
@@ -63,7 +61,7 @@
         ]
 
         table.render({
-          parseData,
+          parseData: parserTableData,
           elem: '#log-access-table',
           url: MODULE_PATH + 'access_log',
           page: true,
@@ -73,7 +71,7 @@
         })
 
         table.render({
-          parseData,
+          parseData: parserTableData,
           elem: '#log-login-table',
           url: MODULE_PATH + 'login_log',
           page: true,

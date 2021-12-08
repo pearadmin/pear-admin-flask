@@ -63,9 +63,7 @@
                lay-filter="tool-switch" {{ "{{# if(d.enable==1){ }} checked {{# } }}" }}>
     </script>
 
-    <script type="module">
-      import { ROLE_API, parserTableData as parseData } from '/static/api/http.js'
-
+    <script>
       layui.use(['table', 'form', 'jquery', 'popup', 'common'], function () {
         let table = layui.table
         let form = layui.form
@@ -85,9 +83,9 @@
         ]
 
         table.render({
-          parseData,
+          parseData: parserTableData,
           elem: '#tables',
-          url: ROLE_API.ROLES(),
+          url: '/api/v1/roles/roles',
           page: true,
           cols: get_columns(),
           skin: 'line',
@@ -133,7 +131,7 @@
           }
           let loading = layer.load()
           $.ajax({
-            url: ROLE_API.ROLE_STATUS(this.value),
+            url: '/api/v1/roles/role/' + this.value + '/status',
             data: JSON.stringify({ roleId: this.value, operate: operate }),
             dataType: 'json',
             contentType: 'application/json',
@@ -184,7 +182,7 @@
             layer.close(index)
             let loading = layer.load()
             $.ajax({
-              url: ROLE_API.ROLE_POWER(obj.data['id']),
+              url: '/api/v1/roles/roles/role_power/' + obj.data['id'],
               dataType: 'json',
               type: 'delete',
               success: function (result) {
@@ -227,7 +225,7 @@
             let loading = layer.load()
             $.ajax({
 
-              url: ROLE_API.ROLES(),
+              url: '/api/v1/roles/roles',
               data: { ids: ids },
               dataType: 'json',
               type: 'delete',

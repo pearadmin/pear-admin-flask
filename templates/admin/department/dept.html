@@ -74,10 +74,7 @@
                 {{ "{{# if(d.status==1){ }} checked {{# } }}" }}>
     </script>
 
-    <script type="module">
-
-      import { DEPARTMENT_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['table', 'form', 'jquery', 'treetable', 'popup'], function () {
         let table = layui.table
         let form = layui.form
@@ -113,7 +110,7 @@
             treeDefaultClose: false,
             toolbar: '#toolbar', /*表格的工具栏*/
             elem: '#tables', /*表格挂载的对象*/
-            url: DEPARTMENT_API.DEPARTMENTS(), /*数据来源接口*/
+            url: '/api/v1/dept/departments', /*数据来源接口*/
             page: false,
             cols: get_columns(),/*表格渲染的数据*/
           })
@@ -188,7 +185,7 @@
           }
           let loading = layer.load()
           $.ajax({
-            url: DEPARTMENT_API.DEPARTMENT_STATUS(this.value),
+            url: '/api/v1/dept/department/' + this.value + '/status',
             data: JSON.stringify({ deptId: this.value, operate: operate }),
             dataType: 'json',
             contentType: 'application/json',
@@ -230,7 +227,7 @@
             layer.close(index)
             let loading = layer.load()
             $.ajax({
-              url: DEPARTMENT_API.DEPARTMENT(obj.data['deptId']),
+              url: '/api/v1/dept/department/' + obj.data['deptId'],
               dataType: 'json',
               type: 'delete',
               success: function (result) {

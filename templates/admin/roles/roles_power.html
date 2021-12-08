@@ -30,10 +30,7 @@
 
 
 {% block models_script %}
-    <script type="module">
-
-      import { ROLE_API } from '/static/api/http.js'
-
+    <script>
       layui.use(['dtree', 'form', 'jquery'], function () {
         let dtree = layui.dtree
         let form = layui.form
@@ -42,7 +39,7 @@
         dtree.render({
           elem: '#role-power',
           method: 'get',
-          url: ROLE_API.ROLE_POWER({{role_id}}),
+          url: '/api/v1/roles/role_power/' + {{ role_id }}, /*最后是 jianja2 语法*/
           dataFormat: 'list',
           checkbar: true,
           skin: 'layui',
@@ -63,7 +60,7 @@
           data.field.powerIds = ids
 
           $.ajax({
-            url: ROLE_API.ROLE_POWER(data.field.roleId),
+            url: '/api/v1/roles/role_power/' + data.field.roleId,
             data: data.field,
             dataType: 'json',
             type: 'put',

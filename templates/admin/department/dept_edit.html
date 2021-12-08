@@ -95,9 +95,7 @@
 
 
 {% block models_script %}
-    <script type="module">
-      import { DEPARTMENT_API } from '/static/api/http.js'
-
+    <script >
       layui.use(['form', 'jquery'], function () {
         let form = layui.form
         let $ = layui.jquery
@@ -105,7 +103,7 @@
         // 修改数据 当点击更新之后，获取数据
         form.on('submit(dept-update)', function (data) {
           $.ajax({
-            url: DEPARTMENT_API.DEPARTMENT(data.field.deptId),
+            url: '/api/v1/dept/department/' + data.field.deptId,
             data: JSON.stringify(data.field),
             dataType: 'json',
             contentType: 'application/json',
